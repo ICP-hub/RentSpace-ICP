@@ -43,7 +43,7 @@ shared ({ caller = owner }) actor class Database() = this {
   public type ActorType = actor {
     getPK : query () -> async Text;
     skExists : query (Text) -> async Bool;
-    getAccountInfo : query (Text) -> async AccountInfo;
+    getAccountInfo : query (Text) -> async ?AccountInfo;
     createAccount : (Text, Text, Text, Text, Text, Text) -> async ();
     updateAccountInfo : (Text, AccountInfo) -> async ?AccountInfo;
     createRentSpace : (Text, RentSpaceInfo) -> async ();
@@ -189,7 +189,7 @@ shared ({ caller = owner }) actor class Database() = this {
     await actorclass.skExists(sk);
   };
 
-  public func getInfo(id : Text, sk : Text) : async AccountInfo {
+  public func getInfo(id : Text, sk : Text) : async ?AccountInfo {
     let actorclass = actor (id) : ActorType;
     await actorclass.getAccountInfo(sk);
   };
