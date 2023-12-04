@@ -3,6 +3,17 @@
     "backend": {
       "main": "Backend/RentSpace_backend/main.mo",
       "type": "motoko"
+    },
+    "LoginWeb": {
+      "dependencies": [],
+      "frontend": {
+        "entrypoint": "LoginWeb/src/index.html"
+      },
+      "source": [
+        "LoginWeb/assets",
+        "dist/LoginWeb/"
+      ],
+      "type": "assets"
     }
   },
   "defaults": {
