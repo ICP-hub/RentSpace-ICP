@@ -10,6 +10,8 @@ import {name as appName} from './app.json';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
+import Main from './src/app/Main';
+import BottomNav from './src/components/BottomNav';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,7 +23,7 @@ const RootComponent: React.FC = () => {
   return (
     <NavigationContainer linking={linking}>
       <Stack.Navigator initialRouteName="Launch">
-        <Stack.Screen name="Launch" component={App} />
+        <Stack.Screen name="Launch" component={Main} />
       </Stack.Navigator>
     </NavigationContainer>
   );
