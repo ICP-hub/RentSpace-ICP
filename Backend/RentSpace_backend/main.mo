@@ -7,6 +7,7 @@ import Admin "mo:candb/CanDBAdmin";
 import Principal "mo:base/Principal";
 import Cycles "mo:base/ExperimentalCycles";
 import Array "mo:base/Array";
+import Iter "mo:base/Iter";
 import Entity "mo:candb/Entity";
 import CA "mo:candb/CanisterActions";
 import schema "schema";
@@ -42,7 +43,7 @@ shared ({ caller = owner }) actor class Database() = this {
   public type ActorType = actor {
     getPK : query () -> async Text;
     skExists : query (Text) -> async Bool;
-    getAccountInfo : query (Text) -> async ();
+    getAccountInfo : query (Text) -> async AccountInfo;
     createAccount : (Text, Text, Text, Text, Text, Text) -> async ();
     updateAccountInfo : (Text, AccountInfo) -> async ?AccountInfo;
     createRentSpace : (Text, RentSpaceInfo) -> async ();
@@ -62,6 +63,19 @@ shared ({ caller = owner }) actor class Database() = this {
   // Get all canister for an specific PK
   public shared query ({ caller = caller }) func getCanistersByPK(pk : Text) : async [Text] {
     getCanistersIdsIfExists(pk);
+  };
+
+  // returns all partitions
+  public query func getPKs() : async [Text] {
+    let allPks = CanisterMap.entries(pkToCanisterMap);
+
+    let iterOfPks = Iter.map<(Text, CanisterMap.CanisterIdList), Text>(
+      allPks,
+      func(e) {
+        e.0;
+      },
+    );
+    return Iter.toArray(iterOfPks);
   };
 
   // @required function (Do not delete or change)
@@ -175,7 +189,7 @@ shared ({ caller = owner }) actor class Database() = this {
     await actorclass.skExists(sk);
   };
 
-  public func getInfo(id : Text, sk : Text) : async () {
+  public func getInfo(id : Text, sk : Text) : async AccountInfo {
     let actorclass = actor (id) : ActorType;
     await actorclass.getAccountInfo(sk);
   };

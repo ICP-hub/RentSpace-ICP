@@ -1,6 +1,6 @@
 {
   "canisters": {
-    "RentSpace_backend": {
+    "backend": {
       "main": "Backend/RentSpace_backend/main.mo",
       "type": "motoko"
     }
