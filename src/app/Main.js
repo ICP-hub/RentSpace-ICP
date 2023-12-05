@@ -8,12 +8,16 @@ import BottomSheetLogin from '../components/BottomSheetLogin';
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import BottomSheetFinishSignUp from '../components/BottomSheetFinishSignUp';
 import { InAppBrowser } from 'react-native-inappbrowser-reborn'
+import BottomSheetCommunity from '../components/BottomSheetCommunity';
+import BottomSheetNotification from '../components/BottomSheetNotification';
 //import BottomSheet from '@gorhom/bottom-sheet'
 // import { StatusBar } from 'expo-status-bar'
 
 const Main = () => {
   const btmSheetLoginRef = useRef(null);
   const btmSheetFinishRef = useRef(null);
+  const btmSheetCommRef=useRef(null)
+  const btmSheetNotiRef=useRef(null)
   const snapPoints = ['94%'];
   const handlePresentModal = () => {
     btmSheetLoginRef.current.present();
@@ -61,9 +65,18 @@ const Main = () => {
       } catch (error) {
       }
   };
-  const closeModal = () => {
-    btmSheetFinishRef.current.dismiss();
+  const closeModal = (valRef) => {
+    valRef.current.dismiss();
   };
+  const openFinishSignUp=()=>{
+    btmSheetFinishRef.current.present()
+  }
+  const openComm=()=>{
+    btmSheetCommRef.current.present()
+  }
+  const openNotiModal=()=>{
+    btmSheetNotiRef.current.present()
+  }
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       {/* <BottomSheetLogin/> */}
@@ -71,7 +84,7 @@ const Main = () => {
       <BottomSheetModalProvider>
         {/* <StatusBar hidden={true}/> */}
         {/* <BottomSheetFinishSignUp/> */}
-        <BottomNav handlePresentModal={handlePresentModal} />
+        <BottomNav handlePresentModal={handlePresentModal} openFinishSignUp={openFinishSignUp} openComm={openComm} openNotiModal={openNotiModal}/>
         <BottomSheetModal
           ref={btmSheetLoginRef}
           index={0}
@@ -82,7 +95,23 @@ const Main = () => {
           ref={btmSheetFinishRef}
           index={0}
           snapPoints={snapPoints}>
-          <BottomSheetFinishSignUp closeModal={closeModal} />
+          <BottomSheetFinishSignUp closeModal={()=>{closeModal(btmSheetFinishRef)}} />
+        </BottomSheetModal>
+        <BottomSheetModal
+          ref={btmSheetCommRef}
+          index={0}
+          snapPoints={snapPoints}
+          >
+            <BottomSheetCommunity/>
+
+        </BottomSheetModal>
+        <BottomSheetModal
+          ref={btmSheetNotiRef}
+          index={0}
+          snapPoints={snapPoints}
+          >
+            <BottomSheetNotification/>
+
         </BottomSheetModal>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>

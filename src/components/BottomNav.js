@@ -5,20 +5,20 @@ import {images} from '../constants'
 
 
 
-const BottomNav = ({handlePresentModal}) => {
+const BottomNav = ({handlePresentModal,openFinishSignUp,openComm,openNotiModal}) => {
 
 
   return (
     
     
     <View style={styles.viewNav}>
-        <TouchableOpacity style={styles.iconNav}>
+        <TouchableOpacity style={styles.iconNav} onPress={()=>{openFinishSignUp()}}>
             <Image source={images.search}/>
         </TouchableOpacity >
-        <TouchableOpacity style={styles.iconNav}>
+        <TouchableOpacity style={styles.iconNav} onPress={()=>{openComm()}}>
             <Image source={images.search}/>
         </TouchableOpacity >
-        <TouchableOpacity style={styles.iconNav}>
+        <TouchableOpacity style={styles.iconNav} onPress={()=>{openNotiModal()}}>
             <Image source={images.favourite}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconNav}>

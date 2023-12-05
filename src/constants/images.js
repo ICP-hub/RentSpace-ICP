@@ -9,6 +9,7 @@ import bitfinity from '../assets/logos/bitfinityLogo.png'
 import internetIden from '../assets/logos/internetIdenLogo.png'
 import plug from '../assets/logos/plugLogo.png'
 import cross from '../assets/images/VectorCross.png'
+import commLogo from '../assets/images/communityCommit.png'
 
 export default {
     favourite,
@@ -21,5 +22,6 @@ export default {
     bitfinity,
     internetIden,
     plug,
-    cross
+    cross,
+    commLogo
 }
