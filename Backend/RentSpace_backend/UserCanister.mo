@@ -9,7 +9,11 @@ import Int64 "mo:base/Int64";
 import Nat64 "mo:base/Nat64";
 import Text "mo:base/Text";
 import Prelude "mo:base/Prelude";
-import List "mo:base/List";
+import List "mo:base/List"; 
+
+
+// let g = Source.Source();
+// UUID.toText(await g.new());
 
 shared ({caller = owner}) actor class Users({
     //partiton key of this canister
@@ -43,6 +47,10 @@ shared ({caller = owner}) actor class Users({
         };
     };
 
+//     public func getUuid():async Text{
+//     let g = Source.Source();
+//     UUID.toText(await g.new());
+//   };
     ///--------------------------------------------------------------------///
     ///------schema for listing the rent spaces start from here------------///
     ///--------------------------------------------------------------------///
@@ -50,7 +58,8 @@ shared ({caller = owner}) actor class Users({
     // This works for our hello world app, but as names are easily duplicated, one might want
     // to attach an unique identifier to the sk to separate users with the same name
 
-    public func createUser(userIdentity : Text, firstName : Text, lastName : Text, dob : Text, userEmail : Text, userType : Text) : async () {
+    public shared({caller=user1})func createUser(user : Text, firstName : Text, lastName : Text, dob : Text, userEmail : Text, userType : Text) : async () {
+        let userIdentity = user;
         let identityStatus = await skExists(userIdentity);
         if (userIdentity == "" or userType == "" or firstName == "" or lastName == "" or dob == "" or userEmail == "" or identityStatus == true) {
             return;
@@ -135,7 +144,7 @@ shared ({caller = owner}) actor class Users({
     };
     ///----function to get the getUserInfo data using the by passing uuid as sortkey------///
 
-    public query func getUserInfo(user : Text) : async ?UserInfo {
+    public  shared query({caller=user1}) func  getUserInfo(user:Text) : async ?UserInfo {
         let userIdentity = user;
         let userInfo = switch (CanDB.get(db, {sk = userIdentity})) {
             case null {null};

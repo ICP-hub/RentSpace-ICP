@@ -11,6 +11,7 @@ import Text "mo:base/Text";
 import Prelude "mo:base/Prelude";
 import List "mo:base/List";
 import Error "mo:base/Error";
+import utils "utils";
 
 shared ({caller = owner}) actor class Hotel({
     //partiton key of this canister
@@ -52,28 +53,28 @@ shared ({caller = owner}) actor class Hotel({
         hotelLocation : Text;
     };
 
-    func putHotelId(uuid : Text, userIdentity : Text) /* (?List.List<Text>, RBT.Tree<Text, List.List<Text>>) */ {
+    func putHotelId(userIdentity : Text, hotelId : Text) : async () {
 
         switch (RBT.get(hotelIdTree, Text.compare, userIdentity)) {
             case (?result) {
                 Debug.print(debug_show (result));
-                let data = List.push(userIdentity # "#" #uuid, result);
+                let data = List.push(hotelId, result);
                 hotelIdTree := RBT.put(hotelIdTree, Text.compare, userIdentity, data);
             };
             case null {
                 var hotelIdList = List.nil<Text>();
                 Debug.print("inside Null");
-                hotelIdList := List.push(userIdentity # "#" #uuid, hotelIdList);
+                hotelIdList := List.push(hotelId, hotelIdList);
                 hotelIdTree := RBT.put(hotelIdTree, Text.compare, userIdentity, hotelIdList);
             };
         };
     };
     ///---------public function to create the new Hotels---------///
-    public func createHotel(userIdentity : Text, uuid : Text, hotelData : HotelInfo) : async () {
-        let hotelId = userIdentity # "#" #uuid;
+    public func createHotel(userIdentity : Text, hotelData : HotelInfo) : async () {
+        let hotelId = await utils.createHotelSK(userIdentity);
         let hotelExist = await skExists(hotelId);
-        putHotelId(uuid, userIdentity);
-        if (uuid == "" or hotelData.hotelTitle == "" or hotelData.hotelDes == "" or hotelData.hotelImage == "" or hotelData.hotelPrice == "" or hotelData.hotelLocation == "" or hotelExist == true) {
+        await putHotelId(userIdentity, hotelId);
+        if (hotelData.hotelTitle == "" or hotelData.hotelDes == "" or hotelData.hotelImage == "" or hotelData.hotelPrice == "" or hotelData.hotelLocation == "" or hotelExist == true) {
             return ();
         };
         await* CanDB.put(
@@ -138,10 +139,10 @@ shared ({caller = owner}) actor class Hotel({
     };
 
     ////--function to update the Hotel data---////
-    public func updateHotel(userIdentity : Text, uuid : Text, hotelData : HotelInfo) : async ?HotelInfo {
-        let sortKey = userIdentity # "#" #uuid;
+    public func updateHotel(hotelId : Text, hotelData : HotelInfo) : async ?HotelInfo {
+        let sortKey = hotelId;
         let hotelExist = await skExists(sortKey);
-        if (uuid == "" or hotelData.hotelTitle == "" or hotelData.hotelDes == "" or hotelData.hotelImage == "" or hotelData.hotelPrice == "" or hotelData.hotelLocation == "" or userIdentity == "" or hotelExist == false) {
+        if (hotelId == "" or hotelData.hotelTitle == "" or hotelData.hotelDes == "" or hotelData.hotelImage == "" or hotelData.hotelPrice == "" or hotelData.hotelLocation == ""  or hotelExist == false) {
             return null;
         };
         let newData = await* CanDB.put(

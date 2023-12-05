@@ -13,51 +13,13 @@ import CA "mo:candb/CanisterActions";
 import List "mo:base/List";
 import User "UserCanister";
 import Hotel "HotelCanister";
+import Source "mo:uuid/async/SourceV4";
+import UUID "mo:uuid/UUID";
+
 
 shared ({caller = owner}) actor class Database() = this {
 
-  type UserInfo = {
-    firstName : Text;
-    lastName : Text;
-    dob : Text;
-    userEmail : Text;
-    userType : Text;
-    userProfile : Text;
-    userGovId : Text;
-    hostStatus : Bool;
-    verificationStatus : Bool;
-  };
-  type HotelInfo = {
-    hotelTitle : Text;
-    hotelDes : Text;
-    hotelImage : Text;
-    hotelPrice : Text;
-    hotelLocation : Text;
-  };
-  type ScanUser = {
-    users : [UserInfo];
-    nextKey : ?Text;
-  };
-  type ScanHotels = {
-    hotels : [HotelInfo];
-    nextKey : ?Text;
-  };
-  public type UserType = actor {
-    getPK : query () -> async Text;
-    skExists : query (Text) -> async Bool;
-    getUserInfo : query (Text) -> async ?UserInfo;
-    createUser : (Text, Text, Text, Text, Text, Text) -> async ();
-    updateUserInfo : (Text, UserInfo) -> async ?UserInfo;
-    scanUsers : query (Text, Text, Nat, ?Bool) -> async ScanUser;
-  };
-  public type HotelType = actor {
-    createHotel : (Text,Text, HotelInfo) -> async ();
-    getHotel : query (Text) -> async ?HotelInfo;
-    updateHotel : (Text, HotelInfo) -> async ?HotelInfo;
-    scanRent : query (Text, Text, Nat, ?Bool) -> async ScanHotels;
-    getHotelId : query (Text) -> async ?[Text];
-  };
-
+  
   // @required stable variable (do not delete or change)
 
   //holds the canisterMap of PK -> CanisterIdList
@@ -179,63 +141,8 @@ shared ({caller = owner}) actor class Database() = this {
     return "Canisters in PK " # pk # " upgraded";
   };
 
-  //for validating user
-  public shared ({caller}) func authTest() : async Text {
-    assert (caller == owner);
-    return "Passed";
-  };
-  //for the help
-  public func getPk(id : Text) : async Text {
-    let actorclass = actor (id) : UserType;
-    await actorclass.getPK();
-  };
-
-  public func skExist(id : Text, sk : Text) : async Bool {
-    let actorclass = actor (id) : UserType;
-    await actorclass.skExists(sk);
-  };
-
-  public func getInfo(id : Text, sk : Text) : async ?UserInfo {
-    let actorclass = actor (id) : UserType;
-    await actorclass.getUserInfo(sk);
-  };
-
-  public func putUser(id : Text, sk : Text, firstName : Text, lastName : Text, dob : Text, email : Text, userType : Text) : async () {
-    let actorclass = actor (id) : UserType;
-    await actorclass.createUser(sk, firstName, lastName, dob, email, userType);
-  };
-
-  public func updateUser(canisterId : Text, user : Text, userData : UserInfo) : async ?UserInfo {
-    let actorclass = actor (canisterId) : UserType;
-    await actorclass.updateUserInfo(user, userData);
-  };
-  public func scanUsers(canisterId : Text, skUpper : Text, skLower : Text, limit : Nat, ascending : ?Bool) : async ScanUser {
-    let actorclass = actor (canisterId) : UserType;
-    await actorclass.scanUsers(skUpper, skLower, limit, ascending);
-  };
-  public func createHotel(canisterId : Text, userIdentity:Text,uuid : Text, hotelData : HotelInfo) : async () {
-    let actorclass = actor (canisterId) : HotelType;
-    await actorclass.createHotel(userIdentity,uuid, hotelData);
-  };
-
-  public func getHotel(canisterId : Text, uuid : Text) : async ?HotelInfo {
-    let actorclass = actor (canisterId) : HotelType;
-    await actorclass.getHotel(uuid);
-  };
-
-  public func updateHotel(canisterId : Text, uuid : Text, hotelData : HotelInfo) : async ?HotelInfo {
-    let actorclass = actor (canisterId) : HotelType;
-    await actorclass.updateHotel(uuid : Text, hotelData : HotelInfo);
-  };
-  public func scanRent(canisterId : Text, skUpper : Text, skLower : Text, limit : Nat, ascending : ?Bool) : async ScanHotels {
-    let actorclass = actor (canisterId) : HotelType;
-    await actorclass.scanRent(skUpper, skLower, limit, ascending);
-  };
-
-  public func getHotelId(canisterId : Text, userIdentity : Text) : async ?[Text] {
-    let actorclass = actor (canisterId) : HotelType;
-    await actorclass.getHotelId(userIdentity);
-  };
+  
+  //
 
   public shared ({caller = caller}) func autoScaleHotelCanister(pk : Text) : async Text {
     // Auto-Scaling Authorization - if the request to auto-scale the partition is not coming from an existing canister in the partition, reject it
