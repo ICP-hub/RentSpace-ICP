@@ -10,6 +10,10 @@ import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
 import java.util.List;
 
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+
+
+
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
@@ -25,8 +29,16 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
+          //List<ReactPackage> packages = new List<ReactPackage>(new MainReactPackage(),new SplashScreenReactPackage(),this);
           return packages;
         }
+        //  @Override
+        // protected List<ReactPackage> getPackages() {
+        //     return Arrays.<ReactPackage>asList(
+        //             new MainReactPackage(),
+        //     new SplashScreenReactPackage()  //here
+        //     );
+        // }
 
         @Override
         protected String getJSMainModuleName() {

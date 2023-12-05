@@ -23,7 +23,7 @@ const RootComponent: React.FC = () => {
   return (
     <NavigationContainer linking={linking}>
       <Stack.Navigator initialRouteName="Launch">
-        <Stack.Screen name="Launch" component={Main} />
+        <Stack.Screen options={{headerShown:false}} name="Launch" component={Main} />
       </Stack.Navigator>
     </NavigationContainer>
   );
