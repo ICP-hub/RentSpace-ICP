@@ -1,3 +1,4 @@
 [dependencies]
 base = "0.9.7"
 candb = "1.0.2"
+stable-hash-map = "0.0.1"

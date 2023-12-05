@@ -10,11 +10,13 @@ import Array "mo:base/Array";
 import Iter "mo:base/Iter";
 import Entity "mo:candb/Entity";
 import CA "mo:candb/CanisterActions";
-import schema "schema";
+import List "mo:base/List";
+import User "UserCanister";
+import Hotel "HotelCanister";
 
-shared ({ caller = owner }) actor class Database() = this {
+shared ({caller = owner}) actor class Database() = this {
 
-  type AccountInfo = {
+  type UserInfo = {
     firstName : Text;
     lastName : Text;
     dob : Text;
@@ -25,32 +27,35 @@ shared ({ caller = owner }) actor class Database() = this {
     hostStatus : Bool;
     verificationStatus : Bool;
   };
-  type RentSpaceInfo = {
-    spaceTitle : Text;
-    spaceDes : Text;
-    spaceImage : Text;
-    spacePrice : Text;
-    spaceLocation : Text;
+  type HotelInfo = {
+    hotelTitle : Text;
+    hotelDes : Text;
+    hotelImage : Text;
+    hotelPrice : Text;
+    hotelLocation : Text;
   };
-  type ScanAccount = {
-    accounts : [AccountInfo];
+  type ScanUser = {
+    users : [UserInfo];
     nextKey : ?Text;
   };
-  type ScanRentSpaces = {
-    rentSpaces : [RentSpaceInfo];
+  type ScanHotels = {
+    hotels : [HotelInfo];
     nextKey : ?Text;
   };
-  public type ActorType = actor {
+  public type UserType = actor {
     getPK : query () -> async Text;
     skExists : query (Text) -> async Bool;
-    getAccountInfo : query (Text) -> async ?AccountInfo;
-    createAccount : (Text, Text, Text, Text, Text, Text) -> async ();
-    updateAccountInfo : (Text, AccountInfo) -> async ?AccountInfo;
-    createRentSpace : (Text, RentSpaceInfo) -> async ();
-    getRentSpace : query (Text) -> async ?RentSpaceInfo;
-    updateRentSpace : (Text, RentSpaceInfo) -> async ?RentSpaceInfo;
-    scanAccounts : query (Text, Text, Nat, ?Bool) -> async ScanAccount;
-    scanRent : query (Text, Text, Nat, ?Bool) -> async ScanRentSpaces;
+    getUserInfo : query (Text) -> async ?UserInfo;
+    createUser : (Text, Text, Text, Text, Text, Text) -> async ();
+    updateUserInfo : (Text, UserInfo) -> async ?UserInfo;
+    scanUsers : query (Text, Text, Nat, ?Bool) -> async ScanUser;
+  };
+  public type HotelType = actor {
+    createHotel : (Text,Text, HotelInfo) -> async ();
+    getHotel : query (Text) -> async ?HotelInfo;
+    updateHotel : (Text, HotelInfo) -> async ?HotelInfo;
+    scanRent : query (Text, Text, Nat, ?Bool) -> async ScanHotels;
+    getHotelId : query (Text) -> async ?[Text];
   };
 
   // @required stable variable (do not delete or change)
@@ -61,7 +66,7 @@ shared ({ caller = owner }) actor class Database() = this {
   // @required API (do not delete or Change)
 
   // Get all canister for an specific PK
-  public shared query ({ caller = caller }) func getCanistersByPK(pk : Text) : async [Text] {
+  public shared query ({caller = caller}) func getCanistersByPK(pk : Text) : async [Text] {
     getCanistersIdsIfExists(pk);
   };
 
@@ -84,42 +89,43 @@ shared ({ caller = owner }) actor class Database() = this {
   /// exist for the given PK
   func getCanistersIdsIfExists(pk : Text) : [Text] {
     switch (CanisterMap.get(pkToCanisterMap, pk)) {
-      case null { [] };
-      case (?canisterIdsBuffer) { Buffer.toArray(canisterIdsBuffer) };
+      case null {[]};
+      case (?canisterIdsBuffer) {Buffer.toArray(canisterIdsBuffer)};
     };
   };
 
-  public shared ({ caller = caller }) func autoScaleServiceCanister(pk : Text) : async Text {
+  public shared ({caller = caller}) func autoScaleUserCanister(pk : Text) : async Text {
     // Auto-Scaling Authorization - if the request to auto-scale the partition is not coming from an existing canister in the partition, reject it
     if (Utils.callingCanisterOwnsPK(caller, pkToCanisterMap, pk)) {
       Debug.print("creating an additional canister for pk=" # pk);
-      await createCanister(pk, ?[owner, Principal.fromActor(this)]);
+      await createActorCanister(pk, ?[owner, Principal.fromActor(this)]);
     } else {
       throw Error.reject("not authorized");
     };
   };
 
-  public shared ({ caller = creator }) func createNewCanister(canisterName : Text, controllers : ?[Principal]) : async ?Text {
+  public shared ({caller = creator}) func createNewUserCanister(canisterName : Text, controllers : ?[Principal]) : async ?Text {
     let pk = canisterName;
     let canisterIds = getCanistersIdsIfExists(pk);
     if (canisterIds == []) {
-      ?(await createCanister(pk, ?[owner, Principal.fromActor(this)]));
+      ?(await createUserCanister(pk, ?[owner, Principal.fromActor(this)]));
     } else {
       Debug.print(pk # "already exists");
       null;
     };
   };
+
   // Spins up a new HelloService canister with the provided pk and controllers
-  func createCanister(pk : Text, controllers : ?[Principal]) : async Text {
+  func createUserCanister(pk : Text, controllers : ?[Principal]) : async Text {
     Debug.print("creating new hello service canister with pk=" # pk);
     // Pre-load 300 billion cycles for the creation of a new Hello Service canister
     // Note that canister creation costs 100 billion cycles, meaning there are 200 billion
     // left over for the new canister when it is created
     Cycles.add(300_000_000_000);
-    let newCanister = await schema.Schema({
+    let newCanister = await User.Users({
       partitonKey = pk;
       scalingOptions = {
-        autoScalingHook = autoScaleServiceCanister;
+        autoScalingHook = autoScaleUserCanister;
         sizeLimit = #heapSize(475_000_000); // Scale out at 475MB
         // for auto-scaling testing
         //sizeLimit = #count(3); // Scale out at 3 entities inserted
@@ -141,11 +147,11 @@ shared ({ caller = owner }) actor class Database() = this {
     // After creating the new Hello Service canister, add it to the pkToCanisterMap
     pkToCanisterMap := CanisterMap.add(pkToCanisterMap, pk, newCanisterId);
 
-    Debug.print("new hello service canisterId=" # newCanisterId);
+    Debug.print("new User canisterId=" # newCanisterId);
     newCanisterId;
   };
 
-  public shared ({ caller }) func deleteServiceCanister(serviceId : Text) : async () {
+  public shared ({caller}) func deleteCanister(serviceId : Text) : async () {
     assert (caller == owner);
     // admin can delete any pk by passing in service id of user principal
     let pk = serviceId;
@@ -160,11 +166,11 @@ shared ({ caller = owner }) actor class Database() = this {
     };
   };
 
-  public shared ({ caller }) func upgradeStoryServiceCanistersByPK(serviceId : Text, wasmModule : Blob) : async Text {
+  public shared ({caller}) func upgradeCanisterByPK(serviceId : Text, wasmModule : Blob) : async Text {
     assert (caller == owner);
     let pk = serviceId;
     let scalingOptions = {
-      autoScalingHook = autoScaleServiceCanister;
+      autoScalingHook = autoScaleUserCanister;
       sizeLimit = #heapSize(475_000_000); // Scale out at 475MB
     };
 
@@ -174,56 +180,118 @@ shared ({ caller = owner }) actor class Database() = this {
   };
 
   //for validating user
-  public shared ({ caller }) func authTest() : async Text {
+  public shared ({caller}) func authTest() : async Text {
     assert (caller == owner);
     return "Passed";
   };
   //for the help
   public func getPk(id : Text) : async Text {
-    let actorclass = actor (id) : ActorType;
+    let actorclass = actor (id) : UserType;
     await actorclass.getPK();
   };
 
   public func skExist(id : Text, sk : Text) : async Bool {
-    let actorclass = actor (id) : ActorType;
+    let actorclass = actor (id) : UserType;
     await actorclass.skExists(sk);
   };
 
-  public func getInfo(id : Text, sk : Text) : async ?AccountInfo {
-    let actorclass = actor (id) : ActorType;
-    await actorclass.getAccountInfo(sk);
+  public func getInfo(id : Text, sk : Text) : async ?UserInfo {
+    let actorclass = actor (id) : UserType;
+    await actorclass.getUserInfo(sk);
   };
 
-  public func putAccount(id : Text, sk : Text, firstName : Text, lastName : Text, dob : Text, email : Text, userType : Text) : async () {
-    let actorclass = actor (id) : ActorType;
-    await actorclass.createAccount(sk, firstName, lastName, dob, email, userType);
+  public func putUser(id : Text, sk : Text, firstName : Text, lastName : Text, dob : Text, email : Text, userType : Text) : async () {
+    let actorclass = actor (id) : UserType;
+    await actorclass.createUser(sk, firstName, lastName, dob, email, userType);
   };
 
-  public func updateAccount(canisterId : Text, user : Text, accountData : AccountInfo) : async ?AccountInfo {
-    let actorclass = actor (canisterId) : ActorType;
-    await actorclass.updateAccountInfo(user, accountData);
+  public func updateUser(canisterId : Text, user : Text, userData : UserInfo) : async ?UserInfo {
+    let actorclass = actor (canisterId) : UserType;
+    await actorclass.updateUserInfo(user, userData);
   };
-  public func scanAccounts(canisterId : Text, skUpper : Text, skLower : Text, limit : Nat, ascending : ?Bool) : async ScanAccount {
-    let actorclass = actor (canisterId) : ActorType;
-    await actorclass.scanAccounts(skUpper, skLower, limit, ascending);
+  public func scanUsers(canisterId : Text, skUpper : Text, skLower : Text, limit : Nat, ascending : ?Bool) : async ScanUser {
+    let actorclass = actor (canisterId) : UserType;
+    await actorclass.scanUsers(skUpper, skLower, limit, ascending);
   };
-  public func createRentSpace(canisterId : Text, uuid : Text, spaceData : RentSpaceInfo) : async () {
-    let actorclass = actor (canisterId) : ActorType;
-    await actorclass.createRentSpace(uuid, spaceData);
-  };
-
-  public func getRentSpace(canisterId : Text, uuid : Text) : async ?RentSpaceInfo {
-    let actorclass = actor (canisterId) : ActorType;
-    await actorclass.getRentSpace(uuid);
+  public func createHotel(canisterId : Text, userIdentity:Text,uuid : Text, hotelData : HotelInfo) : async () {
+    let actorclass = actor (canisterId) : HotelType;
+    await actorclass.createHotel(userIdentity,uuid, hotelData);
   };
 
-  public func updateRentSpace(canisterId : Text, uuid : Text, spaceData : RentSpaceInfo) : async ?RentSpaceInfo {
-    let actorclass = actor (canisterId) : ActorType;
-    await actorclass.updateRentSpace(uuid : Text, spaceData : RentSpaceInfo);
+  public func getHotel(canisterId : Text, uuid : Text) : async ?HotelInfo {
+    let actorclass = actor (canisterId) : HotelType;
+    await actorclass.getHotel(uuid);
   };
-  public func scanRent(canisterId : Text, skUpper : Text, skLower : Text, limit : Nat, ascending : ?Bool) : async ScanRentSpaces {
-    let actorclass = actor (canisterId) : ActorType;
+
+  public func updateHotel(canisterId : Text, uuid : Text, hotelData : HotelInfo) : async ?HotelInfo {
+    let actorclass = actor (canisterId) : HotelType;
+    await actorclass.updateHotel(uuid : Text, hotelData : HotelInfo);
+  };
+  public func scanRent(canisterId : Text, skUpper : Text, skLower : Text, limit : Nat, ascending : ?Bool) : async ScanHotels {
+    let actorclass = actor (canisterId) : HotelType;
     await actorclass.scanRent(skUpper, skLower, limit, ascending);
+  };
+
+  public func getHotelId(canisterId : Text, userIdentity : Text) : async ?[Text] {
+    let actorclass = actor (canisterId) : HotelType;
+    await actorclass.getHotelId(userIdentity);
+  };
+
+  public shared ({caller = caller}) func autoScaleHotelCanister(pk : Text) : async Text {
+    // Auto-Scaling Authorization - if the request to auto-scale the partition is not coming from an existing canister in the partition, reject it
+    if (Utils.callingCanisterOwnsPK(caller, pkToCanisterMap, pk)) {
+      Debug.print("creating an additional canister for pk=" # pk);
+      await createActorCanister(pk, ?[owner, Principal.fromActor(this)]);
+    } else {
+      throw Error.reject("not authorized");
+    };
+  };
+
+  public shared ({caller = creator}) func createNewHotelCanister(canisterName : Text, controllers : ?[Principal]) : async ?Text {
+    let pk = canisterName;
+    let canisterIds = getCanistersIdsIfExists(pk);
+    if (canisterIds == []) {
+      ?(await createActorCanister(pk, ?[owner, Principal.fromActor(this)]));
+    } else {
+      Debug.print(pk # "already exists");
+      null;
+    };
+  };
+
+  // Spins up a new HelloService canister with the provided pk and controllers
+  func createActorCanister(pk : Text, controllers : ?[Principal]) : async Text {
+    Debug.print("creating new hello service canister with pk=" # pk);
+    // Pre-load 300 billion cycles for the creation of a new Hello Service canister
+    // Note that canister creation costs 100 billion cycles, meaning there are 200 billion
+    // left over for the new canister when it is created
+    Cycles.add(300_000_000_000);
+    let newCanister = await Hotel.Hotel({
+      partitonKey = pk;
+      scalingOptions = {
+        autoScalingHook = autoScaleHotelCanister;
+        sizeLimit = #heapSize(475_000_000); // Scale out at 475MB
+        // for auto-scaling testing
+        //sizeLimit = #count(3); // Scale out at 3 entities inserted
+      };
+      owners = controllers;
+    });
+    let newCanisterPrincipal = Principal.fromActor(newCanister);
+    await CA.updateCanisterSettings({
+      canisterId = newCanisterPrincipal;
+      settings = {
+        controllers = controllers;
+        compute_allocation = ?0;
+        memory_allocation = ?0;
+        freezing_threshold = ?2592000;
+      };
+    });
+
+    let newCanisterId = Principal.toText(newCanisterPrincipal);
+    // After creating the new Hello Service canister, add it to the pkToCanisterMap
+    pkToCanisterMap := CanisterMap.add(pkToCanisterMap, pk, newCanisterId);
+
+    Debug.print("new User canisterId=" # newCanisterId);
+    newCanisterId;
   };
 
 };
