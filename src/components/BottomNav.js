@@ -2,6 +2,8 @@ import { View, Text,StyleSheet, TouchableOpacity,Image } from 'react-native'
 import React from 'react'
 import { COLORS ,SIZES} from '../constants/themes'
 import {images} from '../constants'
+import Icon from 'react-native-vector-icons/AntDesign'
+import Icon2 from 'react-native-vector-icons/Fontisto'
 
 
 
@@ -12,22 +14,22 @@ const BottomNav = ({handlePresentModal,openFinishSignUp,openComm,openNotiModal})
     
     
     <View style={styles.viewNav}>
+        {/* <Icon name="home" size={20} color={COLORS.inputBorder}/> */}
         <TouchableOpacity style={styles.iconNav} onPress={()=>{openFinishSignUp()}}>
-            <Image source={images.search}/>
+        <Icon name="filter" size={25} color={COLORS.inputBorder}/>
         </TouchableOpacity >
         <TouchableOpacity style={styles.iconNav} onPress={()=>{openComm()}}>
-            <Image source={images.search}/>
+            {/* <Image source={images.search}/> */}
+            <Icon name="search1" size={25} color={COLORS.inputBorder}/>
         </TouchableOpacity >
         <TouchableOpacity style={styles.iconNav} onPress={()=>{openNotiModal()}}>
-            <Image source={images.favourite}/>
+        <Icon name="hearto" size={25} color={COLORS.inputBorder}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconNav}>
-            <Image source={images.message}/>
+        <Icon2 name="comment" size={20} color={COLORS.inputBorder}/>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.profileCont} onPress={()=>{handlePresentModal()}}>
-            <Image source={images.profileHead}/>
-            <Image source={images.profile}/>
-            
+        <TouchableOpacity style={styles.iconNav} onPress={()=>{handlePresentModal()}}>
+        <Icon name="user" size={25} color={COLORS.inputBorder}/>
         </TouchableOpacity>
     </View>
       
@@ -47,8 +49,8 @@ const styles=StyleSheet.create({
     },
     iconNav:{
         display:'inline',
-        width:20,
-        height:20
+        width:25,
+        height:25
     },
     viewNav:{
         backgroundColor:"white",
