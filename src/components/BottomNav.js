@@ -7,7 +7,7 @@ import Icon2 from 'react-native-vector-icons/Fontisto'
 
 
 
-const BottomNav = ({handlePresentModal,openFinishSignUp,openComm,openNotiModal}) => {
+const BottomNav = ({handlePresentModal,openFinishSignUp,openComm,openNotiModal,openDetailsModal}) => {
 
 
   return (
@@ -25,7 +25,7 @@ const BottomNav = ({handlePresentModal,openFinishSignUp,openComm,openNotiModal})
         <TouchableOpacity style={styles.iconNav} onPress={()=>{openNotiModal()}}>
         <Icon name="hearto" size={25} color={COLORS.inputBorder}/>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.iconNav}>
+        <TouchableOpacity style={styles.iconNav} onPress={()=>{openDetailsModal()}}>
         <Icon2 name="comment" size={20} color={COLORS.inputBorder}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconNav} onPress={()=>{handlePresentModal()}}>

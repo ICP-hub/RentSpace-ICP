@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {COLORS, SIZES} from '../constants/themes';
 import {images} from '../constants';
 import BottomNav from '../components/BottomNav';
@@ -10,14 +10,23 @@ import BottomSheetFinishSignUp from '../components/BottomSheetFinishSignUp';
 import { InAppBrowser } from 'react-native-inappbrowser-reborn'
 import BottomSheetCommunity from '../components/BottomSheetCommunity';
 import BottomSheetNotification from '../components/BottomSheetNotification';
+import SplashScreen from 'react-native-splash-screen';
+import BottomSheetDetails from '../components/BottomSheetDetails';
 //import BottomSheet from '@gorhom/bottom-sheet'
 // import { StatusBar } from 'expo-status-bar'
 
 const Main = () => {
+
+
+  useEffect(()=>{
+    SplashScreen.hide()
+  },[])
+
   const btmSheetLoginRef = useRef(null);
   const btmSheetFinishRef = useRef(null);
   const btmSheetCommRef=useRef(null)
   const btmSheetNotiRef=useRef(null)
+  const btmExtraDetailsRef=useRef(null)
   const snapPoints = ['94%'];
   const handlePresentModal = () => {
     btmSheetLoginRef.current.present();
@@ -77,6 +86,9 @@ const Main = () => {
   const openNotiModal=()=>{
     btmSheetNotiRef.current.present()
   }
+  const openDetailsModal=()=>{
+    btmExtraDetailsRef.current.present()
+  }
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       {/* <BottomSheetLogin/> */}
@@ -84,7 +96,13 @@ const Main = () => {
       <BottomSheetModalProvider>
         {/* <StatusBar hidden={true}/> */}
         {/* <BottomSheetFinishSignUp/> */}
-        <BottomNav handlePresentModal={handlePresentModal} openFinishSignUp={openFinishSignUp} openComm={openComm} openNotiModal={openNotiModal}/>
+        <BottomNav 
+          handlePresentModal={handlePresentModal} 
+          openFinishSignUp={openFinishSignUp} 
+          openComm={openComm} 
+          openNotiModal={openNotiModal}
+          openDetailsModal={openDetailsModal}
+        />
         <BottomSheetModal
           ref={btmSheetLoginRef}
           index={0}
@@ -111,6 +129,14 @@ const Main = () => {
           snapPoints={snapPoints}
           >
             <BottomSheetNotification/>
+
+        </BottomSheetModal>
+        <BottomSheetModal
+          ref={btmExtraDetailsRef}
+          index={0}
+          snapPoints={snapPoints}
+          >
+            <BottomSheetDetails/>
 
         </BottomSheetModal>
       </BottomSheetModalProvider>
