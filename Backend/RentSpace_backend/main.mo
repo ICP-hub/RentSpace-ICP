@@ -201,4 +201,8 @@ shared ({caller = owner}) actor class Database() = this {
     newCanisterId;
   };
 
+  public shared query({caller}) func whoami () : async Text {
+    return Principal.toText(caller);
+  }
+
 };
