@@ -64,6 +64,7 @@ shared ({caller = owner}) actor class Users({
         if (userIdentity == "" or userType == "" or firstName == "" or lastName == "" or dob == "" or userEmail == "" or identityStatus == true) {
             return;
         };
+        Debug.print("yeah this is working");
         //inserts the entity into CanDB
         await* CanDB.put(
             db,
