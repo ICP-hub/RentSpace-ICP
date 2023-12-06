@@ -4,6 +4,14 @@
       "main": "Backend/RentSpace_backend/main.mo",
       "type": "motoko"
     },
+    "User": {
+      "main": "Backend/RentSpace_backend/UserCanister.mo",
+      "type": "motoko"
+    },
+    "hotel": {
+      "main": "Backend/RentSpace_backend/HotelCanister.mo",
+      "type": "motoko"
+    },
     "LoginWeb": {
       "dependencies": [],
       "frontend": {

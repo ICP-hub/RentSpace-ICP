@@ -100,6 +100,7 @@ shared ({caller = owner}) actor class Users({
     // attempts to cast an Entity (retrieved from CanDB) into a User type
     func unWarpUserInfo(entity : Entity.Entity) : ?UserInfo {
         let {sk; attributes} = entity;
+        Debug.print(debug_show(entity));
         let userIdValue = Entity.getAttributeMapValueForKey(attributes, "userId");
         let firstNameValue = Entity.getAttributeMapValueForKey(attributes, "firstName");
         let lastNameValue = Entity.getAttributeMapValueForKey(attributes, "lastName");

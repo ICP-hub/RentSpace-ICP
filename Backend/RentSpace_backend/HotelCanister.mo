@@ -60,12 +60,14 @@ shared ({caller = owner}) actor class Hotel({
                 Debug.print(debug_show (result));
                 let data = List.push(hotelId, result);
                 hotelIdTree := RBT.put(hotelIdTree, Text.compare, userIdentity, data);
+                return 
             };
             case null {
                 var hotelIdList = List.nil<Text>();
                 Debug.print("inside Null");
                 hotelIdList := List.push(hotelId, hotelIdList);
                 hotelIdTree := RBT.put(hotelIdTree, Text.compare, userIdentity, hotelIdList);
+                return 
             };
         };
     };
