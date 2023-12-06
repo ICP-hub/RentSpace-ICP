@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
         color:COLORS.textLightGrey,
         fontSize:SIZES.small,
         width:'80%',
-        marginBottom:20
+        marginBottom:25
     },
     subSec:{
         width:'80%'

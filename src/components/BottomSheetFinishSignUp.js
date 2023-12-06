@@ -5,6 +5,9 @@ import { images } from '../constants'
 import { RawButton, TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { Calendar } from 'react-native-calendars'
 import { Dimensions } from 'react-native'
+import fetch from 'isomorphic-fetch';
+import { HttpAgent } from '@dfinity/agent';
+
 
 const BottomSheetFinishSignUp = ({closeModal}) => {
     const [fname,setFname]=useState("")
@@ -13,6 +16,10 @@ const BottomSheetFinishSignUp = ({closeModal}) => {
     const [DOB,setDOB]=useState("Birthday(dd/mm/yyyy)")
     const [showCalendar,setShowCalendar]=useState(false)
     const [selected,setSelected]=useState("")
+
+    const host='http://127.0.0.1:4943'
+    const agent = new HttpAgent({ fetch, host });
+
   return (
     <View style={styles.bottomSheet}>
         <View style={styles.header}>

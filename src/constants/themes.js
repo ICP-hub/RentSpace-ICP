@@ -12,6 +12,7 @@ const SIZES={
   small: 12,
   preMedium:14,
   medium: 16,
+  largeMed:18,
   large: 20,
   xLarge: 24,
   xxLarge: 32,
