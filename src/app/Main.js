@@ -1,5 +1,5 @@
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import React, {useEffect, useRef} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, Image,Modal} from 'react-native';
+import React, {useEffect, useRef,useState} from 'react';
 import {COLORS, SIZES} from '../constants/themes';
 import {images} from '../constants';
 import BottomNav from '../components/BottomNav';
@@ -12,10 +12,17 @@ import BottomSheetCommunity from '../components/BottomSheetCommunity';
 import BottomSheetNotification from '../components/BottomSheetNotification';
 import SplashScreen from 'react-native-splash-screen';
 import BottomSheetDetails from '../components/BottomSheetDetails';
+import ModalSafety from '../components/ModalSafety';
+import ModalCancellation from '../components/ModalCancellation';
+import ModalHouseRules from '../components/ModalHouseRules';
 //import BottomSheet from '@gorhom/bottom-sheet'
 // import { StatusBar } from 'expo-status-bar'
 
 const Main = () => {
+
+  const [safetyModal,setSafetyModal]=useState(false)
+  const [cancelModal,setCancelModal]=useState(false)
+  const [rulesModal,setRulesModal]=useState(false)
 
 
   useEffect(()=>{
@@ -90,12 +97,26 @@ const Main = () => {
     btmExtraDetailsRef.current.present()
   }
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      {/* <BottomSheetLogin/> */}
-
+    // Necessary for capturing touch gestures in the screen
+    <GestureHandlerRootView style={{flex: 1,paddingTop:200}}>
+      
       <BottomSheetModalProvider>
-        {/* <StatusBar hidden={true}/> */}
-        {/* <BottomSheetFinishSignUp/> */}
+
+        {/* Modals Defined */}
+
+        <Modal visible={safetyModal} animationType='fade'  >
+          <ModalSafety setSafetyModal={setSafetyModal}/>
+        </Modal>
+
+        <Modal visible={cancelModal} animationType='fade' >
+          <ModalCancellation setCancelModal={setCancelModal}/>
+        </Modal>
+
+        <Modal visible={rulesModal} animationType='fade' >
+          <ModalHouseRules setRulesModal={setRulesModal}/>
+        </Modal>
+
+        {/* navigation Bar */}
         <BottomNav 
           handlePresentModal={handlePresentModal} 
           openFinishSignUp={openFinishSignUp} 
@@ -103,6 +124,23 @@ const Main = () => {
           openNotiModal={openNotiModal}
           openDetailsModal={openDetailsModal}
         />
+        <TouchableOpacity style={styles.btn} onPress={()=>{setSafetyModal(true)}}>
+          <Text style={styles.btnText}>
+            Safety & Property
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn} onPress={()=>{setCancelModal(true)}}>
+          <Text style={styles.btnText}>
+            Cancellation Policy
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn} onPress={()=>{setRulesModal(true)}}>
+          <Text style={styles.btnText}>
+            House Rules
+          </Text>
+        </TouchableOpacity>
+
+        {/* BottomSheets */}
         <BottomSheetModal
           ref={btmSheetLoginRef}
           index={0}
@@ -145,3 +183,25 @@ const Main = () => {
 };
 
 export default Main;
+
+const styles = StyleSheet.create({
+  btn:{
+    display:'flex',
+        flexDirection:'column',
+        alignItems:'center',
+        justifyContent:'center',
+        backgroundColor:"white",
+        borderRadius:10,
+        height:50,
+        paddingHorizontal:30,
+        marginTop:20,
+        borderWidth:1,
+        borderColor:COLORS.inputBorder,
+
+  },
+  btnText:{
+    color:COLORS.inputBorder,
+        fontWeight:'bold',
+        fontSize:SIZES.medium
+  }
+})

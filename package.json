@@ -20,6 +20,7 @@
     "@gorhom/bottom-sheet": "^4.5.1",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
+    "deprecated-react-native-prop-types": "^5.0.0",
     "fast-text-encoding": "^1.0.6",
     "ic-mops": "^0.34.4",
     "patch-package": "^6.4.7",
