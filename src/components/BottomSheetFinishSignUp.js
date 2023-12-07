@@ -22,7 +22,7 @@ const BottomSheetFinishSignUp = ({closeModal}) => {
   const [selected, setSelected] = useState('');
 
   const id = 'by6od-j4aaa-aaaaa-qaadq-cai';
-  const localHost = 'http://localhost:8080/';
+  const localHost = 'http://127.0.0.1:4943';
   const agent = new HttpAgent({host: localHost});
 
   async function loadUser() {
