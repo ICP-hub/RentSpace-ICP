@@ -15,6 +15,8 @@ import BottomSheetDetails from '../components/BottomSheetDetails';
 import ModalSafety from '../components/ModalSafety';
 import ModalCancellation from '../components/ModalCancellation';
 import ModalHouseRules from '../components/ModalHouseRules';
+import SearchBar from '../components/SearchBar';
+import HeaderSearch from '../components/HeaderSearch';
 //import BottomSheet from '@gorhom/bottom-sheet'
 // import { StatusBar } from 'expo-status-bar'
 
@@ -115,6 +117,9 @@ const Main = () => {
         <Modal visible={rulesModal} animationType='fade' >
           <ModalHouseRules setRulesModal={setRulesModal}/>
         </Modal>
+        {/* searchBar Top */}
+
+        
 
         {/* navigation Bar */}
         <BottomNav 
@@ -124,6 +129,9 @@ const Main = () => {
           openNotiModal={openNotiModal}
           openDetailsModal={openDetailsModal}
         />
+
+        <HeaderSearch/>
+        
         <TouchableOpacity style={styles.btn} onPress={()=>{setSafetyModal(true)}}>
           <Text style={styles.btnText}>
             Safety & Property
@@ -139,6 +147,8 @@ const Main = () => {
             House Rules
           </Text>
         </TouchableOpacity>
+
+        
 
         {/* BottomSheets */}
         <BottomSheetModal

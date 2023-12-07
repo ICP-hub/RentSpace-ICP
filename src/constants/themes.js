@@ -5,7 +5,10 @@ const COLORS={
     textLightGrey:"#666666",
     iconColourModal:"#2A353D",
     hrLine:"#F4F4F4",
-    inputBorder2:"#360bbf"
+    inputBorder2:"#360bbf",
+    lightPurple:'#9274A1',
+    lightBorderPurple:"#CEC2D6",
+    darkPurple:'#3C115A'
 }
 const SIZES={
     xSmall: 10,
