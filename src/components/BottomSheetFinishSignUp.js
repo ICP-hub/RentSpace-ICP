@@ -21,11 +21,11 @@ const BottomSheetFinishSignUp = ({closeModal}) => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selected, setSelected] = useState('');
 
-  const id = '';
-  const localHost = 'http://127.0.0.1:4943/';
+  const id = 'by6od-j4aaa-aaaaa-qaadq-cai';
+  const localHost = 'http://localhost:8080/';
   const agent = new HttpAgent({host: localHost});
 
-  async function loadNFT() {
+  async function loadUser() {
     const UserActor = await Actor.createActor(idlFactory, {
       agent,
       canisterId: id,
