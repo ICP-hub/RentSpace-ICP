@@ -20,6 +20,7 @@ const BottomSheetFinishSignUp = ({closeModal}) => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selected, setSelected] = useState('');
 
+    let id ="be2us-64aaa-aaaaa-qaabq-cai";
   let UserActor;
 
   const localHost = 'http://localhost:8080/';
