@@ -1,7 +1,8 @@
 import {Image, Modal, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {SIZES, COLORS} from '../constants/themes';
 import {images} from '../constants';
+
 import {
   RawButton,
   TextInput,
@@ -20,22 +21,20 @@ const BottomSheetFinishSignUp = ({closeModal}) => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selected, setSelected] = useState('');
 
-    let id ="be2us-64aaa-aaaaa-qaabq-cai";
-  let UserActor;
-
-  const localHost = 'http://localhost:8080/';
+  const id = '';
+  const localHost = 'http://127.0.0.1:4943/';
   const agent = new HttpAgent({host: localHost});
 
-  async function loadUser() {
-    UserActor = await Actor.createActor(idlFactory, {
+  async function loadNFT() {
+    const UserActor = await Actor.createActor(idlFactory, {
       agent,
       canisterId: id,
     });
-  };
+    console.log(UserActor);
+  }
 
   useEffect(() => {
-      loadUser();
-      console.log(UserActor);
+    loadUser();
   }, []);
 
   return (

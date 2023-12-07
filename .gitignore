@@ -79,6 +79,7 @@ yarn-error.log
 .dfx/
 
 # generated files
+/src/declarations
 
 
 # frontend code
