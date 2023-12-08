@@ -46,6 +46,8 @@ loginButton.onclick = async (e) => {
 
     // At this point we're authenticated, and we can get the identity from the auth client.
     const middleIdentity = authClient.getIdentity();
+    console.log("middleIdentity===>",middleIdentity);
+    console.log("middleIdentity===>",JSON.stringify(middleIdentity));
     // Using the identity obtained from the auth client to create an agent to interact with the IC.
     const agent = new HttpAgent({middleIdentity});
     console.log("agent 1",agent)
