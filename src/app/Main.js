@@ -19,6 +19,7 @@ import SearchBar from '../components/SearchBar';
 import HeaderSearch from '../components/HeaderSearch';
 import MapScreen from '../components/MapScreen';
 import UserDetailDemo from '../components/UserDetailDemo';
+import BookHotelPage from '../components/BookHotelPage';
 //import BottomSheet from '@gorhom/bottom-sheet'
 // import { StatusBar } from 'expo-status-bar'
 
@@ -101,7 +102,7 @@ const Main = () => {
     btmExtraDetailsRef.current.present()
   }
   useEffect(()=>{
-    openFinishSignUp()
+    // openFinishSignUp()
   },[])
   return (
     // Necessary for capturing touch gestures in the screen
@@ -137,7 +138,8 @@ const Main = () => {
 
         <HeaderSearch/>
 
-        <UserDetailDemo user={user}/>
+        {/* <UserDetailDemo user={user}/> */}
+        <BookHotelPage/>
         {/* <MapScreen/> */}
         
         {/* 
@@ -171,14 +173,14 @@ const Main = () => {
           ref={btmSheetFinishRef}
           index={0}
           snapPoints={snapPoints}>
-          <BottomSheetFinishSignUp setUser={setUser} closeModal={()=>{closeModal(btmSheetFinishRef)}} />
+          <BottomSheetFinishSignUp setUser={setUser} openComm={openComm} closeModal={()=>{closeModal(btmSheetFinishRef)}} />
         </BottomSheetModal>
         <BottomSheetModal
           ref={btmSheetCommRef}
           index={0}
           snapPoints={snapPoints}
           >
-            <BottomSheetCommunity/>
+            <BottomSheetCommunity selfMod={btmSheetCommRef} openNotiModal={openNotiModal}/>
 
         </BottomSheetModal>
         <BottomSheetModal
@@ -186,7 +188,7 @@ const Main = () => {
           index={0}
           snapPoints={snapPoints}
           >
-            <BottomSheetNotification/>
+            <BottomSheetNotification self={btmSheetNotiRef}/>
 
         </BottomSheetModal>
         <BottomSheetModal

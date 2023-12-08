@@ -4,7 +4,7 @@ import { SIZES,COLORS } from '../constants/themes'
 import {  images } from '../constants'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
-const BottomSheetCommunity = () => {
+const BottomSheetCommunity = ({selfMod,openNotiModal}) => {
   return (
     <View style={styles.bottomSheet}>
         <View style={styles.commImgCont}>
@@ -27,10 +27,17 @@ const BottomSheetCommunity = () => {
         Learn More.
       </Text>
       
-      <TouchableOpacity style={styles.agreeBtn}>
+      <TouchableOpacity style={styles.agreeBtn} onPress={
+        ()=>{
+            selfMod.current.dismiss()
+            openNotiModal()
+        }
+      }>
                 <Text style={styles.agreeText}>Accept and continue</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.declineBtn}>
+        <TouchableOpacity style={styles.declineBtn} onPress={()=>{
+            alert("Please agree to the Community Guideline")
+        }}>
                 <Text style={styles.declineText}>Decline</Text>
         </TouchableOpacity>
     </View>

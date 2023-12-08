@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { SIZES } from '../constants/themes'
+import { COLORS, SIZES } from '../constants/themes'
 
 const UserDetailDemo = ({user}) => {
   return (
@@ -14,6 +14,12 @@ const UserDetailDemo = ({user}) => {
       <Text style={styles.simpleInfo}>Verified : {user?.verificationStatus?"Yes":"No"}</Text>
       <Text style={styles.simpleInfo}>Id : {user?.userId}</Text>
       <Text style={styles.simpleInfo}>Govt Id : {user?.userGovId?"Something":"Not Provided"}</Text>
+      <TouchableOpacity style={[styles.bookHotelBtn,{backgroundColor:(user?.verificationStatus)?'green':'red'}]} >
+        <Text style={styles.btnText}>Book Hotel</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.updateBtn}>
+        <Text style={styles.updateBtn}>Update Profile</Text>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -24,16 +30,40 @@ const styles = StyleSheet.create({
     container:{
         display:'flex',
         flexDirection:'column',
-        alignItems:'center'
+        alignItems:'center',
+        width:'100%'
     },
     title:{
-        fontSize:SIZES.largeMed,
+        fontSize:SIZES.large,
         color:'black',
-        textAlign:'center'
+        textAlign:'center',
+        marginBottom:30
     },
     simpleInfo:{
         color:'black',
-        fontSize:SIZES.medium,
+        fontSize:SIZES.largeMed,
         textAlign:'center'
+    },
+    bookHotelBtn:{
+        display:'flex',
+        flexDirection:'column',
+        alignItems:'center',
+        width:'50%',
+        marginVertical:30,
+        borderRadius:20,
+        paddingVertical:10
+    },
+    updateBtn:{
+        display:'flex',
+        flexDirection:'column',
+        alignItems:'center',
+        width:'50%',
+        backgroundColor:COLORS.lightPurple,
+        borderRadius:20,
+        paddingVertical:10
+    },
+    btnText:{
+        fontSize:SIZES.medium,
+        color:COLORS.darkPurple
     }
 })

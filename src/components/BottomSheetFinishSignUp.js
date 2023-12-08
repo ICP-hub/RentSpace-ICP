@@ -13,7 +13,7 @@ import {Dimensions} from 'react-native';
 import {User} from '../declarations/User/index.js';
 import { backend } from '../declarations/backend/index.js';
 
-const BottomSheetFinishSignUp = ({setUser,closeModal}) => {
+const BottomSheetFinishSignUp = ({setUser,openComm,closeModal}) => {
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
   const [email, setEmail] = useState('');
@@ -32,6 +32,9 @@ const BottomSheetFinishSignUp = ({setUser,closeModal}) => {
       await User.getUserInfo(id).then((res)=>{
         console.log(res[0]),
         setUser(res[0])
+        openComm()
+        closeModal()
+        
       })
     }).catch((err)=>{console.log(err)})
     //alert(email)
