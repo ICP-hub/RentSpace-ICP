@@ -1,6 +1,6 @@
 import uuid "mo:uuid/UUID";
 import Source "mo:uuid/async/SourceV4";
-import DateTime "mo:datetime/DateTime";
+// import "    ";
 module {
     public func getUuid() : async Text {
         let g = Source.Source();
@@ -10,4 +10,7 @@ module {
         let uuid = await getUuid();
         return userIdentity # "#" # uuid;
     };
+//     public func getDateAndTime():async Text{
+// let pstTimeZone = IanaTimeZone(AmericaTimeZones.Los_Angeles.data);
+//     }
 };

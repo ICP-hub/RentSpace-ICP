@@ -13,6 +13,7 @@ export const canisterId = "by6od-j4aaa-aaaaa-qaadq-cai";
 
   // process.env.CANISTER_ID_USER ||
   // process.env.USER_CANISTER_ID
+  "avqkn-guaaa-aaaaa-qaaea-cai";
 
 export const createActor = (canisterId, options = {}) => {
   const agent = options.agent || new HttpAgent({ ...options.agentOptions });
