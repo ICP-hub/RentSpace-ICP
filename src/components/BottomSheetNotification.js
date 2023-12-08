@@ -5,7 +5,7 @@ import { SIZES,COLORS } from '../constants/themes'
 import {  images } from '../constants'
 import { Switch, TouchableOpacity } from 'react-native-gesture-handler'
 
-const BottomSheetNotification = () => {
+const BottomSheetNotification = ({self}) => {
   const [switchVal,setSwitchVal]=useState(true)  
 
   return (
@@ -35,7 +35,9 @@ const BottomSheetNotification = () => {
         </View>
       
       <View style={styles.btnCont}>
-        <TouchableOpacity style={styles.notifyBtn}>
+        <TouchableOpacity style={styles.notifyBtn} onPress={()=>{
+            self.current.dismiss()
+        }}>
                 <Text style={styles.notifyText}>Yes, notify me</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.skipBtn}>

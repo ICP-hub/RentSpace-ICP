@@ -10,6 +10,8 @@ import internetIden from '../assets/logos/internetIdenLogo.png'
 import plug from '../assets/logos/plugLogo.png'
 import cross from '../assets/images/VectorCross.png'
 import commLogo from '../assets/images/communityCommit.png'
+import hotel from '../assets/images/hotelDemo.jpg'
+import profileSample from '../assets/images/profileSample.jpg'
 
 export default {
     favourite,
@@ -23,5 +25,7 @@ export default {
     internetIden,
     plug,
     cross,
-    commLogo
+    commLogo,
+    hotel,
+    profileSample
 }

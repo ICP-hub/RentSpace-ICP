@@ -1,0 +1,44 @@
+type Users = 
+ service {
+   createUser: (text, text, text, text, text, text) -> ();
+   getPK: () -> (text) query;
+   getUserInfo: (text) -> (opt UserInfo) query;
+   scanUsers: (text, text, nat, opt bool) -> (ScanUser) query;
+   skExists: (text) -> (bool) query;
+   transferCycles: () -> ();
+   updateUserInfo: (text, UserInfo) -> (opt UserInfo);
+ };
+type UserInfo = 
+ record {
+   dob: text;
+   firstName: text;
+   hostStatus: bool;
+   lastName: text;
+   userEmail: text;
+   userGovId: text;
+   userId: text;
+   userProfile: text;
+   userType: text;
+   verificationStatus: bool;
+ };
+type ScanUser = 
+ record {
+   nextKey: opt text;
+   users: vec UserInfo;
+ };
+type ScalingOptions = 
+ record {
+   autoScalingHook: AutoScalingCanisterSharedFunctionHook;
+   sizeLimit: ScalingLimitType;
+ };
+type ScalingLimitType = 
+ variant {
+   count: nat;
+   heapSize: nat;
+ };
+type AutoScalingCanisterSharedFunctionHook = func (text) -> (text);
+service : (record {
+             owners: opt vec principal;
+             partitonKey: text;
+             scalingOptions: ScalingOptions;
+           }) -> Users

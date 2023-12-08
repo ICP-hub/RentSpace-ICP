@@ -5,13 +5,17 @@ const COLORS={
     textLightGrey:"#666666",
     iconColourModal:"#2A353D",
     hrLine:"#F4F4F4",
-    inputBorder2:"#360bbf"
+    inputBorder2:"#360bbf",
+    lightPurple:'#9274A1',
+    lightBorderPurple:"#CEC2D6",
+    darkPurple:'#3C115A'
 }
 const SIZES={
     xSmall: 10,
   small: 12,
   preMedium:14,
   medium: 16,
+  largeMed:18,
   large: 20,
   xLarge: 24,
   xxLarge: 32,
