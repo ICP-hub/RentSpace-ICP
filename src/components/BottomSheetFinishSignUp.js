@@ -10,8 +10,7 @@ import {
 } from 'react-native-gesture-handler';
 import {Calendar} from 'react-native-calendars';
 import {Dimensions} from 'react-native';
-import {Actor, HttpAgent} from '@dfinity/agent';
-import {idlFactory} from '../declarations/User';
+import {User} from '../declarations/User/index.js';
 
 const BottomSheetFinishSignUp = ({closeModal}) => {
   const [fname, setFname] = useState('');
@@ -21,16 +20,11 @@ const BottomSheetFinishSignUp = ({closeModal}) => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selected, setSelected] = useState('');
 
-  const id = 'by6od-j4aaa-aaaaa-qaadq-cai';
-  const localHost = 'http://127.0.0.1:4943';
-  const agent = new HttpAgent({host: localHost});
+ 
 
   async function loadUser() {
-    const UserActor = await Actor.createActor(idlFactory, {
-      agent,
-      canisterId: id,
-    });
-    console.log(UserActor);
+  let user=await User;
+  console.log(user);
   }
 
   useEffect(() => {
