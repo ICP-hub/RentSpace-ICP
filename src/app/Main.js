@@ -212,7 +212,7 @@ const Main = () => {
           index={0}
           snapPoints={snapPoints}
           >
-            <UserDetailDemo user={user}/>
+            <UserDetailDemo user={user} setUser={setUser}/>
           </BottomSheetModal>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>

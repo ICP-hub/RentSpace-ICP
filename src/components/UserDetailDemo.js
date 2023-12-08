@@ -1,14 +1,27 @@
 import { StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { COLORS, SIZES } from '../constants/themes'
+import { User } from '../declarations/User/index.js'
 
-const UserDetailDemo = ({user}) => {
+const UserDetailDemo = ({user,setUser}) => {
+
+  const makeHost=async()=>{
+    console.log("You are host now")
+    await User.updateUserInfo(user?.userId,{...user,userType:'Host',hostStatus:true}).then(async(res)=>{
+      alert('You are a host now!')
+      await User.getUserInfo(user?.userId).then((res)=>{
+        console.log(res[0])
+        setUser(res[0])
+      })
+    }).catch((err)=>{console.log(err)})
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>User Details</Text>
       <Text style={styles.simpleInfo}>Name : {user?.firstName +" "+ user?.lastName}</Text>
       <Text style={styles.simpleInfo}>DOB :  {user?.dob}</Text>
-      <Text style={styles.simpleInfo}>hostStatus {user?.hostStatus?"Lender":"User"}</Text>
+      <Text style={styles.simpleInfo}>hostStatus {user?.hostStatus?"Host":"User"}</Text>
       <Text style={styles.simpleInfo}>Email : {user?.userEmail}</Text>
       <Text style={styles.simpleInfo}>Type :  {user?.userType}</Text>
       <Text style={styles.simpleInfo}>Verified : {user?.verificationStatus?"Yes":"No"}</Text>
@@ -17,8 +30,8 @@ const UserDetailDemo = ({user}) => {
       <TouchableOpacity style={[styles.bookHotelBtn,{backgroundColor:(user?.verificationStatus)?'green':'red'}]} >
         <Text style={styles.btnText}>Book Hotel</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.updateBtn}>
-        <Text style={styles.updateBtn}>Update Profile</Text>
+      <TouchableOpacity style={styles.updateBtn} onPress={()=>{makeHost()}}>
+        <Text style={styles.updateBtn}>Make me a Host</Text>
       </TouchableOpacity>
     </View>
   )
