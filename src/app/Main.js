@@ -17,6 +17,7 @@ import ModalCancellation from '../components/ModalCancellation';
 import ModalHouseRules from '../components/ModalHouseRules';
 import SearchBar from '../components/SearchBar';
 import HeaderSearch from '../components/HeaderSearch';
+import MapScreen from '../components/MapScreen';
 //import BottomSheet from '@gorhom/bottom-sheet'
 // import { StatusBar } from 'expo-status-bar'
 
@@ -131,7 +132,11 @@ const Main = () => {
         />
 
         <HeaderSearch/>
+
+        <MapScreen/>
         
+        {/* 
+        Sample Touchables for displaying modal UI, for preview purposes
         <TouchableOpacity style={styles.btn} onPress={()=>{setSafetyModal(true)}}>
           <Text style={styles.btnText}>
             Safety & Property
@@ -146,7 +151,7 @@ const Main = () => {
           <Text style={styles.btnText}>
             House Rules
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         
 
