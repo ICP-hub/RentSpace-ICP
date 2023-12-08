@@ -7,7 +7,7 @@ import Icon2 from 'react-native-vector-icons/Fontisto'
 
 
 
-const BottomNav = ({handlePresentModal,openFinishSignUp,openComm,openNotiModal,openDetailsModal}) => {
+const BottomNav = ({handlePresentModal,openFinishSignUp,openComm,openNotiModal,openDetailsModal,openUserDetails}) => {
 
 
   return (
@@ -18,7 +18,7 @@ const BottomNav = ({handlePresentModal,openFinishSignUp,openComm,openNotiModal,o
         <TouchableOpacity style={styles.iconNav} onPress={()=>{openFinishSignUp()}}>
         <Icon name="filter" size={25} color={COLORS.inputBorder}/>
         </TouchableOpacity >
-        <TouchableOpacity style={styles.iconNav} onPress={()=>{openComm()}}>
+        <TouchableOpacity style={styles.iconNav} onPress={()=>{openUserDetails()}}>
             {/* <Image source={images.search}/> */}
             <Icon name="search1" size={25} color={COLORS.inputBorder}/>
         </TouchableOpacity >

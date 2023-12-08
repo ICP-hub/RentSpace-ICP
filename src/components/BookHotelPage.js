@@ -4,7 +4,7 @@ import { images } from '../constants'
 import { COLORS, SIZES } from '../constants/themes'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
-const BookHotelPage = () => {
+const BookHotelPage = ({setUpdatePage}) => {
   return (
     <View style={styles.hotelPage}>
       <View style={styles.lenderCont}>
@@ -17,7 +17,7 @@ const BookHotelPage = () => {
     <Text style={styles.desc}>
       <Text style={styles.title}>Pennsylvania Inn Hotel</Text> offers a charming retreat in the heart of the Keystone State.
       </Text>
-      <TouchableOpacity style={styles.bookBtn}>
+      <TouchableOpacity style={styles.bookBtn} onPress={()=>{setUpdatePage(true)}}>
         <Text style={styles.bookTxt}>Book</Text>
       </TouchableOpacity>
     </View>

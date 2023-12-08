@@ -20,6 +20,7 @@ import HeaderSearch from '../components/HeaderSearch';
 import MapScreen from '../components/MapScreen';
 import UserDetailDemo from '../components/UserDetailDemo';
 import BookHotelPage from '../components/BookHotelPage';
+import UpdateProfile from '../components/UpdateProfile';
 //import BottomSheet from '@gorhom/bottom-sheet'
 // import { StatusBar } from 'expo-status-bar'
 
@@ -28,6 +29,7 @@ const Main = () => {
   const [safetyModal,setSafetyModal]=useState(false)
   const [cancelModal,setCancelModal]=useState(false)
   const [rulesModal,setRulesModal]=useState(false)
+  const [updatePage,setUpdatePage]=useState(false)
   const [user,setUser]=useState({})
 
   useEffect(()=>{
@@ -39,6 +41,7 @@ const Main = () => {
   const btmSheetCommRef=useRef(null)
   const btmSheetNotiRef=useRef(null)
   const btmExtraDetailsRef=useRef(null)
+  const btmUserDetailsRef=useRef(null)
   const snapPoints = ['94%'];
   const handlePresentModal = () => {
     btmSheetLoginRef.current.present();
@@ -123,6 +126,10 @@ const Main = () => {
         <Modal visible={rulesModal} animationType='fade' >
           <ModalHouseRules setRulesModal={setRulesModal}/>
         </Modal>
+        <Modal visible={updatePage} animationType='slide'>
+          <UpdateProfile user={user} setUser={setUser} setUpdatePage={setUpdatePage}/>
+        </Modal>
+       
         {/* searchBar Top */}
 
         
@@ -134,12 +141,13 @@ const Main = () => {
           openComm={openComm} 
           openNotiModal={openNotiModal}
           openDetailsModal={openDetailsModal}
+          openUserDetails={()=>{btmUserDetailsRef.current.present()}}
         />
 
         <HeaderSearch/>
 
         {/* <UserDetailDemo user={user}/> */}
-        <BookHotelPage/>
+        <BookHotelPage setUpdatePage={setUpdatePage}/>
         {/* <MapScreen/> */}
         
         {/* 
@@ -199,6 +207,13 @@ const Main = () => {
             <BottomSheetDetails/>
 
         </BottomSheetModal>
+        <BottomSheetModal
+          ref={btmUserDetailsRef}
+          index={0}
+          snapPoints={snapPoints}
+          >
+            <UserDetailDemo user={user}/>
+          </BottomSheetModal>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );
