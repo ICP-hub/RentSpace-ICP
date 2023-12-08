@@ -1,14 +1,18 @@
-import { StyleSheet, Text, View,TextInput,TouchableOpacity, Alert } from 'react-native'
+import { StyleSheet, Text, View,TextInput,TouchableOpacity, Alert, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import { SIZES,COLORS } from '../constants/themes'
 import { hotel } from '../declarations/hotel/index.js'
 
 const HotelCreationForm = ({setHotels,setHotelCreateForm,user}) => {
+  const [loading,setLoading]=useState(false)
   const [hotelData,setHotelData]=useState({})
   const createHotel=async()=>{
     console.log('create hotel')
+    setLoading(true)
   await hotel.createHotel(user?.userId,hotelData).then(async(res)=>{
+    setLoading(false)
     alert('Your hotel has been created')
+   
     await hotel.getHotelId(user?.userId).then(async(res)=>{
       console.log(res)
       setHotels(res)
@@ -56,6 +60,7 @@ const HotelCreationForm = ({setHotels,setHotelCreateForm,user}) => {
         placeholderTextColor={COLORS.inputBorder}
         onChangeText={value=>{setHotelData({...hotelData,hotelLocation:value})}}
       />
+      <ActivityIndicator size={40} animating={loading}/>
       <TouchableOpacity style={styles.submitBtn} onPress={()=>{createHotel()}}>
         <Text style={styles.submitText}>Create Hotel</Text>
       </TouchableOpacity>

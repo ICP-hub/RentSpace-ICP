@@ -1,15 +1,19 @@
-import { StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { ActivityIndicator, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
+import React, { useState } from 'react'
 import { COLORS, SIZES } from '../constants/themes'
 import { User } from '../declarations/User/index.js'
 import {hotel} from '../declarations/hotel/index.js'
 
 const UserDetailDemo = ({setHotels,user,setUser,self,setHotelCreateForm}) => {
 
+  const [loading,setLoading]=useState(false)
   const makeHost=async()=>{
+    setLoading(true)
     console.log("You are host now")
     await User.updateUserInfo(user?.userId,{...user,userType:'Host',hostStatus:true}).then(async(res)=>{
+      setLoading(false)
       alert('You are a host now!')
+
       self.current.dismiss()
       setHotelCreateForm(true)
       await User.getUserInfo(user?.userId).then((res)=>{
@@ -27,6 +31,7 @@ const UserDetailDemo = ({setHotels,user,setUser,self,setHotelCreateForm}) => {
 
   return (
     <View style={styles.container}>
+      
       <Text style={styles.title}>User Details</Text>
       <Text style={styles.simpleInfo}>Name : {user?.firstName +" "+ user?.lastName}</Text>
       <Text style={styles.simpleInfo}>DOB :  {user?.dob}</Text>
@@ -39,6 +44,7 @@ const UserDetailDemo = ({setHotels,user,setUser,self,setHotelCreateForm}) => {
       <TouchableOpacity style={[styles.bookHotelBtn,{backgroundColor:(user?.verificationStatus)?'green':'red'}]} >
         <Text style={styles.btnText} onPress={()=>{self.current.dismiss()}}>Book Hotel</Text>
       </TouchableOpacity>
+      <ActivityIndicator size={40} animating={loading}/>
       <TouchableOpacity style={styles.updateBtn} onPress={()=>{
         makeHost()
         

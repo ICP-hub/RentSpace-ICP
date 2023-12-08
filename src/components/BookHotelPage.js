@@ -9,6 +9,7 @@ const BookHotelPage = ({setUpdatePage,hotels,user}) => {
 
   const [hotelList,setHotelList]=useState([])
   async function getHotelDetails(){
+    setHotelList([])
     for(let i=0;i<hotels.length;i++){
       await hotel.getHotel(hotels[i]).then((res)=>{
         setHotelList(hotelList=>[...hotelList,res[0]])

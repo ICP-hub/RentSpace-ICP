@@ -1,4 +1,4 @@
-import {Alert, Image, Modal, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, Alert, Image, Modal, StyleSheet, Text, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {SIZES, COLORS} from '../constants/themes';
 import {images} from '../constants';
@@ -20,14 +20,18 @@ const BottomSheetFinishSignUp = ({setUser,openComm,closeModal}) => {
   const [DOB, setDOB] = useState('Birthday(dd/mm/yyyy)');
   const [showCalendar, setShowCalendar] = useState(false);
   const [selected, setSelected] = useState('');
+  const [loading,setLoading]=useState(false)
   
 
   async function signUp(){
+    setLoading(true)
     const id=Math.round(Math.random()*1000).toString()
     await User.createUser(id,fname,lname,DOB,email,"user").then(async(res)=>{
       //setUser(res[0])
       console.log(res)
+      setLoading(false)
       alert('You are registered with id : '+id)
+      
       //alert('Welcome'+res[0]?.firstName)
       await User.getUserInfo(id).then((res)=>{
         console.log(res[0]),
@@ -126,6 +130,7 @@ const BottomSheetFinishSignUp = ({setUser,openComm,closeModal}) => {
         </Text>{' '}
         and acknowledge the <Text style={styles.linkText}>Privacy Policy.</Text>
       </Text>
+      <ActivityIndicator size={40} animating={loading}/>
       <TouchableOpacity style={styles.submitBtn} onPress={()=>{signUp()}}>
         <Text style={styles.submitText}>Accept and continue</Text>
       </TouchableOpacity>
