@@ -21,6 +21,7 @@ import MapScreen from '../components/MapScreen';
 import UserDetailDemo from '../components/UserDetailDemo';
 import BookHotelPage from '../components/BookHotelPage';
 import UpdateProfile from '../components/UpdateProfile';
+import HotelCreationForm from '../components/HotelCreationForm';
 //import BottomSheet from '@gorhom/bottom-sheet'
 // import { StatusBar } from 'expo-status-bar'
 
@@ -30,7 +31,9 @@ const Main = () => {
   const [cancelModal,setCancelModal]=useState(false)
   const [rulesModal,setRulesModal]=useState(false)
   const [updatePage,setUpdatePage]=useState(false)
+  const [hotelCreateForm,setHotelCreateForm]=useState(false)
   const [user,setUser]=useState({})
+  const [hotels,setHotels]=useState()
 
   useEffect(()=>{
     SplashScreen.hide()
@@ -129,6 +132,9 @@ const Main = () => {
         <Modal visible={updatePage} animationType='slide'>
           <UpdateProfile user={user} setUser={setUser} setUpdatePage={setUpdatePage}/>
         </Modal>
+        <Modal visible={hotelCreateForm} animationType='slide'>
+          <HotelCreationForm setHotels={setHotels} setHotelCreateForm={setHotelCreateForm} user={user}/>
+        </Modal>
        
         {/* searchBar Top */}
 
@@ -147,7 +153,7 @@ const Main = () => {
         <HeaderSearch/>
 
         {/* <UserDetailDemo user={user}/> */}
-        <BookHotelPage setUpdatePage={setUpdatePage}/>
+        <BookHotelPage setUpdatePage={setUpdatePage} hotels={hotels} user={user}/>
         {/* <MapScreen/> */}
         
         {/* 
@@ -212,7 +218,7 @@ const Main = () => {
           index={0}
           snapPoints={snapPoints}
           >
-            <UserDetailDemo user={user} setUser={setUser}/>
+            <UserDetailDemo setHotels={setHotels} user={user} setUser={setUser} self={btmUserDetailsRef} setHotelCreateForm={setHotelCreateForm}/>
           </BottomSheetModal>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>

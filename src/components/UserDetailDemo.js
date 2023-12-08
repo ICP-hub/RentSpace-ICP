@@ -2,17 +2,26 @@ import { StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-nativ
 import React from 'react'
 import { COLORS, SIZES } from '../constants/themes'
 import { User } from '../declarations/User/index.js'
+import {hotel} from '../declarations/hotel/index.js'
 
-const UserDetailDemo = ({user,setUser}) => {
+const UserDetailDemo = ({setHotels,user,setUser,self,setHotelCreateForm}) => {
 
   const makeHost=async()=>{
     console.log("You are host now")
     await User.updateUserInfo(user?.userId,{...user,userType:'Host',hostStatus:true}).then(async(res)=>{
       alert('You are a host now!')
+      self.current.dismiss()
+      setHotelCreateForm(true)
       await User.getUserInfo(user?.userId).then((res)=>{
         console.log(res[0])
         setUser(res[0])
+      }).then(()=>{
+        hotel.getHotelId(user?.userId).then((res)=>{
+          console.log(res)
+          setHotels(res)
+        })
       })
+
     }).catch((err)=>{console.log(err)})
   }
 
@@ -26,11 +35,14 @@ const UserDetailDemo = ({user,setUser}) => {
       <Text style={styles.simpleInfo}>Type :  {user?.userType}</Text>
       <Text style={styles.simpleInfo}>Verified : {user?.verificationStatus?"Yes":"No"}</Text>
       <Text style={styles.simpleInfo}>Id : {user?.userId}</Text>
-      <Text style={styles.simpleInfo}>Govt Id : {user?.userGovId?"Something":"Not Provided"}</Text>
+      <Text style={styles.simpleInfo}>Govt Id : {user?.userGovId?user?.userGovId:"Not Provided"}</Text>
       <TouchableOpacity style={[styles.bookHotelBtn,{backgroundColor:(user?.verificationStatus)?'green':'red'}]} >
-        <Text style={styles.btnText}>Book Hotel</Text>
+        <Text style={styles.btnText} onPress={()=>{self.current.dismiss()}}>Book Hotel</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.updateBtn} onPress={()=>{makeHost()}}>
+      <TouchableOpacity style={styles.updateBtn} onPress={()=>{
+        makeHost()
+        
+      }}>
         <Text style={styles.updateBtn}>Make me a Host</Text>
       </TouchableOpacity>
     </View>
@@ -70,13 +82,14 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'column',
         alignItems:'center',
-        width:'50%',
+        width:'60%',
         backgroundColor:COLORS.lightPurple,
         borderRadius:20,
         paddingVertical:10
     },
     btnText:{
         fontSize:SIZES.medium,
-        color:COLORS.darkPurple
+        color:COLORS.darkPurple,
+  
     }
 })

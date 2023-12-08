@@ -1,11 +1,50 @@
-import { StyleSheet, Text, View,Image, Touchable } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View,Image, Touchable,TouchableOpacity,FlatList } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { images } from '../constants'
 import { COLORS, SIZES } from '../constants/themes'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { hotel } from '../declarations/hotel/index.js'
+// import { TouchableOpacity } from 'react-native-gesture-handler'
 
-const BookHotelPage = ({setUpdatePage}) => {
+const BookHotelPage = ({setUpdatePage,hotels,user}) => {
+
+  const [hotelList,setHotelList]=useState([])
+  async function getHotelDetails(){
+    for(let i=0;i<hotels.length;i++){
+      await hotel.getHotel(hotels[i]).then((res)=>{
+        setHotelList(hotelList=>[...hotelList,res[0]])
+      })
+    }
+  }
+  useEffect(()=>{
+    console.log(hotels)
+    getHotelDetails()
+  },[hotels])
+
+  if(hotels.length>0){
+    return(
+      <FlatList data={hotelList} style={{marginBottom:80}}  renderItem={(item)=>(
+        <View style={styles.hotelPage}>
+        <View style={styles.lenderCont}>
+          <Image style={styles.lenderImg} source={images.profileSample}/>
+          <Text style={styles.lenderName}>{user?.firstName}</Text>
+        </View>
+        <Image style={styles.img} source={images.hotel}/>
+        
+      <View style={styles.descCont}>
+      <Text style={styles.desc}>
+        <Text style={styles.title}>{item.item.hotelTitle}</Text> {item.item.hotelDes}
+        </Text>
+        <TouchableOpacity style={styles.bookBtn} onPress={()=>{setUpdatePage(true)}}>
+          <Text style={styles.bookTxt}>Book</Text>
+        </TouchableOpacity>
+      </View>
+      </View>
+      )}/>
+    )
+  }else{
   return (
+
+    
     <View style={styles.hotelPage}>
       <View style={styles.lenderCont}>
         <Image style={styles.lenderImg} source={images.profileSample}/>
@@ -25,6 +64,7 @@ const BookHotelPage = ({setUpdatePage}) => {
 
     </View>
   )
+  }
 }
 
 export default BookHotelPage
@@ -66,7 +106,8 @@ const styles = StyleSheet.create({
         borderRadius:50,
         borderWidth:2,
         borderColor:COLORS.darkPurple,
-        marginLeft:4
+        marginLeft:4,
+        marginBottom:20
     },
     title:{
         fontSize:SIZES.preMedium,
