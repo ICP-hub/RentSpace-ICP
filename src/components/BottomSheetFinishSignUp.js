@@ -1,4 +1,4 @@
-import {Image, Modal, StyleSheet, Text, View} from 'react-native';
+import {Alert, Image, Modal, StyleSheet, Text, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {SIZES, COLORS} from '../constants/themes';
 import {images} from '../constants';
@@ -11,24 +11,51 @@ import {
 import {Calendar} from 'react-native-calendars';
 import {Dimensions} from 'react-native';
 import {User} from '../declarations/User/index.js';
+import { backend } from '../declarations/backend/index.js';
 
-const BottomSheetFinishSignUp = ({closeModal}) => {
+const BottomSheetFinishSignUp = ({setUser,closeModal}) => {
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
   const [email, setEmail] = useState('');
   const [DOB, setDOB] = useState('Birthday(dd/mm/yyyy)');
   const [showCalendar, setShowCalendar] = useState(false);
   const [selected, setSelected] = useState('');
+  
 
+  async function signUp(){
+    const id=Math.round(Math.random()*1000).toString()
+    await User.createUser(id,fname,lname,DOB,email,"user").then(async(res)=>{
+      //setUser(res[0])
+      console.log(res)
+      alert('You are registered with id : '+id)
+      //alert('Welcome'+res[0]?.firstName)
+      await User.getUserInfo(id).then((res)=>{
+        console.log(res[0]),
+        setUser(res[0])
+      })
+    }).catch((err)=>{console.log(err)})
+    //alert(email)
+  }
  
-
+  let user;
   async function loadUser() {
-  let user=await User;
-  console.log(user);
+    let data = "1";
+    let key=data.toString();
+    const user=await User;
+  // await user.getUserInfo('1').then((res)=>{
+  //   console.log(res)
+  // }).catch((err)=>{
+  //   console.log(err)
+  // })
+  //console.log(user?.toString());
+  //console.log(t)
+  
+  console.log(user)
   }
 
   useEffect(() => {
     loadUser();
+    //console.log(user?.toString())
   }, []);
 
   return (
@@ -48,7 +75,7 @@ const BottomSheetFinishSignUp = ({closeModal}) => {
         placeholderTextColor={COLORS.inputBorder}
         style={styles.firstName}
         value={fname}
-        onChange={value => {
+        onChangeText={value => {
           setFname(value);
         }}
       />
@@ -57,7 +84,7 @@ const BottomSheetFinishSignUp = ({closeModal}) => {
         placeholderTextColor={COLORS.inputBorder}
         style={styles.lastName}
         value={lname}
-        onChange={value => {
+        onChangeText={value => {
           setLname(value);
         }}
       />
@@ -81,7 +108,7 @@ const BottomSheetFinishSignUp = ({closeModal}) => {
         placeholderTextColor={COLORS.inputBorder}
         style={styles.simpleInput}
         value={email}
-        onChange={value => {
+        onChangeText={value => {
           setEmail(value);
         }}
       />
@@ -96,7 +123,7 @@ const BottomSheetFinishSignUp = ({closeModal}) => {
         </Text>{' '}
         and acknowledge the <Text style={styles.linkText}>Privacy Policy.</Text>
       </Text>
-      <TouchableOpacity style={styles.submitBtn}>
+      <TouchableOpacity style={styles.submitBtn} onPress={()=>{signUp()}}>
         <Text style={styles.submitText}>Accept and continue</Text>
       </TouchableOpacity>
       <Modal visible={showCalendar} animationType="fade" transparent>

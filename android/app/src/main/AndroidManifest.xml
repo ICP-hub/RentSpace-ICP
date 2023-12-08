@@ -27,5 +27,8 @@
           <data android:scheme="rentspace" android:host="auth" />
         </intent-filter>
       </activity>
+      <meta-data
+     android:name="com.google.android.geo.API_KEY"
+     android:value="AIzaSyCu4M_dLh0V6AjTKvA6f1ZhfKbyrQ1cYrc"/>
     </application>
 </manifest>

@@ -18,6 +18,7 @@ import ModalHouseRules from '../components/ModalHouseRules';
 import SearchBar from '../components/SearchBar';
 import HeaderSearch from '../components/HeaderSearch';
 import MapScreen from '../components/MapScreen';
+import UserDetailDemo from '../components/UserDetailDemo';
 //import BottomSheet from '@gorhom/bottom-sheet'
 // import { StatusBar } from 'expo-status-bar'
 
@@ -26,7 +27,7 @@ const Main = () => {
   const [safetyModal,setSafetyModal]=useState(false)
   const [cancelModal,setCancelModal]=useState(false)
   const [rulesModal,setRulesModal]=useState(false)
-
+  const [user,setUser]=useState({})
 
   useEffect(()=>{
     SplashScreen.hide()
@@ -99,6 +100,9 @@ const Main = () => {
   const openDetailsModal=()=>{
     btmExtraDetailsRef.current.present()
   }
+  useEffect(()=>{
+    openFinishSignUp()
+  },[])
   return (
     // Necessary for capturing touch gestures in the screen
     <GestureHandlerRootView style={{flex: 1,paddingTop:200}}>
@@ -133,7 +137,8 @@ const Main = () => {
 
         <HeaderSearch/>
 
-        <MapScreen/>
+        <UserDetailDemo user={user}/>
+        {/* <MapScreen/> */}
         
         {/* 
         Sample Touchables for displaying modal UI, for preview purposes
@@ -166,7 +171,7 @@ const Main = () => {
           ref={btmSheetFinishRef}
           index={0}
           snapPoints={snapPoints}>
-          <BottomSheetFinishSignUp closeModal={()=>{closeModal(btmSheetFinishRef)}} />
+          <BottomSheetFinishSignUp setUser={setUser} closeModal={()=>{closeModal(btmSheetFinishRef)}} />
         </BottomSheetModal>
         <BottomSheetModal
           ref={btmSheetCommRef}
