@@ -37,6 +37,7 @@ const Main = () => {
 
   useEffect(()=>{
     SplashScreen.hide()
+    btmSheetFinishRef.current.present()
   },[])
 
   const btmSheetLoginRef = useRef(null);
@@ -186,8 +187,9 @@ const Main = () => {
         <BottomSheetModal
           ref={btmSheetFinishRef}
           index={0}
+          enablePanDownToClose={false}
           snapPoints={snapPoints}>
-          <BottomSheetFinishSignUp setUser={setUser} openComm={openComm} closeModal={()=>{closeModal(btmSheetFinishRef)}} />
+          <BottomSheetFinishSignUp user1={user} setUser={setUser} openComm={openComm} closeModal={()=>{closeModal(btmSheetFinishRef)}} />
         </BottomSheetModal>
         <BottomSheetModal
           ref={btmSheetCommRef}

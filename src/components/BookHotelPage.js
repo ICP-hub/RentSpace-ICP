@@ -10,7 +10,7 @@ const BookHotelPage = ({setUpdatePage,hotels,user}) => {
   const [hotelList,setHotelList]=useState([])
   async function getHotelDetails(){
     setHotelList([])
-    for(let i=0;i<hotels.length;i++){
+    for(let i=0;i<hotels?.length;i++){
       await hotel.getHotel(hotels[i]).then((res)=>{
         setHotelList(hotelList=>[...hotelList,res[0]])
       })
@@ -21,7 +21,7 @@ const BookHotelPage = ({setUpdatePage,hotels,user}) => {
     getHotelDetails()
   },[hotels])
 
-  if(hotels.length>0){
+  if(hotels?.length>0){
     return(
       <FlatList data={hotelList} style={{marginBottom:80}}  renderItem={(item)=>(
         <View style={styles.hotelPage}>

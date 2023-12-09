@@ -9,7 +9,7 @@ export { idlFactory } from "./User.did.js";
  * process.env.CANISTER_ID_<CANISTER_NAME_UPPERCASE>
  * beginning in dfx 0.15.0
  */
-export const canisterId = "be2us-64aaa-aaaaa-qaabq-cai";
+export const canisterId = "br5f7-7uaaa-aaaaa-qaaca-cai";
 
   // process.env.CANISTER_ID_USER ||
   // process.env.USER_CANISTER_ID

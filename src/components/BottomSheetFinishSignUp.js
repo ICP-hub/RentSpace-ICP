@@ -13,7 +13,7 @@ import {Dimensions} from 'react-native';
 import {User} from '../declarations/User/index.js';
 import { backend } from '../declarations/backend/index.js';
 
-const BottomSheetFinishSignUp = ({setUser,openComm,closeModal}) => {
+const BottomSheetFinishSignUp = ({user1,setUser,openComm,closeModal}) => {
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
   const [email, setEmail] = useState('');
@@ -70,7 +70,12 @@ const BottomSheetFinishSignUp = ({setUser,openComm,closeModal}) => {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {
-            closeModal();
+            if(user1){
+              closeModal();
+            }else{
+              alert('Please Register first to continue further')
+            }
+            
           }}>
           <Image source={images.cross} style={styles.crossImg} />
         </TouchableOpacity>

@@ -31,18 +31,21 @@ const UpdateProfile = ({user,setUser,setUpdatePage}) => {
         style={styles.inputs} 
         placeholder='First Name' 
         placeholderTextColor={COLORS.inputBorder} 
+        value={updatedUser?.firstName}
         onChangeText={value=>{setUpdatedUser({...updatedUser,firstName:value})}}
     />
       <TextInput 
         style={styles.inputs} 
         placeholder='Last Name' 
         placeholderTextColor={COLORS.inputBorder}
+        value={updatedUser?.lastName}
         onChangeText={value=>{setUpdatedUser({...updatedUser,lastName:value})}}
     />
       <TextInput 
         style={styles.inputs} 
         placeholder='Email' 
         placeholderTextColor={COLORS.inputBorder}
+        value={updatedUser?.userEmail}
         onChangeText={value=>{setUpdatedUser({...updatedUser,userEmail:value})}}
         />
       <TextInput 
@@ -61,10 +64,14 @@ const UpdateProfile = ({user,setUser,setUpdatePage}) => {
         style={styles.inputs} 
         placeholder='BirthDay(dd/mm/yyyy)' 
         placeholderTextColor={COLORS.inputBorder}
+        value={updatedUser?.dob}
         onChangeText={value=>{setUpdatedUser({...updatedUser,dob:value})}}
         />
       <TouchableOpacity style={styles.submitBtn} onPress={()=>{update()}}>
         <Text style={styles.submitText}>Update</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={[styles.submitBtn,{backgroundColor:'red'}]} onPress={()=>{setUpdatePage(false)}}>
+        <Text style={styles.submitText}>cancel</Text>
       </TouchableOpacity>
     </View>
   )
