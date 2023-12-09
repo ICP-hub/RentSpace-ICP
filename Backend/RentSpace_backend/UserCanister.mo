@@ -10,7 +10,7 @@ import Nat64 "mo:base/Nat64";
 import Text "mo:base/Text";
 import Prelude "mo:base/Prelude";
 import List "mo:base/List"; 
-
+import Error "mo:base/Error";
 
 // let g = Source.Source();
 // UUID.toText(await g.new());
@@ -62,7 +62,7 @@ shared ({caller = owner}) actor class Users({
         let userIdentity = user;
         let identityStatus = await skExists(userIdentity);
         if (userIdentity == "" or userType == "" or firstName == "" or lastName == "" or dob == "" or userEmail == "" or identityStatus == true) {
-            return;
+         throw Error.reject("User already Exist or left filed Empty");
         };
         Debug.print("yeah this is working");
         //inserts the entity into CanDB

@@ -10,7 +10,5 @@ module {
         let uuid = await getUuid();
         return userIdentity # "#" # uuid;
     };
-//     public func getDateAndTime():async Text{
-// let pstTimeZone = IanaTimeZone(AmericaTimeZones.Los_Angeles.data);
-//     }
+
 };

@@ -52,33 +52,33 @@ shared ({caller = owner}) actor class Booking({
         let bookingId = hotelId # "#" #date # "#" #uuid;
     };
 
-    
-    func putUserId(userIdentity : Text, bookingId:Text) : async () {
+    func putUserId(userIdentity : Text, bookingId : Text) : async () {
 
         switch (RBT.get(bookingIdTree, Text.compare, userIdentity)) {
             case (?result) {
                 Debug.print(debug_show (result));
                 let data = List.push(bookingId, result);
                 bookingIdTree := RBT.put(bookingIdTree, Text.compare, userIdentity, data);
-                return 
+                return;
             };
             case null {
                 var bookingIdList = List.nil<Text>();
                 Debug.print("inside Null");
                 bookingIdList := List.push(bookingId, bookingIdList);
                 bookingIdTree := RBT.put(bookingIdTree, Text.compare, userIdentity, bookingIdList);
-                return 
+                return;
             };
         };
     };
     type BookingInfo = {
         userId : Text;
+        date:Text;
         bookingDuration : Text;
         cancelStatus : Bool;
     };
-    public func bookHotel(hotelId : Text, date : Text, userId : Text, bookingDuration : Text, cancelStatus : Bool) : async () {
-        let sortKey = await createBookingId(hotelId, date);
-        if (hotelId == "" or date == "" or sortKey == "") {
+    public func bookHotel(hotelId : Text,bookingInfo: BookingInfo) : async () {
+        let sortKey = await createBookingId(hotelId,bookingInfo.date);
+        if (hotelId == "" or bookingInfo.date == "" or sortKey == "") {
             return;
         };
         await* CanDB.put(
@@ -86,15 +86,29 @@ shared ({caller = owner}) actor class Booking({
             {
                 sk = sortKey;
                 attributes = [
-                    ("userId", #text(userId)),
-                    ("bookingDuration", #text(bookingDuration)),
-                    ("cacelStatus", #bool(cancelStatus)),
+                    ("userId", #text(bookingInfo.userId)),
+                    ("date",#text(bookingInfo.date)),
+                    ("bookingDuration", #text(bookingInfo.bookingDuration)),
+                    ("cancelStatus", #bool(bookingInfo.cancelStatus)),
                 ];
             },
         );
     };
-    // func unwarpBookingDetails(entity : Entity.Entity) : ?public func getBookingDetials(bookingId : Text) : async Text {
+    func unwarpBookingDetails(entity : Entity.Entity) : ?BookingInfo {
+        let {sk; attributes} = entity;
+        let userIdValue = Entity.getAttributeMapValueForKey(attributes, "userId");
+        let dateValue = Entity.getAttributeMapValueForKey(attributes, "date");
+        let bookingDurationValue = Entity.getAttributeMapValueForKey(attributes, "bookingDuration");
+        let cancelStatusValue = Entity.getAttributeMapValueForKey(attributes, "cancelStatus");
+        switch (userIdValue,dateValue ,bookingDurationValue, cancelStatusValue) {
+            case (?(#text(userId)),?(#text(date)) ,?(#text(bookingDuration)), ?(#bool(cancelStatus))) {
+                ?{userId; date;bookingDuration; cancelStatus};
+            };
+            case _ {null};
+        };
+    };
+
+    // public func getBookingDetials(bookingId : Text) : async Text {
 
     // };
-
 };
