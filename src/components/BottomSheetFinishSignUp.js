@@ -70,7 +70,7 @@ const BottomSheetFinishSignUp = ({user1,setUser,openComm,closeModal}) => {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {
-            if(user1?.userId==''){
+            if(user1?.userId!=null){
               closeModal();
             }else{
               alert('Please Register first to continue further')
