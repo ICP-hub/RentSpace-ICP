@@ -22,18 +22,23 @@ import UserDetailDemo from '../components/UserDetailDemo';
 import BookHotelPage from '../components/BookHotelPage';
 import UpdateProfile from '../components/UpdateProfile';
 import HotelCreationForm from '../components/HotelCreationForm';
+import HotelDetailPage from '../components/HotelDetailPage';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 //import BottomSheet from '@gorhom/bottom-sheet'
 // import { StatusBar } from 'expo-status-bar'
 
-const Main = () => {
+const Main = ({navigation}) => {
 
   const [safetyModal,setSafetyModal]=useState(false)
   const [cancelModal,setCancelModal]=useState(false)
   const [rulesModal,setRulesModal]=useState(false)
   const [updatePage,setUpdatePage]=useState(false)
   const [hotelCreateForm,setHotelCreateForm]=useState(false)
+  const [hotelDetailPage,openHotelDetailPage]=useState(false)
   const [user,setUser]=useState({})
-  const [hotels,setHotels]=useState()
+  const [hotels,setHotels]=useState([])
+  const [userDetails,setUserDetails]=useState(false)
 
   useEffect(()=>{
     SplashScreen.hide()
@@ -136,19 +141,23 @@ const Main = () => {
         <Modal visible={hotelCreateForm} animationType='slide'>
           <HotelCreationForm setHotels={setHotels} setHotelCreateForm={setHotelCreateForm} user={user}/>
         </Modal>
-       
+       <Modal visible={hotelDetailPage} animationType='slide'>
+          <HotelDetailPage openHotelDetailPage={openHotelDetailPage}/>
+       </Modal>
+       <Modal visible={userDetails} animationType='slide'>
+        <UserDetailDemo setHotels={setHotels} user={user} setUser={setUser} self={setUserDetails} setHotelCreateForm={setHotelCreateForm}/>
+       </Modal>
         {/* searchBar Top */}
 
         
 
         {/* navigation Bar */}
         <BottomNav 
-          handlePresentModal={handlePresentModal} 
-          openFinishSignUp={openFinishSignUp} 
-          openComm={openComm} 
-          openNotiModal={openNotiModal}
-          openDetailsModal={openDetailsModal}
-          openUserDetails={()=>{btmUserDetailsRef.current.present()}}
+          filterNav={openFinishSignUp} 
+          searchNav={openDetailsModal}
+          heartNav={()=>{console.log('clicked!')}}
+          commentNav={openHotelDetailPage}
+          userNav={()=>{setUserDetails(true)}}
         />
 
         <HeaderSearch/>
@@ -215,13 +224,13 @@ const Main = () => {
             <BottomSheetDetails/>
 
         </BottomSheetModal>
-        <BottomSheetModal
+        {/* <BottomSheetModal
           ref={btmUserDetailsRef}
           index={0}
           snapPoints={snapPoints}
           >
             <UserDetailDemo setHotels={setHotels} user={user} setUser={setUser} self={btmUserDetailsRef} setHotelCreateForm={setHotelCreateForm}/>
-          </BottomSheetModal>
+          </BottomSheetModal> */}
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );

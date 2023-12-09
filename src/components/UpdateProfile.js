@@ -1,8 +1,11 @@
-import { StyleSheet, Text, View,TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View,TextInput, TouchableOpacity, Image ,ScrollView} from 'react-native'
 import React, { useState } from 'react'
 import { images } from '../constants'
 import { SIZES,COLORS } from '../constants/themes'
 import { User } from '../declarations/User/index.js'
+import Icon from 'react-native-vector-icons/AntDesign'
+import Icon2 from 'react-native-vector-icons/Fontisto'
+import Icon3 from 'react-native-vector-icons/FontAwesome5'
 
 
 const UpdateProfile = ({user,setUser,setUpdatePage}) => {
@@ -25,8 +28,23 @@ const UpdateProfile = ({user,setUser,setUpdatePage}) => {
     }
 
   return (
+    <ScrollView>
     <View style={styles.bottomSheet}>
-      <Text style={styles.title}>Update Your Profile</Text>
+      <View style={styles.titleCont}>
+        <Text style={styles.title}>Edit Profile</Text>
+        <Icon name='edit' size={25} color='black'/>
+      </View>
+      <View style={styles.imageCont}>
+        <TouchableOpacity>
+          <Image source={images.profile2} style={styles.img}/>
+        </TouchableOpacity> 
+        
+        <Text style={styles.simpleText}>Edit Photo</Text>
+      </View>
+      <View style={styles.labelCont}>
+      <Icon3 name='user-edit' size={15} color={'black'} style={{marginRight:6}}/>
+        <Text style={styles.simpleText}>First Name</Text>
+      </View>
       <TextInput 
         style={styles.inputs} 
         placeholder='First Name' 
@@ -34,6 +52,10 @@ const UpdateProfile = ({user,setUser,setUpdatePage}) => {
         value={updatedUser?.firstName}
         onChangeText={value=>{setUpdatedUser({...updatedUser,firstName:value})}}
     />
+      <View style={styles.labelCont}>
+      <Icon3 name='user-edit' size={15} color={'black'} style={{marginRight:6}}/>
+        <Text style={styles.simpleText}>Last Name</Text>
+      </View>
       <TextInput 
         style={styles.inputs} 
         placeholder='Last Name' 
@@ -41,6 +63,10 @@ const UpdateProfile = ({user,setUser,setUpdatePage}) => {
         value={updatedUser?.lastName}
         onChangeText={value=>{setUpdatedUser({...updatedUser,lastName:value})}}
     />
+      <View style={styles.labelCont}>
+      <Icon2 name='email' size={18} color={'black'} style={{marginRight:6}}/>
+        <Text style={styles.simpleText}>Email ID</Text>
+      </View>
       <TextInput 
         style={styles.inputs} 
         placeholder='Email' 
@@ -48,6 +74,10 @@ const UpdateProfile = ({user,setUser,setUpdatePage}) => {
         value={updatedUser?.userEmail}
         onChangeText={value=>{setUpdatedUser({...updatedUser,userEmail:value})}}
         />
+      <View style={styles.labelCont}>
+        <Icon name='idcard' size={18} color={'black'} style={{marginRight:6}}/>
+        <Text style={styles.simpleText}>Govt ID </Text>
+      </View>
       <TextInput 
         style={styles.inputs} 
         placeholder='Govt Id No.' 
@@ -60,6 +90,10 @@ const UpdateProfile = ({user,setUser,setUpdatePage}) => {
         placeholderTextColor={COLORS.inputBorder}
         onChangeText={value=>{setUpdatedUser({...updatedUser,userProfile:value})}}
     />
+    <View style={styles.labelCont}>
+        <Icon3 name='birthday-cake' size={15} color={'black'} style={{marginRight:6}}/>
+        <Text style={styles.simpleText}>BirthDay</Text>
+      </View>
       <TextInput 
         style={styles.inputs} 
         placeholder='BirthDay(dd/mm/yyyy)' 
@@ -68,12 +102,13 @@ const UpdateProfile = ({user,setUser,setUpdatePage}) => {
         onChangeText={value=>{setUpdatedUser({...updatedUser,dob:value})}}
         />
       <TouchableOpacity style={styles.submitBtn} onPress={()=>{update()}}>
-        <Text style={styles.submitText}>Update</Text>
+        <Text style={styles.submitText}>Save</Text>
       </TouchableOpacity>
       <TouchableOpacity style={[styles.submitBtn,{backgroundColor:'red'}]} onPress={()=>{setUpdatePage(false)}}>
         <Text style={styles.submitText}>cancel</Text>
       </TouchableOpacity>
-    </View>
+      </View>
+    </ScrollView>
   )
 }
 
@@ -88,11 +123,43 @@ const styles = StyleSheet.create({
         height: '100%',
         paddingVertical:40
       },
+      titleCont:{
+        display:'flex',
+        flexDirection:'row'
+      },
       title:{
         fontSize: SIZES.medium,
         fontWeight: 'bold',
         color: 'black',
-        marginBottom:40
+        marginBottom:40,
+        marginRight:6
+      },
+      imageCont:{
+        display:'flex',
+        flexDirection:'column',
+        alignItems:'center',
+        marginBottom:35
+      },
+      img:{
+        width:80,
+        height:80,
+        marginBottom:5
+      },
+      iconPlus:{
+
+      },
+      labelCont:{
+        display:'flex',
+        flexDirection:'row',
+        marginBottom:4,
+        width:'80%',
+        justifyContent:'flex-start',
+        alignContent:'center'
+      },
+      simpleText:{
+        fontSize:SIZES.preMedium,
+        color:'black',
+
       },
       inputs:{
         borderColor: COLORS.inputBorder,
@@ -102,9 +169,10 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         height: 50,
         padding: 15,
-        color: COLORS.inputBorder,
+        color: COLORS.textLightGrey,
         fontSize: SIZES.preMedium,
         opacity: 0.5,
+        
       },
       submitBtn:{
         display: 'flex',

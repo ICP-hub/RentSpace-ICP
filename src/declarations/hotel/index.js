@@ -9,7 +9,7 @@ export { idlFactory } from "./hotel.did.js";
  * process.env.CANISTER_ID_<CANISTER_NAME_UPPERCASE>
  * beginning in dfx 0.15.0
  */
-export const canisterId ='be2us-64aaa-aaaaa-qaabq-cai'
+export const canisterId ='bw4dl-smaaa-aaaaa-qaacq-cai'
   // process.env.CANISTER_ID_HOTEL ||
   // process.env.HOTEL_CANISTER_ID;
 
