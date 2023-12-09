@@ -9,7 +9,8 @@ const COLORS={
     lightPurple:'#9274A1',
     lightBorderPurple:"#CEC2D6",
     darkPurple:'#3C115A',
-    royalPurple:'#8E0FF0'
+    royalPurple:'#8E0FF0',
+    darkerPurple:'#11002C'
 }
 const SIZES={
     xSmall: 10,

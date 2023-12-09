@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,TextInput, TouchableOpacity, Image ,ScrollView} from 'react-native'
+import { StyleSheet, Text, View,TextInput, TouchableOpacity, Image ,ScrollView,Modal} from 'react-native'
 import React, { useState } from 'react'
 import { images } from '../constants'
 import { SIZES,COLORS } from '../constants/themes'
@@ -6,11 +6,14 @@ import { User } from '../declarations/User/index.js'
 import Icon from 'react-native-vector-icons/AntDesign'
 import Icon2 from 'react-native-vector-icons/Fontisto'
 import Icon3 from 'react-native-vector-icons/FontAwesome5'
+import {Calendar} from 'react-native-calendars';
 
 
 const UpdateProfile = ({user,setUser,setUpdatePage}) => {
 
     const [updatedUser,setUpdatedUser]=useState(user)
+    const [showCalendar, setShowCalendar] = useState(false);
+    const [selected, setSelected] = useState('');
 
     const update=async()=>{
         setUpdatedUser({...updatedUser,userType:user?.userType,hostStatus:false,verificationStatus:false,userId:user?.userId})
@@ -36,6 +39,7 @@ const UpdateProfile = ({user,setUser,setUpdatePage}) => {
       </View>
       <View style={styles.imageCont}>
         <TouchableOpacity>
+          <Icon name='pluscircle' size={20} color='blue' style={styles.iconPlus}/>
           <Image source={images.profile2} style={styles.img}/>
         </TouchableOpacity> 
         
@@ -94,20 +98,44 @@ const UpdateProfile = ({user,setUser,setUpdatePage}) => {
         <Icon3 name='birthday-cake' size={15} color={'black'} style={{marginRight:6}}/>
         <Text style={styles.simpleText}>BirthDay</Text>
       </View>
-      <TextInput 
+      {/* <TextInput 
         style={styles.inputs} 
         placeholder='BirthDay(dd/mm/yyyy)' 
         placeholderTextColor={COLORS.inputBorder}
         value={updatedUser?.dob}
         onChangeText={value=>{setUpdatedUser({...updatedUser,dob:value})}}
-        />
+        /> */}
+        <TouchableOpacity style={styles.inputs} onPress={()=>{
+            setShowCalendar(true)
+        }}>
+            <Text style={styles.dateText}>{updatedUser?.dob}</Text>
+        </TouchableOpacity>
       <TouchableOpacity style={styles.submitBtn} onPress={()=>{update()}}>
         <Text style={styles.submitText}>Save</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.submitBtn,{backgroundColor:'red'}]} onPress={()=>{setUpdatePage(false)}}>
+      <TouchableOpacity style={styles.submitBtn} onPress={()=>{setUpdatePage(false)}}>
         <Text style={styles.submitText}>cancel</Text>
       </TouchableOpacity>
       </View>
+      <Modal visible={showCalendar} animationType="slide" transparent>
+        <View>
+          <Calendar
+            onDayPress={day => {
+              setSelected(day.dateString);
+              setUpdatedUser({...updatedUser,dob:`${day.day}/${day.month}/${day.year}`});
+              setShowCalendar(false);
+            }}
+            style={styles.calendar}
+            markedDates={{
+              [selected]: {
+                selected: true,
+                disableTouchEvent: true,
+                selectedDotColor: COLORS.inputBorder,
+              },
+            }}
+          />
+        </View>
+      </Modal>
     </ScrollView>
   )
 }
@@ -146,7 +174,12 @@ const styles = StyleSheet.create({
         marginBottom:5
       },
       iconPlus:{
-
+        position:'absolute',
+        right:5,
+        zIndex:5,
+        bottom:5,
+        backgroundColor:'white',
+        borderRadius:10
       },
       labelCont:{
         display:'flex',
@@ -190,5 +223,18 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         fontSize: SIZES.medium,
-      }
+      },
+      dateText:{
+        color: COLORS.textLightGrey,
+        fontSize: SIZES.preMedium,
+        opacity: 0.5,
+      },
+      calendar: {
+        marginHorizontal: 35,
+        borderRadius: 10,
+        elevation: 2,
+        marginTop: '60%',
+        borderWidth: 1,
+        borderBlockColor: COLORS.inputBorder,
+      },
 })

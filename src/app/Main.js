@@ -145,7 +145,7 @@ const Main = ({navigation}) => {
           <HotelDetailPage openHotelDetailPage={openHotelDetailPage}/>
        </Modal>
        <Modal visible={userDetails} animationType='slide'>
-        <UserDetailDemo setHotels={setHotels} user={user} setUser={setUser} self={setUserDetails} setHotelCreateForm={setHotelCreateForm}/>
+        <UserDetailDemo setUpdatePage={setUpdatePage} setHotels={setHotels} user={user} setUser={setUser} self={setUserDetails} setHotelCreateForm={setHotelCreateForm}/>
        </Modal>
         {/* searchBar Top */}
 
@@ -163,7 +163,7 @@ const Main = ({navigation}) => {
         <HeaderSearch/>
 
         {/* <UserDetailDemo user={user}/> */}
-        <BookHotelPage setUpdatePage={setUpdatePage} hotels={hotels} user={user}/>
+        <BookHotelPage setUpdatePage={setUpdatePage} hotels={hotels} user={user} openHotelDetailPage={openHotelDetailPage}/>
         {/* <MapScreen/> */}
         
         {/* 

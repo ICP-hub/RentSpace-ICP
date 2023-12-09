@@ -10,7 +10,7 @@ import Icon2 from 'react-native-vector-icons/Entypo'
 import Icon3 from 'react-native-vector-icons/MaterialIcons'
 import { ScrollView } from 'react-native-gesture-handler'
 
-const UserDetailDemo = ({setHotels,user,setUser,self,setHotelCreateForm}) => {
+const UserDetailDemo = ({setUpdatePage,setHotels,user,setUser,self,setHotelCreateForm}) => {
 
   const [loading,setLoading]=useState(false)
   const makeHost=async()=>{
@@ -82,7 +82,7 @@ const UserDetailDemo = ({setHotels,user,setUser,self,setHotelCreateForm}) => {
             <Text style={styles.btnText} onPress={()=>{self(false)}}>Book Hotel</Text>
             
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn}>
+          <TouchableOpacity style={styles.btn} onPress={()=>setUpdatePage(true)}>
             <Text style={styles.btnText}>Edit</Text>
           </TouchableOpacity>
           
@@ -94,7 +94,12 @@ const UserDetailDemo = ({setHotels,user,setUser,self,setHotelCreateForm}) => {
             
           }}>
             <Text style={styles.btnText}>Make me a Host</Text>
-          </TouchableOpacity> :<Text></Text>
+          </TouchableOpacity> :
+          <TouchableOpacity style={styles.updateBtn} onPress={()=>{
+            setHotelCreateForm(true)
+          }}>
+            <Text style={styles.btnText}>Create new Hotel</Text>
+          </TouchableOpacity>
         }
         
           
@@ -111,13 +116,13 @@ const UserDetailDemo = ({setHotels,user,setUser,self,setHotelCreateForm}) => {
       }}>
         <Text style={styles.updateBtn}>Make me a Host</Text>
       </TouchableOpacity> */}
-      <BottomNav 
+      {/* <BottomNav 
           filterNav={console.log('clicked!')} 
           searchNav={console.log('clicked!')}
           heartNav={()=>{console.log('clicked!')}}
           commentNav={console.log('clicked!')}
           userNav={()=>{console.log('clicked!')}}
-        />
+        /> */}
     </View>
   )
 }
