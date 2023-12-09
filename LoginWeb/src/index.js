@@ -1,4 +1,4 @@
-import {Backend,createActor} from "../../src/declarations/backend/index";
+import {backend,createActor} from "../../src/declarations/backend/index";
 import {AuthClient} from "@dfinity/auth-client";
 import {HttpAgent} from "@dfinity/agent";
 import {DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain} from "@dfinity/identity";
@@ -20,11 +20,15 @@ if (publicKeyIndex !== -1) {
 }
 
 let delegationChain;
-let actor = Backend;
+let actor = backend;
+// window.actor = actor;
 
 const loginButton = document.getElementById("login");
 loginButton.onclick = async (e) => {
     e.preventDefault();
+    console.log("actor ==>",actor)
+    let principalString2 = await actor.whoami();
+    console.log("principalString",principalString2);
 
     // Create an auth client.
     var middleKeyIdentity = await ECDSAKeyIdentity.generate();
@@ -42,12 +46,18 @@ loginButton.onclick = async (e) => {
 
     // At this point we're authenticated, and we can get the identity from the auth client.
     const middleIdentity = authClient.getIdentity();
-
+    console.log("middleIdentity===>",middleIdentity);
+    console.log("middleIdentity===>",JSON.stringify(middleIdentity));
     // Using the identity obtained from the auth client to create an agent to interact with the IC.
-    const agent = new HttpAgent({identity: middleIdentity});
+    const agent = new HttpAgent({middleIdentity});
+    console.log("agent 1",agent)
     actor = createActor(process.env.CANISTER_ID_BACKEND, {
         agent,
     });
+    window.actor1 = actor;
+    let principalString = await actor.whoami();
+    console.log("principalString",principalString);
+    console.log("agent 2",agent)
 
     // Create another delegation with the app public key, then we have two delegations on the chain.
     if (appPublicKey != null && middleIdentity instanceof DelegationIdentity ) {
@@ -73,7 +83,7 @@ openButton.onclick = async (e) => {
         return false;
     }
     
-    var url = "https://6x7nu-oaaaa-aaaan-qdaua-cai.icp0.io/authorize?";
+    var url = "rentspace://auth?";
     var delegationString = JSON.stringify(delegationChain.toJSON());    
     url = url + "delegation=" + encodeURIComponent(delegationString);
     //console.log(url);

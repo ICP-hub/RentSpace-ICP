@@ -55,7 +55,7 @@ const Main = () => {
     // btmSheetLoginRef.current.dismiss();
     // btmSheetFinishRef.current.present();
     try {
-        const url = `http://127.0.0.1:4943/?canisterId=cinef-v4aaa-aaaaa-qaalq-cai`
+        const url = `http://127.0.0.1:4943/?canisterId=bkyz2-fmaaa-aaaaa-qaaaq-cai&sessionkey=bd3sg-teaaa-aaaaa-qaaba-cai`
         if (await InAppBrowser.isAvailable()) {
           const result = await InAppBrowser.open(url, {
             // iOS Properties
