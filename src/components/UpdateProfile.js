@@ -7,13 +7,14 @@ import Icon from 'react-native-vector-icons/AntDesign'
 import Icon2 from 'react-native-vector-icons/Fontisto'
 import Icon3 from 'react-native-vector-icons/FontAwesome5'
 import {Calendar} from 'react-native-calendars';
-
+import { launchImageLibrary } from 'react-native-image-picker'
 
 const UpdateProfile = ({user,setUser,setUpdatePage}) => {
 
     const [updatedUser,setUpdatedUser]=useState(user)
     const [showCalendar, setShowCalendar] = useState(false);
     const [selected, setSelected] = useState('');
+    const [userImg,setUserImg]=useState(images.profile2)
 
     const update=async()=>{
         setUpdatedUser({...updatedUser,userType:user?.userType,hostStatus:false,verificationStatus:false,userId:user?.userId})
@@ -29,6 +30,15 @@ const UpdateProfile = ({user,setUser,setUpdatePage}) => {
         })
         console.log(updatedUser)
     }
+    const chooseUserImg=async()=>{
+      const result=await launchImageLibrary({mediaType:'image',includeBase64:true},
+      (res)=>{
+        //console.log(res)
+        setUserImg(res.assets[0])
+      })
+      .catch((err)=>{console.log(err)})
+      console.log(result)
+    }
 
   return (
     <ScrollView>
@@ -38,9 +48,11 @@ const UpdateProfile = ({user,setUser,setUpdatePage}) => {
         <Icon name='edit' size={25} color='black'/>
       </View>
       <View style={styles.imageCont}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>{
+          chooseUserImg()
+        }}>
           <Icon name='pluscircle' size={20} color='blue' style={styles.iconPlus}/>
-          <Image source={images.profile2} style={styles.img}/>
+          <Image source={userImg.uri==null?userImg:{uri:userImg.uri}} style={styles.img}/>
         </TouchableOpacity> 
         
         <Text style={styles.simpleText}>Edit Photo</Text>
