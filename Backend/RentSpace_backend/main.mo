@@ -16,10 +16,8 @@ import Hotel "HotelCanister";
 import Source "mo:uuid/async/SourceV4";
 import UUID "mo:uuid/UUID";
 
-
 shared ({caller = owner}) actor class Database() = this {
 
-  
   // @required stable variable (do not delete or change)
 
   //holds the canisterMap of PK -> CanisterIdList
@@ -66,7 +64,9 @@ shared ({caller = owner}) actor class Database() = this {
     };
   };
 
-  public shared ({caller = creator}) func createNewUserCanister(canisterName : Text, controllers : ?[Principal]) : async ?Text {
+  public shared ({caller = creator}) func createNewUserCanister(canisterName : Text) : async ?Text {
+    assert (creator == owner);
+    Debug.print(debug_show (creator));
     let pk = canisterName;
     let canisterIds = getCanistersIdsIfExists(pk);
     if (canisterIds == []) {
@@ -114,6 +114,7 @@ shared ({caller = owner}) actor class Database() = this {
   };
 
   public shared ({caller}) func deleteCanister(serviceId : Text) : async () {
+    //Warning! change this condition othwer
     assert (caller == owner);
     // admin can delete any pk by passing in service id of user principal
     let pk = serviceId;
@@ -141,10 +142,11 @@ shared ({caller = owner}) actor class Database() = this {
     return "Canisters in PK " # pk # " upgraded";
   };
 
-  
   //
 
   public shared ({caller = caller}) func autoScaleHotelCanister(pk : Text) : async Text {
+    assert (caller == owner);
+
     // Auto-Scaling Authorization - if the request to auto-scale the partition is not coming from an existing canister in the partition, reject it
     if (Utils.callingCanisterOwnsPK(caller, pkToCanisterMap, pk)) {
       Debug.print("creating an additional canister for pk=" # pk);
@@ -155,6 +157,7 @@ shared ({caller = owner}) actor class Database() = this {
   };
 
   public shared ({caller = creator}) func createNewHotelCanister(canisterName : Text, controllers : ?[Principal]) : async ?Text {
+    assert (creator == owner);
     let pk = canisterName;
     let canisterIds = getCanistersIdsIfExists(pk);
     if (canisterIds == []) {
@@ -201,8 +204,8 @@ shared ({caller = owner}) actor class Database() = this {
     newCanisterId;
   };
 
-  public shared query({caller}) func whoami () : async Text {
+  public shared query ({caller}) func whoami() : async Text {
     return Principal.toText(caller);
-  }
+  };
 
 };

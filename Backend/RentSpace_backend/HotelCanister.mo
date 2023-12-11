@@ -12,6 +12,7 @@ import Prelude "mo:base/Prelude";
 import List "mo:base/List";
 import Error "mo:base/Error";
 import utils "utils";
+import Types "types";
 
 shared ({caller = owner}) actor class Hotel({
     //partiton key of this canister
@@ -45,13 +46,6 @@ shared ({caller = owner}) actor class Hotel({
             return await CA.transferCycles(caller);
         };
     };
-    type HotelInfo = {
-        hotelTitle : Text;
-        hotelDes : Text;
-        hotelImage : Text;
-        hotelPrice : Text;
-        hotelLocation : Text;
-    };
 
     func putHotelId(userIdentity : Text, hotelId : Text) : async () {
 
@@ -60,19 +54,20 @@ shared ({caller = owner}) actor class Hotel({
                 Debug.print(debug_show (result));
                 let data = List.push(hotelId, result);
                 hotelIdTree := RBT.put(hotelIdTree, Text.compare, userIdentity, data);
-                return 
+                return;
             };
             case null {
                 var hotelIdList = List.nil<Text>();
                 Debug.print("inside Null");
                 hotelIdList := List.push(hotelId, hotelIdList);
                 hotelIdTree := RBT.put(hotelIdTree, Text.compare, userIdentity, hotelIdList);
-                return 
+                return;
             };
         };
     };
     ///---------public function to create the new Hotels---------///
-    public func createHotel(userIdentity : Text, hotelData : HotelInfo) : async () {
+    public shared({caller=user}) func createHotel(hotelData : Types.HotelInfo) : async () {
+        let userIdentity = Principal.toText(user);
         let hotelId = await utils.createHotelSK(userIdentity);
         let hotelExist = await skExists(hotelId);
         await putHotelId(userIdentity, hotelId);
@@ -93,14 +88,15 @@ shared ({caller = owner}) actor class Hotel({
             },
         );
     };
-    public query func getHotelId(userIdentity : Text) : async [Text] {
+    public shared query ({caller = user}) func getHotelId() : async [Text] {
+        let userIdentity = Principal.toText(user);
         return switch (RBT.get(hotelIdTree, Text.compare, userIdentity)) {
             case (?result) {List.toArray<Text>(result)};
             case null {throw Error.reject("no id found")};
         };
     };
     ///----function to get the hotel data using the by passing uuid as sortkey------///
-    public query func getHotel(hotelId : Text) : async ?HotelInfo {
+    public query func getHotel(hotelId : Text) : async ?Types.HotelInfo {
         let id = hotelId;
         let hotelData = switch (CanDB.get(db, {sk = id})) {
             case (null) {null};
@@ -112,7 +108,7 @@ shared ({caller = owner}) actor class Hotel({
         };
     };
 
-    func unwrapHotel(entity : Entity.Entity) : ?HotelInfo {
+    func unwrapHotel(entity : Entity.Entity) : ?Types.HotelInfo {
         let {sk; attributes} = entity;
         let hotelTitleValue = Entity.getAttributeMapValueForKey(attributes, "hotelTitle");
         let hotelDesValue = Entity.getAttributeMapValueForKey(attributes, "hotelDes");
@@ -141,10 +137,10 @@ shared ({caller = owner}) actor class Hotel({
     };
 
     ////--function to update the Hotel data---////
-    public func updateHotel(hotelId : Text, hotelData : HotelInfo) : async ?HotelInfo {
+    public func updateHotel(hotelId : Text, hotelData : Types.HotelInfo) : async ?Types.HotelInfo {
         let sortKey = hotelId;
         let hotelExist = await skExists(sortKey);
-        if (hotelId == "" or hotelData.hotelTitle == "" or hotelData.hotelDes == "" or hotelData.hotelImage == "" or hotelData.hotelPrice == "" or hotelData.hotelLocation == ""  or hotelExist == false) {
+        if (hotelId == "" or hotelData.hotelTitle == "" or hotelData.hotelDes == "" or hotelData.hotelImage == "" or hotelData.hotelPrice == "" or hotelData.hotelLocation == "" or hotelExist == false) {
             return null;
         };
         let newData = await* CanDB.put(
@@ -164,7 +160,7 @@ shared ({caller = owner}) actor class Hotel({
     };
 
     type ScanHotels = {
-        hotels : [HotelInfo];
+        hotels : [Types.HotelInfo];
         nextKey : ?Text;
     };
     ///---pagiantion of Hotels----///
@@ -186,8 +182,8 @@ shared ({caller = owner}) actor class Hotel({
         };
     };
 
-    func arrayUnwarphotels(entities : [Entity.Entity]) : [HotelInfo] {
-        Array.mapFilter<Entity.Entity, HotelInfo>(
+    func arrayUnwarphotels(entities : [Entity.Entity]) : [Types.HotelInfo] {
+        Array.mapFilter<Entity.Entity, Types.HotelInfo>(
             entities,
             func(e) {
                 let {sk; attributes} = e;
