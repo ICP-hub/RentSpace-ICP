@@ -1,12 +1,15 @@
-import { StyleSheet, Text, View ,TouchableOpacity,Image} from 'react-native'
+import { StyleSheet, Text, View ,TouchableOpacity,Image,ScrollView} from 'react-native'
 import React from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { COLORS,SIZES } from '../constants/themes'
 import { images } from '../constants'
 import Icon2 from 'react-native-vector-icons/AntDesign'
+import HostBand from './cards/HostBand'
+import HotelFacilityCard from './cards/HotelFacilityCard'
 
 const HotelDetailPage = ({openHotelDetailPage}) => {
   return (
+    <ScrollView>
     <View style={styles.bottomSheet}>
       <TouchableOpacity style={styles.backIcon} onPress={()=>{openHotelDetailPage(false)}}>
         <Icon name="angle-left" size={30} color={COLORS.textLightGrey} />    
@@ -23,8 +26,15 @@ const HotelDetailPage = ({openHotelDetailPage}) => {
             <Icon2 name='star' size={12} color={COLORS.inputBorder} style={{marginRight:5}}/>
             <Text style={styles.hotelReviewText}>4.92 • 432 reviews • Ubdu, Bai, Indonesia</Text>
         </View>
+        
       </View>
+      <HostBand/>
+      <View style={[styles.allCont,{marginVertical:25}]}>
+        <HotelFacilityCard />
+      </View>
+      <View style={styles.hrLine}></View>
     </View>
+    </ScrollView>
   )
 }
 
@@ -51,11 +61,11 @@ const styles = StyleSheet.create({
         height:220
     },
     hotelTitle:{
-        width:"100%",
+        width:"90%",
         fontSize:SIZES.large,
         fontWeight:'bold',
         color:"black",
-
+        marginRight:15
     },
     hotelTitleReviewCont:{
         display:'flex',
@@ -63,7 +73,7 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'90%',
         marginTop:15,
-        marginLeft:20
+        marginLeft:40
     },
     hotelTitleCont:{
         display:'flex',
@@ -91,5 +101,18 @@ const styles = StyleSheet.create({
         color:"black",
         marginBottom:15,
         opacity:0.6
+    },
+    allCont:{
+        display:'flex',
+        flexDirection:'column',
+        alignItems:'center',
+        width:'100%'
+    },
+    hrLine:{
+        height:2,
+        borderBottomWidth:2,
+        borderBottomColor:COLORS.hrLine,
+        width:"100%",
+        marginBottom:20
     }
 })
