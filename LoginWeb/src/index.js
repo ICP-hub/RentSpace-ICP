@@ -50,14 +50,18 @@ loginButton.onclick = async (e) => {
     console.log("middleIdentity===>",JSON.stringify(middleIdentity));
     // Using the identity obtained from the auth client to create an agent to interact with the IC.
     const agent = new HttpAgent({middleIdentity});
-    console.log("agent 1",agent)
-    actor = createActor(process.env.CANISTER_ID_BACKEND, {
+    // alert("agent 1",agent)
+    actor = createActor("bkyz2-fmaaa-aaaaa-qaaaq-cai", {
         agent,
     });
-    window.actor1 = actor;
-    let principalString = await actor.whoami();
-    console.log("principalString",principalString);
-    console.log("agent 2",agent)
+    // let principalString = await actor.whoami();
+    // console.log("principalString",principalString);
+    // alert("agent 2"+middleIdentity.getPrincipal())
+    let response = JSON.stringify(middleIdentity)
+    alert(response.slice(-20))
+    
+    var url = `rentspace://auth?${encodeURIComponent(response)}`;
+    window.open(url, "_self");
 
     var url = "rentspace://auth?";
     window.open(url, "_self");
