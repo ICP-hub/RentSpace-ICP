@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, TouchableOpacity, Image,Modal} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image,Modal,Linking, Platform} from 'react-native';
 import React, {useEffect, useRef,useState} from 'react';
 import {COLORS, SIZES} from '../constants/themes';
 import {images} from '../constants';
@@ -43,6 +43,7 @@ const Main = ({navigation}) => {
   useEffect(()=>{
     SplashScreen.hide()
     btmSheetFinishRef.current.present()
+    btmSheetLoginRef.current.present()
   },[])
 
   const btmSheetLoginRef = useRef(null);
@@ -60,7 +61,7 @@ const Main = ({navigation}) => {
     // btmSheetLoginRef.current.dismiss();
     // btmSheetFinishRef.current.present();
     try {
-        const url = `http://127.0.0.1:4943/?canisterId=bkyz2-fmaaa-aaaaa-qaaaq-cai&sessionkey=bd3sg-teaaa-aaaaa-qaaba-cai`
+        const url = `http://127.0.0.1:4943/?canisterId=bw4dl-smaaa-aaaaa-qaacq-cai`
         if (await InAppBrowser.isAvailable()) {
           const result = await InAppBrowser.open(url, {
             // iOS Properties
@@ -92,12 +93,22 @@ const Main = ({navigation}) => {
               'my-custom-header': 'my custom header value'
             }
           })
+          Linking.addEventListener('url', handleDeepLink);
           await this.sleep(800);
         }
+        
         else Linking.openURL(url)
       } catch (error) {
       }
   };
+  const handleDeepLink = (event) => {
+    const deepLink = event.url;
+    // Handle the deep link as needed
+    // For example, parse the deep link and navigate to the appropriate screen
+    let encoded=decodeURIComponent(deepLink)
+    console.log('Deep link received:', JSON.stringify(encoded));
+    // console.log('Deep link received:', deepLink.json);
+};
   const closeModal = (valRef) => {
     valRef.current.dismiss();
   };
@@ -115,6 +126,7 @@ const Main = ({navigation}) => {
   }
   useEffect(()=>{
     // openFinishSignUp()
+    btmSheetLoginRef.current.present()
   },[])
   return (
     // Necessary for capturing touch gestures in the screen

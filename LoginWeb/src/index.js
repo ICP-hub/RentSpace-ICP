@@ -9,26 +9,26 @@ function fromHexString(hexString) {
 }
 
 
-let appPublicKey;
+// let appPublicKey;
 
-var url = window.location.href;
-var publicKeyIndex = url.indexOf("sessionkey=");
-if (publicKeyIndex !== -1) {
-    // Parse the public key.
-    var publicKeyString = url.substring(publicKeyIndex + "sessionkey=".length);
-    appPublicKey = Ed25519PublicKey.fromDer(fromHexString(publicKeyString));
-}
+// var url = window.location.href;
+// var publicKeyIndex = url.indexOf("sessionkey=");
+// if (publicKeyIndex !== -1) {
+//     // Parse the public key.
+//     var publicKeyString = url.substring(publicKeyIndex + "sessionkey=".length);
+//     appPublicKey = Ed25519PublicKey.fromDer(fromHexString(publicKeyString));
+// }
 
-let delegationChain;
+// let delegationChain;
 let actor = backend;
 // window.actor = actor;
 
 const loginButton = document.getElementById("login");
 loginButton.onclick = async (e) => {
     e.preventDefault();
-    console.log("actor ==>",actor)
-    let principalString2 = await actor.whoami();
-    console.log("principalString",principalString2);
+    // console.log("actor ==>",actor)
+    // let principalString2 = await actor.whoami();
+    // console.log("principalString",principalString2);
 
     // Create an auth client.
     var middleKeyIdentity = await ECDSAKeyIdentity.generate();
@@ -59,36 +59,39 @@ loginButton.onclick = async (e) => {
     console.log("principalString",principalString);
     console.log("agent 2",agent)
 
-    // Create another delegation with the app public key, then we have two delegations on the chain.
-    if (appPublicKey != null && middleIdentity instanceof DelegationIdentity ) {
-        let middleToApp = await DelegationChain.create(
-            middleKeyIdentity,
-            appPublicKey,
-            new Date(Date.now() + 15 * 60 * 1000),
-            { previous: middleIdentity.getDelegation() },
-        );
-
-        delegationChain = middleToApp;
-    }
-
-    return false;
-};
-
-const openButton = document.getElementById("open");
-openButton.onclick = async (e) => {
-    e.preventDefault();
-
-    if (delegationChain == null){
-        console.log("Invalid delegation chain.");
-        return false;
-    }
-    
     var url = "rentspace://auth?";
-    var delegationString = JSON.stringify(delegationChain.toJSON());    
-    url = url + "delegation=" + encodeURIComponent(delegationString);
-    //console.log(url);
-
     window.open(url, "_self");
 
+    // Create another delegation with the app public key, then we have two delegations on the chain.
+    // if (appPublicKey != null && middleIdentity instanceof DelegationIdentity ) {
+    //     let middleToApp = await DelegationChain.create(
+    //         middleKeyIdentity,
+    //         appPublicKey,
+    //         new Date(Date.now() + 15 * 60 * 1000),
+    //         { previous: middleIdentity.getDelegation() },
+    //     );
+
+    //     delegationChain = middleToApp;
+    // }
+
     return false;
 };
+
+// const openButton = document.getElementById("open");
+// openButton.onclick = async (e) => {
+//     e.preventDefault();
+
+//     if (delegationChain == null){
+//         console.log("Invalid delegation chain.");
+//         return false;
+//     }
+    
+//     var url = "rentspace://auth?";
+//     var delegationString = JSON.stringify(delegationChain.toJSON());    
+//     url = url + "delegation=" + encodeURIComponent(delegationString);
+//     //console.log(url);
+
+//     window.open(url, "_self");
+
+//     return false;
+// };
