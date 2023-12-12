@@ -67,6 +67,7 @@ shared ({caller = owner}) actor class Hotel({
     };
     ///---------public function to create the new Hotels---------///
     public shared({caller=user}) func createHotel(hotelData : Types.HotelInfo) : async () {
+        assert(user == Principal.fromText("2vxsx-fae"));
         let userIdentity = Principal.toText(user);
         let hotelId = await utils.createHotelSK(userIdentity);
         let hotelExist = await skExists(hotelId);

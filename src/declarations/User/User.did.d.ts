@@ -20,7 +20,6 @@ export interface UserInfo {
   'userType' : string,
   'userEmail' : string,
   'userGovId' : string,
-  'userId' : string,
   'hostStatus' : boolean,
   'userProfile' : string,
   'lastName' : string,
@@ -29,14 +28,15 @@ export interface UserInfo {
 }
 export interface Users {
   'createUser' : ActorMethod<
-    [string, string, string, string, string, string],
+    [string, string, string, string, string],
     undefined
   >,
+  'getOwner' : ActorMethod<[], string>,
   'getPK' : ActorMethod<[], string>,
-  'getUserInfo' : ActorMethod<[string], [] | [UserInfo]>,
+  'getUserInfo' : ActorMethod<[], [] | [UserInfo]>,
   'scanUsers' : ActorMethod<[string, string, bigint, [] | [boolean]], ScanUser>,
   'skExists' : ActorMethod<[string], boolean>,
   'transferCycles' : ActorMethod<[], undefined>,
-  'updateUserInfo' : ActorMethod<[string, UserInfo], [] | [UserInfo]>,
+  'updateUserInfo' : ActorMethod<[UserInfo], [] | [UserInfo]>,
 }
 export interface _SERVICE extends Users {}

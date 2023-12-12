@@ -1,12 +1,13 @@
 type Users = 
  service {
-   createUser: (text, text, text, text, text, text) -> ();
+   createUser: (text, text, text, text, text) -> ();
+   getOwner: () -> (text) query;
    getPK: () -> (text) query;
-   getUserInfo: (text) -> (opt UserInfo) query;
+   getUserInfo: () -> (opt UserInfo) query;
    scanUsers: (text, text, nat, opt bool) -> (ScanUser) query;
    skExists: (text) -> (bool) query;
    transferCycles: () -> ();
-   updateUserInfo: (text, UserInfo) -> (opt UserInfo);
+   updateUserInfo: (UserInfo) -> (opt UserInfo);
  };
 type UserInfo = 
  record {
@@ -16,7 +17,6 @@ type UserInfo =
    lastName: text;
    userEmail: text;
    userGovId: text;
-   userId: text;
    userProfile: text;
    userType: text;
    verificationStatus: bool;
