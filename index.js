@@ -13,6 +13,8 @@ import React from 'react';
 import Main from './src/app/Main';
 import BottomNav from './src/components/BottomNav';
 import Profile from './src/app/Profile';
+import  Store  from './src/redux/store';
+import { Provider } from 'react-redux';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,12 +24,14 @@ const linking = {
 
 const RootComponent: React.FC = () => {
   return (
+    <Provider store={Store}>
     <NavigationContainer linking={linking}>
       <Stack.Navigator initialRouteName="Launch">
         <Stack.Screen options={{headerShown:false}} name="Launch" component={Main} />
         <Stack.Screen options={{headerShown:false}} name='profile' component={Profile}/>
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 };
 

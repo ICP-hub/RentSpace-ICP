@@ -8,8 +8,13 @@ import Icon2 from 'react-native-vector-icons/Fontisto'
 import Icon3 from 'react-native-vector-icons/FontAwesome5'
 import {Calendar} from 'react-native-calendars';
 import { launchImageLibrary } from 'react-native-image-picker'
+import { useSelector,useDispatch } from 'react-redux'
+import { setUser } from '../redux/actions'
 
-const UpdateProfile = ({user,setUser,setUpdatePage}) => {
+const UpdateProfile = ({setUpdatePage}) => {
+
+    const {user}=useSelector(state=>state.userReducer)
+    const dispatch=useDispatch()
 
     const [updatedUser,setUpdatedUser]=useState(user)
     const [showCalendar, setShowCalendar] = useState(false);
@@ -21,7 +26,7 @@ const UpdateProfile = ({user,setUser,setUpdatePage}) => {
         await User.updateUserInfo(user?.userId,updatedUser).then(async(res)=>{
             alert(`Your profile is updated ${user?.firstName} !`)
             await User.getUserInfo(user?.userId).then((res)=>{
-                setUser(res[0])
+                dispatch(setUser(res[0]))
                 console.log(res[0])
                 setUpdatePage(false)
             })
