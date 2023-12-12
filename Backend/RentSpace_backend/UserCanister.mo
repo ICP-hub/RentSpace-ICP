@@ -59,13 +59,12 @@ shared ({caller = owner}) actor class Users({
     // to attach an unique identifier to the sk to separate users with the same name
 
     public shared ({caller = user}) func createUser(firstName : Text, lastName : Text, dob : Text, userEmail : Text, userType : Text) : async () {
-        assert (user == Principal.fromText("2vxsx-fae"));
+        assert (Principal.isAnonymous(user) == false);
         let userIdentity = Principal.toText(user);
         let identityStatus = await skExists(userIdentity);
         if (userIdentity == "" or userType == "" or firstName == "" or lastName == "" or dob == "" or userEmail == "" or identityStatus == true) {
             throw Error.reject("User already Exist or left filed Empty");
         };
-        Debug.print("yeah this is working");
         //inserts the entity into CanDB
         await* CanDB.put(
             db,
