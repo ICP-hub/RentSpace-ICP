@@ -4,9 +4,12 @@ import { images } from '../constants'
 import { COLORS, SIZES } from '../constants/themes'
 import { hotel } from '../declarations/hotel/index.js'
 import HotelCard from './cards/HotelCard'
-// import { TouchableOpacity } from 'react-native-gesture-handler'
+import { useSelector } from 'react-redux'
 
-const BookHotelPage = ({setUpdatePage,hotels,user,openHotelDetailPage}) => {
+const BookHotelPage = ({openHotelDetailPage}) => {
+
+  const {user}=useSelector(state=>state.userReducer)
+  const {hotels}=useSelector(state=>state.hotelsReducer)
 
   const [hotelList,setHotelList]=useState([])
   const sampleName='DreamLiner Hotel'
@@ -33,27 +36,6 @@ const BookHotelPage = ({setUpdatePage,hotels,user,openHotelDetailPage}) => {
     )
   }else{
   return (
-
-    
-    // <View style={styles.hotelPage}>
-    //   <View style={styles.lenderCont}>
-    //     <Image style={styles.lenderImg} source={images.profileSample}/>
-    //     <Text style={styles.lenderName}>John Doe</Text>
-    //   </View>
-    //   <Image style={styles.img} source={images.hotel}/>
-      
-    // <View style={styles.descCont}>
-    // <Text style={styles.desc}>
-    //   <Text style={styles.title}>Pennsylvania Inn Hotel</Text> offers a charming retreat in the heart of the Keystone State.
-    //   </Text>
-    //   <TouchableOpacity style={styles.bookBtn} onPress={()=>{setUpdatePage(true)}}>
-    //     <Text style={styles.bookTxt}>Book</Text>
-    //   </TouchableOpacity>
-    // </View>
-    
-    
-
-    // </View>
     <>
     <HotelCard name={sampleName} des={sampleDes} rating={4} openHotelDetailPage={openHotelDetailPage}/>
     

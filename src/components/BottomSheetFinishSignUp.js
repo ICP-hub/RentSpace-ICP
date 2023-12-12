@@ -1,19 +1,18 @@
 import {ActivityIndicator, Alert, Image, Modal, StyleSheet, Text, View} from 'react-native';
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import {SIZES, COLORS} from '../constants/themes';
 import {images} from '../constants';
 
 import {
-  RawButton,
   TextInput,
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import {Calendar} from 'react-native-calendars';
-import {Dimensions} from 'react-native';
 import {User} from '../declarations/User/index.js';
-import { backend } from '../declarations/backend/index.js';
+import { useSelector,useDispatch } from 'react-redux';
+import { setUser } from '../redux/actions';
 
-const BottomSheetFinishSignUp = ({user1,setUser,openComm,closeModal}) => {
+const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
   const [email, setEmail] = useState('');
@@ -21,6 +20,9 @@ const BottomSheetFinishSignUp = ({user1,setUser,openComm,closeModal}) => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selected, setSelected] = useState('');
   const [loading,setLoading]=useState(false)
+
+  const {user} =useSelector(state=>state.userReducer)
+  const dispatch=useDispatch()
   
 
   async function signUp(){
@@ -35,42 +37,23 @@ const BottomSheetFinishSignUp = ({user1,setUser,openComm,closeModal}) => {
       //alert('Welcome'+res[0]?.firstName)
       await User.getUserInfo(id).then((res)=>{
         console.log(res[0]),
-        setUser(res[0])
+        // setUser(res[0])
+        dispatch(setUser(res[0]))
         openComm()
         closeModal()
-        
+        console.log(user)
       })
     }).catch((err)=>{console.log(err)})
     //alert(email)
   }
  
-  let user;
-  async function loadUser() {
-    let data = "1";
-    let key=data.toString();
-    const user=await User;
-  // await user.getUserInfo('1').then((res)=>{
-  //   console.log(res)
-  // }).catch((err)=>{
-  //   console.log(err)
-  // })
-  //console.log(user?.toString());
-  //console.log(t)
-  
-  console.log(user)
-  }
-
-  useEffect(() => {
-    loadUser();
-    //console.log(user?.toString())
-  }, []);
 
   return (
     <View style={styles.bottomSheet}>
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {
-            if(user1?.userId!=null){
+            if(user?.userId!=null){
               closeModal();
             }else{
               alert('Please Register first to continue further')

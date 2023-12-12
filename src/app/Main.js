@@ -25,27 +25,27 @@ import HotelCreationForm from '../components/HotelCreationForm';
 import HotelDetailPage from '../components/HotelDetailPage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-//import BottomSheet from '@gorhom/bottom-sheet'
-// import { StatusBar } from 'expo-status-bar'
 
 const Main = ({navigation}) => {
 
+
+  //States for managing modals
   const [safetyModal,setSafetyModal]=useState(false)
   const [cancelModal,setCancelModal]=useState(false)
   const [rulesModal,setRulesModal]=useState(false)
   const [updatePage,setUpdatePage]=useState(false)
   const [hotelCreateForm,setHotelCreateForm]=useState(false)
   const [hotelDetailPage,openHotelDetailPage]=useState(false)
-  const [user,setUser]=useState({})
-  const [hotels,setHotels]=useState([])
   const [userDetails,setUserDetails]=useState(false)
 
+  //Hiding splashscreen and opening sign up page
   useEffect(()=>{
     SplashScreen.hide()
     btmSheetFinishRef.current.present()
     // btmSheetLoginRef.current.present()
   },[])
 
+  //Refs for managing bottomsheets
   const btmSheetLoginRef = useRef(null);
   const btmSheetFinishRef = useRef(null);
   const btmSheetCommRef=useRef(null)
@@ -55,7 +55,6 @@ const Main = ({navigation}) => {
   const snapPoints = ['94%'];
   const handlePresentModal = () => {
     btmSheetLoginRef.current.present();
-    //alert("first")
   };
   const handleLogin = async () => {
     // btmSheetLoginRef.current.dismiss();
@@ -109,6 +108,8 @@ const Main = ({navigation}) => {
     console.log('Deep link received:', JSON.stringify(encoded));
     // console.log('Deep link received:', deepLink.json);
 };
+
+//methods for opening and closing bottomdsheets
   const closeModal = (valRef) => {
     valRef.current.dismiss();
   };
@@ -124,10 +125,7 @@ const Main = ({navigation}) => {
   const openDetailsModal=()=>{
     btmExtraDetailsRef.current.present()
   }
-  useEffect(()=>{
-    // openFinishSignUp()
-    btmSheetLoginRef.current.present()
-  },[])
+
   return (
     // Necessary for capturing touch gestures in the screen
     <GestureHandlerRootView style={{flex: 1,paddingTop:200}}>
@@ -148,18 +146,18 @@ const Main = ({navigation}) => {
           <ModalHouseRules setRulesModal={setRulesModal}/>
         </Modal>
         <Modal visible={updatePage} animationType='slide'>
-          <UpdateProfile user={user} setUser={setUser} setUpdatePage={setUpdatePage}/>
+          <UpdateProfile  setUpdatePage={setUpdatePage}/>
         </Modal>
         <Modal visible={hotelCreateForm} animationType='slide'>
-          <HotelCreationForm setHotels={setHotels} setHotelCreateForm={setHotelCreateForm} user={user}/>
+          <HotelCreationForm setHotelCreateForm={setHotelCreateForm}/>
         </Modal>
        <Modal visible={hotelDetailPage} animationType='slide'>
           <HotelDetailPage openHotelDetailPage={openHotelDetailPage}/>
        </Modal>
        <Modal visible={userDetails} animationType='slide'>
-        <UserDetailDemo setUpdatePage={setUpdatePage} setHotels={setHotels} user={user} setUser={setUser} self={setUserDetails} setHotelCreateForm={setHotelCreateForm}/>
+        <UserDetailDemo setUpdatePage={setUpdatePage}  self={setUserDetails} setHotelCreateForm={setHotelCreateForm}/>
        </Modal>
-        {/* searchBar Top */}
+        
 
         
 
@@ -172,29 +170,14 @@ const Main = ({navigation}) => {
           userNav={()=>{setUserDetails(true)}}
         />
 
+      {/* searchBar Top */}
         <HeaderSearch/>
 
         {/* <UserDetailDemo user={user}/> */}
-        <BookHotelPage setUpdatePage={setUpdatePage} hotels={hotels} user={user} openHotelDetailPage={openHotelDetailPage}/>
+        <BookHotelPage setUpdatePage={setUpdatePage}  openHotelDetailPage={openHotelDetailPage}/>
         {/* <MapScreen/> */}
         
-        {/* 
-        Sample Touchables for displaying modal UI, for preview purposes
-        <TouchableOpacity style={styles.btn} onPress={()=>{setSafetyModal(true)}}>
-          <Text style={styles.btnText}>
-            Safety & Property
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.btn} onPress={()=>{setCancelModal(true)}}>
-          <Text style={styles.btnText}>
-            Cancellation Policy
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.btn} onPress={()=>{setRulesModal(true)}}>
-          <Text style={styles.btnText}>
-            House Rules
-          </Text>
-        </TouchableOpacity> */}
+
 
         
 
@@ -210,7 +193,7 @@ const Main = ({navigation}) => {
           index={0}
           enablePanDownToClose={false}
           snapPoints={snapPoints}>
-          <BottomSheetFinishSignUp user1={user} setUser={setUser} openComm={openComm} closeModal={()=>{closeModal(btmSheetFinishRef)}} />
+          <BottomSheetFinishSignUp openComm={openComm} closeModal={()=>{closeModal(btmSheetFinishRef)}} />
         </BottomSheetModal>
         <BottomSheetModal
           ref={btmSheetCommRef}
@@ -236,13 +219,6 @@ const Main = ({navigation}) => {
             <BottomSheetDetails/>
 
         </BottomSheetModal>
-        {/* <BottomSheetModal
-          ref={btmUserDetailsRef}
-          index={0}
-          snapPoints={snapPoints}
-          >
-            <UserDetailDemo setHotels={setHotels} user={user} setUser={setUser} self={btmUserDetailsRef} setHotelCreateForm={setHotelCreateForm}/>
-          </BottomSheetModal> */}
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );

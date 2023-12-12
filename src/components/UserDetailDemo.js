@@ -1,16 +1,19 @@
 import { ActivityIndicator, StyleSheet, Text, Image, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import { COLORS, SIZES } from '../constants/themes'
 import { User } from '../declarations/User/index.js'
 import {hotel} from '../declarations/hotel/index.js'
-import BottomNav from './BottomNav'
 import { images } from '../constants'
 import Icon from 'react-native-vector-icons/AntDesign'
 import Icon2 from 'react-native-vector-icons/Entypo'
 import Icon3 from 'react-native-vector-icons/MaterialIcons'
-import { ScrollView } from 'react-native-gesture-handler'
+import { useSelector,useDispatch } from 'react-redux'
+import { setUser,setHotels } from '../redux/actions'
 
-const UserDetailDemo = ({setUpdatePage,setHotels,user,setUser,self,setHotelCreateForm}) => {
+const UserDetailDemo = ({setUpdatePage,self,setHotelCreateForm}) => {
+
+  const {user}=useSelector(state=>state.userReducer)
+  const dispatch=useDispatch()
 
   const [loading,setLoading]=useState(false)
   const makeHost=async()=>{
@@ -24,11 +27,11 @@ const UserDetailDemo = ({setUpdatePage,setHotels,user,setUser,self,setHotelCreat
       setHotelCreateForm(true)
       await User.getUserInfo(user?.userId).then((res)=>{
         console.log(res[0])
-        setUser(res[0])
+        dispatch(setUser(res[0]))
       }).then(()=>{
         hotel.getHotelId(user?.userId).then((res)=>{
           console.log(res)
-          setHotels(res)
+          dispatch(setHotels(res))
         })
       })
 

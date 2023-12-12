@@ -1,16 +1,25 @@
-import { SET_USER } from "./actions";
+import { SET_USER,SET_HOTELS } from "./actions";
 
 const initialState={
-    user:{}
+    user:{},
+    hotels:[],
 }
 
-function userReducer(state=initialState,action){
+export function userReducer(state=initialState,action){
     switch(action.type){
         case SET_USER:
             return {...state , user:action.payload}
         default:
             return state
     }
+
 }
 
-export default userReducer
+export function hotelsReducer(state=initialState,action){
+    switch(action.type){
+        case SET_HOTELS:
+            return {...state,hotels:action.payload}
+        default:
+            return state
+    }
+}

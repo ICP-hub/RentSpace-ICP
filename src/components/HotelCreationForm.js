@@ -6,8 +6,12 @@ import Icon from 'react-native-vector-icons/Fontisto'
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'
 import Icon3 from 'react-native-vector-icons/FontAwesome5'
 import Icon4 from 'react-native-vector-icons/MaterialIcons'
+import { useSelector,useDispatch } from 'react-redux'
+import { setHotels } from '../redux/actions'
 
-const HotelCreationForm = ({setHotels,setHotelCreateForm,user}) => {
+const HotelCreationForm = ({setHotelCreateForm}) => {
+  const {user}=useSelector(state=>state.userReducer)
+  const dispatch=useDispatch()
   const [loading,setLoading]=useState(false)
   const [hotelData,setHotelData]=useState({})
   const createHotel=async()=>{
@@ -19,7 +23,7 @@ const HotelCreationForm = ({setHotels,setHotelCreateForm,user}) => {
    
     await hotel.getHotelId(user?.userId).then(async(res)=>{
       console.log(res)
-      setHotels(res)
+      dispatch(setHotels(res))
       setHotelCreateForm(false)
      
     })
@@ -75,7 +79,7 @@ const HotelCreationForm = ({setHotels,setHotelCreateForm,user}) => {
       />
       <View style={styles.labelCont}>
       <Icon4 name='location-on' size={18} color={'black'} style={{marginRight:6}}/>
-        <Text style={styles.simpleText}>First Name</Text>
+        <Text style={styles.simpleText}>Location</Text>
       </View>
       <TextInput 
         style={styles.inputs} 
