@@ -7,7 +7,7 @@ import Icon2 from 'react-native-vector-icons/Fontisto'
 
 
 
-const BottomNav = ({handlePresentModal,openFinishSignUp,openComm,openNotiModal,openDetailsModal,openUserDetails}) => {
+const BottomNav = ({filterNav,searchNav,heartNav,commentNav,userNav}) => {
 
 
   return (
@@ -15,20 +15,20 @@ const BottomNav = ({handlePresentModal,openFinishSignUp,openComm,openNotiModal,o
     
     <View style={styles.viewNav}>
         {/* <Icon name="home" size={20} color={COLORS.inputBorder}/> */}
-        <TouchableOpacity style={styles.iconNav} onPress={()=>{openFinishSignUp()}}>
+        <TouchableOpacity style={styles.iconNav} onPress={()=>{filterNav()}}>
         <Icon name="filter" size={25} color={COLORS.inputBorder}/>
         </TouchableOpacity >
-        <TouchableOpacity style={styles.iconNav} onPress={()=>{openUserDetails()}}>
+        <TouchableOpacity style={styles.iconNav} onPress={()=>{searchNav()}}>
             {/* <Image source={images.search}/> */}
             <Icon name="search1" size={25} color={COLORS.inputBorder}/>
         </TouchableOpacity >
-        <TouchableOpacity style={styles.iconNav} onPress={()=>{openNotiModal()}}>
+        <TouchableOpacity style={styles.iconNav} onPress={()=>{heartNav(true)}}>
         <Icon name="hearto" size={25} color={COLORS.inputBorder}/>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.iconNav} onPress={()=>{openDetailsModal()}}>
+        <TouchableOpacity style={styles.iconNav} onPress={()=>{commentNav()}}>
         <Icon2 name="comment" size={20} color={COLORS.inputBorder}/>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.iconNav} onPress={()=>{handlePresentModal()}}>
+        <TouchableOpacity style={styles.iconNav} onPress={()=>{userNav()}}>
         <Icon name="user" size={25} color={COLORS.inputBorder}/>
         </TouchableOpacity>
     </View>
@@ -60,7 +60,13 @@ const styles=StyleSheet.create({
         position:"absolute",
         bottom:0,
         paddingVertical:20,
-        flexDirection:"row"
+        flexDirection:"row",
+        borderTopRightRadius:20,
+        borderTopLeftRadius:20,
+        elevation:15,
+        shadowColor:'black',
+        shadowOffset:{width:-2,height:4},
+        shadowRadius:3
     },
     text:{
         textAlign:"center",

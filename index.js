@@ -12,6 +12,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import Main from './src/app/Main';
 import BottomNav from './src/components/BottomNav';
+import Profile from './src/app/Profile';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,7 @@ const RootComponent: React.FC = () => {
     <NavigationContainer linking={linking}>
       <Stack.Navigator initialRouteName="Launch">
         <Stack.Screen options={{headerShown:false}} name="Launch" component={Main} />
+        <Stack.Screen options={{headerShown:false}} name='profile' component={Profile}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

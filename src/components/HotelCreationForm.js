@@ -2,6 +2,10 @@ import { StyleSheet, Text, View,TextInput,TouchableOpacity, Alert, ActivityIndic
 import React, { useState } from 'react'
 import { SIZES,COLORS } from '../constants/themes'
 import { hotel } from '../declarations/hotel/index.js'
+import Icon from 'react-native-vector-icons/Fontisto'
+import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'
+import Icon3 from 'react-native-vector-icons/FontAwesome5'
+import Icon4 from 'react-native-vector-icons/MaterialIcons'
 
 const HotelCreationForm = ({setHotels,setHotelCreateForm,user}) => {
   const [loading,setLoading]=useState(false)
@@ -25,6 +29,10 @@ const HotelCreationForm = ({setHotels,setHotelCreateForm,user}) => {
   return (
     <View style={styles.bottomSheet}>
       <Text style={styles.title}>Create new Hotel</Text>
+      <View style={styles.labelCont}>
+      <Icon3 name='hotel' size={15} color={'black'} style={{marginRight:6}}/>
+        <Text style={styles.simpleText}>Hotel Name</Text>
+      </View>
       <TextInput 
         style={styles.inputs} 
         value={hotelData?.hotelTitle}
@@ -32,6 +40,10 @@ const HotelCreationForm = ({setHotels,setHotelCreateForm,user}) => {
         placeholderTextColor={COLORS.inputBorder}
         onChangeText={value=>{setHotelData({...hotelData,hotelTitle:value})}}
       />
+      <View style={styles.labelCont}>
+      <Icon2 name='notebook-outline' size={18} color={'black'} style={{marginRight:6}}/>
+        <Text style={styles.simpleText}>Description</Text>
+      </View>
       <TextInput 
         style={styles.inputs} 
         value={hotelData?.hotelDes}
@@ -39,6 +51,10 @@ const HotelCreationForm = ({setHotels,setHotelCreateForm,user}) => {
         placeholderTextColor={COLORS.inputBorder}
         onChangeText={value=>{setHotelData({...hotelData,hotelDes:value})}}
       />
+      <View style={styles.labelCont}>
+      <Icon name='photograph' size={15} color={'black'} style={{marginRight:6}}/>
+        <Text style={styles.simpleText}>Image</Text>
+      </View>
       <TextInput 
         style={styles.inputs} 
         value={hotelData?.hotelImage}
@@ -46,6 +62,10 @@ const HotelCreationForm = ({setHotels,setHotelCreateForm,user}) => {
         placeholderTextColor={COLORS.inputBorder}
         onChangeText={value=>{setHotelData({...hotelData,hotelImage:value})}}
       />
+      <View style={styles.labelCont}>
+      <Icon4 name='attach-money' size={18} color={'black'} style={{marginRight:3}}/>
+        <Text style={styles.simpleText}>Price per night</Text>
+      </View>
       <TextInput 
         style={styles.inputs} 
         value={hotelData?.hotelPrice}
@@ -53,6 +73,10 @@ const HotelCreationForm = ({setHotels,setHotelCreateForm,user}) => {
         placeholderTextColor={COLORS.inputBorder}
         onChangeText={value=>{setHotelData({...hotelData,hotelPrice:value})}}
       />
+      <View style={styles.labelCont}>
+      <Icon4 name='location-on' size={18} color={'black'} style={{marginRight:6}}/>
+        <Text style={styles.simpleText}>First Name</Text>
+      </View>
       <TextInput 
         style={styles.inputs} 
         value={hotelData?.hotelLocation}
@@ -64,7 +88,7 @@ const HotelCreationForm = ({setHotels,setHotelCreateForm,user}) => {
       <TouchableOpacity style={styles.submitBtn} onPress={()=>{createHotel()}}>
         <Text style={styles.submitText}>Create Hotel</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.submitBtn,{backgroundColor:'red'}]} onPress={()=>{setHotelCreateForm(false)}}>
+      <TouchableOpacity style={styles.submitBtn} onPress={()=>{setHotelCreateForm(false)}}>
         <Text style={styles.submitText}>Cancel</Text>
       </TouchableOpacity>
     </View>
@@ -116,5 +140,18 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: SIZES.medium,
-  }
+  },
+  labelCont:{
+    display:'flex',
+    flexDirection:'row',
+    marginBottom:4,
+    width:'80%',
+    justifyContent:'flex-start',
+    alignContent:'center'
+  },
+  simpleText:{
+    fontSize:SIZES.preMedium,
+    color:'black',
+
+  },
 })

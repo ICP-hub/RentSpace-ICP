@@ -3,11 +3,14 @@ import React, { useEffect, useState } from 'react'
 import { images } from '../constants'
 import { COLORS, SIZES } from '../constants/themes'
 import { hotel } from '../declarations/hotel/index.js'
+import HotelCard from './cards/HotelCard'
 // import { TouchableOpacity } from 'react-native-gesture-handler'
 
-const BookHotelPage = ({setUpdatePage,hotels,user}) => {
+const BookHotelPage = ({setUpdatePage,hotels,user,openHotelDetailPage}) => {
 
   const [hotelList,setHotelList]=useState([])
+  const sampleName='DreamLiner Hotel'
+  const sampleDes='2972 Westheimer Rd. Santa Ana, Illinois 85486 '
   async function getHotelDetails(){
     setHotelList([])
     for(let i=0;i<hotels?.length;i++){
@@ -24,46 +27,37 @@ const BookHotelPage = ({setUpdatePage,hotels,user}) => {
   if(hotels?.length>0){
     return(
       <FlatList data={hotelList} style={{marginBottom:80}}  renderItem={(item)=>(
-        <View style={styles.hotelPage}>
-        <View style={styles.lenderCont}>
-          <Image style={styles.lenderImg} source={images.profileSample}/>
-          <Text style={styles.lenderName}>{user?.firstName}</Text>
-        </View>
-        <Image style={styles.img} source={images.hotel}/>
-        
-      <View style={styles.descCont}>
-      <Text style={styles.desc}>
-        <Text style={styles.title}>{item.item.hotelTitle}</Text> {item.item.hotelDes}
-        </Text>
-        <TouchableOpacity style={styles.bookBtn} onPress={()=>{setUpdatePage(true)}}>
-          <Text style={styles.bookTxt}>Book</Text>
-        </TouchableOpacity>
-      </View>
-      </View>
+        <HotelCard name={item.item.hotelTitle} des={item.item.hotelDes} rating={4} openHotelDetailPage={openHotelDetailPage}/>
       )}/>
+      
     )
   }else{
   return (
 
     
-    <View style={styles.hotelPage}>
-      <View style={styles.lenderCont}>
-        <Image style={styles.lenderImg} source={images.profileSample}/>
-        <Text style={styles.lenderName}>John Doe</Text>
-      </View>
-      <Image style={styles.img} source={images.hotel}/>
+    // <View style={styles.hotelPage}>
+    //   <View style={styles.lenderCont}>
+    //     <Image style={styles.lenderImg} source={images.profileSample}/>
+    //     <Text style={styles.lenderName}>John Doe</Text>
+    //   </View>
+    //   <Image style={styles.img} source={images.hotel}/>
       
-    <View style={styles.descCont}>
-    <Text style={styles.desc}>
-      <Text style={styles.title}>Pennsylvania Inn Hotel</Text> offers a charming retreat in the heart of the Keystone State.
-      </Text>
-      <TouchableOpacity style={styles.bookBtn} onPress={()=>{setUpdatePage(true)}}>
-        <Text style={styles.bookTxt}>Book</Text>
-      </TouchableOpacity>
-    </View>
+    // <View style={styles.descCont}>
+    // <Text style={styles.desc}>
+    //   <Text style={styles.title}>Pennsylvania Inn Hotel</Text> offers a charming retreat in the heart of the Keystone State.
+    //   </Text>
+    //   <TouchableOpacity style={styles.bookBtn} onPress={()=>{setUpdatePage(true)}}>
+    //     <Text style={styles.bookTxt}>Book</Text>
+    //   </TouchableOpacity>
+    // </View>
+    
     
 
-    </View>
+    // </View>
+    <>
+    <HotelCard name={sampleName} des={sampleDes} rating={4} openHotelDetailPage={openHotelDetailPage}/>
+    
+    </>
   )
   }
 }

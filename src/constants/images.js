@@ -12,6 +12,7 @@ import cross from '../assets/images/VectorCross.png'
 import commLogo from '../assets/images/communityCommit.png'
 import hotel from '../assets/images/hotelDemo.jpg'
 import profileSample from '../assets/images/profileSample.jpg'
+import profile2 from '../assets/images/profile2.png'
 
 export default {
     favourite,
@@ -27,5 +28,6 @@ export default {
     cross,
     commLogo,
     hotel,
-    profileSample
+    profileSample,
+    profile2
 }

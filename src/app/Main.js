@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, TouchableOpacity, Image,Modal} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image,Modal,Linking, Platform} from 'react-native';
 import React, {useEffect, useRef,useState} from 'react';
 import {COLORS, SIZES} from '../constants/themes';
 import {images} from '../constants';
@@ -22,22 +22,28 @@ import UserDetailDemo from '../components/UserDetailDemo';
 import BookHotelPage from '../components/BookHotelPage';
 import UpdateProfile from '../components/UpdateProfile';
 import HotelCreationForm from '../components/HotelCreationForm';
+import HotelDetailPage from '../components/HotelDetailPage';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 //import BottomSheet from '@gorhom/bottom-sheet'
 // import { StatusBar } from 'expo-status-bar'
 
-const Main = () => {
+const Main = ({navigation}) => {
 
   const [safetyModal,setSafetyModal]=useState(false)
   const [cancelModal,setCancelModal]=useState(false)
   const [rulesModal,setRulesModal]=useState(false)
   const [updatePage,setUpdatePage]=useState(false)
   const [hotelCreateForm,setHotelCreateForm]=useState(false)
+  const [hotelDetailPage,openHotelDetailPage]=useState(false)
   const [user,setUser]=useState({})
-  const [hotels,setHotels]=useState()
+  const [hotels,setHotels]=useState([])
+  const [userDetails,setUserDetails]=useState(false)
 
   useEffect(()=>{
     SplashScreen.hide()
     btmSheetFinishRef.current.present()
+    btmSheetLoginRef.current.present()
   },[])
 
   const btmSheetLoginRef = useRef(null);
@@ -55,7 +61,7 @@ const Main = () => {
     // btmSheetLoginRef.current.dismiss();
     // btmSheetFinishRef.current.present();
     try {
-        const url = `http://127.0.0.1:4943/?canisterId=bkyz2-fmaaa-aaaaa-qaaaq-cai&sessionkey=bd3sg-teaaa-aaaaa-qaaba-cai`
+        const url = `http://127.0.0.1:4943/?canisterId=bw4dl-smaaa-aaaaa-qaacq-cai`
         if (await InAppBrowser.isAvailable()) {
           const result = await InAppBrowser.open(url, {
             // iOS Properties
@@ -87,12 +93,22 @@ const Main = () => {
               'my-custom-header': 'my custom header value'
             }
           })
+          Linking.addEventListener('url', handleDeepLink);
           await this.sleep(800);
         }
+        
         else Linking.openURL(url)
       } catch (error) {
       }
   };
+  const handleDeepLink = (event) => {
+    const deepLink = event.url;
+    // Handle the deep link as needed
+    // For example, parse the deep link and navigate to the appropriate screen
+    let encoded=decodeURIComponent(deepLink)
+    console.log('Deep link received:', JSON.stringify(encoded));
+    // console.log('Deep link received:', deepLink.json);
+};
   const closeModal = (valRef) => {
     valRef.current.dismiss();
   };
@@ -110,6 +126,7 @@ const Main = () => {
   }
   useEffect(()=>{
     // openFinishSignUp()
+    btmSheetLoginRef.current.present()
   },[])
   return (
     // Necessary for capturing touch gestures in the screen
@@ -136,25 +153,29 @@ const Main = () => {
         <Modal visible={hotelCreateForm} animationType='slide'>
           <HotelCreationForm setHotels={setHotels} setHotelCreateForm={setHotelCreateForm} user={user}/>
         </Modal>
-       
+       <Modal visible={hotelDetailPage} animationType='slide'>
+          <HotelDetailPage openHotelDetailPage={openHotelDetailPage}/>
+       </Modal>
+       <Modal visible={userDetails} animationType='slide'>
+        <UserDetailDemo setUpdatePage={setUpdatePage} setHotels={setHotels} user={user} setUser={setUser} self={setUserDetails} setHotelCreateForm={setHotelCreateForm}/>
+       </Modal>
         {/* searchBar Top */}
 
         
 
         {/* navigation Bar */}
         <BottomNav 
-          handlePresentModal={handlePresentModal} 
-          openFinishSignUp={openFinishSignUp} 
-          openComm={openComm} 
-          openNotiModal={openNotiModal}
-          openDetailsModal={openDetailsModal}
-          openUserDetails={()=>{btmUserDetailsRef.current.present()}}
+          filterNav={openFinishSignUp} 
+          searchNav={openDetailsModal}
+          heartNav={()=>{console.log('clicked!')}}
+          commentNav={openHotelDetailPage}
+          userNav={()=>{setUserDetails(true)}}
         />
 
         <HeaderSearch/>
 
         {/* <UserDetailDemo user={user}/> */}
-        <BookHotelPage setUpdatePage={setUpdatePage} hotels={hotels} user={user}/>
+        <BookHotelPage setUpdatePage={setUpdatePage} hotels={hotels} user={user} openHotelDetailPage={openHotelDetailPage}/>
         {/* <MapScreen/> */}
         
         {/* 
@@ -215,13 +236,13 @@ const Main = () => {
             <BottomSheetDetails/>
 
         </BottomSheetModal>
-        <BottomSheetModal
+        {/* <BottomSheetModal
           ref={btmUserDetailsRef}
           index={0}
           snapPoints={snapPoints}
           >
             <UserDetailDemo setHotels={setHotels} user={user} setUser={setUser} self={btmUserDetailsRef} setHotelCreateForm={setHotelCreateForm}/>
-          </BottomSheetModal>
+          </BottomSheetModal> */}
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );
