@@ -43,7 +43,7 @@ const Main = ({navigation}) => {
   useEffect(()=>{
     SplashScreen.hide()
     btmSheetFinishRef.current.present()
-    btmSheetLoginRef.current.present()
+    // btmSheetLoginRef.current.present()
   },[])
 
   const btmSheetLoginRef = useRef(null);

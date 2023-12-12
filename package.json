@@ -20,6 +20,7 @@
     "@gorhom/bottom-sheet": "^4.5.1",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
+    "@reduxjs/toolkit": "^2.0.1",
     "deprecated-react-native-prop-types": "^5.0.0",
     "fast-text-encoding": "^1.0.6",
     "ic-mops": "^0.34.4",
@@ -44,7 +45,9 @@
     "react-native-slider": "^0.11.0",
     "react-native-splash-screen": "^3.3.0",
     "react-native-vector-icons": "^10.0.2",
-    "react-redux": "^9.0.3",
+    "react-redux": "^9.0.4",
+    "redux": "^5.0.0",
+    "redux-thunk": "^3.1.0",
     "text-encoding": "^0.7.0"
   },
   "devDependencies": {
