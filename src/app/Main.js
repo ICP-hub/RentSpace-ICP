@@ -25,6 +25,8 @@ import HotelCreationForm from '../components/HotelCreationForm';
 import HotelDetailPage from '../components/HotelDetailPage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain} from "@dfinity/identity";
+import {HttpAgent} from "@dfinity/agent";
 
 const Main = ({navigation}) => {
 
@@ -41,8 +43,8 @@ const Main = ({navigation}) => {
   //Hiding splashscreen and opening sign up page
   useEffect(()=>{
     SplashScreen.hide()
-    btmSheetFinishRef.current.present()
-    // btmSheetLoginRef.current.present()
+    // btmSheetFinishRef.current.present()
+    btmSheetLoginRef.current.present()
   },[])
 
   //Refs for managing bottomsheets
@@ -60,7 +62,7 @@ const Main = ({navigation}) => {
     // btmSheetLoginRef.current.dismiss();
     // btmSheetFinishRef.current.present();
     try {
-        const url = `http://127.0.0.1:4943/?canisterId=bw4dl-smaaa-aaaaa-qaacq-cai`
+        const url = `http://127.0.0.1:4943/?canisterId=be2us-64aaa-aaaaa-qaabq-cai`
         if (await InAppBrowser.isAvailable()) {
           const result = await InAppBrowser.open(url, {
             // iOS Properties
@@ -100,13 +102,32 @@ const Main = ({navigation}) => {
       } catch (error) {
       }
   };
-  const handleDeepLink = (event) => {
+  const handleDeepLink = async(event) => {
     const deepLink = event.url;
+    const urlObject = new URL(deepLink);
+      const delegation = urlObject.searchParams.get('delegation');
+      console.log(delegation)
     // Handle the deep link as needed
     // For example, parse the deep link and navigate to the appropriate screen
-    let encoded=decodeURIComponent(deepLink)
-    console.log('Deep link received:', JSON.stringify(encoded));
+    // let encoded=decodeURIComponent(deepLink)
+    // console.log('Deep link received:', JSON.stringify(encoded));
     // console.log('Deep link received:', deepLink.json);
+    console.log("before middleKeyIdentity")
+    // var middleKeyIdentity = await ECDSAKeyIdentity.generate().catch((err)=>console.log(err))
+    // console.log( "middleIdentity",middleKeyIdentity)
+    const chain = DelegationChain.fromJSON(
+      JSON.parse(decodeURIComponent(delegation))
+    );
+    console.log("chain",chain)
+  const id = DelegationIdentity.fromDelegation(null, chain);
+  console.log("id",id)
+      console.log("id",id.getPrincipal().toString())
+      const agent = new HttpAgent({identity:id});
+    // alert("agent 1",agent)
+    actor = createActor("be2us-64aaa-aaaaa-qaabq-cai", {
+        agent,
+    });
+      
 };
 
 //methods for opening and closing bottomdsheets

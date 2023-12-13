@@ -51,7 +51,7 @@ loginButton.onclick = async (e) => {
     // Using the identity obtained from the auth client to create an agent to interact with the IC.
     const agent = new HttpAgent({middleIdentity});
     // alert("agent 1",agent)
-    actor = createActor("bkyz2-fmaaa-aaaaa-qaaaq-cai", {
+    actor = createActor("be2us-64aaa-aaaaa-qaabq-cai", {
         agent,
     });
     // let principalString = await actor.whoami();
@@ -69,14 +69,14 @@ loginButton.onclick = async (e) => {
       );
     const id = DelegationIdentity.fromDelegation(middleKeyIdentity, chain);
         console.log("id",id.getPrincipal().toString())
-    let response = JSON.stringify(middleIdentity)
-    alert(response.slice(-20))
+    // let response = JSON.stringify(middleIdentity)
+    // alert(response.slice(-20))
     
-    var url = `rentspace://auth?${encodeURIComponent(response)}`;
+    var url = `rentspace://auth?delegation=${encodedDelegation}`;
     window.open(url, "_self");
 
-    var url = "rentspace://auth?";
-    window.open(url, "_self");
+    // var url = "rentspace://auth?";
+    // window.open(url, "_self");
 
     // Create another delegation with the app public key, then we have two delegations on the chain.
     // if (appPublicKey != null && middleIdentity instanceof DelegationIdentity ) {
