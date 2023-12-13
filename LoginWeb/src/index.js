@@ -51,7 +51,7 @@ loginButton.onclick = async (e) => {
     // Using the identity obtained from the auth client to create an agent to interact with the IC.
     const agent = new HttpAgent({middleIdentity});
     // alert("agent 1",agent)
-    actor = createActor("be2us-64aaa-aaaaa-qaabq-cai", {
+    actor = createActor("bkyz2-fmaaa-aaaaa-qaaaq-cai", {
         agent,
     });
     // let principalString = await actor.whoami();

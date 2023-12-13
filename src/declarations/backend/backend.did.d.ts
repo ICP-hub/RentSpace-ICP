@@ -8,10 +8,7 @@ export interface Database {
     [string, [] | [Array<Principal>]],
     [] | [string]
   >,
-  'createNewUserCanister' : ActorMethod<
-    [string, [] | [Array<Principal>]],
-    [] | [string]
-  >,
+  'createNewUserCanister' : ActorMethod<[string], [] | [string]>,
   'deleteCanister' : ActorMethod<[string], undefined>,
   'getCanistersByPK' : ActorMethod<[string], Array<string>>,
   'getPKs' : ActorMethod<[], Array<string>>,
