@@ -17,7 +17,6 @@ export const idlFactory = ({ IDL }) => {
     'userType' : IDL.Text,
     'userEmail' : IDL.Text,
     'userGovId' : IDL.Text,
-    'userId' : IDL.Text,
     'hostStatus' : IDL.Bool,
     'userProfile' : IDL.Text,
     'lastName' : IDL.Text,
@@ -30,12 +29,13 @@ export const idlFactory = ({ IDL }) => {
   });
   const Users = IDL.Service({
     'createUser' : IDL.Func(
-        [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
+        [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
         [],
         [],
       ),
+    'getOwner' : IDL.Func([], [IDL.Text], ['query']),
     'getPK' : IDL.Func([], [IDL.Text], ['query']),
-    'getUserInfo' : IDL.Func([IDL.Text], [IDL.Opt(UserInfo)], ['query']),
+    'getUserInfo' : IDL.Func([], [IDL.Opt(UserInfo)], ['query']),
     'scanUsers' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Nat, IDL.Opt(IDL.Bool)],
         [ScanUser],
@@ -43,7 +43,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'skExists' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
     'transferCycles' : IDL.Func([], [], []),
-    'updateUserInfo' : IDL.Func([IDL.Text, UserInfo], [IDL.Opt(UserInfo)], []),
+    'updateUserInfo' : IDL.Func([UserInfo], [IDL.Opt(UserInfo)], []),
   });
   return Users;
 };

@@ -9,7 +9,7 @@ import Int64 "mo:base/Int64";
 import Nat64 "mo:base/Nat64";
 import Text "mo:base/Text";
 import Prelude "mo:base/Prelude";
-import List "mo:base/List"; 
+import List "mo:base/List";
 import Error "mo:base/Error";
 import Types "types";
 
@@ -24,8 +24,7 @@ shared ({caller = owner}) actor class Users({
     // (optional) allows the developer to specify additional owners (i.e. for allowing admin or backfill access to specific endpoints)
     owners : ?[Principal];
 }) {
-
-
+    
     /// @required (may wrap, but must be present in some form in the canister)
     stable let db = CanDB.init({
         pk = partitonKey;
@@ -48,10 +47,10 @@ shared ({caller = owner}) actor class Users({
         };
     };
 
-//     public func getUuid():async Text{
-//     let g = Source.Source();
-//     UUID.toText(await g.new());
-//   };
+    //     public func getUuid():async Text{
+    //     let g = Source.Source();
+    //     UUID.toText(await g.new());
+    //   };
     ///--------------------------------------------------------------------///
     ///------schema for listing the rent spaces start from here------------///
     ///--------------------------------------------------------------------///
@@ -59,13 +58,13 @@ shared ({caller = owner}) actor class Users({
     // This works for our hello world app, but as names are easily duplicated, one might want
     // to attach an unique identifier to the sk to separate users with the same name
 
-    public shared({caller=user})func createUser( firstName : Text, lastName : Text, dob : Text, userEmail : Text, userType : Text) : async () {
+    public shared ({caller = user}) func createUser(firstName : Text, lastName : Text, dob : Text, userEmail : Text, userType : Text) : async () {
+        // assert (Principal.isAnonymous(user) == false);
         let userIdentity = Principal.toText(user);
         let identityStatus = await skExists(userIdentity);
         if (userIdentity == "" or userType == "" or firstName == "" or lastName == "" or dob == "" or userEmail == "" or identityStatus == true) {
-         throw Error.reject("User already Exist or left filed Empty");
+            throw Error.reject("User already Exist or left filed Empty");
         };
-        Debug.print("yeah this is working");
         //inserts the entity into CanDB
         await* CanDB.put(
             db,
@@ -86,11 +85,10 @@ shared ({caller = owner}) actor class Users({
         );
     };
 
-  
     // attempts to cast an Entity (retrieved from CanDB) into a User type
     func unWarpUserInfo(entity : Entity.Entity) : ?Types.UserInfo {
         let {sk; attributes} = entity;
-        Debug.print(debug_show(entity));
+        Debug.print(debug_show (entity));
         let userIdValue = Entity.getAttributeMapValueForKey(attributes, "userId");
         let firstNameValue = Entity.getAttributeMapValueForKey(attributes, "firstName");
         let lastNameValue = Entity.getAttributeMapValueForKey(attributes, "lastName");
@@ -102,7 +100,7 @@ shared ({caller = owner}) actor class Users({
         let hostStatusValue = Entity.getAttributeMapValueForKey(attributes, "hostStatus");
         let verificationStatusValue = Entity.getAttributeMapValueForKey(attributes, "verificationStatus");
 
-        switch ( firstNameValue, lastNameValue, dobValue, userEmailValue, userTypeValue, userProfileValue, userGovIdValue, hostStatusValue, verificationStatusValue) {
+        switch (firstNameValue, lastNameValue, dobValue, userEmailValue, userTypeValue, userProfileValue, userGovIdValue, hostStatusValue, verificationStatusValue) {
             case (
                 ?(#text(firstName)),
                 ?(#text(lastName)),
@@ -133,7 +131,7 @@ shared ({caller = owner}) actor class Users({
     };
     ///----function to get the getUserInfo data using the by passing uuid as sortkey------///
 
-    public  shared query({caller = user}) func  getUserInfo() : async ?Types.UserInfo {
+    public shared query ({caller = user}) func getUserInfo() : async ?Types.UserInfo {
         let userIdentity = Principal.toText(user);
         let userInfo = switch (CanDB.get(db, {sk = userIdentity})) {
             case null {null};
@@ -147,7 +145,7 @@ shared ({caller = owner}) actor class Users({
         };
     };
     //public function to update the data of the canister
-    public  shared({caller= user}) func updateUserInfo( userData : Types.UserInfo) : async ?Types.UserInfo {
+    public shared ({caller = user}) func updateUserInfo(userData : Types.UserInfo) : async ?Types.UserInfo {
         let userIdentity = Principal.toText(user);
         let userInfo = await* CanDB.replace(
             db,
@@ -171,7 +169,7 @@ shared ({caller = owner}) actor class Users({
             case (?u) {unWarpUserInfo(u)};
         };
     };
-      type ScanUser = {
+    type ScanUser = {
         users : [Types.UserInfo];
         nextKey : ?Text;
     };
@@ -210,7 +208,7 @@ shared ({caller = owner}) actor class Users({
                 let hostStatusValue = Entity.getAttributeMapValueForKey(attributes, "hostStatus");
                 let verificationStatusValue = Entity.getAttributeMapValueForKey(attributes, "verificationStatus");
 
-                switch ( firstNameValue, lastNameValue, dobValue, userEmailValue, userTypeValue, userProfileValue, userGovIdValue, hostStatusValue, verificationStatusValue) {
+                switch (firstNameValue, lastNameValue, dobValue, userEmailValue, userTypeValue, userProfileValue, userGovIdValue, hostStatusValue, verificationStatusValue) {
                     case (
                         ?(#text(firstName)),
                         ?(#text(lastName)),
@@ -245,6 +243,7 @@ shared ({caller = owner}) actor class Users({
     ///----------------------------------------------------------------------///
     ///-------schema for listing the rent spaces start from here-------------///
     ///---------------------------------------------------------------------///
-
-    
+ public query func getOwner():async Text{
+    return Principal.toText(owner);
+  }
 };

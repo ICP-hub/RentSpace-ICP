@@ -38,24 +38,8 @@ export const createActor = (canisterId, options = {}) => {
   return Actor.createActor(idlFactory, {
     agent,
     canisterId,
-    blsVerify: () => true,
     ...options.actorOptions,
   });
 };
-export const User = createActor(canisterId, {
-  agentOptions: {
-    fetchOptions: {
-      reactNative: {
-        __nativeResponseType: "base64",
-      },
-    },
-    callOptions: {
-      reactNative: {
-        textStreaming: true,
-      },
-    },
-    blsVerify: () => true,
-    host: "http://127.0.0.1:4943",
-  },
-});
-// export const User = createActor(canisterId);
+
+export const User = createActor(canisterId);
