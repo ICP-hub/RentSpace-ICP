@@ -56,7 +56,7 @@ shared ({caller = owner}) actor class Database() = this {
 
   public shared ({caller = caller}) func autoScaleUserCanister(pk : Text) : async Text {
     // Auto-Scaling Authorization - if the request to auto-scale the partition is not coming from an existing canister in the partition, reject it
-    if (Utils.callingCanisterOwnsPK(caller, pkToCanisterMap, pk)) {
+    if (Utils.callingCanisterOwnsPK(owner, pkToCanisterMap, pk)) {
       Debug.print("creating an additional canister for pk=" # pk);
       await createActorCanister(pk, ?[owner, Principal.fromActor(this)]);
     } else {
@@ -76,6 +76,7 @@ shared ({caller = owner}) actor class Database() = this {
       null;
     };
   };
+  // dfx canister --network ic call <canister_name> <function_name> <function_input>
 
   // Spins up a new HelloService canister with the provided pk and controllers
   func createUserCanister(pk : Text, controllers : ?[Principal]) : async Text {
@@ -156,7 +157,7 @@ shared ({caller = owner}) actor class Database() = this {
     };
   };
 
-  public shared ({caller = creator}) func createNewHotelCanister(canisterName : Text, controllers : ?[Principal]) : async ?Text {
+  public shared ({caller = creator}) func createNewHotelCanister(canisterName : Text) : async ?Text {
     assert (creator == owner);
     let pk = canisterName;
     let canisterIds = getCanistersIdsIfExists(pk);
@@ -207,5 +208,8 @@ shared ({caller = owner}) actor class Database() = this {
   public shared query ({caller}) func whoami() : async Text {
     return Principal.toText(caller);
   };
+  public query func getOwner():async Text{
+    return Principal.toText(owner);
+  }
 
 };
