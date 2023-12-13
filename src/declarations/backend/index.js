@@ -38,7 +38,7 @@ export const createActor = (canisterId, options = {}) => {
   });
 };
 
-export const User = createActor(canisterId, {
+export const backend = createActor(canisterId, {
   agentOptions: {
     fetchOptions: {
       reactNative: {
