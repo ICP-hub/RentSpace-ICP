@@ -27,6 +27,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain} from "@dfinity/identity";
 import {HttpAgent} from "@dfinity/agent";
+import { createActor,backend } from '../declarations/backend';
 
 const Main = ({navigation}) => {
 
@@ -62,7 +63,7 @@ const Main = ({navigation}) => {
     // btmSheetLoginRef.current.dismiss();
     // btmSheetFinishRef.current.present();
     try {
-        const url = `http://127.0.0.1:4943/?canisterId=be2us-64aaa-aaaaa-qaabq-cai`
+        const url = `http://127.0.0.1:4943/?canisterId=bd3sg-teaaa-aaaaa-qaaba-cai`
         if (await InAppBrowser.isAvailable()) {
           const result = await InAppBrowser.open(url, {
             // iOS Properties
@@ -122,11 +123,51 @@ const Main = ({navigation}) => {
   const id = DelegationIdentity.fromDelegation(null, chain);
   console.log("id",id)
       console.log("id",id.getPrincipal().toString())
-      const agent = new HttpAgent({identity:id});
-    // alert("agent 1",agent)
-    actor = createActor("be2us-64aaa-aaaaa-qaabq-cai", {
-        agent,
-    });
+      console.log("before agent")
+      let agent
+      // try{
+      //   agent = new HttpAgent({
+      //     identity:id,
+      //     host:"http://127.0.0.1:4943",fetchOptions: {
+      //       reactNative: {
+      //         __nativeResponseType: "base64",
+      //       },
+      //     },
+      //     callOptions: {
+      //       reactNative: {
+      //         textStreaming: true,
+      //       },
+      //     },
+      //     blsVerify: () => true,
+      //   })
+      // }catch(err){
+      //   console.log(err)
+      // }
+      
+    // console.log("before actor creation, agent : ",agent)
+    let actor = backend;
+    try{
+      actor = createActor("bkyz2-fmaaa-aaaaa-qaaaq-cai", {
+        agentOptions: {
+          fetchOptions: {
+            reactNative: {
+              __nativeResponseType: "base64",
+            },
+          },
+          callOptions: {
+            reactNative: {
+              textStreaming: true,
+            },
+          },
+          blsVerify: () => true,
+          host: "http://127.0.0.1:4943",
+          identity:id
+        }});
+    }catch(err){
+      console.log(err)
+    }
+    let iid = await actor.whoami();
+    console.log("iid",iid)
       
 };
 
