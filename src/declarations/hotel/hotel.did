@@ -23,9 +23,9 @@ type HotelInfo =
  };
 type Hotel = 
  service {
-   createHotel: (text, HotelInfo) -> ();
+   createHotel: (HotelInfo) -> ();
    getHotel: (text) -> (opt HotelInfo) query;
-   getHotelId: (text) -> (vec text) query;
+   getHotelId: () -> (vec text) query;
    getPK: () -> (text) query;
    scanRent: (text, text, nat, opt bool) -> (ScanHotels) query;
    skExists: (text) -> (bool) query;

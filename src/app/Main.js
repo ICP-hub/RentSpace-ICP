@@ -32,15 +32,11 @@ import BookHotelPage from '../components/BookHotelPage';
 import UpdateProfile from '../components/UpdateProfile';
 import HotelCreationForm from '../components/HotelCreationForm';
 import HotelDetailPage from '../components/HotelDetailPage';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {
-  DelegationIdentity,
-  Ed25519PublicKey,
-  ECDSAKeyIdentity,
-  DelegationChain,
-} from '@dfinity/identity';
-import {HttpAgent} from '@dfinity/agent';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain} from "@dfinity/identity";
+import {HttpAgent} from "@dfinity/agent";
+import { createActor,backend } from '../declarations/backend';
 
 const Main = ({navigation}) => {
   //States for managing modals
@@ -125,6 +121,7 @@ const Main = ({navigation}) => {
     } catch (error) {}
   };
   const handleDeepLink = async event => {
+    let actor = backend;
     const deepLink = event.url;
     const urlObject = new URL(deepLink);
     const delegation = urlObject.searchParams.get('delegation');
