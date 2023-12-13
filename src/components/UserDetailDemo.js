@@ -19,17 +19,17 @@ const UserDetailDemo = ({setUpdatePage,self,setHotelCreateForm}) => {
   const makeHost=async()=>{
     setLoading(true)
     console.log("You are host now")
-    await User.updateUserInfo(user?.userId,{...user,userType:'Host',hostStatus:true}).then(async(res)=>{
+    await User.updateUserInfo({...user,userType:'Host',hostStatus:true}).then(async(res)=>{
       setLoading(false)
       alert('You are a host now!')
 
       self(false)
       setHotelCreateForm(true)
-      await User.getUserInfo(user?.userId).then((res)=>{
+      await User.getUserInfo().then((res)=>{
         console.log(res[0])
         dispatch(setUser(res[0]))
       }).then(()=>{
-        hotel.getHotelId(user?.userId).then((res)=>{
+        hotel.getHotelId().then((res)=>{
           console.log(res)
           dispatch(setHotels(res))
         })

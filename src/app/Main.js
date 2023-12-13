@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, TouchableOpacity, Image,Modal,Linking, Platform} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image,Modal,Linking, Platform, Alert} from 'react-native';
 import React, {useEffect, useRef,useState} from 'react';
 import {COLORS, SIZES} from '../constants/themes';
 import {images} from '../constants';
@@ -28,10 +28,16 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain} from "@dfinity/identity";
 import {HttpAgent} from "@dfinity/agent";
 import { createActor,backend } from '../declarations/backend';
+import { User } from '../declarations/User';
+import { useDispatch,useSelector } from 'react-redux';
+import { setUser,setHotels } from '../redux/actions';
+import { hotel } from '../declarations/hotel';
 
 const Main = ({navigation}) => {
 
-
+  const dispatch=useDispatch()
+  const {user}=useSelector(state=>state.userReducer)
+  const {hotels}=useSelector(state=>state.hotelsReducer)
   //States for managing modals
   const [safetyModal,setSafetyModal]=useState(false)
   const [cancelModal,setCancelModal]=useState(false)
@@ -44,6 +50,7 @@ const Main = ({navigation}) => {
   //Hiding splashscreen and opening sign up page
   useEffect(()=>{
     SplashScreen.hide()
+    // btmSheetFinishRef.current.present()
     // btmSheetFinishRef.current.present()
     btmSheetLoginRef.current.present()
   },[])
@@ -63,7 +70,7 @@ const Main = ({navigation}) => {
     // btmSheetLoginRef.current.dismiss();
     // btmSheetFinishRef.current.present();
     try {
-        const url = `http://127.0.0.1:4943/?canisterId=bd3sg-teaaa-aaaaa-qaaba-cai`
+        const url = `http://127.0.0.1:4943/?canisterId=be2us-64aaa-aaaaa-qaabq-cai`
         if (await InAppBrowser.isAvailable()) {
           const result = await InAppBrowser.open(url, {
             // iOS Properties
@@ -166,8 +173,24 @@ const Main = ({navigation}) => {
     }catch(err){
       console.log(err)
     }
-    let iid = await actor.whoami();
-    console.log("iid",iid)
+    await User.getUserInfo().then(async(res)=>{
+      if(res[0]?.firstName!=null){
+        alert(`You are Successfully logged in ${res[0]?.firstName}!`)
+        dispatch(setUser(res[0]))
+        await hotel.getHotelId().then((res)=>{
+          dispatch(setHotels(res))
+          btmSheetLoginRef.current.dismiss()
+        })
+      }
+      else{
+        alert('Please follow the registeration further')
+        openFinishSignUp()
+        btmSheetLoginRef.current.dismiss()
+      }
+
+    })
+    // let iid = await actor.whoami();
+    // console.log("iid",iid)
       
 };
 

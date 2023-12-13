@@ -9,9 +9,7 @@ export { idlFactory } from "./hotel.did.js";
  * process.env.CANISTER_ID_<CANISTER_NAME_UPPERCASE>
  * beginning in dfx 0.15.0
  */
-export const canisterId =
-  process.env.CANISTER_ID_HOTEL ||
-  process.env.HOTEL_CANISTER_ID;
+export const canisterId ="bw4dl-smaaa-aaaaa-qaacq-cai"
 
 export const createActor = (canisterId, options = {}) => {
   const agent = options.agent || new HttpAgent({ ...options.agentOptions });
@@ -36,8 +34,25 @@ export const createActor = (canisterId, options = {}) => {
   return Actor.createActor(idlFactory, {
     agent,
     canisterId,
+    blsVerify: () => true,
     ...options.actorOptions,
   });
 };
 
-export const hotel = createActor(canisterId);
+
+export const hotel = createActor(canisterId, {
+  agentOptions: {
+    fetchOptions: {
+      reactNative: {
+        __nativeResponseType: 'base64',
+      },
+    },
+    callOptions: {
+      reactNative: {
+        textStreaming: true,
+      },
+    },
+    blsVerify: () => true,
+    host: 'http://127.0.0.1:4943',
+  },
+});

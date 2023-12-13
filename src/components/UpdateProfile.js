@@ -22,10 +22,10 @@ const UpdateProfile = ({setUpdatePage}) => {
     const [userImg,setUserImg]=useState(images.profile2)
 
     const update=async()=>{
-        setUpdatedUser({...updatedUser,userType:user?.userType,hostStatus:false,verificationStatus:false,userId:user?.userId})
-        await User.updateUserInfo(user?.userId,updatedUser).then(async(res)=>{
-            alert(`Your profile is updated ${user?.firstName} !`)
-            await User.getUserInfo(user?.userId).then((res)=>{
+        setUpdatedUser({...updatedUser,userType:user?.userType,hostStatus:false,verificationStatus:false})
+        await User.updateUserInfo(updatedUser).then(async(res)=>{
+            alert(`Your profile is updated ${updatedUser?.firstName} !`)
+            await User.getUserInfo().then((res)=>{
                 dispatch(setUser(res[0]))
                 console.log(res[0])
                 setUpdatePage(false)

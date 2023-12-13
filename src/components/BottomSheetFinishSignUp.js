@@ -28,14 +28,14 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
   async function signUp(){
     setLoading(true)
     const id=Math.round(Math.random()*1000).toString()
-    await User.createUser(id,fname,lname,DOB,email,"user").then(async(res)=>{
+    await User.createUser(fname,lname,DOB,email,"user").then(async(res)=>{
       //setUser(res[0])
       console.log(res)
       setLoading(false)
-      alert('You are registered with id : '+id)
+      alert(`Welcome ${fname}! You are successfully registered `)
       
       //alert('Welcome'+res[0]?.firstName)
-      await User.getUserInfo(id).then((res)=>{
+      await User.getUserInfo().then((res)=>{
         console.log(res[0]),
         // setUser(res[0])
         dispatch(setUser(res[0]))
@@ -53,7 +53,7 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {
-            if(user?.userId!=null){
+            if(user?.fname!=null){
               closeModal();
             }else{
               alert('Please Register first to continue further')

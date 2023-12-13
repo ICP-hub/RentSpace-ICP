@@ -17,11 +17,11 @@ const HotelCreationForm = ({setHotelCreateForm}) => {
   const createHotel=async()=>{
     console.log('create hotel')
     setLoading(true)
-  await hotel.createHotel(user?.userId,hotelData).then(async(res)=>{
+  await hotel.createHotel(hotelData).then(async(res)=>{
     setLoading(false)
     alert('Your hotel has been created')
    
-    await hotel.getHotelId(user?.userId).then(async(res)=>{
+    await hotel.getHotelId().then(async(res)=>{
       console.log(res)
       dispatch(setHotels(res))
       setHotelCreateForm(false)
