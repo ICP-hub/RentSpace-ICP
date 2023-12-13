@@ -20,6 +20,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Text],
         [],
       ),
+    'whoami' : IDL.Func([], [IDL.Text], ['query']),
   });
   return Database;
 };

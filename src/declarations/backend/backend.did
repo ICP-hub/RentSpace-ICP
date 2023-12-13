@@ -8,5 +8,6 @@ type Database =
    getCanistersByPK: (text) -> (vec text) query;
    getPKs: () -> (vec text) query;
    upgradeCanisterByPK: (text, blob) -> (text);
+   whoami: () -> (text) query;
  };
 service : () -> Database

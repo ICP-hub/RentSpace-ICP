@@ -16,5 +16,6 @@ export interface Database {
   'getCanistersByPK' : ActorMethod<[string], Array<string>>,
   'getPKs' : ActorMethod<[], Array<string>>,
   'upgradeCanisterByPK' : ActorMethod<[string, Uint8Array | number[]], string>,
+  'whoami' : ActorMethod<[], string>,
 }
 export interface _SERVICE extends Database {}
