@@ -11,6 +11,7 @@ import Text "mo:base/Text";
 import Prelude "mo:base/Prelude";
 import List "mo:base/List"; 
 import Error "mo:base/Error";
+import Types "types";
 
 // let g = Source.Source();
 // UUID.toText(await g.new());
@@ -41,9 +42,9 @@ shared ({caller = owner}) actor class Users({
     };
 
     //@required public API (Do not delete or change)
-    public shared ({caller = caller}) func transferCycles() : async () {
-        if (caller == owner) {
-            return await CA.transferCycles(caller);
+    public shared ({caller = user}) func transferCycles() : async () {
+        if (user == owner) {
+            return await CA.transferCycles(user);
         };
     };
 
@@ -58,8 +59,8 @@ shared ({caller = owner}) actor class Users({
     // This works for our hello world app, but as names are easily duplicated, one might want
     // to attach an unique identifier to the sk to separate users with the same name
 
-    public shared({caller=user1})func createUser(user : Text, firstName : Text, lastName : Text, dob : Text, userEmail : Text, userType : Text) : async () {
-        let userIdentity = user;
+    public shared({caller=user})func createUser( firstName : Text, lastName : Text, dob : Text, userEmail : Text, userType : Text) : async () {
+        let userIdentity = Principal.toText(user);
         let identityStatus = await skExists(userIdentity);
         if (userIdentity == "" or userType == "" or firstName == "" or lastName == "" or dob == "" or userEmail == "" or identityStatus == true) {
          throw Error.reject("User already Exist or left filed Empty");
@@ -71,7 +72,6 @@ shared ({caller = owner}) actor class Users({
             {
                 sk = userIdentity;
                 attributes = [
-                    ("userId", #text(userIdentity)),
                     ("firstName", #text(firstName)),
                     ("lastName", #text(lastName)),
                     ("dob", #text(dob)),
@@ -86,20 +86,9 @@ shared ({caller = owner}) actor class Users({
         );
     };
 
-    type UserInfo = {
-        userId : Text;
-        firstName : Text;
-        lastName : Text;
-        dob : Text;
-        userEmail : Text;
-        userType : Text;
-        userProfile : Text;
-        userGovId : Text;
-        hostStatus : Bool;
-        verificationStatus : Bool;
-    };
+  
     // attempts to cast an Entity (retrieved from CanDB) into a User type
-    func unWarpUserInfo(entity : Entity.Entity) : ?UserInfo {
+    func unWarpUserInfo(entity : Entity.Entity) : ?Types.UserInfo {
         let {sk; attributes} = entity;
         Debug.print(debug_show(entity));
         let userIdValue = Entity.getAttributeMapValueForKey(attributes, "userId");
@@ -113,9 +102,8 @@ shared ({caller = owner}) actor class Users({
         let hostStatusValue = Entity.getAttributeMapValueForKey(attributes, "hostStatus");
         let verificationStatusValue = Entity.getAttributeMapValueForKey(attributes, "verificationStatus");
 
-        switch (userIdValue, firstNameValue, lastNameValue, dobValue, userEmailValue, userTypeValue, userProfileValue, userGovIdValue, hostStatusValue, verificationStatusValue) {
+        switch ( firstNameValue, lastNameValue, dobValue, userEmailValue, userTypeValue, userProfileValue, userGovIdValue, hostStatusValue, verificationStatusValue) {
             case (
-                ?(#text(userId)),
                 ?(#text(firstName)),
                 ?(#text(lastName)),
                 ?(#text(dob)),
@@ -127,7 +115,6 @@ shared ({caller = owner}) actor class Users({
                 ?(#bool(verificationStatus)),
             ) {
                 ?{
-                    userId;
                     firstName;
                     lastName;
                     dob;
@@ -146,8 +133,8 @@ shared ({caller = owner}) actor class Users({
     };
     ///----function to get the getUserInfo data using the by passing uuid as sortkey------///
 
-    public  shared query({caller=user1}) func  getUserInfo(user:Text) : async ?UserInfo {
-        let userIdentity = user;
+    public  shared query({caller = user}) func  getUserInfo() : async ?Types.UserInfo {
+        let userIdentity = Principal.toText(user);
         let userInfo = switch (CanDB.get(db, {sk = userIdentity})) {
             case null {null};
             case (?userEntity) {unWarpUserInfo(userEntity)};
@@ -160,14 +147,13 @@ shared ({caller = owner}) actor class Users({
         };
     };
     //public function to update the data of the canister
-    public func updateUserInfo(user : Text, userData : UserInfo) : async ?UserInfo {
-        let userIdentity = user;
+    public  shared({caller= user}) func updateUserInfo( userData : Types.UserInfo) : async ?Types.UserInfo {
+        let userIdentity = Principal.toText(user);
         let userInfo = await* CanDB.replace(
             db,
             {
                 sk = userIdentity;
                 attributes = [
-                    ("userId", #text(userData.userId)),
                     ("firstName", #text(userData.firstName)),
                     ("lastName", #text(userData.lastName)),
                     ("dob", #text(userData.dob)),
@@ -186,7 +172,7 @@ shared ({caller = owner}) actor class Users({
         };
     };
       type ScanUser = {
-        users : [UserInfo];
+        users : [Types.UserInfo];
         nextKey : ?Text;
     };
 
@@ -209,12 +195,11 @@ shared ({caller = owner}) actor class Users({
         };
     };
 
-    func arrayUnwarpUser(entities : [Entity.Entity]) : [UserInfo] {
-        Array.mapFilter<Entity.Entity, UserInfo>(
+    func arrayUnwarpUser(entities : [Entity.Entity]) : [Types.UserInfo] {
+        Array.mapFilter<Entity.Entity, Types.UserInfo>(
             entities,
             func(e) {
                 let {sk; attributes} = e;
-                let userIdValue = Entity.getAttributeMapValueForKey(attributes, "userId");
                 let firstNameValue = Entity.getAttributeMapValueForKey(attributes, "firstName");
                 let lastNameValue = Entity.getAttributeMapValueForKey(attributes, "lastName");
                 let dobValue = Entity.getAttributeMapValueForKey(attributes, "dob");
@@ -225,9 +210,8 @@ shared ({caller = owner}) actor class Users({
                 let hostStatusValue = Entity.getAttributeMapValueForKey(attributes, "hostStatus");
                 let verificationStatusValue = Entity.getAttributeMapValueForKey(attributes, "verificationStatus");
 
-                switch (userIdValue, firstNameValue, lastNameValue, dobValue, userEmailValue, userTypeValue, userProfileValue, userGovIdValue, hostStatusValue, verificationStatusValue) {
+                switch ( firstNameValue, lastNameValue, dobValue, userEmailValue, userTypeValue, userProfileValue, userGovIdValue, hostStatusValue, verificationStatusValue) {
                     case (
-                        ?(#text(userId)),
                         ?(#text(firstName)),
                         ?(#text(lastName)),
                         ?(#text(dob)),
@@ -239,7 +223,6 @@ shared ({caller = owner}) actor class Users({
                         ?(#bool(verificationStatus)),
                     ) {
                         ?{
-                            userId;
                             firstName;
                             lastName;
                             dob;
