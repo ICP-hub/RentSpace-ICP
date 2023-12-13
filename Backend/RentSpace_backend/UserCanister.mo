@@ -59,7 +59,7 @@ shared ({caller = owner}) actor class Users({
     // to attach an unique identifier to the sk to separate users with the same name
 
     public shared ({caller = user}) func createUser(firstName : Text, lastName : Text, dob : Text, userEmail : Text, userType : Text) : async () {
-        assert (Principal.isAnonymous(user) == false);
+        // assert (Principal.isAnonymous(user) == false);
         let userIdentity = Principal.toText(user);
         let identityStatus = await skExists(userIdentity);
         if (userIdentity == "" or userType == "" or firstName == "" or lastName == "" or dob == "" or userEmail == "" or identityStatus == true) {
