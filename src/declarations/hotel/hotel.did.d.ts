@@ -6,9 +6,9 @@ export type AutoScalingCanisterSharedFunctionHook = ActorMethod<
   string
 >;
 export interface Hotel {
-  'createHotel' : ActorMethod<[string, HotelInfo], undefined>,
+  'createHotel' : ActorMethod<[HotelInfo], undefined>,
   'getHotel' : ActorMethod<[string], [] | [HotelInfo]>,
-  'getHotelId' : ActorMethod<[string], Array<string>>,
+  'getHotelId' : ActorMethod<[], Array<string>>,
   'getPK' : ActorMethod<[], string>,
   'scanRent' : ActorMethod<
     [string, string, bigint, [] | [boolean]],

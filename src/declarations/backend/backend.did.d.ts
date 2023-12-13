@@ -14,6 +14,7 @@ export interface Database {
   >,
   'deleteCanister' : ActorMethod<[string], undefined>,
   'getCanistersByPK' : ActorMethod<[string], Array<string>>,
+  'getOwner' : ActorMethod<[], string>,
   'getPKs' : ActorMethod<[], Array<string>>,
   'upgradeCanisterByPK' : ActorMethod<[string, Uint8Array | number[]], string>,
   'whoami' : ActorMethod<[], string>,

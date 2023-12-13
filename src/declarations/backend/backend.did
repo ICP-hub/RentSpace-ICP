@@ -6,6 +6,7 @@ type Database =
    createNewUserCanister: (text, opt vec principal) -> (opt text);
    deleteCanister: (text) -> ();
    getCanistersByPK: (text) -> (vec text) query;
+   getOwner: () -> (text) query;
    getPKs: () -> (vec text) query;
    upgradeCanisterByPK: (text, blob) -> (text);
    whoami: () -> (text) query;

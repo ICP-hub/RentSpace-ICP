@@ -9,11 +9,9 @@ export { idlFactory } from "./User.did.js";
  * process.env.CANISTER_ID_<CANISTER_NAME_UPPERCASE>
  * beginning in dfx 0.15.0
  */
-export const canisterId = "by6od-j4aaa-aaaaa-qaadq-cai";
-
-  // process.env.CANISTER_ID_USER ||
-  // process.env.USER_CANISTER_ID
-  // "avqkn-guaaa-aaaaa-qaaea-cai";
+export const canisterId =
+  process.env.CANISTER_ID_USER ||
+  process.env.USER_CANISTER_ID;
 
 export const createActor = (canisterId, options = {}) => {
   const agent = options.agent || new HttpAgent({ ...options.agentOptions });

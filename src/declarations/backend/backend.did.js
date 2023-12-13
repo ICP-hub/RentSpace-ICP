@@ -14,6 +14,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'deleteCanister' : IDL.Func([IDL.Text], [], []),
     'getCanistersByPK' : IDL.Func([IDL.Text], [IDL.Vec(IDL.Text)], ['query']),
+    'getOwner' : IDL.Func([], [IDL.Text], ['query']),
     'getPKs' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
     'upgradeCanisterByPK' : IDL.Func(
         [IDL.Text, IDL.Vec(IDL.Nat8)],

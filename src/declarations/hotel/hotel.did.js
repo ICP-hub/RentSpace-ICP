@@ -24,9 +24,9 @@ export const idlFactory = ({ IDL }) => {
     'hotels' : IDL.Vec(HotelInfo),
   });
   const Hotel = IDL.Service({
-    'createHotel' : IDL.Func([IDL.Text, HotelInfo], [], []),
+    'createHotel' : IDL.Func([HotelInfo], [], []),
     'getHotel' : IDL.Func([IDL.Text], [IDL.Opt(HotelInfo)], ['query']),
-    'getHotelId' : IDL.Func([IDL.Text], [IDL.Vec(IDL.Text)], ['query']),
+    'getHotelId' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
     'getPK' : IDL.Func([], [IDL.Text], ['query']),
     'scanRent' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Nat, IDL.Opt(IDL.Bool)],
