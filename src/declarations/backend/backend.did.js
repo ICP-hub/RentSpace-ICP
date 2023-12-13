@@ -7,11 +7,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(IDL.Text)],
         [],
       ),
-    'createNewUserCanister' : IDL.Func(
-        [IDL.Text, IDL.Opt(IDL.Vec(IDL.Principal))],
-        [IDL.Opt(IDL.Text)],
-        [],
-      ),
+    'createNewUserCanister' : IDL.Func([IDL.Text], [IDL.Opt(IDL.Text)], []),
     'deleteCanister' : IDL.Func([IDL.Text], [], []),
     'getCanistersByPK' : IDL.Func([IDL.Text], [IDL.Vec(IDL.Text)], ['query']),
     'getPKs' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
