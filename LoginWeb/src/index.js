@@ -1,6 +1,6 @@
 import {backend, createActor} from '../../src/declarations/backend/index';
 import {AuthClient} from '@dfinity/auth-client';
-import {HttpAgent} from '@dfinity/agent';
+import {HttpAgent,fromHex} from '@dfinity/agent';
 import {
   DelegationIdentity,
   Ed25519PublicKey,
@@ -21,8 +21,8 @@ loginButton.onclick = async e => {
 //   var middleKeyIdentity = await ECDSAKeyIdentity.generate({extractable: true});
   let publicKey = params.get('publicKey');
   let newIdentity = new ECDSAKeyIdentity(
-    {publicKey: publicKey},
-    publicKey,
+    {publicKey: fromHex(publicKey)},
+    fromHex(publicKey),
     null,
   );
   let authClient = await AuthClient.create({identity: newIdentity});
@@ -37,19 +37,7 @@ loginButton.onclick = async e => {
 
   const identity = authClient.getIdentity();
 
-    // At this point we're authenticated, and we can get the identity from the auth client.
-    const middleIdentity = authClient.getIdentity();
-    console.log("middleIdentity===>",middleIdentity);
-    console.log("middleIdentity===>",JSON.stringify(middleIdentity));
-    // Using the identity obtained from the auth client to create an agent to interact with the IC.
-    const agent = new HttpAgent({identity:middleIdentity});
-    // alert("agent 1",agent)
-    actor = createActor("bkyz2-fmaaa-aaaaa-qaaaq-cai", {
-        agent,
-    });
-    // let principalString = await actor.whoami();
-    // console.log("principalString",principalString);
-    // alert("agent 2"+middleIdentity.getPrincipal())
+  var delegationString = JSON.stringify(identity.getDelegation().toJSON());
 
   const encodedDelegation = encodeURIComponent(delegationString);
 
