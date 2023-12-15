@@ -26,7 +26,6 @@
     "fast-text-encoding": "^1.0.6",
     "ic-mops": "^0.34.4",
     "isomorphic-fetch": "^3.0.0",
-    "isomorphic-webcrypto": "^2.3.8",
     "os": "^0.1.2",
     "patch-package": "^6.4.7",
     "react": "18.2.0",
