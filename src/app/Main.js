@@ -32,6 +32,11 @@ import { User } from '../declarations/User';
 import { useDispatch,useSelector } from 'react-redux';
 import { setUser,setHotels } from '../redux/actions';
 import { hotel } from '../declarations/hotel';
+// import { main } from './crypt';
+// import 'react-native-crypto'
+
+import PolyfillCrypto from 'react-native-webview-crypto'
+global.Buffer = require('buffer').Buffer;
 
 const Main = ({navigation}) => {
 
@@ -53,6 +58,7 @@ const Main = ({navigation}) => {
     // btmSheetFinishRef.current.present()
     // btmSheetFinishRef.current.present()
     btmSheetLoginRef.current.present()
+    // console.log(main())
   },[])
 
   //Refs for managing bottomsheets
@@ -70,20 +76,27 @@ const Main = ({navigation}) => {
   useEffect(() => {
     generateIdentity();
   }, []);
-
+  
   const [middleKeyIdentity, setMiddleKeyIdentity] = useState('');
   const generateIdentity = async () => {
-    middleKeyIdentity = await ECDSAKeyIdentity.generate({extractable: true});
-    setMiddleKeyIdentity(middleKeyIdentity);
+    console.log("inside generateIdentity")
+    await ECDSAKeyIdentity.generate({extractable: true})
+    .then(async(res)=>{
+      let key=await global.crypto.subtle.exportKey("spki",res._keyPair.publicKey) 
+      //To be converted into string(hex)
+      setMiddleKeyIdentity(key)
+    }
+      )
+    .catch((err)=>console.log(err))
+    console.log("generated middlekey : ",middleKeyIdentity)
+    // setMiddleKeyIdentity(middleKeyIdentity);
   };
 
   const handleLogin = async () => {
     // btmSheetLoginRef.current.dismiss();
     // btmSheetFinishRef.current.present();
     try {
-      const url = `http://127.0.0.1:4943/?canisterId=be2us-64aaa-aaaaa-qaabq-cai?publicKey=${middleKeyIdentity
-        .getPublicKey()
-        .toDer()}`;
+      const url = `http://127.0.0.1:4943/?canisterId=be2us-64aaa-aaaaa-qaabq-cai&publicKey=${middleKeyIdentity}`;
       if (await InAppBrowser.isAvailable()) {
         const result = await InAppBrowser.open(url, {
           // iOS Properties
@@ -177,6 +190,7 @@ const Main = ({navigation}) => {
     <GestureHandlerRootView style={{flex: 1, paddingTop: 200}}>
       <BottomSheetModalProvider>
         {/* Modals Defined */}
+        <PolyfillCrypto/>
 
         <Modal visible={safetyModal} animationType="fade">
           <ModalSafety setSafetyModal={setSafetyModal} />
