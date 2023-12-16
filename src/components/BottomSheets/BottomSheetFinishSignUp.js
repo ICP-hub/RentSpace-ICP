@@ -1,16 +1,16 @@
 import {ActivityIndicator, Alert, Image, Modal, StyleSheet, Text, View} from 'react-native';
 import {useState, useEffect} from 'react';
-import {SIZES, COLORS} from '../constants/themes';
-import {images} from '../constants';
+import {SIZES, COLORS} from '../../constants/themes';
+import {images} from '../../constants';
 
 import {
   TextInput,
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import {Calendar} from 'react-native-calendars';
-import {User} from '../declarations/User/index.js';
+import {User} from '../../declarations/User/index.js';
 import { useSelector,useDispatch } from 'react-redux';
-import { setUser } from '../redux/actions';
+import { setUser } from '../../redux/users/actions';
 
 const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
   const [fname, setFname] = useState('');
@@ -22,20 +22,21 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
   const [loading,setLoading]=useState(false)
 
   const {user} =useSelector(state=>state.userReducer)
+  const {actors}=useSelector(state=>state.actorReducer)
   const dispatch=useDispatch()
   
 
   async function signUp(){
     setLoading(true)
     const id=Math.round(Math.random()*1000).toString()
-    await User.createUser(fname,lname,DOB,email,"user").then(async(res)=>{
+    await actors.userActor?.createUser(fname,lname,DOB,email,"user").then(async(res)=>{
       //setUser(res[0])
       console.log(res)
       setLoading(false)
       alert(`Welcome ${fname}! You are successfully registered `)
       
       //alert('Welcome'+res[0]?.firstName)
-      await User.getUserInfo().then((res)=>{
+      await actors.userActor?.getUserInfo().then((res)=>{
         console.log(res[0]),
         // setUser(res[0])
         dispatch(setUser(res[0]))

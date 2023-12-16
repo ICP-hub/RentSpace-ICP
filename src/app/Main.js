@@ -1,39 +1,32 @@
 import {View, Text, StyleSheet, TouchableOpacity, Image,Modal,Linking, Platform, Alert} from 'react-native';
 import React, {useEffect, useRef,useState} from 'react';
 import {COLORS, SIZES} from '../constants/themes';
-import {images} from '../constants';
-import BottomNav from '../components/BottomNav';
+import BottomNav from '../components/Navigation/BottomNav';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import BottomSheetLogin from '../components/BottomSheetLogin';
+import BottomSheetLogin from '../components/BottomSheets/BottomSheetLogin';
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
-import BottomSheetFinishSignUp from '../components/BottomSheetFinishSignUp';
+import BottomSheetFinishSignUp from '../components/BottomSheets/BottomSheetFinishSignUp';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
-import BottomSheetCommunity from '../components/BottomSheetCommunity';
-import BottomSheetNotification from '../components/BottomSheetNotification';
+import BottomSheetCommunity from '../components/BottomSheets/BottomSheetCommunity';
+import BottomSheetNotification from '../components/BottomSheets/BottomSheetNotification';
 import SplashScreen from 'react-native-splash-screen';
-import BottomSheetDetails from '../components/BottomSheetDetails';
-import ModalSafety from '../components/ModalSafety';
-import ModalCancellation from '../components/ModalCancellation';
-import ModalHouseRules from '../components/ModalHouseRules';
-import SearchBar from '../components/SearchBar';
-import HeaderSearch from '../components/HeaderSearch';
-import MapScreen from '../components/MapScreen';
-import UserDetailDemo from '../components/UserDetailDemo';
-import BookHotelPage from '../components/BookHotelPage';
-import UpdateProfile from '../components/UpdateProfile';
-import HotelCreationForm from '../components/HotelCreationForm';
-import HotelDetailPage from '../components/HotelDetailPage';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import BottomSheetDetails from '../components/BottomSheets/BottomSheetDetails';
+import ModalSafety from '../components/Modals/hotelDetailSubSections/ModalSafety';
+import ModalCancellation from '../components/Modals/hotelDetailSubSections/ModalCancellation';
+import ModalHouseRules from '../components/Modals/hotelDetailSubSections/ModalHouseRules';
+import HeaderSearch from '../components/Header/HeaderSearch';
+import UserDetailDemo from '../components/Modals/UserDetailDemo';
+import BookHotelPage from '../components/NavScreens/BookHotelPage';
+import UpdateProfile from '../components/Modals/UpdateProfile';
+import HotelCreationForm from '../components/Modals/HotelCreationForm';
+import HotelDetailPage from '../components/Modals/hotelDetailSubSections/HotelDetailPage';
 import {DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain} from "@dfinity/identity";
 import {HttpAgent, toHex} from "@dfinity/agent";
 import { createActor,backend } from '../declarations/backend';
-import { User } from '../declarations/User';
 import { useDispatch,useSelector } from 'react-redux';
-import { setUser,setHotels } from '../redux/actions';
-import { hotel } from '../declarations/hotel';
-// import { main } from './crypt';
-// import 'react-native-crypto'
+import { setUser } from '../redux/users/actions';
+import { setPrinciple } from '../redux/principle/actions';
+import { setActor} from '../redux/actor/actions'
 
 import PolyfillCrypto from 'react-native-webview-crypto'
 global.Buffer = require('buffer').Buffer;
@@ -43,6 +36,7 @@ const Main = ({navigation}) => {
   const dispatch=useDispatch()
   const {user}=useSelector(state=>state.userReducer)
   const {hotels}=useSelector(state=>state.hotelsReducer)
+  const {actors}=useSelector(state=>state.actorReducer)
   //States for managing modals
   const [safetyModal, setSafetyModal] = useState(false);
   const [cancelModal, setCancelModal] = useState(false);
@@ -52,15 +46,9 @@ const Main = ({navigation}) => {
   const [hotelDetailPage, openHotelDetailPage] = useState(false);
   const [userDetails, setUserDetails] = useState(false);
 
-  const [principle,setPrinciple]=useState('')
-  // const [actor,setActor]=useState(backend)
-  //Hiding splashscreen and opening sign up page
   useEffect(() => {
     SplashScreen.hide();
-    // btmSheetFinishRef.current.present()
-    // btmSheetFinishRef.current.present()
     btmSheetLoginRef.current.present()
-    // console.log(main())
     generateIdentity();
   },[])
 
@@ -86,10 +74,24 @@ const Main = ({navigation}) => {
       )
     .catch((err)=>console.log(err))
   };
+  const getUserData=async()=>{
+    
+    console.log(actors)
+    await actors.userActor?.getUserInfo().then((res)=>{
+      if(res[0].firstName!=''){
+        dispatch(setUser(res[0]))
+        btmSheetLoginRef.current.dismiss()
+        alert(`welcome back ${res[0].firstName}!`)
+        
+      }else{
+        alert('Now please follow the registeration process!')
+        btmSheetLoginRef.current.dismiss()
+        btmSheetFinishRef.current.present()
+      }
+    }).catch((err)=>console.error(err))
+  }
 
   const handleLogin = async () => {
-    // btmSheetLoginRef.current.dismiss();
-    // btmSheetFinishRef.current.present();
     try {
       const url = `http://127.0.0.1:4943/?canisterId=be2us-64aaa-aaaaa-qaabq-cai&publicKey=${toHex(middleKeyIdentity.getPublicKey().toDer())}`;
       if (await InAppBrowser.isAvailable()) {
@@ -152,19 +154,27 @@ const Main = ({navigation}) => {
     },
     blsVerify: () => true,
     host: 'http://127.0.0.1:4943',});
-    // alert("agent 1",agent)
+
     actor = createActor('bkyz2-fmaaa-aaaaa-qaaaq-cai', {
       agent,
     });
-    // setActor(actor);
+    let actorUser=createActor('br5f7-7uaaa-aaaaa-qaaca-cai',{agent})
+    let actorHotel=createActor('bw4dl-smaaa-aaaaa-qaacq-cai',{agent})
+    // dispatch(setActor({
+    //   backendActor:actor,
+    //   userActor:actorUser,
+    //   hotelActor:actorHotel
+    // }))
 
     let whoami = await actor.whoami();
-    setPrinciple(whoami);
     console.log("whoami",whoami);
-    alert(principle);
+    dispatch(setPrinciple(whoami))
+
+      alert(whoami);
+      getUserData()
   };
 
-  //methods for opening and closing bottomdsheets
+  //methods for opening and closing bottomsheets
   const closeModal = valRef => {
     valRef.current.dismiss();
   };
@@ -237,7 +247,6 @@ const Main = ({navigation}) => {
           setUpdatePage={setUpdatePage}
           openHotelDetailPage={openHotelDetailPage}
         />
-        {/* <MapScreen/> */}
 
         {/* BottomSheets */}
         <BottomSheetModal

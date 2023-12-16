@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import Icon from 'react-native-vector-icons/AntDesign'
 import { TextInput } from 'react-native-gesture-handler'
-import { COLORS,SIZES } from '../constants/themes'
+import { COLORS,SIZES } from '../../constants/themes'
 
 const SearchBar = () => {
   return (

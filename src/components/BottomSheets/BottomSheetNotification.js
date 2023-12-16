@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View,Image } from 'react-native'
 import React from 'react'
 import {useState} from 'react'
-import { SIZES,COLORS } from '../constants/themes'
-import {  images } from '../constants'
+import { SIZES,COLORS } from '../../constants/themes'
+import {  images } from '../../constants'
 import { Switch, TouchableOpacity } from 'react-native-gesture-handler'
 
 const BottomSheetNotification = ({self}) => {

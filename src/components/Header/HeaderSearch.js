@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import SearchBar from './SearchBar'
-import { COLORS,SIZES } from '../constants/themes'
+import { COLORS,SIZES } from '../../constants/themes'
 import HeaderTitles from './HeaderTitles'
 
 const HeaderSearch = () => {
