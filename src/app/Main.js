@@ -27,6 +27,8 @@ import { useDispatch,useSelector } from 'react-redux';
 import { setUser } from '../redux/users/actions';
 import { setPrinciple } from '../redux/principle/actions';
 import { setActor} from '../redux/actor/actions'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+const flatted=require('flatted')
 
 import PolyfillCrypto from 'react-native-webview-crypto'
 global.Buffer = require('buffer').Buffer;
@@ -46,8 +48,54 @@ const Main = ({navigation}) => {
   const [hotelDetailPage, openHotelDetailPage] = useState(false);
   const [userDetails, setUserDetails] = useState(false);
 
+  const getUserAgent=async()=>{
+    await AsyncStorage.getItem('user').then(async(res)=>{
+      console.log('getting id : ',res)
+      try{
+      if(res==null){
+        btmSheetLoginRef.current.present()
+        AsyncStorage.clear()
+      }else{
+        const agent = new HttpAgent({identity: res,fetchOptions: {
+          reactNative: {
+            __nativeResponseType: 'base64',
+          },
+        },
+        callOptions: {
+          reactNative: {
+            textStreaming: true,
+          },
+        },
+        blsVerify: () => true,
+        host: 'http://127.0.0.1:4943',});
+        
+        actor = createActor('bkyz2-fmaaa-aaaaa-qaaaq-cai', {
+          agent,
+        });
+        let actor = createActor('bkyz2-fmaaa-aaaaa-qaaaq-cai', {
+          agent,
+        });
+        let actorUser=createActor('br5f7-7uaaa-aaaaa-qaaca-cai',{agent})
+        let actorHotel=createActor('bw4dl-smaaa-aaaaa-qaacq-cai',{agent})
+        // dispatch(setActor({
+        //   backendActor:actor,
+        //   userActor:actorUser,
+        //   hotelActor:actorHotel
+        // }))
+    
+        let whoami = await actor.whoami();
+        console.log("whoami",whoami);
+        dispatch(setPrinciple(whoami))
+        alert(whoami);
+        getUserData()
+      }
+    }catch(err){console.log(err)}
+    }).catch((err)=>{console.log(err)})
+  }
+
   useEffect(() => {
     SplashScreen.hide();
+    // getUserAgent()
     btmSheetLoginRef.current.present()
     generateIdentity();
   },[])
@@ -76,7 +124,7 @@ const Main = ({navigation}) => {
   };
   const getUserData=async()=>{
     
-    console.log(actors)
+    // console.log(actors)
     await actors.userActor?.getUserInfo().then((res)=>{
       if(res[0].firstName!=''){
         dispatch(setUser(res[0]))
@@ -89,6 +137,7 @@ const Main = ({navigation}) => {
         btmSheetFinishRef.current.present()
       }
     }).catch((err)=>console.error(err))
+    // await AsyncStorage.clear()
   }
 
   const handleLogin = async () => {
@@ -154,7 +203,6 @@ const Main = ({navigation}) => {
     },
     blsVerify: () => true,
     host: 'http://127.0.0.1:4943',});
-
     actor = createActor('bkyz2-fmaaa-aaaaa-qaaaq-cai', {
       agent,
     });
@@ -169,7 +217,9 @@ const Main = ({navigation}) => {
     let whoami = await actor.whoami();
     console.log("whoami",whoami);
     dispatch(setPrinciple(whoami))
-
+    await AsyncStorage.setItem('user',JSON.stringify(middleIdentity))
+      .then((res)=>console.log('data stored successfully',middleIdentity))
+      .catch((err)=>console.log(err))
       alert(whoami);
       getUserData()
   };
