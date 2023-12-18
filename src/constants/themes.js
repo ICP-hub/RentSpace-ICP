@@ -10,7 +10,10 @@ const COLORS={
     lightBorderPurple:"#CEC2D6",
     darkPurple:'#3C115A',
     royalPurple:'#C586F4',
-    darkerPurple:'#11002C'
+    darkerPurple:'#11002C',
+    hostTitle:'#4B1FD5',
+    lighterGrey:'#F0EDEA',
+    mediumGrey:'#7B7B7B'
 }
 const SIZES={
     xSmall: 10,
