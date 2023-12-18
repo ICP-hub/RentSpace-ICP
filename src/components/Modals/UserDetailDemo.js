@@ -1,4 +1,4 @@
-import { ActivityIndicator, StyleSheet, Text, Image, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, Text, Image, TouchableOpacity, View, Modal } from 'react-native'
 import  { useState } from 'react'
 import { COLORS, SIZES } from '../../constants/themes'
 import { User } from '../../declarations/User/index.js'
@@ -9,11 +9,13 @@ import Icon2 from 'react-native-vector-icons/Entypo'
 import Icon3 from 'react-native-vector-icons/MaterialIcons'
 import { useSelector,useDispatch } from 'react-redux'
 import { setUser,setHotels } from '../../redux/users/actions'
+import HostFirstScreen from '../HostViewNew/HostFirstScreen/HostFirstScreen'
 
 const UserDetailDemo = ({setUpdatePage,self,setHotelCreateForm}) => {
 
   const {user}=useSelector(state=>state.userReducer)
   const {actors}=useSelector(state=>state.actorReducer)
+  const [hostModal,setHostModal]=useState(0)
   const dispatch=useDispatch()
 
   const [loading,setLoading]=useState(false)
@@ -40,8 +42,11 @@ const UserDetailDemo = ({setUpdatePage,self,setHotelCreateForm}) => {
   }
 
   return (
+
     <View style={styles.container}>
-      
+      <Modal visible={(hostModal==1?true:false)}>
+        <HostFirstScreen setHostModal={setHostModal}/>
+          </Modal>
       <View style={styles.header}>
         <Text style={styles.title}>My Profile</Text>
         <Image source={images.profile2} style={styles.profileLogo}/>
@@ -99,34 +104,21 @@ const UserDetailDemo = ({setUpdatePage,self,setHotelCreateForm}) => {
           }}>
             <Text style={styles.btnText}>Make me a Host</Text>
           </TouchableOpacity> :
+          <View style={styles.btnCont}>
           <TouchableOpacity style={styles.updateBtn} onPress={()=>{
             setHotelCreateForm(true)
           }}>
             <Text style={styles.btnText}>Create new Hotel</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.btn} onPress={()=>setHostModal(1)}>
+          <Text style={styles.btnText}>Preview</Text>
+        </TouchableOpacity>
+          
+        </View>
         }
         
           
       </View>
-      
-
-      {/* <TouchableOpacity style={[styles.bookHotelBtn,{backgroundColor:(user?.verificationStatus)?'green':'red'}]} >
-        <Text style={styles.btnText} onPress={()=>{self(false)}}>Book Hotel</Text>
-      </TouchableOpacity>
-      <ActivityIndicator size={40} animating={loading}/>
-      <TouchableOpacity style={styles.updateBtn} onPress={()=>{
-        makeHost()
-        
-      }}>
-        <Text style={styles.updateBtn}>Make me a Host</Text>
-      </TouchableOpacity> */}
-      {/* <BottomNav 
-          filterNav={console.log('clicked!')} 
-          searchNav={console.log('clicked!')}
-          heartNav={()=>{console.log('clicked!')}}
-          commentNav={console.log('clicked!')}
-          userNav={()=>{console.log('clicked!')}}
-        /> */}
     </View>
   )
 }

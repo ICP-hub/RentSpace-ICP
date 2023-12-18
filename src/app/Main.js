@@ -184,6 +184,7 @@ const Main = ({navigation}) => {
     const deepLink = event.url;
     const urlObject = new URL(deepLink);
     const delegation = urlObject.searchParams.get('delegation');
+
     const chain = DelegationChain.fromJSON(
       JSON.parse(decodeURIComponent(delegation)),
     );
