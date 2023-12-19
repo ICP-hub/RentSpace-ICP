@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
     },
     subTitle:{
       color:COLORS.hostTitle,
-      fontSize:SIZES.xLarge,
-      fontWeight:'500',
+      fontSize:SIZES.large,
+      fontWeight:'800',
       marginBottom:14
     },
     priceCont:{

@@ -13,7 +13,8 @@ const COLORS={
     darkerPurple:'#11002C',
     hostTitle:'#4B1FD5',
     lighterGrey:'#F0EDEA',
-    mediumGrey:'#7B7B7B'
+    mediumGrey:'#7B7B7B',
+    bgLightGrey:'#F1F1F1'
 }
 const SIZES={
     xSmall: 10,
