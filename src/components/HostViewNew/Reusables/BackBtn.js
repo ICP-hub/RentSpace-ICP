@@ -21,6 +21,6 @@ const styles = StyleSheet.create({
         width:'100%',
         marginVertical:10,
         justifyContent:'flex-start',
-        paddingLeft:30
+        paddingLeft:30,
     },
 })
