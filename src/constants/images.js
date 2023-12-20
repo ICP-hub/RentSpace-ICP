@@ -15,6 +15,11 @@ import profileSample from '../assets/images/profileSample.jpg'
 import profile2 from '../assets/images/profile2.png'
 import sampleMapIcon from '../assets/images/sampleMapIcon.jpg'
 import map1 from '../assets/images/map1.png'
+import hostBed from '../assets/images/hostView/bed.png'
+import hostDoor from '../assets/images/hostView/door.png'
+import hostHouseDesign from '../assets/images/hostView/houseDesign.png'
+import hostMirror from '../assets/images/hostView/mirror.png'
+import map2 from '../assets/images/hostView/map2.png'
 
 export default {
     favourite,
@@ -33,5 +38,10 @@ export default {
     profileSample,
     profile2,
     sampleMapIcon,
-    map1
+    map1,
+    hostBed,
+    hostDoor,
+    hostHouseDesign,
+    hostMirror,
+    map2
 }

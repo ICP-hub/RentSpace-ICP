@@ -9,7 +9,8 @@ import Icon2 from 'react-native-vector-icons/Entypo'
 import Icon3 from 'react-native-vector-icons/MaterialIcons'
 import { useSelector,useDispatch } from 'react-redux'
 import { setUser,setHotels } from '../../redux/users/actions'
-import HostFirstScreen from '../HostViewNew/HostFirstScreen/HostFirstScreen'
+import HostWelcomeManager from '../HostViewNew/HostWelcomeManager'
+import Step1Manager from '../HostViewNew/Step1Manager'
 
 const UserDetailDemo = ({setUpdatePage,self,setHotelCreateForm}) => {
 
@@ -44,9 +45,7 @@ const UserDetailDemo = ({setUpdatePage,self,setHotelCreateForm}) => {
   return (
 
     <View style={styles.container}>
-      <Modal visible={(hostModal==1?true:false)}>
-        <HostFirstScreen setHostModal={setHostModal}/>
-          </Modal>
+      
       <View style={styles.header}>
         <Text style={styles.title}>My Profile</Text>
         <Image source={images.profile2} style={styles.profileLogo}/>
@@ -119,6 +118,12 @@ const UserDetailDemo = ({setUpdatePage,self,setHotelCreateForm}) => {
         
           
       </View>
+      <Modal animationType='fade' visible={(hostModal>0 && hostModal<=3)?true:false}>
+        <HostWelcomeManager hostModal={hostModal} setHostModal={setHostModal}/>
+      </Modal>
+      <Modal animationType='fade' visible={(hostModal>3 && hostModal<=8)?true:false}>
+        <Step1Manager hostModal={hostModal} setHostModal={setHostModal}/>
+      </Modal>
     </View>
   )
 }
