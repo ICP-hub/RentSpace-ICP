@@ -17,7 +17,7 @@ const HostFirstScreen = ({setHostModal}) => {
             <Questions/>
             <View style={styles.footer}>
                 <View style={styles.footerEnv}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={()=>{setHostModal(2)}}>
                         <Text style={styles.text}>Ready to Rentspace it?</Text>
                     </TouchableOpacity>
                 </View>
