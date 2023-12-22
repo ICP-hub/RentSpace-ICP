@@ -11,6 +11,8 @@ import { useSelector,useDispatch } from 'react-redux'
 import { setUser,setHotels } from '../../redux/users/actions'
 import HostWelcomeManager from '../HostViewNew/HostWelcomeManager'
 import Step1Manager from '../HostViewNew/Step1Manager'
+import Step2Manager from '../HostViewNew/Step2Manager'
+import Step3Manager from '../HostViewNew/Step3Manager'
 
 const UserDetailDemo = ({setUpdatePage,self,setHotelCreateForm}) => {
 
@@ -118,11 +120,17 @@ const UserDetailDemo = ({setUpdatePage,self,setHotelCreateForm}) => {
         
           
       </View>
-      <Modal animationType='fade' visible={(hostModal>0 && hostModal<=3)?true:false}>
+      <Modal animationType='slide' visible={(hostModal>0 && hostModal<=3)?true:false}>
         <HostWelcomeManager hostModal={hostModal} setHostModal={setHostModal}/>
       </Modal>
-      <Modal animationType='fade' visible={(hostModal>3 && hostModal<=8)?true:false}>
+      <Modal animationType='slide' visible={(hostModal>3 && hostModal<=8)?true:false}>
         <Step1Manager hostModal={hostModal} setHostModal={setHostModal}/>
+      </Modal>
+      <Modal animationType='slide' visible={(hostModal>8 && hostModal<=16)?true:false}>
+        <Step2Manager hostModal={hostModal} setHostModal={setHostModal}/>
+      </Modal>
+      <Modal animationType='slide' visible={(hostModal>16 && hostModal<=23)?true:false}>
+        <Step3Manager hostModal={hostModal} setHostModal={setHostModal}/>
       </Modal>
     </View>
   )

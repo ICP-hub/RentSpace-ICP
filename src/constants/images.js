@@ -19,7 +19,13 @@ import hostBed from '../assets/images/hostView/bed.png'
 import hostDoor from '../assets/images/hostView/door.png'
 import hostHouseDesign from '../assets/images/hostView/houseDesign.png'
 import hostMirror from '../assets/images/hostView/mirror.png'
+import hostHome from '../assets/images/hostView/home.png'
 import map2 from '../assets/images/hostView/map2.png'
+import hotelImg1 from '../assets/images/hostView/hotelImg1.png'
+import hotelImg2 from '../assets/images/hostView/hotelImg2.png'
+import hotelImg3 from '../assets/images/hostView/hotelImg3.png'
+import hotelImg4 from '../assets/images/hostView/hotelImg4.png'
+import hotelImg5 from '../assets/images/hostView/hotelImg5.png'
 
 export default {
     favourite,
@@ -43,5 +49,11 @@ export default {
     hostDoor,
     hostHouseDesign,
     hostMirror,
-    map2
+    hostHome,
+    map2,
+    hotelImg1,
+    hotelImg2,
+    hotelImg3,
+    hotelImg4,
+    hotelImg5
 }

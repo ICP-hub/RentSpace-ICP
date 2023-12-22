@@ -1,16 +1,30 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { Keyboard, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { COLORS, SIZES } from '../../../constants/themes'
+import { KeyboardState } from 'react-native-reanimated';
 
-const BottomBtn = ({setHostModal,pos,step}) => {
+const BottomBtn = ({setHostModal,pos,step,back}) => {
     const progress=(step==1)?'33%':(step==2)?'66%':'100%';
+    const [bottom,setBottom]=useState(true)
+    useEffect(()=>{
+        Keyboard.addListener('keyboardDidShow',()=>{
+            setBottom(false)
+        })
+        Keyboard.addListener('keyboardDidHide',()=>{
+            setBottom(true)
+        })
+    })
   return (
-    <View style={styles.bottomCont}>
+    <View style={(bottom)?[styles.bottomCont,{bottom:0}]:[styles.bottomCont,{bottom:-100}]}>
         <View style={styles.progressCont}>
             <View style={[styles.progress,{width:progress}]}/>
         </View>
         <View style={styles.btnCont}>
-            <TouchableOpacity onPress={()=>setHostModal(pos-1)}>
+            <TouchableOpacity onPress={()=>{
+                back?setHostModal(pos-back):
+                setHostModal(pos-1)
+
+            }}>
                 <Text style={styles.link}>Back</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.btn} onPress={()=>setHostModal(pos+1)}>
@@ -31,7 +45,6 @@ const styles = StyleSheet.create({
         width:'100%',
         backgroundColor:'white',
         position:'absolute',
-        bottom:0
     },
     progressCont:{
         width:'85%',

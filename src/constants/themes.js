@@ -24,6 +24,8 @@ const SIZES={
   largeMed:18,
   large: 20,
   xLarge: 24,
+  medxLarge:26,
+  prexxLarge:28,
   xxLarge: 32,
 }
 const FONTS={
