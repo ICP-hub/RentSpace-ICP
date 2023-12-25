@@ -16,6 +16,10 @@
       "main": "Backend/RentSpace_backend/HotelCanister.mo",
       "type": "motoko"
     },
+    "booking": {
+      "main": "Backend/RentSpace_backend/BookingCanister.mo",
+      "type": "motoko"
+    },
     "LoginWeb": {
       "dependencies": [],
       "frontend": {

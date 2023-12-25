@@ -1,20 +1,24 @@
-import CanisterMap "mo:candb/CanisterMap";
-import Utils "mo:candb/Utils";
-import Buffer "mo:stablebuffer/StableBuffer";
+import List "mo:base/List";
 import Debug "mo:base/Debug";
 import Error "mo:base/Error";
-import Admin "mo:candb/CanDBAdmin";
 import Principal "mo:base/Principal";
 import Cycles "mo:base/ExperimentalCycles";
 import Array "mo:base/Array";
 import Iter "mo:base/Iter";
-import Entity "mo:candb/Entity";
+
+import UUID "mo:uuid/UUID";
+import Source "mo:uuid/async/SourceV4";
+import Buffer "mo:stablebuffer/StableBuffer";
+
 import CA "mo:candb/CanisterActions";
-import List "mo:base/List";
+import CanisterMap "mo:candb/CanisterMap";
+import Utils "mo:candb/Utils";
+import Entity "mo:candb/Entity";
+import Admin "mo:candb/CanDBAdmin";
+
 import User "UserCanister";
 import Hotel "HotelCanister";
-import Source "mo:uuid/async/SourceV4";
-import UUID "mo:uuid/UUID";
+import Booking "BookingCanister";
 
 shared ({caller = owner}) actor class Database() = this {
 
@@ -56,7 +60,7 @@ shared ({caller = owner}) actor class Database() = this {
 
   public shared ({caller = caller}) func autoScaleUserCanister(pk : Text) : async Text {
     // Auto-Scaling Authorization - if the request to auto-scale the partition is not coming from an existing canister in the partition, reject it
-    if (Utils.callingCanisterOwnsPK(owner, pkToCanisterMap, pk)) {
+    if (Utils.callingCanisterOwnsPK(caller, pkToCanisterMap, pk)) {
       Debug.print("creating an additional canister for pk=" # pk);
       await createActorCanister(pk, ?[owner, Principal.fromActor(this)]);
     } else {
@@ -70,7 +74,7 @@ shared ({caller = owner}) actor class Database() = this {
     let pk = canisterName;
     let canisterIds = getCanistersIdsIfExists(pk);
     if (canisterIds == []) {
-      ?(await createUserCanister(pk, ?[owner, Principal.fromActor(this)]));
+      ?(await createUserCanister(pk, ?[owner,creator, Principal.fromActor(this)]));
     } else {
       Debug.print(pk # "already exists");
       null;
@@ -205,11 +209,71 @@ shared ({caller = owner}) actor class Database() = this {
     newCanisterId;
   };
 
+  public shared ({caller = caller}) func autoScaleBookingCanister(pk : Text) : async Text {
+    // Auto-Scaling Authorization - if the request to auto-scale the partition is not coming from an existing canister in the partition, reject it
+    if (Utils.callingCanisterOwnsPK(owner, pkToCanisterMap, pk)) {
+      Debug.print("creating an additional canister for pk=" # pk);
+      await createActorCanister(pk, ?[owner, Principal.fromActor(this)]);
+    } else {
+      throw Error.reject("not authorized");
+    };
+  };
+
+  public shared ({caller = creator}) func createNewBookingCanister(canisterName : Text) : async ?Text {
+    assert (creator == owner);
+    Debug.print(debug_show (creator));
+    let pk = canisterName;
+    let canisterIds = getCanistersIdsIfExists(pk);
+    if (canisterIds == []) {
+      ?(await createBookingCanister(pk, ?[owner, Principal.fromActor(this)]));
+    } else {
+      Debug.print(pk # "already exists");
+      null;
+    };
+  };
+  // dfx canister --network ic call <canister_name> <function_name> <function_input>
+
+  // Spins up a new HelloService canister with the provided pk and controllers
+  func createBookingCanister(pk : Text, controllers : ?[Principal]) : async Text {
+    Debug.print("creating new hello service canister with pk=" # pk);
+    // Pre-load 300 billion cycles for the creation of a new Hello Service canister
+    // Note that canister creation costs 100 billion cycles, meaning there are 200 billion
+    // left over for the new canister when it is created
+    Cycles.add(300_000_000_000);
+    let newCanister = await Booking.Booking({
+      partitonKey = pk;
+      scalingOptions = {
+        autoScalingHook = autoScaleUserCanister;
+        sizeLimit = #heapSize(475_000_000); // Scale out at 475MB
+        // for auto-scaling testing
+        //sizeLimit = #count(3); // Scale out at 3 entities inserted
+      };
+      owners = controllers;
+    });
+    let newCanisterPrincipal = Principal.fromActor(newCanister);
+    await CA.updateCanisterSettings({
+      canisterId = newCanisterPrincipal;
+      settings = {
+        controllers = controllers;
+        compute_allocation = ?0;
+        memory_allocation = ?0;
+        freezing_threshold = ?2592000;
+      };
+    });
+
+    let newCanisterId = Principal.toText(newCanisterPrincipal);
+    // After creating the new Hello Service canister, add it to the pkToCanisterMap
+    pkToCanisterMap := CanisterMap.add(pkToCanisterMap, pk, newCanisterId);
+
+    Debug.print("new User canisterId=" # newCanisterId);
+    newCanisterId;
+  };
+
   public shared query ({caller}) func whoami() : async Text {
     return Principal.toText(caller);
   };
-  public query func getOwner():async Text{
+  public query func getOwner() : async Text {
     return Principal.toText(owner);
-  }
+  };
 
 };

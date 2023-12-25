@@ -1,5 +1,13 @@
-module{
-      public type UserInfo = {
+import Map "mo:stablehashmap/FunctionalStableHashMap";
+import Bool "mo:base/Bool";
+module {
+    public type User = {
+        firstName : Text;
+        lastName : Text;
+        dob : Text;
+        userEmail : Text;
+    };
+    public type UserInfo = {
         firstName : Text;
         lastName : Text;
         dob : Text;
@@ -9,12 +17,36 @@ module{
         userGovId : Text;
         hostStatus : Bool;
         verificationStatus : Bool;
+        createdAt:Text;
     };
-    public  type HotelInfo = {
+    public type HotelInfo = {
         hotelTitle : Text;
         hotelDes : Text;
         hotelImage : Text;
         hotelPrice : Text;
         hotelLocation : Text;
+        createdAt:Text;
     };
-}
+   public type ScanHotels = {
+        hotels : [HotelInfo];
+        nextKey : ?Text;
+    };
+    public type BookingInfo = {
+        userId : Text;
+        date : Text;
+        bookingDuration : Text;
+        cancelStatus : Bool;
+        refundStatus : Bool;
+        paymentStatus : Bool;
+        paymentId : Text;
+    };
+    public type ScanBooking={
+        bookings: [BookingInfo];
+        nextKey:?Text;
+    };
+    public type Node = {
+        var children : Map.StableHashMap<Text, Node>;
+        var isEndOfWord : Bool;
+        var user : [Text];
+    };
+};
