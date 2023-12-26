@@ -76,11 +76,11 @@ shared ({caller = owner}) actor class Hotel({
     ///---------public function to create the new Hotels---------///
     public shared ({caller = user}) func createHotel(hotelData : Types.HotelInfo) : async () {
 
-        assert (Principal.isAnonymous(user) == false);
+        //assert (Principal.isAnonymous(user) == false);
 
         let userIdentity = Principal.toText(user);
         let hotelId = await utils.createHotelSK(userIdentity);
-        let hotelExist = await skExists(hotelId);
+        let hotelExist = await skExists(hotelId);   
 
         assert (userIdentity != "" and hotelData.hotelTitle != "" and hotelData.hotelDes != "" and hotelData.hotelLocation != "" and hotelData.hotelImage != "" and hotelData.hotelPrice != "");
         assert (Text.size(hotelData.hotelTitle) <= 40 and Text.size(hotelData.hotelDes) <= 300 and Text.size(hotelData.hotelLocation) <= 30 and Text.size(hotelData.hotelPrice) <= 15);
@@ -102,7 +102,7 @@ shared ({caller = owner}) actor class Hotel({
         );
     };
     public shared query ({caller = user}) func getHotelId() : async [Text] {
-        assert (Principal.isAnonymous(user) == false);
+        // assert (Principal.isAnonymous(user) == false);
         let userIdentity = Principal.toText(user);
         return switch (RBT.get(hotelIdTree, Text.compare, userIdentity)) {
             case (?result) {List.toArray<Text>(result)};
@@ -111,7 +111,7 @@ shared ({caller = owner}) actor class Hotel({
     };
     ///----function to get the hotel data using the by passing uuid as sortkey------///
     public shared query ({caller = user}) func getHotel(hotelId : Text) : async ?Types.HotelInfo {
-        assert (Principal.isAnonymous(user) == false);
+        //assert (Principal.isAnonymous(user) == false);
         let id = hotelId;
         let hotelData = switch (CanDB.get(db, {sk = id})) {
             case (null) {null};

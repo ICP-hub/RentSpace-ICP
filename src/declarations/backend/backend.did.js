@@ -1,17 +1,11 @@
 export const idlFactory = ({ IDL }) => {
   const Database = IDL.Service({
+    'autoScaleBookingCanister' : IDL.Func([IDL.Text], [IDL.Text], []),
     'autoScaleHotelCanister' : IDL.Func([IDL.Text], [IDL.Text], []),
     'autoScaleUserCanister' : IDL.Func([IDL.Text], [IDL.Text], []),
-    'createNewHotelCanister' : IDL.Func(
-        [IDL.Text, IDL.Opt(IDL.Vec(IDL.Principal))],
-        [IDL.Opt(IDL.Text)],
-        [],
-      ),
-    'createNewUserCanister' : IDL.Func(
-        [IDL.Text, IDL.Opt(IDL.Vec(IDL.Principal))],
-        [IDL.Opt(IDL.Text)],
-        [],
-      ),
+    'createNewBookingCanister' : IDL.Func([IDL.Text], [IDL.Opt(IDL.Text)], []),
+    'createNewHotelCanister' : IDL.Func([IDL.Text], [IDL.Opt(IDL.Text)], []),
+    'createNewUserCanister' : IDL.Func([IDL.Text], [IDL.Opt(IDL.Text)], []),
     'deleteCanister' : IDL.Func([IDL.Text], [], []),
     'getCanistersByPK' : IDL.Func([IDL.Text], [IDL.Vec(IDL.Text)], ['query']),
     'getOwner' : IDL.Func([], [IDL.Text], ['query']),

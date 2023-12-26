@@ -15,11 +15,18 @@ export interface ScanUser {
   'nextKey' : [] | [string],
   'users' : Array<UserInfo>,
 }
+export interface User {
+  'dob' : string,
+  'userEmail' : string,
+  'lastName' : string,
+  'firstName' : string,
+}
 export interface UserInfo {
   'dob' : string,
   'userType' : string,
   'userEmail' : string,
   'userGovId' : string,
+  'createdAt' : string,
   'hostStatus' : boolean,
   'userProfile' : string,
   'lastName' : string,
@@ -27,10 +34,7 @@ export interface UserInfo {
   'firstName' : string,
 }
 export interface Users {
-  'createUser' : ActorMethod<
-    [string, string, string, string, string],
-    undefined
-  >,
+  'createUser' : ActorMethod<[User], undefined>,
   'getOwner' : ActorMethod<[], string>,
   'getPK' : ActorMethod<[], string>,
   'getUserInfo' : ActorMethod<[], [] | [UserInfo]>,

@@ -49,4 +49,14 @@ module {
         var isEndOfWord : Bool;
         var user : [Text];
     };
+    public type Review={
+        bookingId:Text;
+        rating:Float;
+        title:Text;
+        des:Text;
+        createdAt:Text;
+    }; public type ScanReview={
+        review: [Review];
+        nextKey:?Text;
+    };
 };

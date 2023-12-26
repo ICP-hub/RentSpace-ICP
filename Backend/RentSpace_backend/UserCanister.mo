@@ -60,7 +60,7 @@ shared ({caller = owner}) actor class Users({
     // Create a new user. In this basic case, we're using the pricipalId of User as the sort key
 
     public shared ({caller = user}) func createUser(userData : Types.User) : async () {
-        assert (Principal.isAnonymous(user) == false);
+        //assert (Principal.isAnonymous(user) == false);
 
         let userIdentity = Principal.toText(user);
         let identityStatus = await skExists(userIdentity);
@@ -140,7 +140,7 @@ shared ({caller = owner}) actor class Users({
 
     public shared query ({caller = user}) func getUserInfo() : async ?Types.UserInfo {
 
-        assert (Principal.isAnonymous(user) == false);
+        // assert (Principal.isAnonymous(user) == false);
 
         let userIdentity = Principal.toText(user);
         let userInfo = switch (CanDB.get(db, {sk = userIdentity})) {
@@ -158,7 +158,7 @@ shared ({caller = owner}) actor class Users({
     //public function to update the data of the canister
     public shared ({caller = user}) func updateUserInfo(userData : Types.UserInfo) : async ?Types.UserInfo {
 
-        assert (Principal.isAnonymous(user) == false);
+        // assert (Principal.isAnonymous(user) == false);
         let userIdentity = Principal.toText(user);
 
         assert (userIdentity != "" and userData.firstName != "" and userData.lastName != "" and userData.dob != "" and userData.userEmail != "" and userData.userProfile != "" and userData.userGovId != "");
@@ -178,7 +178,7 @@ shared ({caller = owner}) actor class Users({
                     ("userGovId", #text(userData.userGovId)),
                     ("hostStatus", #bool(userData.hostStatus)),
                     ("verificationStatus", #bool(userData.verificationStatus)),
-                    ("createdAt",#text(utils.getDate())),
+                    ("createdAt", #text(utils.getDate())),
                 ];
             },
         );
@@ -194,7 +194,7 @@ shared ({caller = owner}) actor class Users({
 
     ///----------Pagination of the User info------------///
     public shared query ({caller = user}) func scanUsers(skLowerBound : Text, skUpperBound : Text, limit : Nat, ascending : ?Bool) : async ScanUser {
-        assert (Principal.isAnonymous(user) == false);
+        //assert (Principal.isAnonymous(user) == false);
         //cap the amount of entries one can return from database to reduce load and incentive use pagiation
         let cappedLimit = if (limit > 10) {10} else {limit};
         let {entities; nextKey} = CanDB.scan(

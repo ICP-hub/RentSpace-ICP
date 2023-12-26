@@ -1,6 +1,6 @@
 type Users = 
  service {
-   createUser: (text, text, text, text, text) -> ();
+   createUser: (User) -> ();
    getOwner: () -> (text) query;
    getPK: () -> (text) query;
    getUserInfo: () -> (opt UserInfo) query;
@@ -11,6 +11,7 @@ type Users =
  };
 type UserInfo = 
  record {
+   createdAt: text;
    dob: text;
    firstName: text;
    hostStatus: bool;
@@ -20,6 +21,13 @@ type UserInfo =
    userProfile: text;
    userType: text;
    verificationStatus: bool;
+ };
+type User = 
+ record {
+   dob: text;
+   firstName: text;
+   lastName: text;
+   userEmail: text;
  };
 type ScanUser = 
  record {

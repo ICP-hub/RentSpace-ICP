@@ -12,11 +12,18 @@ export const idlFactory = ({ IDL }) => {
     'autoScalingHook' : AutoScalingCanisterSharedFunctionHook,
     'sizeLimit' : ScalingLimitType,
   });
+  const User = IDL.Record({
+    'dob' : IDL.Text,
+    'userEmail' : IDL.Text,
+    'lastName' : IDL.Text,
+    'firstName' : IDL.Text,
+  });
   const UserInfo = IDL.Record({
     'dob' : IDL.Text,
     'userType' : IDL.Text,
     'userEmail' : IDL.Text,
     'userGovId' : IDL.Text,
+    'createdAt' : IDL.Text,
     'hostStatus' : IDL.Bool,
     'userProfile' : IDL.Text,
     'lastName' : IDL.Text,
@@ -28,11 +35,7 @@ export const idlFactory = ({ IDL }) => {
     'users' : IDL.Vec(UserInfo),
   });
   const Users = IDL.Service({
-    'createUser' : IDL.Func(
-        [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
-        [],
-        [],
-      ),
+    'createUser' : IDL.Func([User], [], []),
     'getOwner' : IDL.Func([], [IDL.Text], ['query']),
     'getPK' : IDL.Func([], [IDL.Text], ['query']),
     'getUserInfo' : IDL.Func([], [IDL.Opt(UserInfo)], ['query']),

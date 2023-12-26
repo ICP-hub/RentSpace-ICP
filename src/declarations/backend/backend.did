@@ -1,9 +1,11 @@
 type Database = 
  service {
+   autoScaleBookingCanister: (text) -> (text);
    autoScaleHotelCanister: (text) -> (text);
    autoScaleUserCanister: (text) -> (text);
-   createNewHotelCanister: (text, opt vec principal) -> (opt text);
-   createNewUserCanister: (text, opt vec principal) -> (opt text);
+   createNewBookingCanister: (text) -> (opt text);
+   createNewHotelCanister: (text) -> (opt text);
+   createNewUserCanister: (text) -> (opt text);
    deleteCanister: (text) -> ();
    getCanistersByPK: (text) -> (vec text) query;
    getOwner: () -> (text) query;

@@ -14,12 +14,15 @@ export interface Hotel {
     [string, string, bigint, [] | [boolean]],
     ScanHotels
   >,
+  'searchLocationNode' : ActorMethod<[string], Array<string>>,
+  'searchNameNode' : ActorMethod<[string], Array<string>>,
   'skExists' : ActorMethod<[string], boolean>,
   'transferCycles' : ActorMethod<[], undefined>,
   'updateHotel' : ActorMethod<[string, HotelInfo], [] | [HotelInfo]>,
 }
 export interface HotelInfo {
   'hotelDes' : string,
+  'createdAt' : string,
   'hotelImage' : string,
   'hotelPrice' : string,
   'hotelTitle' : string,

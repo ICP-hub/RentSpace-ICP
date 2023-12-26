@@ -14,6 +14,7 @@ export const idlFactory = ({ IDL }) => {
   });
   const HotelInfo = IDL.Record({
     'hotelDes' : IDL.Text,
+    'createdAt' : IDL.Text,
     'hotelImage' : IDL.Text,
     'hotelPrice' : IDL.Text,
     'hotelTitle' : IDL.Text,
@@ -33,6 +34,8 @@ export const idlFactory = ({ IDL }) => {
         [ScanHotels],
         ['query'],
       ),
+    'searchLocationNode' : IDL.Func([IDL.Text], [IDL.Vec(IDL.Text)], ['query']),
+    'searchNameNode' : IDL.Func([IDL.Text], [IDL.Vec(IDL.Text)], ['query']),
     'skExists' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
     'transferCycles' : IDL.Func([], [], []),
     'updateHotel' : IDL.Func([IDL.Text, HotelInfo], [IDL.Opt(HotelInfo)], []),

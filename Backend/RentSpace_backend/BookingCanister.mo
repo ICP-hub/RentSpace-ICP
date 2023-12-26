@@ -77,7 +77,7 @@ shared ({caller = owner}) actor class Booking({
 
     public shared ({caller = user}) func bookHotel(hotelId : Text, bookingInfo : Types.BookingInfo) : async () {
         let userIdentity = Principal.toText(user);
-        assert(Principal.isAnonymous(user)==false);
+        // assert(Principal.isAnonymous(user)==false);
         assert (bookingInfo.userId != "" and bookingInfo.date != "" and bookingInfo.bookingDuration != "" and bookingInfo.bookingDuration != "" and bookingInfo.paymentId != "");
         assert (Text.size(bookingInfo.userId) <= 50 and Text.size(bookingInfo.date) <= 20 and Text.size(bookingInfo.bookingDuration) <= 20 and Text.size(bookingInfo.bookingDuration) <= 10 and Text.size(bookingInfo.paymentId) <= 20);
 
@@ -132,7 +132,7 @@ shared ({caller = owner}) actor class Booking({
     };
 
     public shared query ({caller = user}) func getBookingId() : async ?(Text, List.List<Text>) {
-        assert (Principal.isAnonymous(user) == false);
+        //assert (Principal.isAnonymous(user) == false);
         switch (RBT.get<Text, List.List<Text>>(bookingIdTree, Text.compare, Principal.toText(user))) {
             case (null) {null};
             case (?result) {result};
@@ -140,7 +140,7 @@ shared ({caller = owner}) actor class Booking({
     };
 
     public shared query ({caller = user}) func getBookingDetials(bookingId : Text) : async ?Types.BookingInfo {
-        assert (Principal.isAnonymous(user) == false);
+        //assert (Principal.isAnonymous(user) == false);
         let id = bookingId;
         let bookingData = switch (CanDB.get(db, {sk = id})) {
             case (null) {null};
@@ -198,7 +198,7 @@ shared ({caller = owner}) actor class Booking({
     public shared ({caller = user}) func updateBookingStatus(bookingId : Text, bookingInfo : Types.BookingInfo) : async () {
         let sortKey = bookingId;
         let checkBookingId = await skExists(bookingId);
-        assert (Principal.isAnonymous(user) == false and checkBookingId != false);
+       // assert (Principal.isAnonymous(user) == false and checkBookingId != false);
         assert (bookingInfo.userId != "" and bookingInfo.date != "" and bookingInfo.bookingDuration != "" and bookingInfo.bookingDuration != "" and bookingInfo.paymentId != "");
         assert (Text.size(bookingInfo.userId) <= 50 and Text.size(bookingInfo.date) <= 20 and Text.size(bookingInfo.bookingDuration) <= 20 and Text.size(bookingInfo.bookingDuration) <= 10 and Text.size(bookingInfo.paymentId) <= 20);
         await* CanDB.put(
