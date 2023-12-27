@@ -23,7 +23,7 @@ shared ({caller = owner}) actor class Hotel({
     scalingOptions : CanDB.ScalingOptions;
     // (optional) allows the developer to specify additional owners (i.e. for allowing admin or backfill access to specific endpoints)
     owners : ?[Principal];
-}) {
+}) =this{
 
     stable var hotelIdTree = RBT.init<Text, List.List<Text>>();
 
@@ -202,37 +202,7 @@ shared ({caller = owner}) actor class Hotel({
         Array.mapFilter<Entity.Entity, Types.HotelInfo>(
             entities,
             func(e) {
-                let {sk; attributes} = e;
-                let hotelTitleValue = Entity.getAttributeMapValueForKey(attributes, "hotelTitle");
-                let hotelDesValue = Entity.getAttributeMapValueForKey(attributes, "hotelDes");
-                let hotelImageValue = Entity.getAttributeMapValueForKey(attributes, "hotelImage");
-                let hotelPriceValue = Entity.getAttributeMapValueForKey(attributes, "hotelPrice");
-                let hotelLocationValue = Entity.getAttributeMapValueForKey(attributes, "hotelLocation");
-                let createAtValue = Entity.getAttributeMapValueForKey(attributes, "createdAt");
-
-                switch (hotelTitleValue, hotelDesValue, hotelImageValue, hotelPriceValue, hotelLocationValue,createAtValue) {
-                    case (
-                        ?(#text(hotelTitle)),
-                        ?(#text(hotelDes)),
-                        ?(#text(hotelImage)),
-                        ?(#text(hotelPrice)),
-                        ?(#text(hotelLocation)),
-                        ?(#text(createdAt)),
-                    ) {
-                        ?{
-                            hotelTitle = hotelTitle;
-                            hotelDes = hotelDes;
-                            hotelImage = hotelImage;
-                            hotelPrice = hotelPrice;
-                            hotelLocation = hotelLocation;
-                            createdAt=createdAt;
-                        };
-                    };
-                    case _ {
-                        Debug.print("Invalid data");
-                        null;
-                    };
-                };
+               unwrapHotel(e)
             },
         );
     };
@@ -308,6 +278,5 @@ shared ({caller = owner}) actor class Hotel({
         result := Trie.collectUsers(node, result);
         return result;
     };
-
     ///-----------------------------Ends Here----------------------------///
 };

@@ -168,30 +168,8 @@ shared ({caller = owner}) actor class Booking({
         Array.mapFilter<Entity.Entity, Types.BookingInfo>(
             entities,
             func(e) {
-                let {sk; attributes} = e;
-                let userIdValue = Entity.getAttributeMapValueForKey(attributes, "userId");
-                let dateValue = Entity.getAttributeMapValueForKey(attributes, "date");
-                let bookingDurationValue = Entity.getAttributeMapValueForKey(attributes, "bookingDuration");
-                let cancelStatusValue = Entity.getAttributeMapValueForKey(attributes, "cancelStatus");
-                let refundStatusValue = Entity.getAttributeMapValueForKey(attributes, "refundStatus");
-                let paymentStatusValue = Entity.getAttributeMapValueForKey(attributes, "paymentStatus");
-                let paymentIdValue = Entity.getAttributeMapValueForKey(attributes, "paymentId");
-
-                switch (userIdValue, dateValue, bookingDurationValue, cancelStatusValue, refundStatusValue, paymentStatusValue, paymentIdValue) {
-                    case (?(#text(userId)), ?(#text(date)), ?(#text(bookingDuration)), ?(#bool(cancelStatus)), ?(#bool(refundStatus)), ?(#bool(paymentStatus)), ?(#text(paymentId))) {
-                        ?{
-                            userId;
-                            date;
-                            bookingDuration;
-                            cancelStatus;
-                            refundStatus;
-                            paymentStatus;
-                            paymentId;
-                        };
-                    };
-                    case _ {null};
-                };
-            },
+            unwarpBookingDetails(e);
+            }
         );
     };
 

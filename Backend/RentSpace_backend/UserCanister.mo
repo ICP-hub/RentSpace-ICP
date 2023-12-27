@@ -216,49 +216,7 @@ shared ({caller = owner}) actor class Users({
         Array.mapFilter<Entity.Entity, Types.UserInfo>(
             entities,
             func(e) {
-                let {sk; attributes} = e;
-                let firstNameValue = Entity.getAttributeMapValueForKey(attributes, "firstName");
-                let lastNameValue = Entity.getAttributeMapValueForKey(attributes, "lastName");
-                let dobValue = Entity.getAttributeMapValueForKey(attributes, "dob");
-                let userEmailValue = Entity.getAttributeMapValueForKey(attributes, "userEmail");
-                let userTypeValue = Entity.getAttributeMapValueForKey(attributes, "userType");
-                let userProfileValue = Entity.getAttributeMapValueForKey(attributes, "userProfile");
-                let userGovIdValue = Entity.getAttributeMapValueForKey(attributes, "userGovId");
-                let hostStatusValue = Entity.getAttributeMapValueForKey(attributes, "hostStatus");
-                let verificationStatusValue = Entity.getAttributeMapValueForKey(attributes, "verificationStatus");
-                let createdAtValue = Entity.getAttributeMapValueForKey(attributes, "createdAt");
-
-                switch (firstNameValue, lastNameValue, dobValue, userEmailValue, userTypeValue, userProfileValue, userGovIdValue, hostStatusValue, verificationStatusValue, createdAtValue) {
-                    case (
-                        ?(#text(firstName)),
-                        ?(#text(lastName)),
-                        ?(#text(dob)),
-                        ?(#text(userEmail)),
-                        ?(#text(userType)),
-                        ?(#text(userProfile)),
-                        ?(#text(userGovId)),
-                        ?(#bool(hostStatus)),
-                        ?(#bool(verificationStatus)),
-                        ?(#text(createdAt)),
-                    ) {
-                        ?{
-                            firstName;
-                            lastName;
-                            dob;
-                            userEmail;
-                            userType;
-                            userProfile;
-                            userGovId;
-                            hostStatus;
-                            verificationStatus;
-                            createdAt;
-                        };
-                    };
-                    case _ {
-                        Debug.print("Invalid data");
-                        null;
-                    };
-                };
+               unWarpUserInfo(e);
             },
         );
     };

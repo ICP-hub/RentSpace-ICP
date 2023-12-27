@@ -178,33 +178,7 @@ shared ({caller = owner}) actor class Review({
         Array.mapFilter<Entity.Entity, Types.Review>(
             entities,
             func(e) {
-                let {sk; attributes} = e;
-                let bookingIdValue = Entity.getAttributeMapValueForKey(attributes, "bookingId");
-                let ratingValue = Entity.getAttributeMapValueForKey(attributes, "rating");
-                let titleValue = Entity.getAttributeMapValueForKey(attributes, "title");
-                let desValue = Entity.getAttributeMapValueForKey(attributes, "des");
-                let createdAtValue = Entity.getAttributeMapValueForKey(attributes, "createdAt");
-
-                switch (bookingIdValue, ratingValue, titleValue, desValue, createdAtValue) {
-                    case (
-                        ?(#text(bookingId)),
-                        ?(#float(rating)),
-                        ?(#text(title)),
-                        ?(#text(des)),
-                        ?(#text(createdAt)),
-                    ) {
-                        ?{
-                            bookingId;
-                            rating;
-                            title;
-                            des;
-                            createdAt;
-                        };
-                    };
-                    case _ {
-                        null;
-                    };
-                };
+               unWarpReviewInfo(e);
             },
         );
     };
