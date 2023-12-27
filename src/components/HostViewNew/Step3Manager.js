@@ -6,6 +6,7 @@ import Pricing from './Step3/Pricing/Pricing'
 import Discount from './Step3/Discount/Discount'
 import SecurityCheck from './Step3/SecurityCheck/SecurityCheck'
 import ReviewListing from './Step3/ReviewListing/ReviewListing'
+import Congratulations from './Step3/Congratulations/Congratulations'
 
 const Step3Manager = ({hostModal,setHostModal}) => {
   let component="<></>"
@@ -28,6 +29,9 @@ const Step3Manager = ({hostModal,setHostModal}) => {
         break   
     case(22):
         component=<ReviewListing setHostModal={setHostModal} pos={22}/>
+        break
+    case(23):
+        component=<Congratulations setHostModal={setHostModal} pos={23}/>
         break       
     default:
         component=<Text style={{color:'black'}}>Component not created</Text>
