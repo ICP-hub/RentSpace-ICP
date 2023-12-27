@@ -14,7 +14,8 @@ const COLORS={
     hostTitle:'#4B1FD5',
     lighterGrey:'#F0EDEA',
     mediumGrey:'#7B7B7B',
-    bgLightGrey:'#F1F1F1'
+    bgLightGrey:'#F1F1F1',
+    lightGreen:"#4CC900"
 }
 const SIZES={
     xSmall: 10,

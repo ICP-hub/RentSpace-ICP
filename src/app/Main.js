@@ -282,7 +282,7 @@ const Main = ({navigation}) => {
           filterNav={openFinishSignUp}
           searchNav={openDetailsModal}
           heartNav={() => {
-            console.log('clicked!');
+            navigation.navigate('hostHome')
           }}
           commentNav={openHotelDetailPage}
           userNav={() => {

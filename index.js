@@ -15,6 +15,10 @@ import BottomNav from './src/components/Navigation/BottomNav';
 import Profile from './src/app/Profile';
 import  Store  from './src/redux/store';
 import { Provider } from 'react-redux';
+import HostHome from './src/components/TempHost/HostHome/HostHome';
+import MenuPage from './src/components/TempHost/MenuPage/MenuPage';
+import Listings from './src/components/TempHost/Listings/Listings';
+import AllChats from './src/components/TempHost/ChatPage/AllChats/AllChats';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +33,10 @@ const RootComponent: React.FC = () => {
       <Stack.Navigator initialRouteName="Launch">
         <Stack.Screen options={{headerShown:false}} name="Launch" component={Main} />
         <Stack.Screen options={{headerShown:false}} name='profile' component={Profile}/>
+        <Stack.Screen options={{headerShown:false}} name='hostHome' component={HostHome}/>
+        <Stack.Screen options={{headerShown:false}} name='hostMenu' component={MenuPage}/>
+        <Stack.Screen options={{headerShown:false}} name='hostListing' component={Listings}/>
+        <Stack.Screen options={{headerShown:false}} name='hostChat' component={AllChats}/>
       </Stack.Navigator>
     </NavigationContainer>
     </Provider>

@@ -26,6 +26,8 @@ import hotelImg2 from '../assets/images/hostView/hotelImg2.png'
 import hotelImg3 from '../assets/images/hostView/hotelImg3.png'
 import hotelImg4 from '../assets/images/hostView/hotelImg4.png'
 import hotelImg5 from '../assets/images/hostView/hotelImg5.png'
+import congrats from '../assets/images/hostView/VectorpartyPopper.png'
+import IDAbout from '../assets/images/hostView/IDAbout.png'
 
 export default {
     favourite,
@@ -55,5 +57,7 @@ export default {
     hotelImg2,
     hotelImg3,
     hotelImg4,
-    hotelImg5
+    hotelImg5,
+    congrats,
+    IDAbout
 }
