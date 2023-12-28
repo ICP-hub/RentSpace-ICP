@@ -10,8 +10,7 @@ import {Calendar} from 'react-native-calendars';
 import { launchImageLibrary } from 'react-native-image-picker'
 import { useSelector,useDispatch } from 'react-redux'
 import { setUser } from '../../../../../redux/users/actions'
-import {updateUser} from "../../../../../redux/actor/reducer";
-import { setActor } from '../../../../../redux/actor/actions'
+import { updatingUser } from '../../../../../redux/actor/actions'
 
 const UpdateProfile = ({setEditProfile}) => {
 
@@ -36,21 +35,23 @@ const UpdateProfile = ({setEditProfile}) => {
         })
         console.log("2")
         
-        await actors.userActor?.updateUserInfo(updatedUser)
-        .then(async(res)=>{
-          console.log("3")
-            console.warn("update res : ",res[0])
-            alert('processing')
-            alert(`Your profile is updated ${updatedUser?.firstName} !`)
-            await actors.userActor?.getUserInfo()
-            .then(async(res)=>{
-              let whoami = await actors.backendActor.whoami();
-              console.warn(whoami)
-                dispatch(setUser(res[0]))
-                console.warn("response user",res[0])
-                setEditProfile(false)
-            })
-        })
+        // await actors.userActor?.updateUserInfo(updatedUser)
+        // .then(async(res)=>{
+        //   console.log("3")
+        //     console.warn("update res : ",res[0])
+        //     alert('processing')
+        //     alert(`Your profile is updated ${updatedUser?.firstName} !`)
+        //     await actors.userActor?.getUserInfo()
+        //     .then(async(res)=>{
+        //       let whoami = await actors.backendActor.whoami();
+        //       console.warn(whoami)
+        //         dispatch(setUser(res[0]))
+        //         console.warn("response user",res[0])
+        //         setEditProfile(false)
+        //     })
+        // })
+        dispatch(updatingUser(updatedUser))
+        setEditProfile(false)
         // let us = await(await actors.userActor.getUserInfo());
         // alert(us[0].firstName);
 

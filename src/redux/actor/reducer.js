@@ -1,8 +1,12 @@
-import { SET_ACTOR} from './actions'
+import { SET_ACTOR, UPDATE_USER} from './actions'
 import { backend } from '../../declarations/backend'
 import { User } from '../../declarations/User'
 import { hotel } from '../../declarations/hotel'
+import { setUser } from '../users/actions'
+import { useDispatch } from 'react-redux'
+import store from '../store'
 
+// const dispatch=useDispatch()
 const initialState={
     actors:{
         backendActor:backend,
@@ -24,7 +28,21 @@ export function actorReducer(state=initialState,action){
             who(state.actors.backendActor)
             console.log("action payload : ",action.payload)
             return {...state,actors:action.payload}
+        case UPDATE_USER:
+            updateUser(state.actors.userActor,action.payload)
+            return state
         default:
             return state
     }
+}
+
+async function updateUser(actor,user){
+    console.log("executing : actor -->",actor,"user-->",user)
+    await actor.updateUserInfo(user).then(async(res)=>{
+        console.log("update result : ",res)
+        await actor.getUserInfo().then((resp)=>{
+            console.log("updated user redux",resp[0])   
+            // store.dispatch(setUser(resp))
+        })
+    })
 }
