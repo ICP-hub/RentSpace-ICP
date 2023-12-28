@@ -1,9 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View,TextInput } from 'react-native'
 import React, { useState } from 'react'
 import { SIZES,COLORS } from '../../../../constants/themes'
 import SaveBtn from '../../Reusables/SaveBtn'
 import BottomBtn from '../../Reusables/BottomBtn'
-import { TextInput } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/SimpleLineIcons'
 
 const Pricing = ({setHostModal,pos}) => {

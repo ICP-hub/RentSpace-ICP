@@ -2,7 +2,7 @@ import { StyleSheet, Text, View,Image, Touchable,TouchableOpacity,FlatList } fro
 import React, { useEffect, useState } from 'react'
 import { images } from '../../constants'
 import { COLORS, SIZES } from '../../constants/themes'
-import HotelCard from '../cards/HotelCard'
+import HotelCard from './UserScreens/HotelsSearch/cards/HotelCard'
 import { useSelector } from 'react-redux'
 
 const BookHotelPage = ({openHotelDetailPage}) => {
