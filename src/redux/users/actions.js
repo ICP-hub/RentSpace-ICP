@@ -9,15 +9,15 @@ export const setUser=user=>dispatch=>{
         payload:user,
     })
 }
-export const updateUser=async(user)=>{
-    let actors=store.getState().actorReducer.actors
-    let newUser={}
-    await actors.userActor.updateUserInfo(user).then(async(res)=>{
-        console.log("prev user : ",res[0])
-        newUser=await actors.userActor.getUserInfo()
-    })
-    return({
-        type:UPDATE_USER,
-        payload:newUser[0]
-    })
-}
+// export const updateUser=async(user)=>{
+//     let actors=store.getState().actorReducer.actors
+//     let newUser={}
+//     await actors.userActor.updateUserInfo(user).then(async(res)=>{
+//         console.log("prev user : ",res[0])
+//         newUser=await actors.userActor.getUserInfo()
+//     })
+//     return({
+//         type:UPDATE_USER,
+//         payload:newUser[0]
+//     })
+// }

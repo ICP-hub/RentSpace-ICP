@@ -1,5 +1,5 @@
 export const SET_ACTOR="SET_ACTOR"
-
+export const UPDATE_USER="UPDATE_USER"
 
 export const setActor=actors=>{
     return {
@@ -7,13 +7,10 @@ export const setActor=actors=>{
         payload:actors
     }
 }
-// export const updateUser=async(userActor,user)=>{
-//     let res=await userActor.updateUserInfo(user)
-//     console.log("redux updateUser : ",res[0])
-//     getUser(userActor)
-// }
-// export const getUser=async(userActor)=>{
-//     let res=await userActor.getUserInfo()
-//     console.log("redux getUser : ",res[0])
-//     dispatch((setUser(res[0])))
-// }
+export const updatingUser=(user)=>{
+    return{
+        type:UPDATE_USER,
+        payload:user
+    }
+}
+
