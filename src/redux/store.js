@@ -4,12 +4,13 @@ import { userReducer } from './users/reducer';
 import { hotelsReducer } from './hotels/reducer';
 import { principleReducer } from './principle/reducer';
 import { actorReducer } from './actor/reducer';
+// import { agentReducer } from './agent/reducer';
 
 const rootReducer = combineReducers({ 
   userReducer,
   hotelsReducer,
   principleReducer,
-  actorReducer
+  actorReducer,
 });
 
 export default Store= configureStore({

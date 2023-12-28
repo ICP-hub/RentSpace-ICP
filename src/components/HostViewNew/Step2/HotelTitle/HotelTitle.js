@@ -1,9 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View,TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
 import SaveBtn from '../../Reusables/SaveBtn'
 import BottomBtn from '../../Reusables/BottomBtn'
-import { TextInput } from 'react-native-gesture-handler'
 
 const HotelTitle = ({setHostModal,pos}) => {
     const [title,setTitle]=useState('')
