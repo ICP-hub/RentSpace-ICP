@@ -55,7 +55,7 @@ shared ({caller = owner}) actor class Review({
     };
 
     public shared ({caller = user}) func createReview(bookingId : Text, reviewData : Types.Review) : async () {
-        // assert (Principal.isAnonymous(user) == false);
+        assert (Principal.isAnonymous(user) == false);
 
         let userIdentity = Principal.toText(user);
         let identityStatus = await skExists(userIdentity);
@@ -113,7 +113,7 @@ shared ({caller = owner}) actor class Review({
 
     public shared query ({caller = user}) func getReviewInfo() : async ?Types.Review {
 
-        // assert (Principal.isAnonymous(user) == false);
+        assert (Principal.isAnonymous(user) == false);
 
         let userIdentity = Principal.toText(user);
         let userInfo = switch (CanDB.get(db, {sk = userIdentity})) {
@@ -130,7 +130,7 @@ shared ({caller = owner}) actor class Review({
 
     public shared ({caller = user}) func updateReviewInfo(bookingId : Text, reviewData : Types.Review) : async ?Types.Review {
 
-        // assert (Principal.isAnonymous(user) == false);
+        assert (Principal.isAnonymous(user) == false);
         let userIdentity = Principal.toText(user);
 
         assert (userIdentity != "" and reviewData.rating <= 0 and reviewData.title != "" and reviewData.des != "");
@@ -156,7 +156,7 @@ shared ({caller = owner}) actor class Review({
     };
 
     public shared query ({caller = user}) func scanUsers(skLowerBound : Text, skUpperBound : Text, limit : Nat, ascending : ?Bool) : async Types.ScanReview {
-        //assert (Principal.isAnonymous(user) == false);
+        assert (Principal.isAnonymous(user) == false);
         //cap the amount of entries one can return from database to reduce load and incentive use pagiation
         let cappedLimit = if (limit > 10) {10} else {limit};
         let {entities; nextKey} = CanDB.scan(

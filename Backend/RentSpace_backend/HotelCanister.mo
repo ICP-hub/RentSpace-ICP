@@ -23,7 +23,7 @@ shared ({caller = owner}) actor class Hotel({
     scalingOptions : CanDB.ScalingOptions;
     // (optional) allows the developer to specify additional owners (i.e. for allowing admin or backfill access to specific endpoints)
     owners : ?[Principal];
-}) =this{
+}) = this {
 
     stable var hotelIdTree = RBT.init<Text, List.List<Text>>();
 
@@ -76,11 +76,11 @@ shared ({caller = owner}) actor class Hotel({
     ///---------public function to create the new Hotels---------///
     public shared ({caller = user}) func createHotel(hotelData : Types.HotelInfo) : async () {
 
-        //assert (Principal.isAnonymous(user) == false);
+        assert (Principal.isAnonymous(user) == false);
 
         let userIdentity = Principal.toText(user);
         let hotelId = await utils.createHotelSK(userIdentity);
-        let hotelExist = await skExists(hotelId);   
+        let hotelExist = await skExists(hotelId);
 
         assert (userIdentity != "" and hotelData.hotelTitle != "" and hotelData.hotelDes != "" and hotelData.hotelLocation != "" and hotelData.hotelImage != "" and hotelData.hotelPrice != "");
         assert (Text.size(hotelData.hotelTitle) <= 40 and Text.size(hotelData.hotelDes) <= 300 and Text.size(hotelData.hotelLocation) <= 30 and Text.size(hotelData.hotelPrice) <= 15);
@@ -102,7 +102,7 @@ shared ({caller = owner}) actor class Hotel({
         );
     };
     public shared query ({caller = user}) func getHotelId() : async [Text] {
-        // assert (Principal.isAnonymous(user) == false);
+        assert (Principal.isAnonymous(user) == false);
         let userIdentity = Principal.toText(user);
         return switch (RBT.get(hotelIdTree, Text.compare, userIdentity)) {
             case (?result) {List.toArray<Text>(result)};
@@ -111,7 +111,7 @@ shared ({caller = owner}) actor class Hotel({
     };
     ///----function to get the hotel data using the by passing uuid as sortkey------///
     public shared query ({caller = user}) func getHotel(hotelId : Text) : async ?Types.HotelInfo {
-        //assert (Principal.isAnonymous(user) == false);
+        assert (Principal.isAnonymous(user) == false);
         let id = hotelId;
         let hotelData = switch (CanDB.get(db, {sk = id})) {
             case (null) {null};
@@ -155,11 +155,11 @@ shared ({caller = owner}) actor class Hotel({
     };
 
     ////--function to update the Hotel data---////
-    public func updateHotel(hotelId : Text, hotelData : Types.HotelInfo) : async ?Types.HotelInfo {
+    public shared ({caller = user}) func updateHotel(hotelId : Text, hotelData : Types.HotelInfo) : async ?Types.HotelInfo {
         let sortKey = hotelId;
         let hotelExist = await skExists(sortKey);
 
-        assert (hotelId != "" and hotelData.hotelTitle != "" and hotelData.hotelDes != "" and hotelData.hotelLocation != "" and hotelData.hotelImage != "" and hotelData.hotelPrice != "" and hotelExist != false);
+        assert (Principal.isAnonymous(user) and hotelId != "" and hotelData.hotelTitle != "" and hotelData.hotelDes != "" and hotelData.hotelLocation != "" and hotelData.hotelImage != "" and hotelData.hotelPrice != "" and hotelExist != false);
         assert (Text.size(hotelData.hotelTitle) <= 40 and Text.size(hotelData.hotelDes) <= 300 and Text.size(hotelData.hotelLocation) <= 30 and Text.size(hotelData.hotelPrice) <= 15);
 
         let newData = await* CanDB.put(
@@ -172,7 +172,7 @@ shared ({caller = owner}) actor class Hotel({
                     ("hotelImage", #text(hotelData.hotelImage)),
                     ("hotelPrice", #text(hotelData.hotelPrice)),
                     ("hotelLocation", #text(hotelData.hotelLocation)),
-                    ("createdAt",#text(utils.getDate())),
+                    ("createdAt", #text(utils.getDate())),
                 ];
             },
         );
@@ -202,7 +202,7 @@ shared ({caller = owner}) actor class Hotel({
         Array.mapFilter<Entity.Entity, Types.HotelInfo>(
             entities,
             func(e) {
-               unwrapHotel(e)
+                unwrapHotel(e);
             },
         );
     };
