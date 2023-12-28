@@ -60,13 +60,13 @@ shared ({caller = owner}) actor class User({
     // Create a new user. In this basic case, we're using the pricipalId of User as the sort key
 
     public shared ({caller = user}) func createUser(userData : Types.User) : async () {
-        assert (Principal.isAnonymous(user) == false);
+        // assert (Principal.isAnonymous(user) == false);
 
         let userIdentity = Principal.toText(user);
         let identityStatus = await skExists(userIdentity);
 
         assert (userIdentity != "" and userData.firstName != "" and userData.lastName != "" and userData.dob != "" and userData.userEmail != "");
-        assert (Text.size(userData.firstName) <= 25 and Text.size(userData.lastName) <= 25 and Text.size(userData.dob) <= 11 and Text.size(userData.userEmail) <= 50);
+        assert (Text.size(userData.firstName) <= 25 and Text.size(userData.lastName) <= 25 and Text.size(userData.userEmail) <= 50 and utils.checkDate(userData.dob) == false and utils.checkEmail(userData.userEmail));
         let date = utils.getDate();
         //inserts the entity into CanDB
         await* CanDB.put(
@@ -140,7 +140,7 @@ shared ({caller = owner}) actor class User({
 
     public shared query ({caller = user}) func getUserInfo() : async ?Types.UserInfo {
 
-        assert (Principal.isAnonymous(user) == false);
+        // assert (Principal.isAnonymous(user) == false);
 
         let userIdentity = Principal.toText(user);
         let userInfo = switch (CanDB.get(db, {sk = userIdentity})) {
@@ -158,7 +158,7 @@ shared ({caller = owner}) actor class User({
     //public function to update the data of the canister
     public shared ({caller = user}) func updateUserInfo(userData : Types.UserInfo) : async ?Types.UserInfo {
 
-        assert (Principal.isAnonymous(user) == false);
+        // assert (Principal.isAnonymous(user) == false);
         let userIdentity = Principal.toText(user);
 
         assert (userIdentity != "" and userData.firstName != "" and userData.lastName != "" and userData.dob != "" and userData.userEmail != "" and userData.userProfile != "" and userData.userGovId != "");
@@ -216,7 +216,7 @@ shared ({caller = owner}) actor class User({
         Array.mapFilter<Entity.Entity, Types.UserInfo>(
             entities,
             func(e) {
-               unWarpUserInfo(e);
+                unWarpUserInfo(e);
             },
         );
     };
