@@ -1,12 +1,26 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React,{useState} from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
 import SaveBtn from '../../Reusables/SaveBtn'
 import BottomBtn from '../../Reusables/BottomBtn'
 import PhotoBtn from './PhotoBtn'
 import Icon from 'react-native-vector-icons/Entypo'
+import { useDispatch, useSelector } from 'react-redux'
+import { setListing } from '../../../../redux/NewListing/actions'
 
 const AddPhotos = ({setHostModal,pos}) => {
+  const [images,setImages]=useState("img2")
+  const {listing} = useSelector(state=>state.listingReducer)
+  const dispatch=useDispatch()
+  const checkEmpty=()=>{
+    if(images==""){
+      alert("Please add atleast one image")
+      return false
+    }else{
+      dispatch(setListing({...listing,hotelImage:images}))
+      return true
+    }
+  }
   return (
     <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal}/>
@@ -16,7 +30,7 @@ const AddPhotos = ({setHostModal,pos}) => {
       </Text>
       <PhotoBtn text={"Add photos"} icon={<Icon name='plus' size={25} color={COLORS.textLightGrey}/>}/>
       <PhotoBtn text={"Take new photos"} icon={<Icon name='camera' size={25} color={COLORS.textLightGrey}/>}/>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={2}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={2} nextFunc={checkEmpty}/>
     </View>
   )
 }

@@ -27,7 +27,7 @@ const BasicDetails = ({setHostModal,pos}) => {
       <CounterCard title='Beds' counts={counts} setCounts={setCounts} self={3}/>
       <Line/>
       <CounterCard title='Bathrooms' counts={counts} setCounts={setCounts} self={4}/>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={1}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={1} nextFunc={()=>{return true}} />
     </View>
   )
 }

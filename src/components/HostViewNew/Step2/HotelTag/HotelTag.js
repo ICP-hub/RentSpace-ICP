@@ -21,7 +21,7 @@ const HotelTag = ({setHostModal,pos}) => {
         <TagCard text={'Spacious'}/>
         <TagCard text={'Central'}/>
       </View>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={2}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={2} nextFunc={()=>{return true}}/>
     </View>
   )
 }

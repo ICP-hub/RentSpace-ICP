@@ -40,7 +40,7 @@ const ReviewListing = ({setHostModal,pos}) => {
       <NextStepsCard item={todos[0]}/>
       <NextStepsCard item={todos[1]}/>
       <NextStepsCard item={todos[2]}/>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={3}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={3} nextFunc={()=>{return true}}/>
     </View>
   )
 }

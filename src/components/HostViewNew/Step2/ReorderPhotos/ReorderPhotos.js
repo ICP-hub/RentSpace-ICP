@@ -43,7 +43,7 @@ const ReorderPhotos = ({setHostModal,pos}) => {
             </TouchableOpacity>
         </View>
       </ScrollView>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={2} back={2}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={2} back={2} nextFunc={()=>{return true}}/>
     </View>
   )
 }

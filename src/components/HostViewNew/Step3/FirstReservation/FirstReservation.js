@@ -29,7 +29,7 @@ const FirstReservation = ({setHostModal,pos}) => {
         selected={selected}
         setSelected={setSelected}
       />
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={3}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={3} nextFunc={()=>{return true}} />
     </View>
   )
 }

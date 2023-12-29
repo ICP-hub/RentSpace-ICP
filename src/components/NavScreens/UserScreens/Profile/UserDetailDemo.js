@@ -8,7 +8,8 @@ import Icon from 'react-native-vector-icons/AntDesign'
 import Icon2 from 'react-native-vector-icons/Entypo'
 import Icon3 from 'react-native-vector-icons/MaterialIcons'
 import { useSelector,useDispatch } from 'react-redux'
-import { setUser,setHotels } from '../../../../redux/users/actions'
+import { setUser } from '../../../../redux/users/actions'
+import { setHotels } from '../../../../redux/hotels/actions'
 import HostWelcomeManager from '../../../HostViewNew/HostWelcomeManager'
 import Step1Manager from '../../../HostViewNew/Step1Manager'
 import Step2Manager from '../../../HostViewNew/Step2Manager'
@@ -25,32 +26,28 @@ const UserDetailDemo = ({navigation}) => {
 
   const {user}=useSelector(state=>state.userReducer)
   const {actors}=useSelector(state=>state.actorReducer)
-  const [hostModal,setHostModal]=useState(0)
   const dispatch=useDispatch()
   const [editProfile,setEditProfile]=useState(false)
   const [createHotel,setCreateHotel]=useState(false)
-  // const route=useRoute()
-  // const {actors}=route.params
-  let actor;
-  let actorHotel;
-  let actorUser;
-  // const {agent}=useSelector(state=>state.agentReducer)
-
-  // useEffect(()=>{
-  //   actor = createActor('bkyz2-fmaaa-aaaaa-qaaaq-cai', {
-  //     agent,
-  //   });
-  //   actorUser=createUserActor('br5f7-7uaaa-aaaaa-qaaca-cai',{agent})
-  //   actorHotel=createHotelActor('bw4dl-smaaa-aaaaa-qaacq-cai',{agent})
-  //   dispatch(setActor({
-  //     backendActor:actor,
-  //     userActor:actorUser,
-  //     hotelActor:actorHotel
-  //   }))
-  // },[])
-
-
+  const [noListing,setNoListing]=useState(false)
   const [loading,setLoading]=useState(false)
+
+
+  const getHotelList=async()=>{
+    await actors.hotelActor.getHotelId().then((res)=>{
+      console.log(res)
+      dispatch(setHotels(res))
+    }).catch((err)=>{
+        console.log(err)
+        setNoListing(true)
+        dispatch(setHotels([]))
+    })
+  }
+
+  useEffect(()=>{
+    getHotelList()
+  },[])
+
   const makeHost=async()=>{
     setLoading(true)
     console.log("You are host now")
@@ -63,10 +60,7 @@ const UserDetailDemo = ({navigation}) => {
         console.log(res[0])
         dispatch(setUser(res[0]))
       }).then(()=>{
-        actors.hotelActor.getHotelId().then((res)=>{
-          console.log(res)
-          dispatch(setHotels(res))
-        })
+        getHotelList()
       }).catch((err)=>console.log(err))
 
     }).catch((err)=>{console.log(err)})
@@ -115,35 +109,28 @@ const UserDetailDemo = ({navigation}) => {
         <ActivityIndicator size={40} animating={loading}/>
         
         <View style={styles.btnCont}>
-          
-        <TouchableOpacity style={styles.btn}>
-            <Text style={styles.btnText} onPress={()=>{}}>Book Hotel</Text>
-            
-          </TouchableOpacity>
           <TouchableOpacity style={styles.btn} onPress={()=>setEditProfile(true)}>
             <Text style={styles.btnText}>Edit</Text>
           </TouchableOpacity>
-          
-        </View>
+          <TouchableOpacity style={styles.btn} onPress={()=>navigation.navigate('Launch')}>
+            <Text style={styles.btnText}>Book</Text>
+          </TouchableOpacity>
+          </View>
+        
         {
           (user?.userType!='Host')? 
           <TouchableOpacity style={styles.updateBtn} onPress={()=>{
             makeHost()
             
           }}>
-            <Text style={styles.btnText}>Make me a Host</Text>
+            <Text style={styles.btnText}>Make me a host</Text>
           </TouchableOpacity> :
-          <View style={styles.btnCont}>
-          {/* <TouchableOpacity style={styles.updateBtn} onPress={()=>{
-            setHotelCreateForm(true)
-          }}>
-            <Text style={styles.btnText}>Create new Hotel</Text>
-          </TouchableOpacity> */}
-          <TouchableOpacity style={styles.btn} onPress={()=>setHostModal(1)}>
-          <Text style={styles.btnText}>Preview</Text>
+          
+          <TouchableOpacity style={styles.updateBtn} onPress={()=>navigation.navigate('hostHome')}>
+          <Text style={styles.btnText}>Switch to host View</Text>
         </TouchableOpacity>
           
-        </View>
+       
         }
         
           
@@ -152,7 +139,7 @@ const UserDetailDemo = ({navigation}) => {
       <Modal animationType='slide' visible={editProfile}>
         <UpdateProfile setEditProfile={setEditProfile} />
       </Modal>
-      <Modal animationType='slide' visible={(hostModal>0 && hostModal<=3)?true:false}>
+      {/* <Modal animationType='slide' visible={(hostModal>0 && hostModal<=3)?true:false}>
         <HostWelcomeManager hostModal={hostModal} setHostModal={setHostModal}/>
       </Modal>
       <Modal animationType='slide' visible={(hostModal>3 && hostModal<=8)?true:false}>
@@ -163,7 +150,7 @@ const UserDetailDemo = ({navigation}) => {
       </Modal>
       <Modal animationType='slide' visible={(hostModal>16 && hostModal<=23)?true:false}>
         <Step3Manager hostModal={hostModal} setHostModal={setHostModal}/>
-      </Modal>
+      </Modal> */}
       <BottomNav navigation={navigation}/>
     </ScrollView>
   )

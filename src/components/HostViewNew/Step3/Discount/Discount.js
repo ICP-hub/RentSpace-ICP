@@ -37,7 +37,7 @@ const Discount = ({setHostModal,pos}) => {
       <Text style={[styles.text,{marginLeft:'12%',marginTop:25}]}>
       Only one discount will be applies per stay.
       </Text>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={3}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={3} nextFunc={()=>{return true}} />
     </View>
   )
 }

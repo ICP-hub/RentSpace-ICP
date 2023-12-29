@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { COLORS, SIZES } from '../../../constants/themes'
 import { KeyboardState } from 'react-native-reanimated';
 
-const BottomBtn = ({setHostModal,pos,step,back}) => {
+const BottomBtn = ({setHostModal,pos,step,back,nextFunc}) => {
     const progress=(step==1)?'33%':(step==2)?'66%':'100%';
     const [bottom,setBottom]=useState(true)
     useEffect(()=>{
@@ -14,6 +14,13 @@ const BottomBtn = ({setHostModal,pos,step,back}) => {
             setBottom(true)
         })
     })
+    const execNext=()=>{
+        let res=nextFunc()
+        if(res){
+            setHostModal(pos+1)
+        }
+        
+    }
   return (
     <View style={(bottom)?[styles.bottomCont,{bottom:0}]:[styles.bottomCont,{bottom:-100}]}>
         <View style={styles.progressCont}>
@@ -21,13 +28,17 @@ const BottomBtn = ({setHostModal,pos,step,back}) => {
         </View>
         <View style={styles.btnCont}>
             <TouchableOpacity onPress={()=>{
+                if(pos==4){
+                    setHostModal(0)
+                }else{
                 back?setHostModal(pos-back):
                 setHostModal(pos-1)
+                }
 
             }}>
                 <Text style={styles.link}>Back</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.btn} onPress={()=>setHostModal(pos+1)}>
+            <TouchableOpacity style={styles.btn} onPress={execNext}>
                 <Text style={styles.btnText}>Next</Text>
             </TouchableOpacity>
         </View>

@@ -7,10 +7,10 @@ import ComparisonFeatures from './ComparisonFeatures/ComparisonFeatures'
 import Questions from './Q&A/Questions'
 import { COLORS } from '../../../constants/themes'
 
-const HostFirstScreen = ({setHostModal}) => {
+const HostFirstScreen = ({setHostModal,navigation}) => {
   return (
         <ScrollView contentContainerStyle={styles.view}>
-            <BackBtn setHostModal={setHostModal}/>
+            <BackBtn setHostModal={setHostModal} navigation={navigation}/>
             <Header/>
             <SearchMap/>
             <ComparisonFeatures/>

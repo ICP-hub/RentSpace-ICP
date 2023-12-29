@@ -4,12 +4,18 @@ import SaveBtn from '../Reusables/SaveBtn'
 import BottomBtn from '../Reusables/BottomBtn'
 import { COLORS,SIZES } from '../../../constants/themes'
 import { images } from '../../../constants'
+import { useDispatch } from 'react-redux'
+import { setListing } from '../../../redux/NewListing/actions'
 
 const Step1 = ({setHostModal,pos}) => {
+    const dispatch=useDispatch()
   return (
     <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal}/>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={1}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={1} nextFunc={()=>{
+        dispatch(setListing({}))
+        return true
+        }}/>
       <View style={styles.imageCont}>
         <Image source={images.hostBed} style={styles.bigImg}/>
         <View style={styles.smallImgCont}>

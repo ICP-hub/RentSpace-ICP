@@ -4,6 +4,7 @@ import { userReducer } from './users/reducer';
 import { hotelsReducer } from './hotels/reducer';
 import { principleReducer } from './principle/reducer';
 import { actorReducer } from './actor/reducer';
+import {listingReducer} from './NewListing/reducer';
 // import { agentReducer } from './agent/reducer';
 
 const rootReducer = combineReducers({ 
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   hotelsReducer,
   principleReducer,
   actorReducer,
+  listingReducer
 });
 
 export default Store= configureStore({

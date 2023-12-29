@@ -35,7 +35,7 @@ const HotelType = ({setHostModal,pos}) => {
       <PlaceCard item={data[1]} sr={1} hotelType={hotelType} setHotelType={setHotelType}/>
       <Line/>
       <PlaceCard item={data[2]} sr={2} hotelType={hotelType} setHotelType={setHotelType}/>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={1}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={1} nextFunc={()=>{return true}}/>
     </View>
   )
 }

@@ -3,16 +3,30 @@ import React, { useState } from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
 import SaveBtn from '../../Reusables/SaveBtn'
 import BottomBtn from '../../Reusables/BottomBtn'
+import { useDispatch, useSelector } from 'react-redux'
+import { setListing } from '../../../../redux/NewListing/actions'
 
 const HotelDesc = ({setHostModal,pos}) => {
   const [len,setLen]=useState(0)
   const [desc,setDesc]=useState('')
+
+  const dispatch=useDispatch()
+  const {listing}=useSelector(state=>state.listingReducer)
   const descChange=(value)=>{
     if(value.length>500){
       alert('Description cannot be longer than 500 characters')
     }else{
       setLen(value.length)
       setDesc(value)
+    }
+  }
+  const checkEmpty=()=>{
+    if(desc==''){
+      alert("Please do not leave description empty")
+      return false
+    }else{
+      dispatch(setListing({...listing,hotelDes:desc}))
+      return true
     }
   }
   return (
@@ -28,7 +42,7 @@ const HotelDesc = ({setHostModal,pos}) => {
         multiline={true}
       />
       <Text style={styles.smallText}>{len}/500</Text>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={2}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={2} nextFunc={checkEmpty}/>
     </View>
   )
 }

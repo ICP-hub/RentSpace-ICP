@@ -4,8 +4,8 @@ import { images } from '../../../../constants'
 import { COLORS, SIZES } from '../../../../constants/themes'
 
 const ListingCard = ({item}) => {
-  let status=null
-  switch(item?.status){
+  let status=1
+  switch(status){
     case(0):
         status="Verification Required"
         break
@@ -18,10 +18,10 @@ const ListingCard = ({item}) => {
   return (
     <View style={styles.card}>
       <Text style={styles.status}>{status}</Text>
-      <Image source={item?.image} style={styles.img}/>
+      <Image source={images.hotelImg1} style={styles.img}/>
       <View style={styles.textCont}>
-        <Text style={styles.text}>{item?.name}</Text>
-        <Text style={styles.text}>{item?.address}</Text>
+        <Text style={styles.text}>{item?.hotelTitle}</Text>
+        <Text style={styles.text}>{item?.hotelDes}</Text>
       </View>
     </View>
   )
@@ -36,7 +36,8 @@ const styles = StyleSheet.create({
         justifyContent:'flex-start',
         paddingHorizontal:'4%',
         width:'90%',
-        height:275,
+        minHeight:275,
+        maxHeight:320,
         backgroundColor:'white',
         elevation:10,
         marginTop:15,

@@ -29,7 +29,7 @@ const HotelKeyWord = ({setHostModal,pos}) => {
       
       
       
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={1}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={1} nextFunc={()=>{return true}}/>
     </View>
   )
 }

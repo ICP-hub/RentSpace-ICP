@@ -4,7 +4,10 @@ import { COLORS, SIZES } from '../../../constants/themes'
 
 const SaveBtn = ({setHostModal}) => {
   return (
-    <TouchableOpacity style={styles.btn} onPress={()=>{setHostModal(0)}}>
+    <TouchableOpacity style={styles.btn} onPress={()=>{
+        // setHostModal(0)
+        alert("Please complete your listing first!")
+      }}>
         <Text style={styles.btnText}>Save & exit</Text>
     </TouchableOpacity>
   )
