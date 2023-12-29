@@ -1,30 +1,39 @@
-import { StyleSheet, Text, View ,TouchableOpacity,Image,ScrollView} from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View ,TouchableOpacity,Image,ScrollView, Modal} from 'react-native'
+import React, { useEffect, useRef } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { COLORS,SIZES } from '../../../../../constants/themes'
 import { images } from '../../../../../constants'
 import Icon2 from 'react-native-vector-icons/AntDesign'
-import HostBand from '../cards/HostBand'
-import HotelFacilityCard from '../cards/HotelFacilityCard'
+import HostBand from './cards/HostBand'
+import HotelFacilityCard from './cards/HotelFacilityCard'
+import ReserveBtn from './cards/ReserveBtn'
+import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
-const HotelDetailPage = ({openHotelDetailPage}) => {
+const HotelDetailPage = ({item,setOpen}) => {
+    const btmBtn=useRef(null)
+    useEffect(()=>{
+        btmBtn.current.present()
+    },[])
   return (
+    <BottomSheetModalProvider>
     <ScrollView>
-    <View style={styles.bottomSheet}>
-      <TouchableOpacity style={styles.backIcon} onPress={()=>{openHotelDetailPage(false)}}>
+    <View style={styles.bottomSheet} >
+
+      <TouchableOpacity style={styles.backIcon} onPress={()=>{setOpen(false)}}>
         <Icon name="angle-left" size={30} color={COLORS.textLightGrey} />    
       </TouchableOpacity> 
+     
       <Image source={images.hotel} style={styles.hotelImg}/>
       <View style={styles.hotelTitleReviewCont}>
         <View style={styles.hotelTitleCont}>
-            <Text style={styles.hotelTitle}>Charm Ville - Villa with Nature! FarmVilla n Hosur</Text>
+            <Text style={styles.hotelTitle}>{item?.hotelTitle}</Text>
             <TouchableOpacity style={styles.likeCont}>
                 <Icon2 name="hearto" size={20} color={COLORS.textLightGrey} />
             </TouchableOpacity>    
         </View>
         <View style={styles.hotelReviewCont}>
             <Icon2 name='star' size={12} color={COLORS.inputBorder} style={{marginRight:5}}/>
-            <Text style={styles.hotelReviewText}>4.92 • 432 reviews • Ubdu, Bai, Indonesia</Text>
+            <Text style={styles.hotelReviewText}>4.92 • 432 reviews • {item?.hotelLocation}</Text>
         </View>
         
       </View>
@@ -33,8 +42,13 @@ const HotelDetailPage = ({openHotelDetailPage}) => {
         <HotelFacilityCard />
       </View>
       <View style={styles.hrLine}></View>
+      <BottomSheetModal ref={btmBtn} index={0} snapPoints={['12']} style={{elevation:10,backgroundColor:'white'}}>
+        <ReserveBtn item={item}/>
+      </BottomSheetModal>
+      
     </View>
     </ScrollView>
+    </BottomSheetModalProvider>
   )
 }
 
@@ -46,7 +60,8 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'column',
         alignItems:'center',
-        height:'100%'
+        height:'100%',
+        paddingBottom:100
     },
     backIcon:{
         display:'flex',

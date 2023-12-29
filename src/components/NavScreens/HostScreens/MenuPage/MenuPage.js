@@ -8,6 +8,14 @@ import Icon2 from 'react-native-vector-icons/Feather'
 import Icon3 from 'react-native-vector-icons/Ionicons'
 import Icon4 from 'react-native-vector-icons/MaterialIcons'
 import Icon5 from 'react-native-vector-icons/MaterialCommunityIcons'
+import { useDispatch } from 'react-redux'
+import { setActor } from '../../../../redux/actor/actions'
+import { backend } from '../../../../declarations/backend'
+import { User } from '../../../../declarations/User'
+import { hotel } from '../../../../declarations/hotel'
+import { setUser } from '../../../../redux/users/actions'
+import { setHotels } from '../../../../redux/hotels/actions'
+import { setPrinciple } from '../../../../redux/principle/actions'
 
 const MenuPage = ({navigation}) => {
     const hostingItems=[
@@ -79,27 +87,40 @@ const MenuPage = ({navigation}) => {
             onClick:()=>{}
         },
     ]
+    const dispatch=useDispatch()
+    const logout=()=>{
+        dispatch(setActor({
+            backendActor:backend,
+            userActor:User,
+            hotelActor:hotel
+        }))
+        dispatch(setUser({}))
+        dispatch(setHotels([]))
+        dispatch(setPrinciple(''))
+        navigation.navigate('Launch')
+    }
+
   return (
     <ScrollView contentContainerStyle={styles.view}>
       <Text style={styles.title}>Menu</Text>
       <Text style={styles.Btext}>Get Early Access</Text>
       <Text style={styles.subtitle}>Hosting</Text> 
       {
-        hostingItems.map((item)=>(
-            <MenuItem item={item}/>
+        hostingItems.map((item,index)=>(
+            <MenuItem item={item} key={index}/>
         ))
       }
-      <View style={styles.line}/>
+      <View style={styles.line} />
       <Text style={styles.subtitle}>Account</Text>  
       {
         accountItems.map((item,index)=>(
             <MenuItem item={item} key={index}/>
         ))
       }
-      <TouchableOpacity style={[styles.btn,{marginTop:25}]}>
+      <TouchableOpacity style={[styles.btn,{marginTop:25}]} onPress={()=>navigation.navigate('Launch')}>
         <Text style={[styles.btnText,{color:COLORS.black}]}>Switch to travelling</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.btn,{backgroundColor:COLORS.hostTitle}]}>
+      <TouchableOpacity style={[styles.btn,{backgroundColor:COLORS.hostTitle}]} onPress={logout}>
         <Text style={[styles.btnText,{color:'white'}]}>Logout</Text>
       </TouchableOpacity>
     </ScrollView>

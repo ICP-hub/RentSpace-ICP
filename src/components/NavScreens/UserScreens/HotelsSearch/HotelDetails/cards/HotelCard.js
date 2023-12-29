@@ -1,21 +1,23 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { SIZES,COLORS } from '../../../../../constants/themes'
-import { images } from '../../../../../constants'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Modal } from 'react-native'
+import React, { useState } from 'react'
+import { SIZES,COLORS } from '../../../../../../constants/themes'
+import { images } from '../../../../../../constants'
 import Icon from 'react-native-vector-icons/Entypo'
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'
+import HotelDetailPage from '../HotelDetailPage'
 
-const HotelCard = ({name,des,rating,openHotelDetailPage}) => {
+const HotelCard = ({item}) => {
+    const [open,setOpen]=useState(false)
   return (
     <View style={styles.cardCont}>
-        <TouchableOpacity style={styles.detailLink} onPress={()=>openHotelDetailPage()}>
+        <TouchableOpacity style={styles.detailLink} onPress={()=>{setOpen(true)}}>
             <Icon2 name="page-next" size={30} color='white' />
         </TouchableOpacity>
         
         <Image source={images.hotel} style={styles.img}/>
         <View style={styles.dataCont}>
-            <Text style={styles.title}>{name}</Text>
-            <Text style={styles.simpleText}>{des}</Text>
+            <Text style={styles.title}>{item?.hotelTitle}</Text>
+            <Text style={styles.simpleText}>{item?.hotelDes}</Text>
             <View style={styles.ratingCont}>
                 <Icon name='star' size={15} color='white'/> 
                 <Icon name='star' size={15} color='white'/> 
@@ -23,6 +25,9 @@ const HotelCard = ({name,des,rating,openHotelDetailPage}) => {
                 <Icon name='star' size={15} color='white'/> 
             </View>
         </View>
+        <Modal animationType='slide' visible={open}>
+            <HotelDetailPage item={item} setOpen={setOpen}/>
+        </Modal>
     </View>
   )
 }

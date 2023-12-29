@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux'
 import Step1Manager from '../../../HostViewNew/Step1Manager'
 import Step2Manager from '../../../HostViewNew/Step2Manager'
 import Step3Manager from '../../../HostViewNew/Step3Manager'
+import ChatDrawer from '../ChatPage/ChatDrawer/ChatDrawer'
 
 const Listings = ({navigation}) => {
     const {hotels}=useSelector(state=>state.hotelsReducer)
@@ -17,7 +18,7 @@ const Listings = ({navigation}) => {
     const [hotelList,setHotelList]=useState([])
     const [hostModal,setHostModal]=useState(0)
     const [newHotel,setNewHotel]=useState({})
-
+    const [showDrawer,setShowDrawer]=useState(false)
     async function getHotelDetails(){
         setHotelList([])
         for(let i=0;i<hotels?.length;i++){
@@ -84,7 +85,10 @@ const Listings = ({navigation}) => {
             <Text style={{color:'red',marginTop:50}}>Sorry! No listings to show</Text>    
       }
       
-      <BottomNavHost navigation={navigation}/>
+      <BottomNavHost navigation={navigation} setShowDrawer={setShowDrawer} showDrawer={showDrawer}/>
+      <Modal animationType='fade' visible={showDrawer} transparent>
+        <ChatDrawer navigation={navigation} showDrawer={showDrawer} setShowDrawer={setShowDrawer}/>
+      </Modal>
 
         {/* 
             Hotel creation models
