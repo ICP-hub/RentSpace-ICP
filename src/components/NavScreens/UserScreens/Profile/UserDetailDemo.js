@@ -150,7 +150,7 @@ const UserDetailDemo = ({navigation}) => {
       </View>
       {/*Modals */}
       <Modal animationType='slide' visible={editProfile}>
-        <UpdateProfile setEditProfile={setEditProfile} actors={actors}/>
+        <UpdateProfile setEditProfile={setEditProfile} />
       </Modal>
       <Modal animationType='slide' visible={(hostModal>0 && hostModal<=3)?true:false}>
         <HostWelcomeManager hostModal={hostModal} setHostModal={setHostModal}/>

@@ -14,10 +14,10 @@ const initialState={
         hotelActor:hotel
     }
 }
-async function who(actor){
-    let principal=await actor.whoami()
-    console.log("redux dispatch",principal)
-}
+// async function who(actor){
+//     let principal=await actor.whoami()
+//     console.log("redux dispatch",principal)
+// }
 
 
 export function actorReducer(state=initialState,action){
@@ -25,7 +25,7 @@ export function actorReducer(state=initialState,action){
         case SET_ACTOR:
             console.log({...state,actors:action.payload})
             state = {...state,actors:action.payload};
-            who(state.actors.backendActor)
+            // who(state.actors.backendActor)
             console.log("action payload : ",action.payload)
             return {...state,actors:action.payload}
         case UPDATE_USER:
