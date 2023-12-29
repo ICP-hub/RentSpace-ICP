@@ -1,11 +1,16 @@
 import { FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
 import BottomNavHost from '../../../Navigation/BottomNavHost'
 import IdentityCard from './IdentityCard'
 import Reservations from '../Reservations/Reservations'
 import IDProcessManager from './Identification/IDProcessManager'
 import ChatDrawer from '../ChatPage/ChatDrawer/ChatDrawer'
+import { useSelector } from 'react-redux'
+import HostWelcomeManager from '../../../HostViewNew/HostWelcomeManager'
+import Step1Manager from '../../../HostViewNew/Step1Manager'
+import Step2Manager from '../../../HostViewNew/Step2Manager'
+import Step3Manager from '../../../HostViewNew/Step3Manager'
 
 
 const HostHome = ({navigation}) => {
@@ -27,9 +32,20 @@ const HostHome = ({navigation}) => {
   const [reservationType,setReservationType]=useState(data[0].title)
   const [showReservation,setShowReservations]=useState(false)
   const [showDrawer,setShowDrawer]=useState(false)
+  const [hostModal,setHostModal]=useState(0)
+  const {user}=useSelector(state=>state.userReducer)
+  const {actors}=useSelector(state=>state.actorReducer)
+  const {hotels}=useSelector(state=>state.hotelsReducer)
+
+  useEffect(()=>{
+    if(hotels?.length==0){
+      setHostModal(1)
+    }
+  },[])
+
   return (
     <View style={styles.view}>
-      <Text style={styles.title}>Welcome, Lucy!</Text>
+      <Text style={styles.title}>Welcome, {user.firstName}!</Text>
       <IdentityCard setIdprocess={setIdprocess}/>
       <Text style={styles.subHeading}>Your reservations</Text>
       <FlatList style={styles.reservationTitleList} data={data} renderItem={(item)=>{
@@ -64,6 +80,22 @@ You don’t have any guest checking out today or tomorrow
       </Modal>
       <Modal animationType='slide' visible={(idprocess>0)?true:false}>
         <IDProcessManager idprocess={idprocess} setIdprocess={setIdprocess}/>
+      </Modal>
+
+      {/* 
+            Hotel creation models
+      */}
+      <Modal animationType='slide' visible={(hostModal>0 && hostModal<=3)?true:false}>
+        <HostWelcomeManager hostModal={hostModal} setHostModal={setHostModal} navigation={navigation}/>
+      </Modal>
+      <Modal animationType='slide' visible={(hostModal>3 && hostModal<=8)?true:false}>
+        <Step1Manager hostModal={hostModal} setHostModal={setHostModal}/>
+      </Modal>
+      <Modal animationType='slide' visible={(hostModal>8 && hostModal<=16)?true:false}>
+        <Step2Manager hostModal={hostModal} setHostModal={setHostModal}/>
+      </Modal>
+      <Modal animationType='slide' visible={(hostModal>16 && hostModal<=23)?true:false}>
+        <Step3Manager hostModal={hostModal} setHostModal={setHostModal}/>
       </Modal>
     </View>
   )

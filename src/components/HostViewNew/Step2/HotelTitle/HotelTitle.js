@@ -3,10 +3,24 @@ import React, { useEffect, useState } from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
 import SaveBtn from '../../Reusables/SaveBtn'
 import BottomBtn from '../../Reusables/BottomBtn'
+import { useDispatch, useSelector } from 'react-redux'
+import { setListing } from '../../../../redux/NewListing/actions'
 
 const HotelTitle = ({setHostModal,pos}) => {
     const [title,setTitle]=useState('')
     const [len,setLen]=useState(0)
+    const {listing}=useSelector(state=>state.listingReducer)
+    const dispatch=useDispatch()
+
+    const checkEmpty=()=>{
+        if(title==''){
+            alert("You cannot leave title empty")
+            return false
+        }else{
+            dispatch(setListing({...listing,hotelTitle:title}))
+            return true
+        }
+    }
 
     const checkLen=(value)=>{
         if(value?.length<=32){
@@ -37,7 +51,7 @@ const HotelTitle = ({setHostModal,pos}) => {
         multiline={true}
       />
       <Text style={styles.smallText}>{len}/32</Text>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={2}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={2} nextFunc={checkEmpty}/>
     </View>
   )
 }

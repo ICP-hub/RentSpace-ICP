@@ -40,7 +40,7 @@ const SecurityCheck = ({setHostModal,pos}) => {
 
         </Text>
       </View>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={3}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={3} nextFunc={()=>{return true}} />
     </View>
   )
 }

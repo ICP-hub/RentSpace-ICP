@@ -9,7 +9,7 @@ import App from './App';
 import {name as appName} from './app.json';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import Main from './src/components/NavScreens/UserScreens/HotelsSearch/Main';
 import BottomNav from './src/components/Navigation/BottomNav';
 import Profile from './src/app/Profile';
@@ -46,6 +46,8 @@ const linking = {
 
 const RootComponent: React.FC = () => {
 
+  const btmSheetLoginRef = useRef(null);
+  const btmSheetFinishRef = useRef(null);
 
   const [middleKeyIdentity, setMiddleKeyIdentity] = useState('');
   const generateIdentity = async () => {
@@ -65,9 +67,7 @@ const RootComponent: React.FC = () => {
     
    return p 
   };
-  
-      // generateIdentity();
-      // handleLogin()
+
   let resp;
 
   const handleLogin = async () => {
@@ -143,40 +143,28 @@ const RootComponent: React.FC = () => {
     });
     let actorUser=createUserActor('br5f7-7uaaa-aaaaa-qaaca-cai',{agent})
     let actorHotel=createHotelActor('bw4dl-smaaa-aaaaa-qaacq-cai',{agent})
-    // try{
-    //   dispatch(setAgent({agent}))
-    // }catch(err){
-    //   console.log(err)
-    // }
    
     store.dispatch(setActor({
       backendActor:actor,
       userActor:actorUser,
       hotelActor:actorHotel
     }))
-    // setActors({
-    //   backendActor:actor,
-    //   userActor:actorUser,
-    //   hotelActor:actorHotel
-    // })
-
-    //  console.log(route.params)
     console.log("actor : ",actor)
     let whoami = await actor.whoami();
-    // store.dispatch(setPrinciple(whoami))
+    store.dispatch(setPrinciple(whoami))
     console.log("user",whoami)
    
 
     await actorUser?.getUserInfo().then((res)=>{
       if(res[0]?.firstName!=null){
         store.dispatch(setUser(res[0]))
-        // btmSheetLoginRef.current.dismiss()
+        btmSheetLoginRef.current.dismiss()
         alert(`welcome back ${res[0]?.firstName}!`)
         
       }else{
         alert('Now please follow the registeration process!')
-        // btmSheetLoginRef.current.dismiss()
-        // btmSheetFinishRef.current.present()
+        btmSheetLoginRef.current.dismiss()
+        btmSheetFinishRef.current.present()
       }
     }).catch((err)=>console.error(err))
     // await AsyncStorage.setItem('user',JSON.stringify(middleIdentity))
@@ -192,7 +180,8 @@ const RootComponent: React.FC = () => {
     <Provider store={Store}>
     <NavigationContainer linking={linking}>
       <Stack.Navigator initialRouteName="Launch">
-        <Stack.Screen options={{headerShown:false}} name="Launch" component={Main} initialParams={{handleLogin}}/>
+        <Stack.Screen options={{headerShown:false}} name="Launch" component={Main} initialParams={{handleLogin,btmSheetLoginRef,btmSheetFinishRef
+        }}/>
         <Stack.Screen options={{headerShown:false}} name='profile' component={UserDetailDemo} />
         <Stack.Screen options={{headerShown:false}} name='mapSearch' component={Map}/>
         <Stack.Screen options={{headerShown:false}} name='reels' component={Reels}/>

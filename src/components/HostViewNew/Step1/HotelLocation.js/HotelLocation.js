@@ -1,12 +1,25 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React,{useState} from 'react'
 import SaveBtn from '../../Reusables/SaveBtn'
 import BottomBtn from '../../Reusables/BottomBtn'
 import { SIZES,COLORS } from '../../../../constants/themes'
 import Icon from 'react-native-vector-icons/EvilIcons'
 import { images } from '../../../../constants'
+import { useDispatch, useSelector } from 'react-redux'
+import { setListing } from '../../../../redux/NewListing/actions'
 
 const HotelLocation = ({setHostModal,pos}) => {
+  const [location,setLocation]=useState("Ludhiana")
+  const {listing}=useSelector(state=>state.listingReducer)
+  const dispatch=useDispatch()
+  const checkEmpty=()=>{
+    if(location!=null){
+      dispatch(setListing({...listing,hotelLocation:location}))
+      return true
+    }else{
+      return false
+    }
+  }
   return (
     <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal}/> 
@@ -18,7 +31,7 @@ const HotelLocation = ({setHostModal,pos}) => {
         <Text style={styles.inputText}>Enter Your Address</Text>
       </TouchableOpacity>
       <Image source={images.map2} style={styles.map}/>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={1}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={1} nextFunc={checkEmpty}/>
     </View>
   )
 }

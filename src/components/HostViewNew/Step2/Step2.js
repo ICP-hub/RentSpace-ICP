@@ -9,7 +9,7 @@ const Step2 = ({setHostModal,pos}) => {
   return (
     <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal}/>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={2}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={2} nextFunc={()=>{return true}}/>
       <View style={styles.imageCont}>
         <Image source={images.hostHouseDesign} style={styles.bigImg}/>
         <View style={styles.smallImgCont}>

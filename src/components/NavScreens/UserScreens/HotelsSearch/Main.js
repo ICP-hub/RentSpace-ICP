@@ -15,7 +15,7 @@ import ModalSafety from './HotelDetails/Modals/ModalSafety';
 import ModalCancellation from './HotelDetails/Modals/ModalCancellation';
 import ModalHouseRules from './HotelDetails/Modals/ModalHouseRules';
 import HeaderSearch from '../Reusables/Header/HeaderSearch';
-import BookHotelPage from '../../BookHotelPage';
+import BookHotelPage from './BookHotelPage';
 import HotelCreationForm from '../Profile/Modals/HotelCreationForm';
 import HotelDetailPage from './HotelDetails/HotelDetailPage';
 import {DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain} from "@dfinity/identity";
@@ -43,7 +43,7 @@ const Main = ({navigation}) => {
   const {user}=useSelector(state=>state.userReducer)
   const {hotels}=useSelector(state=>state.hotelsReducer)
   const {actors}=useSelector(state=>state.actorReducer)
-  const {handleLogin}=route.params
+  const {handleLogin,btmSheetFinishRef,btmSheetLoginRef}=route.params
   //States for managing modals
   const [safetyModal, setSafetyModal] = useState(false);
   const [cancelModal, setCancelModal] = useState(false);
@@ -104,8 +104,8 @@ const Main = ({navigation}) => {
   },[])
 
   //Refs for managing bottomsheets
-  const btmSheetLoginRef = useRef(null);
-  const btmSheetFinishRef = useRef(null);
+  // const btmSheetLoginRef = useRef(null);
+  // const btmSheetFinishRef = useRef(null);
   const btmSheetCommRef = useRef(null);
   const btmSheetNotiRef = useRef(null);
   const btmExtraDetailsRef = useRef(null);
@@ -272,7 +272,6 @@ const Main = ({navigation}) => {
     <GestureHandlerRootView style={styles.view}>
       <BottomSheetModalProvider>
         {/* Modals Defined */}
-        {/* <PolyfillCrypto/> */}
 
         <Modal visible={safetyModal} animationType="fade">
           <ModalSafety setSafetyModal={setSafetyModal} />

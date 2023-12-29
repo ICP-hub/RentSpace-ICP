@@ -4,9 +4,24 @@ import { SIZES,COLORS } from '../../../../constants/themes'
 import SaveBtn from '../../Reusables/SaveBtn'
 import BottomBtn from '../../Reusables/BottomBtn'
 import Icon from 'react-native-vector-icons/SimpleLineIcons'
+import { useDispatch, useSelector } from 'react-redux'
+import { setListing } from '../../../../redux/NewListing/actions'
 
 const Pricing = ({setHostModal,pos}) => {
-    const [price,setPrice]=useState(999)
+    const [price,setPrice]=useState(0)
+    const {listing}=useSelector(state=>state.listingReducer)
+    const dispatch=useDispatch()
+
+    const checkEmpty=()=>{
+        if(price==0){
+            alert("You cannot add a listing for free! Please add a price for it")
+            return false
+        }else{
+            dispatch(setListing({...listing,hotelPrice:price.toString()}))
+            return true
+        }
+    }
+
   return (
     <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal}/>
@@ -39,7 +54,7 @@ const Pricing = ({setHostModal,pos}) => {
         <Text style={styles.earningText}>You earn</Text>
         <Text style={styles.bigText}>${(price<200)?0:price-200}</Text>
       </View>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={3}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={3} nextFunc={checkEmpty} />
     </View>
   )
 }

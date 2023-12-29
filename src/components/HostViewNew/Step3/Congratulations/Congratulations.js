@@ -1,11 +1,31 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { Image, StyleSheet, Text, TouchableOpacity, View ,ActivityIndicator} from 'react-native'
+import React,{useState} from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
 import SaveBtn from '../../Reusables/SaveBtn'
 import BottomBtn from '../../Reusables/BottomBtn'
 import { images } from '../../../../constants'
+import {useDispatch, useSelector} from 'react-redux'
+import { setHotels } from '../../../../redux/hotels/actions'
 
 const Congratulations = ({setHostModal,pos}) => {
+  const [loading,setLoading]=useState(false)
+  const {listing}=useSelector(state=>state.listingReducer)
+  const {actors}=useSelector(state=>state.actorReducer)
+  const dispatch=useDispatch()
+  const createHotel=async()=>{
+    console.log('create hotel')
+    setLoading(true)
+  await actors.hotelActor?.createHotel(listing).then(async(res)=>{
+    setLoading(false)
+   
+    await actors.hotelActor?.getHotelId().then(async(res)=>{
+      console.log(res)
+      dispatch(setHotels(res))
+      setHostModal(false)
+    })
+
+  }).catch((err)=>{console.log(err)})
+  }
   return (
     <View style={styles.view}>
       <Image source={images.congrats} style={styles.img}/>  
@@ -18,10 +38,11 @@ const Congratulations = ({setHostModal,pos}) => {
       Brian Chesky, CEO
       </Text>
       <View style={styles.btnView}>
-        <TouchableOpacity style={styles.btn} onPress={()=>setHostModal(false)}>
+        <TouchableOpacity style={styles.btn} onPress={createHotel}>
             <Text style={styles.btnText}>Let’s get started</Text>
         </TouchableOpacity>
       </View>
+      <ActivityIndicator size={40} animating={loading} style={styles.loader}/>
     </View>
   )
 }
@@ -89,5 +110,10 @@ const styles = StyleSheet.create({
         fontSize:SIZES.medium,
         fontWeight:'bold',
         color:'white'
+    },
+    loader:{
+      position:'absolute',
+      top:'45%',
+      left:'45%'
     }
 })
