@@ -7,7 +7,7 @@ import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'
 const BottomNavHost = ({navigation,showDrawer,setShowDrawer}) => {
   return (
     <View style={styles.viewNav}>
-      <TouchableOpacity style={styles.iconNav} onPress={()=>navigation.navigate('Launch')}>
+      <TouchableOpacity style={styles.iconNav} onPress={()=>navigation.navigate('hostHome')}>
         <Icon name='shield-checkmark-outline' size={26} color={COLORS.hostTitle}/>
       </TouchableOpacity>
       <TouchableOpacity style={styles.iconNav}>

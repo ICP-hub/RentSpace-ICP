@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View,Image } from 'react-native'
 import React from 'react'
-import { COLORS, SIZES } from '../../../../../constants/themes'
-import { images } from '../../../../../constants'
+import { COLORS, SIZES } from '../../../../../../constants/themes'
+import { images } from '../../../../../../constants'
 
 const HostBand = () => {
   return (

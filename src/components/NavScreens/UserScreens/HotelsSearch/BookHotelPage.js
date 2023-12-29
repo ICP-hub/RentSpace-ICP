@@ -2,10 +2,10 @@ import { StyleSheet, Text, View,Image, Touchable,TouchableOpacity,FlatList } fro
 import React, { useEffect, useState } from 'react'
 import { images } from '../../../../constants'
 import { COLORS, SIZES } from '../../../../constants/themes'
-import HotelCard from './cards/HotelCard'
+import HotelCard from './HotelDetails/cards/HotelCard'
 import { useSelector } from 'react-redux'
 
-const BookHotelPage = ({openHotelDetailPage}) => {
+const BookHotelPage = () => {
 
   const {user}=useSelector(state=>state.userReducer)
   const {hotels}=useSelector(state=>state.hotelsReducer)
@@ -29,14 +29,14 @@ const BookHotelPage = ({openHotelDetailPage}) => {
   if(hotels?.length>0){
     return(
       <FlatList data={hotelList} style={{marginBottom:80}}  renderItem={(item)=>(
-        <HotelCard name={item.item.hotelTitle} des={item.item.hotelDes} rating={4} openHotelDetailPage={openHotelDetailPage}/>
+        <HotelCard item={item.item}  />
       )}/>
       
     )
   }else{
   return (
     <>
-    <HotelCard name={sampleName} des={sampleDes} rating={4} openHotelDetailPage={openHotelDetailPage}/>
+    <HotelCard name={sampleName} des={sampleDes} rating={4} />
     
     </>
   )

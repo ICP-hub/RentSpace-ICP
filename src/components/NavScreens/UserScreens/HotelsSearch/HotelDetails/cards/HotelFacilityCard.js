@@ -3,7 +3,7 @@ import React from 'react'
 import Icon from 'react-native-vector-icons/Octicons'
 import Icon2 from 'react-native-vector-icons/MaterialIcons'
 import Icon3 from 'react-native-vector-icons/Entypo'
-import { COLORS, SIZES } from '../../../../../constants/themes'
+import { COLORS, SIZES } from '../../../../../../constants/themes'
 
 const HotelFacilityCard = () => {
   return (
