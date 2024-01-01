@@ -37,6 +37,7 @@ import store from './src/redux/store';
 import { setActor } from './src/redux/actor/actions';
 import { setPrinciple } from './src/redux/principle/actions';
 import { setUser } from './src/redux/users/actions';
+import ChatContainer from './src/components/NavScreens/UserScreens/ChatPage/ChatContainer/ChatContainer';
 
 const Stack = createNativeStackNavigator();
 
@@ -182,6 +183,7 @@ const RootComponent: React.FC = () => {
       <Stack.Navigator initialRouteName="Launch">
         <Stack.Screen options={{headerShown:false}} name="Launch" component={Main} initialParams={{handleLogin,btmSheetLoginRef,btmSheetFinishRef
         }}/>
+        <Stack.Screen options={{headerShown:false}} name='UserChat' component={ChatContainer} />
         <Stack.Screen options={{headerShown:false}} name='profile' component={UserDetailDemo} />
         <Stack.Screen options={{headerShown:false}} name='mapSearch' component={Map}/>
         <Stack.Screen options={{headerShown:false}} name='reels' component={Reels}/>

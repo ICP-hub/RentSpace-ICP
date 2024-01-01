@@ -15,7 +15,9 @@ const COLORS={
     lighterGrey:'#F0EDEA',
     mediumGrey:'#7B7B7B',
     bgLightGrey:'#F1F1F1',
-    lightGreen:"#4CC900"
+    lightGreen:"#4CC900",
+    pink:"#D377A6",
+    gold:'#FFD683'
 }
 const SIZES={
     xSmall: 10,

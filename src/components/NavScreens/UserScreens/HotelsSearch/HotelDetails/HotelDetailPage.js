@@ -8,6 +8,7 @@ import HostBand from './cards/HostBand'
 import HotelFacilityCard from './cards/HotelFacilityCard'
 import ReserveBtn from './cards/ReserveBtn'
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import Reviews from './subComponents/Reviews/Reviews'
 
 const HotelDetailPage = ({item,setOpen}) => {
     const btmBtn=useRef(null)
@@ -42,6 +43,8 @@ const HotelDetailPage = ({item,setOpen}) => {
         <HotelFacilityCard />
       </View>
       <View style={styles.hrLine}></View>
+      <Reviews/>  
+
       <BottomSheetModal ref={btmBtn} index={0} snapPoints={['12']} style={{elevation:10,backgroundColor:'white'}}>
         <ReserveBtn item={item}/>
       </BottomSheetModal>
