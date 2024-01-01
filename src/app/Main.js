@@ -1,14 +1,5 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  Modal,
-  Linking,
-  Platform,
-} from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, Image,Modal,Linking, Platform, Alert} from 'react-native';
+import React, {useEffect, useRef,useState} from 'react';
 import {COLORS, SIZES} from '../constants/themes';
 import {images} from '../constants';
 import BottomNav from '../components/BottomNav';
@@ -37,8 +28,16 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain} from "@dfinity/identity";
 import {HttpAgent} from "@dfinity/agent";
 import { createActor,backend } from '../declarations/backend';
+import { User } from '../declarations/User';
+import { useDispatch,useSelector } from 'react-redux';
+import { setUser,setHotels } from '../redux/actions';
+import { hotel } from '../declarations/hotel';
 
 const Main = ({navigation}) => {
+
+  const dispatch=useDispatch()
+  const {user}=useSelector(state=>state.userReducer)
+  const {hotels}=useSelector(state=>state.hotelsReducer)
   //States for managing modals
   const [safetyModal, setSafetyModal] = useState(false);
   const [cancelModal, setCancelModal] = useState(false);
@@ -52,8 +51,9 @@ const Main = ({navigation}) => {
   useEffect(() => {
     SplashScreen.hide();
     // btmSheetFinishRef.current.present()
-    btmSheetLoginRef.current.present();
-  }, []);
+    // btmSheetFinishRef.current.present()
+    btmSheetLoginRef.current.present()
+  },[])
 
   //Refs for managing bottomsheets
   const btmSheetLoginRef = useRef(null);
@@ -121,7 +121,7 @@ const Main = ({navigation}) => {
     } catch (error) {}
   };
   const handleDeepLink = async event => {
-    let actor = backend;
+    actor = backend;
     const deepLink = event.url;
     const urlObject = new URL(deepLink);
     const delegation = urlObject.searchParams.get('delegation');
@@ -134,6 +134,79 @@ const Main = ({navigation}) => {
     console.log('before middleKeyIdentity');
     // var middleKeyIdentity = await ECDSAKeyIdentity.generate().catch((err)=>console.log(err))
     // console.log( "middleIdentity",middleKeyIdentity)
+<<<<<<< HEAD
+    const chain = DelegationChain.fromJSON(
+      JSON.parse(decodeURIComponent(delegation))
+    );
+    console.log("chain",chain)
+  const id = DelegationIdentity.fromDelegation(null, chain);
+  console.log("id",id)
+      console.log("id",id.getPrincipal().toString())
+      console.log("before agent")
+      let agent
+      // try{
+      //   agent = new HttpAgent({
+      //     identity:id,
+      //     host:"http://127.0.0.1:4943",fetchOptions: {
+      //       reactNative: {
+      //         __nativeResponseType: "base64",
+      //       },
+      //     },
+      //     callOptions: {
+      //       reactNative: {
+      //         textStreaming: true,
+      //       },
+      //     },
+      //     blsVerify: () => true,
+      //   })
+      // }catch(err){
+      //   console.log(err)
+      // }
+      
+    // console.log("before actor creation, agent : ",agent)
+    let actor = backend;
+    try{
+      actor = createActor("bkyz2-fmaaa-aaaaa-qaaaq-cai", {
+        agentOptions: {
+          fetchOptions: {
+            reactNative: {
+              __nativeResponseType: "base64",
+            },
+          },
+          callOptions: {
+            reactNative: {
+              textStreaming: true,
+            },
+          },
+          blsVerify: () => true,
+          host: "http://127.0.0.1:4943",
+          identity:id
+        }});
+    }catch(err){
+      console.log(err)
+    }
+    await User.getUserInfo().then(async(res)=>{
+      if(res[0]?.firstName!=null){
+        alert(`You are Successfully logged in ${res[0]?.firstName}!`)
+        dispatch(setUser(res[0]))
+        await hotel.getHotelId().then((res)=>{
+          dispatch(setHotels(res))
+          btmSheetLoginRef.current.dismiss()
+        })
+      }
+      else{
+        alert('Please follow the registeration further')
+        openFinishSignUp()
+        btmSheetLoginRef.current.dismiss()
+      }
+
+    })
+    // let iid = await actor.whoami();
+    // console.log("iid",iid)
+      
+};
+=======
+>>>>>>> a286964952cb0f06c48897d79416633d3a4d3a01
 
     const chain = DelegationChain.fromJSON(
       JSON.parse(decodeURIComponent(delegation)),
