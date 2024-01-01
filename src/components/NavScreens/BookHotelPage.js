@@ -1,15 +1,15 @@
 import { StyleSheet, Text, View,Image, Touchable,TouchableOpacity,FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { images } from '../constants'
-import { COLORS, SIZES } from '../constants/themes'
-import { hotel } from '../declarations/hotel/index.js'
-import HotelCard from './cards/HotelCard'
+import { images } from '../../constants'
+import { COLORS, SIZES } from '../../constants/themes'
+import HotelCard from '../cards/HotelCard'
 import { useSelector } from 'react-redux'
 
 const BookHotelPage = ({openHotelDetailPage}) => {
 
   const {user}=useSelector(state=>state.userReducer)
   const {hotels}=useSelector(state=>state.hotelsReducer)
+  const {actors}=useSelector(state=>state.actorReducer)
 
   const [hotelList,setHotelList]=useState([])
   const sampleName='DreamLiner Hotel'
@@ -17,13 +17,12 @@ const BookHotelPage = ({openHotelDetailPage}) => {
   async function getHotelDetails(){
     setHotelList([])
     for(let i=0;i<hotels?.length;i++){
-      await hotel.getHotel(hotels[i]).then((res)=>{
+      await actors.hotelActor?.getHotel(hotels[i]).then((res)=>{
         setHotelList(hotelList=>[...hotelList,res[0]])
       })
     }
   }
   useEffect(()=>{
-    console.log(hotels)
     getHotelDetails()
   },[hotels])
 

@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View ,TouchableOpacity,Image,ScrollView} from 'react-native'
 import React from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { COLORS,SIZES } from '../constants/themes'
-import { images } from '../constants'
+import { COLORS,SIZES } from '../../../constants/themes'
+import { images } from '../../../constants'
 import Icon2 from 'react-native-vector-icons/AntDesign'
-import HostBand from './cards/HostBand'
-import HotelFacilityCard from './cards/HotelFacilityCard'
+import HostBand from '../../cards/HostBand'
+import HotelFacilityCard from '../../cards/HotelFacilityCard'
 
 const HotelDetailPage = ({openHotelDetailPage}) => {
   return (

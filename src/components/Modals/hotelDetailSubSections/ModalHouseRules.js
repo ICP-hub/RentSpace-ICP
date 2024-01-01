@@ -3,7 +3,7 @@ import React from 'react'
 import Icon from 'react-native-vector-icons/EvilIcons'
 import Icon2 from 'react-native-vector-icons/FontAwesome'
 import Icon3 from 'react-native-vector-icons/MaterialIcons'
-import { COLORS,SIZES } from '../constants/themes'
+import { COLORS,SIZES } from '../../../constants/themes'
 
 const ModalHouseRules = ({setRulesModal}) => {
   return (

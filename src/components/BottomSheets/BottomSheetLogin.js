@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet, Text, View ,Image} from 'react-native'
 import React from 'react'
-import {COLORS, SIZES} from '../constants/themes'
-import {images} from '../constants'
+import {COLORS, SIZES} from '../../constants/themes'
+import {images} from '../../constants'
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
 // const {height:SCREEN_HEIGHT}=Dimensions.get('window')
 

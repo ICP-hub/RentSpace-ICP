@@ -1,35 +1,36 @@
 import { ActivityIndicator, StyleSheet, Text, Image, TouchableOpacity, View } from 'react-native'
 import  { useState } from 'react'
-import { COLORS, SIZES } from '../constants/themes'
-import { User } from '../declarations/User/index.js'
-import {hotel} from '../declarations/hotel/index.js'
-import { images } from '../constants'
+import { COLORS, SIZES } from '../../constants/themes'
+import { User } from '../../declarations/User/index.js'
+import {hotel} from '../../declarations/hotel/index.js'
+import { images } from '../../constants'
 import Icon from 'react-native-vector-icons/AntDesign'
 import Icon2 from 'react-native-vector-icons/Entypo'
 import Icon3 from 'react-native-vector-icons/MaterialIcons'
 import { useSelector,useDispatch } from 'react-redux'
-import { setUser,setHotels } from '../redux/actions'
+import { setUser,setHotels } from '../../redux/users/actions'
 
 const UserDetailDemo = ({setUpdatePage,self,setHotelCreateForm}) => {
 
   const {user}=useSelector(state=>state.userReducer)
+  const {actors}=useSelector(state=>state.actorReducer)
   const dispatch=useDispatch()
 
   const [loading,setLoading]=useState(false)
   const makeHost=async()=>{
     setLoading(true)
     console.log("You are host now")
-    await User.updateUserInfo(user?.userId,{...user,userType:'Host',hostStatus:true}).then(async(res)=>{
+    await actors.userActor?.updateUserInfo({...user,userType:'Host',hostStatus:true}).then(async(res)=>{
       setLoading(false)
       alert('You are a host now!')
 
       self(false)
       setHotelCreateForm(true)
-      await User.getUserInfo(user?.userId).then((res)=>{
+      await actors.userActor?.getUserInfo().then((res)=>{
         console.log(res[0])
         dispatch(setUser(res[0]))
       }).then(()=>{
-        hotel.getHotelId(user?.userId).then((res)=>{
+        hotel.getHotelId().then((res)=>{
           console.log(res)
           dispatch(setHotels(res))
         })

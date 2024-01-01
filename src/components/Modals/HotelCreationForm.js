@@ -1,27 +1,27 @@
 import { StyleSheet, Text, View,TextInput,TouchableOpacity, Alert, ActivityIndicator } from 'react-native'
-import React, { useState } from 'react'
-import { SIZES,COLORS } from '../constants/themes'
-import { hotel } from '../declarations/hotel/index.js'
+import  {  useState } from 'react'
+import { SIZES,COLORS } from '../../constants/themes'
 import Icon from 'react-native-vector-icons/Fontisto'
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'
 import Icon3 from 'react-native-vector-icons/FontAwesome5'
 import Icon4 from 'react-native-vector-icons/MaterialIcons'
 import { useSelector,useDispatch } from 'react-redux'
-import { setHotels } from '../redux/actions'
+import { setHotels } from '../../redux/hotels/actions'
 
 const HotelCreationForm = ({setHotelCreateForm}) => {
   const {user}=useSelector(state=>state.userReducer)
+  const {actors}=useSelector(state=>state.actorReducer)
   const dispatch=useDispatch()
   const [loading,setLoading]=useState(false)
   const [hotelData,setHotelData]=useState({})
   const createHotel=async()=>{
     console.log('create hotel')
     setLoading(true)
-  await hotel.createHotel(user?.userId,hotelData).then(async(res)=>{
+  await actors.hotelActor?.createHotel(hotelData).then(async(res)=>{
     setLoading(false)
     alert('Your hotel has been created')
    
-    await hotel.getHotelId(user?.userId).then(async(res)=>{
+    await actors.hotelActor?.getHotelId().then(async(res)=>{
       console.log(res)
       dispatch(setHotels(res))
       setHotelCreateForm(false)

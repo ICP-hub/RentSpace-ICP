@@ -1,19 +1,20 @@
 import { StyleSheet, Text, View,TextInput, TouchableOpacity, Image ,ScrollView,Modal} from 'react-native'
 import React, { useState } from 'react'
-import { images } from '../constants'
-import { SIZES,COLORS } from '../constants/themes'
-import { User } from '../declarations/User/index.js'
+import { images } from '../../constants'
+import { SIZES,COLORS } from '../../constants/themes'
+import { User } from '../../declarations/User/index.js'
 import Icon from 'react-native-vector-icons/AntDesign'
 import Icon2 from 'react-native-vector-icons/Fontisto'
 import Icon3 from 'react-native-vector-icons/FontAwesome5'
 import {Calendar} from 'react-native-calendars';
 import { launchImageLibrary } from 'react-native-image-picker'
 import { useSelector,useDispatch } from 'react-redux'
-import { setUser } from '../redux/actions'
+import { setUser } from '../../redux/users/actions'
 
 const UpdateProfile = ({setUpdatePage}) => {
 
     const {user}=useSelector(state=>state.userReducer)
+    const {actors}=useSelector(state=>state.actorReducer)
     const dispatch=useDispatch()
 
     const [updatedUser,setUpdatedUser]=useState(user)
@@ -22,10 +23,10 @@ const UpdateProfile = ({setUpdatePage}) => {
     const [userImg,setUserImg]=useState(images.profile2)
 
     const update=async()=>{
-        setUpdatedUser({...updatedUser,userType:user?.userType,hostStatus:false,verificationStatus:false,userId:user?.userId})
-        await User.updateUserInfo(user?.userId,updatedUser).then(async(res)=>{
-            alert(`Your profile is updated ${user?.firstName} !`)
-            await User.getUserInfo(user?.userId).then((res)=>{
+        setUpdatedUser({...updatedUser,userType:user?.userType,hostStatus:false,verificationStatus:false})
+        await actors.userActor?.updateUserInfo(updatedUser).then(async(res)=>{
+            alert(`Your profile is updated ${updatedUser?.firstName} !`)
+            await User.getUserInfo().then((res)=>{
                 dispatch(setUser(res[0]))
                 console.log(res[0])
                 setUpdatePage(false)

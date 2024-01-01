@@ -1,17 +1,18 @@
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useState } from 'react'
-import { SIZES,COLORS } from '../constants/themes'
+import { SIZES,COLORS } from '../../constants/themes'
+import { images } from '../../constants'
 
 const HeaderTitles = () => {
 
     const titles=[
-        {id:1,name:'Amazing views',img:'f'},
-        {id:2,name:'Farms',img:'f'},
-        {id:3,name:'Amazing pools',img:'f'},
-        {id:4,name:'Tropicals',img:'f'},
-        {id:5,name:'OMG!',img:'f'},
-        {id:6,name:'title6',img:'f'},
-        {id:7,name:'title7',img:'f'}
+        {id:1,name:'Amazing views',img:images.sampleMapIcon},
+        {id:2,name:'Farms',img:images.sampleMapIcon},
+        {id:3,name:'Amazing pools',img:images.sampleMapIcon},
+        {id:4,name:'Tropicals',img:images.sampleMapIcon},
+        {id:5,name:'OMG!',img:images.sampleMapIcon},
+        {id:6,name:'title6',img:images.sampleMapIcon},
+        {id:7,name:'title7',img:images.sampleMapIcon}
     ]
     const [title,setTitle]=useState(titles[0].name)
     
@@ -27,7 +28,7 @@ const HeaderTitles = () => {
                 ]} 
             onPress={()=>{setTitle(item.item.name)}}
         >
-            <Image source={item.img} style={styles.titleLogo}/>
+            <Image source={item.item.img} style={styles.titleLogo}/>
             <Text style={styles.titleName}>{item.item.name}</Text>
             
         </TouchableOpacity>    

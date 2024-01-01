@@ -1,7 +1,7 @@
 import { View, Text,StyleSheet, TouchableOpacity,Image } from 'react-native'
 import React from 'react'
-import { COLORS ,SIZES} from '../constants/themes'
-import {images} from '../constants'
+import { COLORS ,SIZES} from '../../constants/themes'
+import {images} from '../../constants'
 import Icon from 'react-native-vector-icons/AntDesign'
 import Icon2 from 'react-native-vector-icons/Fontisto'
 

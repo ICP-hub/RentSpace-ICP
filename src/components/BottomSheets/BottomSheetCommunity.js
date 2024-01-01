@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View ,Image} from 'react-native'
 import React from 'react'
-import { SIZES,COLORS } from '../constants/themes'
-import {  images } from '../constants'
+import { SIZES,COLORS } from '../../constants/themes'
+import {  images } from '../../constants'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const BottomSheetCommunity = ({selfMod,openNotiModal}) => {
