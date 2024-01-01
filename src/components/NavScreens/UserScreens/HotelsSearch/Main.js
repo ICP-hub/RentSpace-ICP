@@ -43,7 +43,7 @@ const Main = ({navigation}) => {
   const {user}=useSelector(state=>state.userReducer)
   const {hotels}=useSelector(state=>state.hotelsReducer)
   const {actors}=useSelector(state=>state.actorReducer)
-  const {setActors}=route.params
+  const {handleLogin}=route.params
   //States for managing modals
   const [safetyModal, setSafetyModal] = useState(false);
   const [cancelModal, setCancelModal] = useState(false);
@@ -100,7 +100,7 @@ const Main = ({navigation}) => {
     SplashScreen.hide();
     // getUserAgent()
     btmSheetLoginRef.current.present()
-    generateIdentity();
+    // generateIdentity();
   },[])
 
   //Refs for managing bottomsheets
@@ -116,15 +116,15 @@ const Main = ({navigation}) => {
   };
 
   
-  const [middleKeyIdentity, setMiddleKeyIdentity] = useState('');
-  const generateIdentity = async () => {
-    await ECDSAKeyIdentity.generate({extractable: true})
-    .then(async(res)=>{
-      setMiddleKeyIdentity(res)
-    }
-      )
-    .catch((err)=>console.log(err))
-  };
+  // const [middleKeyIdentity, setMiddleKeyIdentity] = useState('');
+  // const generateIdentity = async () => {
+  //   await ECDSAKeyIdentity.generate({extractable: true})
+  //   .then(async(res)=>{
+  //     setMiddleKeyIdentity(res)
+  //   }
+  //     )
+  //   .catch((err)=>console.log(err))
+  // };
   const getUserData=async()=>{
     
     // console.log(actors)
@@ -143,118 +143,118 @@ const Main = ({navigation}) => {
     // await AsyncStorage.clear()
   }
 
-  const handleLogin = async () => {
-    try {
-      const url = `http://127.0.0.1:4943/?canisterId=be2us-64aaa-aaaaa-qaabq-cai&publicKey=${toHex(middleKeyIdentity.getPublicKey().toDer())}`;
-      if (await InAppBrowser.isAvailable()) {
-        const result = await InAppBrowser.open(url, {
-          // iOS Properties
-          dismissButtonStyle: 'cancel',
-          preferredBarTintColor: '#453AA4',
-          preferredControlTintColor: 'white',
-          readerMode: false,
-          animated: true,
-          modalPresentationStyle: 'fullScreen',
-          modalTransitionStyle: 'coverVertical',
-          modalEnabled: true,
-          enableBarCollapsing: false,
-          // Android Properties
-          showTitle: true,
-          toolbarColor: '#6200EE',
-          secondaryToolbarColor: 'black',
-          navigationBarColor: 'black',
-          navigationBarDividerColor: 'white',
-          enableUrlBarHiding: true,
-          enableDefaultShare: true,
-          forceCloseOnRedirection: false,
-          animations: {
-            startEnter: 'slide_in_right',
-            startExit: 'slide_out_left',
-            endEnter: 'slide_in_left',
-            endExit: 'slide_out_right',
-          },
-          headers: {
-            'my-custom-header': 'my custom header value',
-          },
-        });
-        Linking.addEventListener('url', handleDeepLink);
-        await this.sleep(800);
-      } else Linking.openURL(url);
-    } catch (error) {}
-  };
-  const handleDeepLink = async event => {
-    actor=backend
-    const deepLink = event.url;
-    const urlObject = new URL(deepLink);
-    const delegation = urlObject.searchParams.get('delegation');
+  // const handleLogin = async () => {
+  //   try {
+  //     const url = `http://127.0.0.1:4943/?canisterId=be2us-64aaa-aaaaa-qaabq-cai&publicKey=${toHex(middleKeyIdentity.getPublicKey().toDer())}`;
+  //     if (await InAppBrowser.isAvailable()) {
+  //       const result = await InAppBrowser.open(url, {
+  //         // iOS Properties
+  //         dismissButtonStyle: 'cancel',
+  //         preferredBarTintColor: '#453AA4',
+  //         preferredControlTintColor: 'white',
+  //         readerMode: false,
+  //         animated: true,
+  //         modalPresentationStyle: 'fullScreen',
+  //         modalTransitionStyle: 'coverVertical',
+  //         modalEnabled: true,
+  //         enableBarCollapsing: false,
+  //         // Android Properties
+  //         showTitle: true,
+  //         toolbarColor: '#6200EE',
+  //         secondaryToolbarColor: 'black',
+  //         navigationBarColor: 'black',
+  //         navigationBarDividerColor: 'white',
+  //         enableUrlBarHiding: true,
+  //         enableDefaultShare: true,
+  //         forceCloseOnRedirection: false,
+  //         animations: {
+  //           startEnter: 'slide_in_right',
+  //           startExit: 'slide_out_left',
+  //           endEnter: 'slide_in_left',
+  //           endExit: 'slide_out_right',
+  //         },
+  //         headers: {
+  //           'my-custom-header': 'my custom header value',
+  //         },
+  //       });
+  //       Linking.addEventListener('url', handleDeepLink);
+  //       await this.sleep(800);
+  //     } else Linking.openURL(url);
+  //   } catch (error) {}
+  // };
+  // const handleDeepLink = async event => {
+  //   let actor=backend
+  //   const deepLink = event.url;
+  //   const urlObject = new URL(deepLink);
+  //   const delegation = urlObject.searchParams.get('delegation');
 
-    const chain = DelegationChain.fromJSON(
-      JSON.parse(decodeURIComponent(delegation)),
-    );
-    const middleIdentity = DelegationIdentity.fromDelegation(
-      middleKeyIdentity,
-      chain,
-    );
-    const agent = new HttpAgent({identity: middleIdentity,fetchOptions: {
-      reactNative: {
-        __nativeResponseType: 'base64',
-      },
-    },
-    callOptions: {
-      reactNative: {
-        textStreaming: true,
-      },
-    },
-    blsVerify: () => true,
-    host: 'http://127.0.0.1:4943',});
+  //   const chain = DelegationChain.fromJSON(
+  //     JSON.parse(decodeURIComponent(delegation)),
+  //   );
+  //   const middleIdentity = DelegationIdentity.fromDelegation(
+  //     middleKeyIdentity,
+  //     chain,
+  //   );
+  //   const agent = new HttpAgent({identity: middleIdentity,fetchOptions: {
+  //     reactNative: {
+  //       __nativeResponseType: 'base64',
+  //     },
+  //   },
+  //   callOptions: {
+  //     reactNative: {
+  //       textStreaming: true,
+  //     },
+  //   },
+  //   blsVerify: () => true,
+  //   host: 'http://127.0.0.1:4943',});
    
-    actor = createActor('bkyz2-fmaaa-aaaaa-qaaaq-cai', {
-      agent,
-    });
-    let actorUser=createUserActor('br5f7-7uaaa-aaaaa-qaaca-cai',{agent})
-    let actorHotel=createHotelActor('bw4dl-smaaa-aaaaa-qaacq-cai',{agent})
-    // try{
-    //   dispatch(setAgent({agent}))
-    // }catch(err){
-    //   console.log(err)
-    // }
+  //   actor = createActor('bkyz2-fmaaa-aaaaa-qaaaq-cai', {
+  //     agent,
+  //   });
+  //   let actorUser=createUserActor('br5f7-7uaaa-aaaaa-qaaca-cai',{agent})
+  //   let actorHotel=createHotelActor('bw4dl-smaaa-aaaaa-qaacq-cai',{agent})
+  //   // try{
+  //   //   dispatch(setAgent({agent}))
+  //   // }catch(err){
+  //   //   console.log(err)
+  //   // }
    
-    dispatch(setActor({
-      backendActor:actor,
-      userActor:actorUser,
-      hotelActor:actorHotel
-    }))
-    setActors({
-      backendActor:actor,
-      userActor:actorUser,
-      hotelActor:actorHotel
-    })
+  //   dispatch(setActor({
+  //     backendActor:actor,
+  //     userActor:actorUser,
+  //     hotelActor:actorHotel
+  //   }))
+  //   // setActors({
+  //   //   backendActor:actor,
+  //   //   userActor:actorUser,
+  //   //   hotelActor:actorHotel
+  //   // })
 
-     console.log(route.params)
+  //    console.log(route.params)
 
-    let whoami = await actor.whoami();
-    dispatch(setPrinciple(whoami))
-    console.log("user",whoami)
+  //   let whoami = await actor.whoami();
+  //   dispatch(setPrinciple(whoami))
+  //   console.log("user",whoami)
    
 
-    await actorUser?.getUserInfo().then((res)=>{
-      if(res[0]?.firstName!=null){
-        dispatch(setUser(res[0]))
-        btmSheetLoginRef.current.dismiss()
-        alert(`welcome back ${res[0]?.firstName}!`)
+  //   await actorUser?.getUserInfo().then((res)=>{
+  //     if(res[0]?.firstName!=null){
+  //       dispatch(setUser(res[0]))
+  //       btmSheetLoginRef.current.dismiss()
+  //       alert(`welcome back ${res[0]?.firstName}!`)
         
-      }else{
-        alert('Now please follow the registeration process!')
-        btmSheetLoginRef.current.dismiss()
-        btmSheetFinishRef.current.present()
-      }
-    }).catch((err)=>console.error(err))
-    // await AsyncStorage.setItem('user',JSON.stringify(middleIdentity))
-    //   .then((res)=>console.log('data stored successfully',middleIdentity))
-    //   .catch((err)=>console.log(err))
-    //   alert(whoami);
-      // getUserData()
-  };
+  //     }else{
+  //       alert('Now please follow the registeration process!')
+  //       btmSheetLoginRef.current.dismiss()
+  //       btmSheetFinishRef.current.present()
+  //     }
+  //   }).catch((err)=>console.error(err))
+  //   // await AsyncStorage.setItem('user',JSON.stringify(middleIdentity))
+  //   //   .then((res)=>console.log('data stored successfully',middleIdentity))
+  //   //   .catch((err)=>console.log(err))
+  //   //   alert(whoami);
+  //     // getUserData()
+  // };
 
   //methods for opening and closing bottomsheets
   const closeModal = valRef => {
@@ -272,7 +272,7 @@ const Main = ({navigation}) => {
     <GestureHandlerRootView style={styles.view}>
       <BottomSheetModalProvider>
         {/* Modals Defined */}
-        <PolyfillCrypto/>
+        {/* <PolyfillCrypto/> */}
 
         <Modal visible={safetyModal} animationType="fade">
           <ModalSafety setSafetyModal={setSafetyModal} />
