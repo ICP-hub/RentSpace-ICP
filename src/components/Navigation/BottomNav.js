@@ -25,7 +25,7 @@ const BottomNav = ({navigation}) => {
         <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('reels')}}>
         <Icon name="hearto" size={25} color={COLORS.inputBorder}/>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('hostHome')}}>
+        <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('UserChat')}}>
         <Icon2 name="comment" size={20} color={COLORS.inputBorder}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('profile')}}>

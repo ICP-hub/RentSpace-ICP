@@ -7,11 +7,14 @@ import PhotoBtn from './PhotoBtn'
 import Icon from 'react-native-vector-icons/Entypo'
 import { useDispatch, useSelector } from 'react-redux'
 import { setListing } from '../../../../redux/NewListing/actions'
+import { launchImageLibrary } from 'react-native-image-picker'
 
 const AddPhotos = ({setHostModal,pos}) => {
   const [images,setImages]=useState("img2")
+  const [hotelImgs,setHotelImgs]=useState([])
   const {listing} = useSelector(state=>state.listingReducer)
   const dispatch=useDispatch()
+  const [video,setVideo]=useState([])
   const checkEmpty=()=>{
     if(images==""){
       alert("Please add atleast one image")
@@ -21,6 +24,25 @@ const AddPhotos = ({setHostModal,pos}) => {
       return true
     }
   }
+  const chooseUserImg=async()=>{
+    const result=await launchImageLibrary({selectionLimit:5,mediaType:'image',includeBase64:true},
+    (res)=>{
+      //console.log(res)
+      setHotelImgs(res.assets)
+    })
+    .catch((err)=>{console.log(err)})
+    console.log(result)
+  }
+  const chooseVideo=async()=>{
+    const result=await launchImageLibrary({mediaType:'video',videoQuality:'medium'},
+      (res)=>{
+        setVideo(res.assets[0])
+      }
+    ).catch((err)=>{
+      console.log(err)
+    })
+    console.log(result)
+  }
   return (
     <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal}/>
@@ -28,8 +50,8 @@ const AddPhotos = ({setHostModal,pos}) => {
       <Text style={styles.text}>
         Our comprehensive verification system checks details such as name, address, government ID and more to confirm the identity of guests who book on Rentspace.
       </Text>
-      <PhotoBtn text={"Add photos"} icon={<Icon name='plus' size={25} color={COLORS.textLightGrey}/>}/>
-      <PhotoBtn text={"Take new photos"} icon={<Icon name='camera' size={25} color={COLORS.textLightGrey}/>}/>
+      <PhotoBtn text={"Add photos"} icon={<Icon name='plus' size={25} color={COLORS.textLightGrey}/>} onClick={chooseUserImg}/>
+      <PhotoBtn text={"Add a video"} icon={<Icon name='plus' size={25} color={COLORS.textLightGrey}/>} onClick={chooseVideo}/>
       <BottomBtn setHostModal={setHostModal} pos={pos} step={2} nextFunc={checkEmpty}/>
     </View>
   )
