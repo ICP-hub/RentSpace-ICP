@@ -1,6 +1,11 @@
 import Map "mo:stablehashmap/FunctionalStableHashMap";
 import Bool "mo:base/Bool";
 module {
+    public type Canister = {
+        #booking;
+        #hotel;
+        #user;
+    };
     public type User = {
         firstName : Text;
         lastName : Text;
@@ -17,7 +22,7 @@ module {
         userGovId : Text;
         hostStatus : Bool;
         verificationStatus : Bool;
-        createdAt:Text;
+        createdAt : Text;
     };
     public type HotelInfo = {
         hotelTitle : Text;
@@ -25,9 +30,9 @@ module {
         hotelImage : Text;
         hotelPrice : Text;
         hotelLocation : Text;
-        createdAt:Text;
+        createdAt : Text;
     };
-   public type ScanHotels = {
+    public type ScanHotels = {
         hotels : [HotelInfo];
         nextKey : ?Text;
     };
@@ -40,23 +45,24 @@ module {
         paymentStatus : Bool;
         paymentId : Text;
     };
-    public type ScanBooking={
-        bookings: [BookingInfo];
-        nextKey:?Text;
+    public type ScanBooking = {
+        bookings : [BookingInfo];
+        nextKey : ?Text;
     };
     public type Node = {
         var children : Map.StableHashMap<Text, Node>;
         var isEndOfWord : Bool;
         var user : [Text];
     };
-    public type Review={
-        bookingId:Text;
-        rating:Float;
-        title:Text;
-        des:Text;
-        createdAt:Text;
-    }; public type ScanReview={
-        review: [Review];
-        nextKey:?Text;
+    public type Review = {
+        bookingId : Text;
+        rating : Float;
+        title : Text;
+        des : Text;
+        createdAt : Text;
+    };
+    public type ScanReview = {
+        review : [Review];
+        nextKey : ?Text;
     };
 };

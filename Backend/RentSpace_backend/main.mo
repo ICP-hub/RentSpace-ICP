@@ -20,18 +20,12 @@ import CanDB "mo:candb/CanDB";
 import User "UserCanister";
 import Hotel "HotelCanister";
 import Booking "BookingCanister";
-import Review "ReviewCanister";
 import Types "types";
 
 shared ({caller = owner}) actor class Database() = this {
 
   // @required stable variable (do not delete or change)
-  type Canister = {
-    #booking;
-    #hotel;
-    #user;
-    #review;
-  };
+
   //holds the canisterMap of PK -> CanisterIdList
   stable var pkToCanisterMap = CanisterMap.init();
 
@@ -55,7 +49,6 @@ shared ({caller = owner}) actor class Database() = this {
     return Iter.toArray(iterOfPks);
   };
 
-  
   func getCanistersIdsIfExists(pk : Text) : [Text] {
     switch (CanisterMap.get(pkToCanisterMap, pk)) {
       case null {[]};
@@ -63,7 +56,7 @@ shared ({caller = owner}) actor class Database() = this {
     };
   };
 
-  func createCanister(pk : Text, controllers : ?[Principal], canister : Canister) : async Text {
+  func createCanister(pk : Text, controllers : ?[Principal], canister : Types.Canister) : async Text {
     Debug.print("creating new hello service canister with pk=" # pk);
 
     Cycles.add(300_000_000_000);
@@ -73,11 +66,7 @@ shared ({caller = owner}) actor class Database() = this {
 
         owners = controllers}));
       };
-      case (#review) {
-        Principal.fromActor(await Review.Review({partitonKey = pk; scalingOptions = {autoScalingHook = autoScaleBookingCanister; sizeLimit = #heapSize(475_000_000)};
 
-        owners = controllers}));
-      };
       case (#hotel) {
         Principal.fromActor(await Hotel.Hotel({partitonKey = pk; scalingOptions = {autoScalingHook = autoScaleBookingCanister; sizeLimit = #heapSize(475_000_000)};
 
@@ -110,7 +99,7 @@ shared ({caller = owner}) actor class Database() = this {
     newCanisterId;
   };
 
-  public shared ({caller = creator}) func createNewCanister(canisterName : Text, canister : Canister) : async ?Text {
+  public shared ({caller = creator}) func createNewCanister(canisterName : Text, canister : Types.Canister) : async ?Text {
     // assert (creator == owner);
     Debug.print(debug_show (creator));
     let pk = canisterName;
@@ -152,16 +141,6 @@ shared ({caller = owner}) actor class Database() = this {
     if (Utils.callingCanisterOwnsPK(owner, pkToCanisterMap, pk)) {
       Debug.print("creating an additional canister for pk=" # pk);
       await createCanister(pk, ?[owner, Principal.fromActor(this)], #booking);
-    } else {
-      throw Error.reject("not authorized");
-    };
-  };
-
-  public shared ({caller = caller}) func autoScaleReviewCanister(pk : Text) : async Text {
-    // Auto-Scaling Authorization - if the request to auto-scale the partition is not coming from an existing canister in the partition, reject it
-    if (Utils.callingCanisterOwnsPK(owner, pkToCanisterMap, pk)) {
-      Debug.print("creating an additional canister for pk=" # pk);
-      await createCanister(pk, ?[owner, Principal.fromActor(this)], #review);
     } else {
       throw Error.reject("not authorized");
     };

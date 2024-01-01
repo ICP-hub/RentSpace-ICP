@@ -8,8 +8,8 @@ import CA "mo:candb/CanisterActions";
 import Entity "mo:candb/Entity";
 import StableRbTree "mo:stable-rbtree/StableRBTree";
 
-import Types "types";
-import utils "utils";
+import Types "../types";
+import utils "../utils";
 
 shared ({caller = owner}) actor class Review({
     partitonKey : Text;
@@ -178,7 +178,7 @@ shared ({caller = owner}) actor class Review({
         Array.mapFilter<Entity.Entity, Types.Review>(
             entities,
             func(e) {
-               unWarpReviewInfo(e);
+                unWarpReviewInfo(e);
             },
         );
     };

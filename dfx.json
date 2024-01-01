@@ -13,7 +13,11 @@
       "type": "motoko"
     },
     "Review": {
-      "main": "Backend/RentSpace_backend/ReviewCanister.mo",
+      "main": "Backend/RentSpace_backend/Review/ReviewCanister.mo",
+      "type": "motoko"
+    },
+    "ReviewMain": {
+      "main": "Backend/RentSpace_backend/Review/main.mo",
       "type": "motoko"
     },
     "hotel": {
