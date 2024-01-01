@@ -26,7 +26,7 @@ import HotelDetailPage from '../components/HotelDetailPage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain} from "@dfinity/identity";
-import {HttpAgent} from "@dfinity/agent";
+import {HttpAgent, toHex} from "@dfinity/agent";
 import { createActor,backend } from '../declarations/backend';
 import { User } from '../declarations/User';
 import { useDispatch,useSelector } from 'react-redux';
@@ -52,6 +52,8 @@ const Main = ({navigation}) => {
   const [hotelDetailPage, openHotelDetailPage] = useState(false);
   const [userDetails, setUserDetails] = useState(false);
 
+  const [principle,setPrinciple]=useState('')
+  // const [actor,setActor]=useState(backend)
   //Hiding splashscreen and opening sign up page
   useEffect(() => {
     SplashScreen.hide();
@@ -59,6 +61,7 @@ const Main = ({navigation}) => {
     // btmSheetFinishRef.current.present()
     btmSheetLoginRef.current.present()
     // console.log(main())
+    generateIdentity();
   },[])
 
   //Refs for managing bottomsheets
@@ -73,30 +76,22 @@ const Main = ({navigation}) => {
     btmSheetLoginRef.current.present();
   };
 
-  useEffect(() => {
-    generateIdentity();
-  }, []);
   
   const [middleKeyIdentity, setMiddleKeyIdentity] = useState('');
   const generateIdentity = async () => {
-    console.log("inside generateIdentity")
     await ECDSAKeyIdentity.generate({extractable: true})
     .then(async(res)=>{
-      let key=await global.crypto.subtle.exportKey("spki",res._keyPair.publicKey) 
-      //To be converted into string(hex)
-      setMiddleKeyIdentity(key)
+      setMiddleKeyIdentity(res)
     }
       )
     .catch((err)=>console.log(err))
-    console.log("generated middlekey : ",middleKeyIdentity)
-    // setMiddleKeyIdentity(middleKeyIdentity);
   };
 
   const handleLogin = async () => {
     // btmSheetLoginRef.current.dismiss();
     // btmSheetFinishRef.current.present();
     try {
-      const url = `http://127.0.0.1:4943/?canisterId=be2us-64aaa-aaaaa-qaabq-cai&publicKey=${middleKeyIdentity}`;
+      const url = `http://127.0.0.1:4943/?canisterId=be2us-64aaa-aaaaa-qaabq-cai&publicKey=${toHex(middleKeyIdentity.getPublicKey().toDer())}`;
       if (await InAppBrowser.isAvailable()) {
         const result = await InAppBrowser.open(url, {
           // iOS Properties
@@ -134,111 +129,39 @@ const Main = ({navigation}) => {
     } catch (error) {}
   };
   const handleDeepLink = async event => {
-    actor = backend;
+    actor=backend
     const deepLink = event.url;
     const urlObject = new URL(deepLink);
     const delegation = urlObject.searchParams.get('delegation');
-    console.log(delegation);
-    // Handle the deep link as needed
-    // For example, parse the deep link and navigate to the appropriate screen
-    // let encoded=decodeURIComponent(deepLink)
-    // console.log('Deep link received:', JSON.stringify(encoded));
-    // console.log('Deep link received:', deepLink.json);
-    console.log('before middleKeyIdentity');
-    // var middleKeyIdentity = await ECDSAKeyIdentity.generate().catch((err)=>console.log(err))
-    // console.log( "middleIdentity",middleKeyIdentity)
-<<<<<<< HEAD
-    const chain = DelegationChain.fromJSON(
-      JSON.parse(decodeURIComponent(delegation))
-    );
-    console.log("chain",chain)
-  const id = DelegationIdentity.fromDelegation(null, chain);
-  console.log("id",id)
-      console.log("id",id.getPrincipal().toString())
-      console.log("before agent")
-      let agent
-      // try{
-      //   agent = new HttpAgent({
-      //     identity:id,
-      //     host:"http://127.0.0.1:4943",fetchOptions: {
-      //       reactNative: {
-      //         __nativeResponseType: "base64",
-      //       },
-      //     },
-      //     callOptions: {
-      //       reactNative: {
-      //         textStreaming: true,
-      //       },
-      //     },
-      //     blsVerify: () => true,
-      //   })
-      // }catch(err){
-      //   console.log(err)
-      // }
-      
-    // console.log("before actor creation, agent : ",agent)
-    let actor = backend;
-    try{
-      actor = createActor("bkyz2-fmaaa-aaaaa-qaaaq-cai", {
-        agentOptions: {
-          fetchOptions: {
-            reactNative: {
-              __nativeResponseType: "base64",
-            },
-          },
-          callOptions: {
-            reactNative: {
-              textStreaming: true,
-            },
-          },
-          blsVerify: () => true,
-          host: "http://127.0.0.1:4943",
-          identity:id
-        }});
-    }catch(err){
-      console.log(err)
-    }
-    await User.getUserInfo().then(async(res)=>{
-      if(res[0]?.firstName!=null){
-        alert(`You are Successfully logged in ${res[0]?.firstName}!`)
-        dispatch(setUser(res[0]))
-        await hotel.getHotelId().then((res)=>{
-          dispatch(setHotels(res))
-          btmSheetLoginRef.current.dismiss()
-        })
-      }
-      else{
-        alert('Please follow the registeration further')
-        openFinishSignUp()
-        btmSheetLoginRef.current.dismiss()
-      }
-
-    })
-    // let iid = await actor.whoami();
-    // console.log("iid",iid)
-      
-};
-=======
->>>>>>> a286964952cb0f06c48897d79416633d3a4d3a01
-
     const chain = DelegationChain.fromJSON(
       JSON.parse(decodeURIComponent(delegation)),
     );
-    console.log('chain', chain);
     const middleIdentity = DelegationIdentity.fromDelegation(
       middleKeyIdentity,
       chain,
     );
-    console.log('middleIdentity', middleIdentity.getPrincipal().toString());
-    const agent = new HttpAgent({identity: middleIdentity});
+    const agent = new HttpAgent({identity: middleIdentity,fetchOptions: {
+      reactNative: {
+        __nativeResponseType: 'base64',
+      },
+    },
+    callOptions: {
+      reactNative: {
+        textStreaming: true,
+      },
+    },
+    blsVerify: () => true,
+    host: 'http://127.0.0.1:4943',});
     // alert("agent 1",agent)
-    actor = createActor('be2us-64aaa-aaaaa-qaabq-cai', {
+    actor = createActor('bkyz2-fmaaa-aaaaa-qaaaq-cai', {
       agent,
     });
+    // setActor(actor);
 
     let whoami = await actor.whoami();
-    console.log(whoami);
-    alert(whoami);
+    setPrinciple(whoami);
+    console.log("whoami",whoami);
+    alert(principle);
   };
 
   //methods for opening and closing bottomdsheets
