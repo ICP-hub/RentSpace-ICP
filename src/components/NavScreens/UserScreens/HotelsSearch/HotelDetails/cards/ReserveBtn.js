@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { COLORS,SIZES } from '../../../../../../constants/themes'
 
-const ReserveBtn = ({item}) => {
+const ReserveBtn = ({item,onClick}) => {
   return (
     <View style={styles.card}>
       <View style={styles.textCont}>
@@ -12,7 +12,7 @@ const ReserveBtn = ({item}) => {
         </View>
         <Text style={styles.normalText}>1-6 Jan</Text>
       </View>
-      <TouchableOpacity style={styles.btn}>
+      <TouchableOpacity style={styles.btn} onPress={onClick}>
         <Text style={styles.btnText}>Reserve</Text>
       </TouchableOpacity>
     </View>

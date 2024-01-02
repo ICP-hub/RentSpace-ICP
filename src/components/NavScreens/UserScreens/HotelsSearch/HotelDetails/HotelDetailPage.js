@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View ,TouchableOpacity,Image,ScrollView, Modal} from 'react-native'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { COLORS,SIZES } from '../../../../../constants/themes'
 import { images } from '../../../../../constants'
@@ -9,9 +9,11 @@ import HotelFacilityCard from './cards/HotelFacilityCard'
 import ReserveBtn from './cards/ReserveBtn'
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import Reviews from './subComponents/Reviews/Reviews'
+import BookingForm from './BookingForm/BookingForm'
 
 const HotelDetailPage = ({item,setOpen}) => {
     const btmBtn=useRef(null)
+    const [showBookHotel,setShowBookHotel]=useState(false)
     useEffect(()=>{
         btmBtn.current.present()
     },[])
@@ -46,9 +48,11 @@ const HotelDetailPage = ({item,setOpen}) => {
       <Reviews/>  
 
       <BottomSheetModal ref={btmBtn} index={0} snapPoints={['12']} style={{elevation:10,backgroundColor:'white'}}>
-        <ReserveBtn item={item}/>
+        <ReserveBtn item={item} onClick={()=>setShowBookHotel(true)}/>
       </BottomSheetModal>
-      
+      <Modal animationType='slide' visible={showBookHotel}>
+        <BookingForm setOpen={setOpen} setShowBookHotel={setShowBookHotel} /> 
+      </Modal> 
     </View>
     </ScrollView>
     </BottomSheetModalProvider>

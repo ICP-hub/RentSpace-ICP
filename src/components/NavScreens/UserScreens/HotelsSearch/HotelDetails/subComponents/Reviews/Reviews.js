@@ -10,7 +10,7 @@ const reviews=require('./sampleReviews.json')
 
 const Reviews = () => {
 
-  const [showReview,setShowReviews]=useState(true)
+  const [showReview,setShowReviews]=useState(false)
   return (
     <View style={styles.reviewCont}>
         <View style={styles.headerCont}>

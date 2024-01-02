@@ -28,7 +28,18 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
 
   async function signUp(){
     setLoading(true)
-    const id=Math.round(Math.random()*1000).toString()
+    const userObj={
+      firstName:fname,
+      lastName:lname,
+      dob:DOB,
+      userEmail:email,
+      userType:'',
+      userProfile:'',
+      userGovId:'',
+      hostStatus:false,
+      verificationStatus:false,
+      createdAt:""
+    }
     await actors.userActor?.createUser(fname,lname,DOB,email,"user").then(async(res)=>{
       //setUser(res[0])
       console.log(res)
@@ -44,7 +55,10 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
         closeModal()
         console.log(user)
       })
-    }).catch((err)=>{console.log(err)})
+    }).catch((err)=>{
+      alert(err)
+      setLoading(false)
+    })
     //alert(email)
   }
  
