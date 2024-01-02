@@ -1,13 +1,9 @@
-type Users = 
- service {
-   createUser: (User) -> ();
-   getOwner: () -> (text) query;
-   getPK: () -> (text) query;
-   getUserInfo: () -> (opt UserInfo) query;
-   scanUsers: (text, text, nat, opt bool) -> (ScanUser) query;
-   skExists: (text) -> (bool) query;
-   transferCycles: () -> ();
-   updateUserInfo: (UserInfo) -> (opt UserInfo);
+type User__1 = 
+ record {
+   dob: text;
+   firstName: text;
+   lastName: text;
+   userEmail: text;
  };
 type UserInfo = 
  record {
@@ -23,11 +19,15 @@ type UserInfo =
    verificationStatus: bool;
  };
 type User = 
- record {
-   dob: text;
-   firstName: text;
-   lastName: text;
-   userEmail: text;
+ service {
+   createUser: (User__1) -> ();
+   getOwner: () -> (text) query;
+   getPK: () -> (text) query;
+   getUserInfo: () -> (opt UserInfo) query;
+   scanUsers: (text, text, nat, opt bool) -> (ScanUser) query;
+   skExists: (text) -> (bool) query;
+   transferCycles: () -> ();
+   updateUserInfo: (UserInfo) -> (opt UserInfo);
  };
 type ScanUser = 
  record {
@@ -49,4 +49,4 @@ service : (record {
              owners: opt vec principal;
              partitonKey: text;
              scalingOptions: ScalingOptions;
-           }) -> Users
+           }) -> User

@@ -16,10 +16,14 @@ export interface ScanUser {
   'users' : Array<UserInfo>,
 }
 export interface User {
-  'dob' : string,
-  'userEmail' : string,
-  'lastName' : string,
-  'firstName' : string,
+  'createUser' : ActorMethod<[User__1], undefined>,
+  'getOwner' : ActorMethod<[], string>,
+  'getPK' : ActorMethod<[], string>,
+  'getUserInfo' : ActorMethod<[], [] | [UserInfo]>,
+  'scanUsers' : ActorMethod<[string, string, bigint, [] | [boolean]], ScanUser>,
+  'skExists' : ActorMethod<[string], boolean>,
+  'transferCycles' : ActorMethod<[], undefined>,
+  'updateUserInfo' : ActorMethod<[UserInfo], [] | [UserInfo]>,
 }
 export interface UserInfo {
   'dob' : string,
@@ -33,14 +37,10 @@ export interface UserInfo {
   'verificationStatus' : boolean,
   'firstName' : string,
 }
-export interface Users {
-  'createUser' : ActorMethod<[User], undefined>,
-  'getOwner' : ActorMethod<[], string>,
-  'getPK' : ActorMethod<[], string>,
-  'getUserInfo' : ActorMethod<[], [] | [UserInfo]>,
-  'scanUsers' : ActorMethod<[string, string, bigint, [] | [boolean]], ScanUser>,
-  'skExists' : ActorMethod<[string], boolean>,
-  'transferCycles' : ActorMethod<[], undefined>,
-  'updateUserInfo' : ActorMethod<[UserInfo], [] | [UserInfo]>,
+export interface User__1 {
+  'dob' : string,
+  'userEmail' : string,
+  'lastName' : string,
+  'firstName' : string,
 }
-export interface _SERVICE extends Users {}
+export interface _SERVICE extends User {}
