@@ -7,8 +7,10 @@ const PaymentScreen = ({booking,item,self}) => {
 
     const [payment,setPayment]=useState(0)
     const {actors}=useSelector(state=>state.actorReducer)
+    const {principle}=useSelector(state=>state.principleReducer)
+    const [userId,setUserId]=useState("sample")
     const getOwner=()=>{
-        const userId=item?.id.split('#')[0]
+        setUserId(item?.id.split('#')[0])
         console.log(userId)
         setPayment(Number(booking.bookingDuration)*Number(item?.hotelPrice))
         console.log(Number(booking.bookingDuration)*Number(item?.hotelPrice))
@@ -20,6 +22,8 @@ const PaymentScreen = ({booking,item,self}) => {
     <View style={styles.view}>
       <Text style={styles.title}>Your Current Balance : {100}</Text>
       <Text style={styles.title}>Hotel Name: {item?.hotelTitle}</Text>
+      <Text style={styles.title}>Sender's id: {"  "}<Text style={{color:COLORS.hostTitle}}>"{principle?.toString()}"</Text></Text>
+      <Text style={styles.title}>Receiver's id:{"  "} <Text style={{color:COLORS.hostTitle}}>"{userId.toString()}"</Text></Text>
       <TextInput 
         style={styles.inputs}
         value={"$"+payment.toString()}/>
@@ -49,9 +53,10 @@ const styles = StyleSheet.create({
       },
       title:{
         color:COLORS.black,
-        fontWeight:'bold',
-        fontSize:SIZES.medium,
+        fontWeight:'400',
+        fontSize:SIZES.preMedium,
         marginBottom:10,
+        width:'80%'
       },
       inputs:{
         borderColor: COLORS.hostTitle,

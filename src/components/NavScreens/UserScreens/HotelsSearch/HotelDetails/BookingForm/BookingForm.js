@@ -92,7 +92,7 @@ const BookingForm = ({item,setOpen,setShowBookHotel}) => {
       </Modal>
       <ActivityIndicator size={50} animating={loading} style={styles.loader}/>
     </View>
-    <BottomSheetModal  style={{borderRadius:20,backgroundColor:'white',elevation:10}} snapPoints={["60%"]} ref={btmPayment}>
+    <BottomSheetModal  style={{borderRadius:20,backgroundColor:'white',elevation:10}} snapPoints={["70%"]} ref={btmPayment}>
       <PaymentScreen booking={booking} item={item} self={btmPayment}/>
     </BottomSheetModal>
     </BottomSheetModalProvider>
