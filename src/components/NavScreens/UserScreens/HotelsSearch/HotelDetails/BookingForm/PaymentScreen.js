@@ -34,13 +34,8 @@ const PaymentScreen = async ({booking,item,self}) => {
       } else {
         toast.success("Transaction successful");
         let balance = await tokenActor.icrc1_balance_of({ owner: sendPrincipal , subaccount: [] });
-        balance = parseInt(balance) / Math.pow(10, tokenMetaData?.metadata?.["icrc1:decimals"]);
-        await updateLocalStorageBalance(balance);
-        reloadFunction();
-        closeModalSend();
-        closeModalNextSection();
-        setSendAmount(0);
-        setSendPrincipal("");
+        return balance = parseInt(balance) / Math.pow(10, tokenMetaData?.metadata?.["icrc1:decimals"]);
+       
       }
     };
     const [payment,setPayment]=useState(0)
