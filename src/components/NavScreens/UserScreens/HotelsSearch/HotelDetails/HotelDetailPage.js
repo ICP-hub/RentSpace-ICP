@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { COLORS,SIZES } from '../../../../../constants/themes'
 import { images } from '../../../../../constants'
+import { COLORS,SIZES } from '../../../../../constants/themes'
+import { images } from '../../../../../constants'
 import Icon2 from 'react-native-vector-icons/AntDesign'
 import HostBand from './cards/HostBand'
 import HotelFacilityCard from './cards/HotelFacilityCard'
@@ -19,16 +21,22 @@ const HotelDetailPage = ({item,setOpen}) => {
     },[])
   return (
     <BottomSheetModalProvider>
+    <BottomSheetModalProvider>
     <ScrollView>
+    <View style={styles.bottomSheet} >
+
+      <TouchableOpacity style={styles.backIcon} onPress={()=>{setOpen(false)}}>
     <View style={styles.bottomSheet} >
 
       <TouchableOpacity style={styles.backIcon} onPress={()=>{setOpen(false)}}>
         <Icon name="angle-left" size={30} color={COLORS.textLightGrey} />    
       </TouchableOpacity> 
      
+     
       <Image source={images.hotel} style={styles.hotelImg}/>
       <View style={styles.hotelTitleReviewCont}>
         <View style={styles.hotelTitleCont}>
+            <Text style={styles.hotelTitle}>{item?.hotelTitle}</Text>
             <Text style={styles.hotelTitle}>{item?.hotelTitle}</Text>
             <TouchableOpacity style={styles.likeCont}>
                 <Icon2 name="hearto" size={20} color={COLORS.textLightGrey} />
@@ -36,6 +44,7 @@ const HotelDetailPage = ({item,setOpen}) => {
         </View>
         <View style={styles.hotelReviewCont}>
             <Icon2 name='star' size={12} color={COLORS.inputBorder} style={{marginRight:5}}/>
+            <Text style={styles.hotelReviewText}>4.92 • 432 reviews • {item?.hotelLocation}</Text>
             <Text style={styles.hotelReviewText}>4.92 • 432 reviews • {item?.hotelLocation}</Text>
         </View>
         
@@ -56,6 +65,7 @@ const HotelDetailPage = ({item,setOpen}) => {
     </View>
     </ScrollView>
     </BottomSheetModalProvider>
+    </BottomSheetModalProvider>
   )
 }
 
@@ -67,6 +77,8 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'column',
         alignItems:'center',
+        height:'100%',
+        paddingBottom:100
         height:'100%',
         paddingBottom:100
     },

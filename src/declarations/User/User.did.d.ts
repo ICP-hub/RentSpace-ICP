@@ -15,22 +15,8 @@ export interface ScanUser {
   'nextKey' : [] | [string],
   'users' : Array<UserInfo>,
 }
-export interface UserInfo {
-  'dob' : string,
-  'userType' : string,
-  'userEmail' : string,
-  'userGovId' : string,
-  'hostStatus' : boolean,
-  'userProfile' : string,
-  'lastName' : string,
-  'verificationStatus' : boolean,
-  'firstName' : string,
-}
-export interface Users {
-  'createUser' : ActorMethod<
-    [string, string, string, string, string],
-    undefined
-  >,
+export interface User {
+  'createUser' : ActorMethod<[User__1], undefined>,
   'getOwner' : ActorMethod<[], string>,
   'getPK' : ActorMethod<[], string>,
   'getUserInfo' : ActorMethod<[], [] | [UserInfo]>,
@@ -39,4 +25,22 @@ export interface Users {
   'transferCycles' : ActorMethod<[], undefined>,
   'updateUserInfo' : ActorMethod<[UserInfo], [] | [UserInfo]>,
 }
-export interface _SERVICE extends Users {}
+export interface UserInfo {
+  'dob' : string,
+  'userType' : string,
+  'userEmail' : string,
+  'userGovId' : string,
+  'createdAt' : string,
+  'hostStatus' : boolean,
+  'userProfile' : string,
+  'lastName' : string,
+  'verificationStatus' : boolean,
+  'firstName' : string,
+}
+export interface User__1 {
+  'dob' : string,
+  'userEmail' : string,
+  'lastName' : string,
+  'firstName' : string,
+}
+export interface _SERVICE extends User {}

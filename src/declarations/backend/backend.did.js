@@ -1,14 +1,17 @@
 export const idlFactory = ({ IDL }) => {
+  const Canister = IDL.Variant({
+    'review' : IDL.Null,
+    'hotel' : IDL.Null,
+    'user' : IDL.Null,
+    'booking' : IDL.Null,
+  });
   const Database = IDL.Service({
+    'autoScaleBookingCanister' : IDL.Func([IDL.Text], [IDL.Text], []),
     'autoScaleHotelCanister' : IDL.Func([IDL.Text], [IDL.Text], []),
+    'autoScaleReviewCanister' : IDL.Func([IDL.Text], [IDL.Text], []),
     'autoScaleUserCanister' : IDL.Func([IDL.Text], [IDL.Text], []),
-    'createNewHotelCanister' : IDL.Func(
-        [IDL.Text, IDL.Opt(IDL.Vec(IDL.Principal))],
-        [IDL.Opt(IDL.Text)],
-        [],
-      ),
-    'createNewUserCanister' : IDL.Func(
-        [IDL.Text, IDL.Opt(IDL.Vec(IDL.Principal))],
+    'createNewCanister' : IDL.Func(
+        [IDL.Text, Canister],
         [IDL.Opt(IDL.Text)],
         [],
       ),

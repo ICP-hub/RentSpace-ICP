@@ -15,6 +15,7 @@ type ScalingLimitType =
  };
 type HotelInfo = 
  record {
+   createdAt: text;
    hotelDes: text;
    hotelImage: text;
    hotelLocation: text;
@@ -28,6 +29,8 @@ type Hotel =
    getHotelId: () -> (vec text) query;
    getPK: () -> (text) query;
    scanRent: (text, text, nat, opt bool) -> (ScanHotels) query;
+   searchLocationNode: (text) -> (vec text) query;
+   searchNameNode: (text) -> (vec text) query;
    skExists: (text) -> (bool) query;
    transferCycles: () -> ();
    updateHotel: (text, HotelInfo) -> (opt HotelInfo);

@@ -1,17 +1,16 @@
 import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 
+export type Canister = { 'review' : null } |
+  { 'hotel' : null } |
+  { 'user' : null } |
+  { 'booking' : null };
 export interface Database {
+  'autoScaleBookingCanister' : ActorMethod<[string], string>,
   'autoScaleHotelCanister' : ActorMethod<[string], string>,
+  'autoScaleReviewCanister' : ActorMethod<[string], string>,
   'autoScaleUserCanister' : ActorMethod<[string], string>,
-  'createNewHotelCanister' : ActorMethod<
-    [string, [] | [Array<Principal>]],
-    [] | [string]
-  >,
-  'createNewUserCanister' : ActorMethod<
-    [string, [] | [Array<Principal>]],
-    [] | [string]
-  >,
+  'createNewCanister' : ActorMethod<[string, Canister], [] | [string]>,
   'deleteCanister' : ActorMethod<[string], undefined>,
   'getCanistersByPK' : ActorMethod<[string], Array<string>>,
   'getOwner' : ActorMethod<[], string>,
