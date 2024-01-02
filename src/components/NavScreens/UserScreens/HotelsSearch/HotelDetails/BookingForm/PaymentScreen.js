@@ -5,44 +5,48 @@ import React, { useEffect, useState } from 'react'
 import { COLORS,SIZES } from '../../../../../../constants/themes'
 import { useSelector } from 'react-redux'
 
-const PaymentScreen = async ({booking,item,self}) => {
+const PaymentScreen =({booking,item,self}) => {
 
   // code for the transation starts from here
   const [tokenActor,setTokenActor] = useState(null);
   const [metaData,setMetaData] = useState(null);
-  setMetaData(await tokenActor.icrc1_metadata())
-  setTokenActor(createTokenActor("ryjl3-tyaaa-aaaaa-aaaba-cai"));
-  console.log(metaData);
+  
+  async function settingToken(){
+    
+    setTokenActor(createTokenActor("ryjl3-tyaaa-aaaaa-aaaba-cai"));
+    setMetaData(await tokenActor.icrc1_metadata())
+    console.log("metadate:",metaData);
+  }
 
   // function  for the transfer
-  const transfer=async (sendAmount,sendPrincipal) =>{
-    let transaction = {
-      amount: parseInt(Number(sendAmount) * Math.pow(10, parseInt(metaData?.metadata?.["icrc1:decimals"]))),
-      from_subaccount: [],
-      to: {
-        owner: Principal.fromText(sendPrincipal),
-        subaccount: [],
-      },
-      fee: [parseInt(metaData?.metadata?.["icrc1:fee"])],
-      memo: [],
-      created_at_time: [],
-    };
-  let response = await tokenActor.icrc1_transfer(transaction);
-  let data = displayObject(response);
-      if (response.Err) {
-       return toast.error(data);
-      } else {
-        toast.success("Transaction successful");
-        let balance = await tokenActor.icrc1_balance_of({ owner: sendPrincipal , subaccount: [] });
-        balance = parseInt(balance) / Math.pow(10, tokenMetaData?.metadata?.["icrc1:decimals"]);
-        await updateLocalStorageBalance(balance);
-        reloadFunction();
-        closeModalSend();
-        closeModalNextSection();
-        setSendAmount(0);
-        setSendPrincipal("");
-      }
-    };
+  // const transfer=async (sendAmount,sendPrincipal) =>{
+  //   let transaction = {
+  //     amount: parseInt(Number(sendAmount) * Math.pow(10, parseInt(metaData?.metadata?.["icrc1:decimals"]))),
+  //     from_subaccount: [],
+  //     to: {
+  //       owner: Principal.fromText(sendPrincipal),
+  //       subaccount: [],
+  //     },
+  //     fee: [parseInt(metaData?.metadata?.["icrc1:fee"])],
+  //     memo: [],
+  //     created_at_time: [],
+  //   };
+  // let response = await tokenActor.icrc1_transfer(transaction);
+  // let data = displayObject(response);
+  //     if (response.Err) {
+  //      return toast.error(data);
+  //     } else {
+  //       toast.success("Transaction successful");
+  //       let balance = await tokenActor.icrc1_balance_of({ owner: sendPrincipal , subaccount: [] });
+  //       balance = parseInt(balance) / Math.pow(10, tokenMetaData?.metadata?.["icrc1:decimals"]);
+  //       await updateLocalStorageBalance(balance);
+  //       reloadFunction();
+  //       closeModalSend();
+  //       closeModalNextSection();
+  //       setSendAmount(0);
+  //       setSendPrincipal("");
+  //     }
+  //   };
     const [payment,setPayment]=useState(0)
     const {actors}=useSelector(state=>state.actorReducer)
     const {principle}=useSelector(state=>state.principleReducer)
@@ -55,6 +59,7 @@ const PaymentScreen = async ({booking,item,self}) => {
     }
     useEffect(()=>{
         getOwner()
+        settingToken()
     },[])
   return (
     <View style={styles.view}>
