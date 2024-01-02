@@ -1,10 +1,48 @@
 import { StyleSheet, Text, View,TextInput, TouchableOpacity } from 'react-native'
+import { createTokenActor } from './utils'
+import {Principal} from "@dfinity/principal"
 import React, { useEffect, useState } from 'react'
 import { COLORS,SIZES } from '../../../../../../constants/themes'
 import { useSelector } from 'react-redux'
 
-const PaymentScreen = ({booking,item,self}) => {
+const PaymentScreen = async ({booking,item,self}) => {
 
+  // code for the transation starts from here
+  const [tokenActor,setTokenActor] = useState(null);
+  const [metaData,setMetaData] = useState(null);
+  setMetaData(await tokenActor.icrc1_metadata())
+  setTokenActor(createTokenActor("ryjl3-tyaaa-aaaaa-aaaba-cai"));
+  console.log(metaData);
+
+  // function  for the transfer
+  const transfer=async (sendAmount,sendPrincipal) =>{
+    let transaction = {
+      amount: parseInt(Number(sendAmount) * Math.pow(10, parseInt(metaData?.metadata?.["icrc1:decimals"]))),
+      from_subaccount: [],
+      to: {
+        owner: Principal.fromText(sendPrincipal),
+        subaccount: [],
+      },
+      fee: [parseInt(metaData?.metadata?.["icrc1:fee"])],
+      memo: [],
+      created_at_time: [],
+    };
+  let response = await tokenActor.icrc1_transfer(transaction);
+  let data = displayObject(response);
+      if (response.Err) {
+       return toast.error(data);
+      } else {
+        toast.success("Transaction successful");
+        let balance = await tokenActor.icrc1_balance_of({ owner: , subaccount: [] });
+        balance = parseInt(balance) / Math.pow(10, tokenMetaData?.metadata?.["icrc1:decimals"]);
+        await updateLocalStorageBalance(balance);
+        reloadFunction();
+        closeModalSend();
+        closeModalNextSection();
+        setSendAmount(0);
+        setSendPrincipal("");
+      }
+    };
     const [payment,setPayment]=useState(0)
     const {actors}=useSelector(state=>state.actorReducer)
     const {principle}=useSelector(state=>state.principleReducer)
