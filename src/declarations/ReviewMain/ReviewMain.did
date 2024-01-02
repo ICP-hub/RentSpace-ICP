@@ -1,0 +1,14 @@
+type ReviewParent = 
+ service {
+   autoScaleCanister: (text) -> (text);
+   createNewCanister: (text, Canister) -> (opt text);
+   getCanistersByPK: (text) -> (vec text) query;
+   getPKs: () -> (vec text) query;
+ };
+type Canister = 
+ variant {
+   booking;
+   hotel;
+   user;
+ };
+service : () -> ReviewParent
