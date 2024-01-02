@@ -8,49 +8,50 @@ import { useSelector } from 'react-redux'
 const PaymentScreen =({booking,item,self}) => {
 
   // code for the transation starts from here
-  const [tokenActor,setTokenActor] = useState(null);
+  const [payment,setPayment]=useState(0)
+    const {actors}=useSelector(state=>state.actorReducer)
+    const {principle}=useSelector(state=>state.principleReducer)
+    const [userId,setUserId]=useState("sample")
   const [metaData,setMetaData] = useState(null);
   
   async function settingToken(){
-    
-    setTokenActor(createTokenActor("ryjl3-tyaaa-aaaaa-aaaba-cai"));
-    setMetaData(await tokenActor.icrc1_metadata())
+    // console.log("first")
+    // setTokenActor(createTokenActor("ryjl3-tyaaa-aaaaa-aaaba-cai"));
+    console.log("token actor",actors?.tokenActor)
+    await actors.tokenActor.icrc1_metadata().then((res)=>{
+      console.log(res)
+      setMetaData(res)
+    }).catch((err)=>{console.log(err)})
     console.log("metadate:",metaData);
   }
 
   // function  for the transfer
-  // const transfer=async (sendAmount,sendPrincipal) =>{
-  //   let transaction = {
-  //     amount: parseInt(Number(sendAmount) * Math.pow(10, parseInt(metaData?.metadata?.["icrc1:decimals"]))),
-  //     from_subaccount: [],
-  //     to: {
-  //       owner: Principal.fromText(sendPrincipal),
-  //       subaccount: [],
-  //     },
-  //     fee: [parseInt(metaData?.metadata?.["icrc1:fee"])],
-  //     memo: [],
-  //     created_at_time: [],
-  //   };
-  // let response = await tokenActor.icrc1_transfer(transaction);
-  // let data = displayObject(response);
-  //     if (response.Err) {
-  //      return toast.error(data);
-  //     } else {
-  //       toast.success("Transaction successful");
-  //       let balance = await tokenActor.icrc1_balance_of({ owner: sendPrincipal , subaccount: [] });
-  //       balance = parseInt(balance) / Math.pow(10, tokenMetaData?.metadata?.["icrc1:decimals"]);
-  //       await updateLocalStorageBalance(balance);
-  //       reloadFunction();
-  //       closeModalSend();
-  //       closeModalNextSection();
-  //       setSendAmount(0);
-  //       setSendPrincipal("");
-  //     }
-  //   };
-    const [payment,setPayment]=useState(0)
-    const {actors}=useSelector(state=>state.actorReducer)
-    const {principle}=useSelector(state=>state.principleReducer)
-    const [userId,setUserId]=useState("sample")
+  const transfer=async (sendAmount,sendPrincipal) =>{
+    console.log("metaData[decimals]",parseInt(metaData[0][1]["Nat"]))
+    let transaction = {
+      amount: parseInt(Number(sendAmount) * Math.pow(10, parseInt(metaData[0][1]["Nat"]))),
+      from_subaccount: [],
+      to: {
+        owner: Principal.fromText(sendPrincipal),
+        subaccount: [],
+      },
+      fee: [parseInt(metaData[3][1]["Nat"])],
+      memo: [],
+      created_at_time: [],
+    };
+    console.log("metadata inside transfer",metaData)
+  let response = await actors?.tokenActor.icrc1_transfer(transaction);
+  let data = displayObject(response);
+      if (response.Err) {
+       return toast.error(data);
+      } else {
+        toast.success("Transaction successful");
+        let balance = await actors?.tokenActor.icrc1_balance_of({ owner: sendPrincipal , subaccount: [] });
+        balance = parseInt(balance) / Math.pow(10, tokenMetaData?.metadata?.["icrc1:decimals"]);
+        return balance
+      }
+    };
+    
     const getOwner=()=>{
         setUserId(item?.id.split('#')[0])
         console.log(userId)
@@ -65,15 +66,17 @@ const PaymentScreen =({booking,item,self}) => {
     <View style={styles.view}>
       <Text style={styles.title}>Your Current Balance : {100}</Text>
       <Text style={styles.title}>Hotel Name: {item?.hotelTitle}</Text>
-      <Text style={styles.title}>Sender's id: {"  "}<Text style={{color:COLORS.hostTitle}}>"{principle?.toString()}"</Text></Text>
-      <Text style={styles.title}>Receiver's id:{"  "} <Text style={{color:COLORS.hostTitle}}>"{userId.toString()}"</Text></Text>
+      {/* <Text style={styles.title}>Sender's id: {"  "}<Text style={{color:COLORS.hostTitle}}>"{principle?.toString()}"</Text></Text>
+      <Text style={styles.title}>Receiver's id:{"  "} <Text style={{color:COLORS.hostTitle}}>"{userId.toString()}"</Text></Text> */}
       <TextInput 
         style={styles.inputs}
         value={"$"+payment.toString()}/>
         {/* // placeholder="Amount"
         // placeholderTextColor={COLORS.textLightGrey}
         // onChangeText={value=>setPayment(value.toString())}/> */}
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity style={styles.btn} onPress={()=>{
+          transfer(2000000000,"qkb5l-wokwi-xjxsf-i73hq-iyk3j-qb723-vpmes-oxzvs-e37yb-ih7kp-iqe")
+        }}>
             <Text style={styles.btnText}>Confirm Payment</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btn} onPress={()=>self.current.dismiss()}>

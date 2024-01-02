@@ -13,7 +13,8 @@ const initialState={
         backendActor:backend,
         userActor:User,
         hotelActor:hotel,
-        bookingActor:booking
+        bookingActor:booking,
+        tokenActor:{}
     }
 }
 // async function who(actor){

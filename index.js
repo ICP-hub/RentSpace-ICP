@@ -27,7 +27,7 @@ import { hotel } from './src/declarations/hotel';
 import { backend } from './src/declarations/backend';
 import PolyfillCrypto from 'react-native-webview-crypto'
 import {DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain} from "@dfinity/identity";
-import {HttpAgent, toHex} from "@dfinity/agent";
+import {Actor, HttpAgent, toHex} from "@dfinity/agent";
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import {View, Text, StyleSheet, TouchableOpacity, Image,Modal,Linking, Platform, Alert} from 'react-native';
 import { createActor } from './src/declarations/backend';
@@ -39,6 +39,8 @@ import { setActor } from './src/redux/actor/actions';
 import { setPrinciple } from './src/redux/principle/actions';
 import { setUser } from './src/redux/users/actions';
 import ChatContainer from './src/components/NavScreens/UserScreens/ChatPage/ChatContainer/ChatContainer';
+import { idlFactory } from './Backend/RentSpace_backend/wallet/legder.did';
+import { createTokenActor } from './src/components/NavScreens/UserScreens/HotelsSearch/HotelDetails/BookingForm/utils';
 
 const Stack = createNativeStackNavigator();
 
@@ -146,12 +148,17 @@ const RootComponent: React.FC = () => {
     let actorUser=createUserActor('be2us-64aaa-aaaaa-qaabq-cai',{agent})
     let actorHotel=createHotelActor('br5f7-7uaaa-aaaaa-qaaca-cai',{agent})
     let actorBooking=createBookingActor('by6od-j4aaa-aaaaa-qaadq-cai',{agent})
-
+    let actorToken=Actor.createActor(idlFactory, {
+      agent,
+      blsVerify:()=>true,
+      canisterId:'ryjl3-tyaaa-aaaaa-aaaba-cai'
+    })
     store.dispatch(setActor({
       backendActor:actor,
       userActor:actorUser,
       hotelActor:actorHotel,
-      bookingActor:actorBooking
+      bookingActor:actorBooking,
+      tokenActor:actorToken
     }))
     console.log("actor : ",actor)
     let whoami = await actor.whoami();
