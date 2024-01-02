@@ -36,8 +36,24 @@ export const createActor = (canisterId, options = {}) => {
   return Actor.createActor(idlFactory, {
     agent,
     canisterId,
+    blsVerify:()=>true,
     ...options.actorOptions,
   });
 };
 
-export const Review = createActor(canisterId);
+export const Review = createActor(canisterId, {
+  agentOptions: {
+     fetchOptions: {
+        reactNative: {
+         __nativeResponseType: 'base64',
+        },
+     },
+     callOptions: {
+     reactNative: {
+        textStreaming: true,
+     },
+  },
+     blsVerify: () => true,
+     host: 'http://127.0.0.1:4943',
+  },
+});

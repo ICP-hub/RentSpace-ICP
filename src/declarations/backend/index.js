@@ -39,4 +39,19 @@ export const createActor = (canisterId, options = {}) => {
   });
 };
 
-export const backend = createActor(canisterId);
+export const backend = createActor(canisterId, {
+      agentOptions: {
+         fetchOptions: {
+            reactNative: {
+             __nativeResponseType: 'base64',
+            },
+         },
+         callOptions: {
+         reactNative: {
+            textStreaming: true,
+         },
+      },
+         blsVerify: () => true,
+         host: 'http://127.0.0.1:4943',
+      },
+   });
