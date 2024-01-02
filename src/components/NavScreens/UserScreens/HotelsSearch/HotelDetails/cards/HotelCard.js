@@ -16,8 +16,8 @@ const HotelCard = ({item}) => {
         
         <Image source={images.hotel} style={styles.img}/>
         <View style={styles.dataCont}>
-            <Text style={styles.title}>{item?.hotelTitle}</Text>
-            <Text style={styles.simpleText}>{item?.hotelDes}</Text>
+            <Text style={styles.title}>{(item?.hotelTitle)?item?.hotelTitle:"Sample Hotel"}</Text>
+            <Text style={styles.simpleText}>{item?.hotelDes??"sample Description"}</Text>
             <View style={styles.ratingCont}>
                 <Icon name='star' size={15} color='white'/> 
                 <Icon name='star' size={15} color='white'/> 

@@ -2,8 +2,6 @@ import {ActivityIndicator, Alert, Image, Modal, StyleSheet, Text, View} from 're
 import {useState, useEffect} from 'react';
 import {SIZES, COLORS} from '../../constants/themes';
 import {images} from '../../constants';
-import {SIZES, COLORS} from '../../constants/themes';
-import {images} from '../../constants';
 
 import {
   TextInput,
@@ -11,9 +9,7 @@ import {
 } from 'react-native-gesture-handler';
 import {Calendar} from 'react-native-calendars';
 import {User} from '../../declarations/User/index.js';
-import {User} from '../../declarations/User/index.js';
 import { useSelector,useDispatch } from 'react-redux';
-import { setUser } from '../../redux/users/actions';
 import { setUser } from '../../redux/users/actions';
 
 const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
@@ -26,7 +22,6 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
   const [loading,setLoading]=useState(false)
 
   const {user} =useSelector(state=>state.userReducer)
-  const {actors}=useSelector(state=>state.actorReducer)
   const {actors}=useSelector(state=>state.actorReducer)
   const dispatch=useDispatch()
   
@@ -52,7 +47,6 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
       alert(`Welcome ${fname}! You are successfully registered `)
       
       //alert('Welcome'+res[0]?.firstName)
-      await actors.userActor?.getUserInfo().then((res)=>{
       await actors.userActor?.getUserInfo().then((res)=>{
         console.log(res[0]),
         // setUser(res[0])

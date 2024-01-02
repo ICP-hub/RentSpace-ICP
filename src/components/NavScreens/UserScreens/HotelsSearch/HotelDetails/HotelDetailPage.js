@@ -3,8 +3,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { COLORS,SIZES } from '../../../../../constants/themes'
 import { images } from '../../../../../constants'
-import { COLORS,SIZES } from '../../../../../constants/themes'
-import { images } from '../../../../../constants'
 import Icon2 from 'react-native-vector-icons/AntDesign'
 import HostBand from './cards/HostBand'
 import HotelFacilityCard from './cards/HotelFacilityCard'
@@ -21,11 +19,7 @@ const HotelDetailPage = ({item,setOpen}) => {
     },[])
   return (
     <BottomSheetModalProvider>
-    <BottomSheetModalProvider>
     <ScrollView>
-    <View style={styles.bottomSheet} >
-
-      <TouchableOpacity style={styles.backIcon} onPress={()=>{setOpen(false)}}>
     <View style={styles.bottomSheet} >
 
       <TouchableOpacity style={styles.backIcon} onPress={()=>{setOpen(false)}}>
@@ -65,7 +59,6 @@ const HotelDetailPage = ({item,setOpen}) => {
     </View>
     </ScrollView>
     </BottomSheetModalProvider>
-    </BottomSheetModalProvider>
   )
 }
 
@@ -78,7 +71,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         height:'100%',
-        paddingBottom:100
+        paddingBottom:100,
         height:'100%',
         paddingBottom:100
     },
