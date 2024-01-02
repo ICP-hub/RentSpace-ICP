@@ -1,0 +1,50 @@
+type ScanBooking = 
+ record {
+   bookings: vec BookingInfo;
+   nextKey: opt text;
+ };
+type ScalingOptions = 
+ record {
+   autoScalingHook: AutoScalingCanisterSharedFunctionHook;
+   sizeLimit: ScalingLimitType;
+ };
+type ScalingLimitType = 
+ variant {
+   count: nat;
+   heapSize: nat;
+ };
+type List = 
+ opt record {
+       text;
+       List;
+     };
+type BookingInfo = 
+ record {
+   bookingDuration: text;
+   cancelStatus: bool;
+   date: text;
+   paymentId: text;
+   paymentStatus: bool;
+   refundStatus: bool;
+   userId: text;
+ };
+type Booking = 
+ service {
+   bookHotel: (text, BookingInfo) -> ();
+   getBookingDetials: (text) -> (opt BookingInfo) query;
+   getBookingId: () -> (opt record {
+                              text;
+                              List;
+                            }) query;
+   getPK: () -> (text) query;
+   scanBooking: (text, text, nat, opt bool) -> (ScanBooking) query;
+   skExists: (text) -> (bool) query;
+   transferCycles: () -> ();
+   updateBookingStatus: (text, BookingInfo) -> ();
+ };
+type AutoScalingCanisterSharedFunctionHook = func (text) -> (text);
+service : (record {
+             owners: opt vec principal;
+             partitonKey: text;
+             scalingOptions: ScalingOptions;
+           }) -> Booking
