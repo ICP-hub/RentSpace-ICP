@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Image, Touchable,TouchableOpacity,FlatList } from 'react-native'
+import { StyleSheet, Text, View,Image, Touchable,TouchableOpacity,FlatList, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { images } from '../../../../constants'
 import { COLORS, SIZES } from '../../../../constants/themes'
@@ -6,6 +6,8 @@ import HotelCard from './HotelDetails/cards/HotelCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { setHotelList } from '../../../../redux/hotelList/actions'
 import { setBookings } from '../../../../redux/UserBookings/actions'
+import ShowBookings from './HotelDetails/ShowBookings/ShowBookings'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 const BookHotelPage = () => {
 
@@ -14,23 +16,36 @@ const BookHotelPage = () => {
   const {actors}=useSelector(state=>state.actorReducer)
   const dispatch=useDispatch()
   const [hotelsList,setHotelsList]=useState([])
-  const [showReservation,setShowReservations]=useState(true)
+  const [showReservation,setShowReservations]=useState(false)
   const sampleName='DreamLiner Hotel'
   const sampleDes='2972 Westheimer Rd. Santa Ana, Illinois 85486 '
+  const [bookingList,setBookingList]=useState([])
   async function getReservations(){
-    setShowReservations(true)
+    // setShowReservations(true)
+    setBookingList([])
     await actors?.bookingActor.getBookingId().then((res)=>{
-      let bookingList=[]
+      
       res.map(async(r)=>{
         console.log("booking-->",r[0])
-        await actors?.bookingActor.getBookingDetials(r[0]).then((resp)=>{
-          
-          bookingList.push(resp[0])
+        let hotelId=r[0].split("#")[0]+"#"+r[0].split("#")[1]
+        console.log(hotelId)
+        await actors?.bookingActor.getBookingDetials(r[0]).then(async(resp)=>{
+          let hotel=null
+          await actors?.hotelActor.getHotel(hotelId).then((hRes)=>{
+            hotel=hRes[0]
+          }).catch((err)=>{console.log(err)})
+          console.log({...resp[0],hotel:hotel})
+          setBookingList(b=>[...b,{...resp[0],hotel:hotel}])
         }).catch((err)=>console.log(err))
       })
-      dispatch(setBookings(bookingList))
-      // console.log("bookings : ",res[0][0])
     }).catch((err)=>console.log(err))
+    console.log("bookingList",bookingList)
+  }
+  async function dispatchBookingData(){
+      
+      console.log("final booking",bookingList)
+      
+      setShowReservations(true)
   }
   async function getHotelDetails(){
     setHotelsList([])
@@ -40,21 +55,31 @@ const BookHotelPage = () => {
         console.log({...res[0],id:hotels[i]})
       })
     }
-    dispatch(setHotelList(hotelsList))
+    try{
+      dispatch(setHotelList(hotelsList))
+    }catch(err){console.log(err)}
+    
   }
   useEffect(()=>{
     getHotelDetails()
+    getReservations()
   },[hotels])
 
   if(hotels?.length>0){
     return(
       <>
-      <TouchableOpacity style={styles.btn} onPress={getReservations}>
-        <Text style={styles.btnText}>Show my bookings</Text>
-      </TouchableOpacity>
+      <View style={styles.btnCont}>
+        <TouchableOpacity style={styles.btn} onPress={dispatchBookingData}>
+          <Icon name="address-book" size={20} color={COLORS.black}/>
+          <Text style={styles.btnText}>Show my bookings</Text>
+        </TouchableOpacity>
+      </View>
       <FlatList data={hotelsList} style={{marginBottom:80}}  renderItem={(item)=>(
         <HotelCard item={item.item}  />
       )}/>
+      <Modal animationType='slide' visible={showReservation}>
+        <ShowBookings bookingList={bookingList} setShowReservations={setShowReservations}/>
+      </Modal>
       </>
     )
   }else{
@@ -147,16 +172,28 @@ const styles = StyleSheet.create({
         width:'80%',
         alignItems:'center'
     },
-    btn:{
+    btnCont:{
       display:'flex',
       flexDirection:'column',
+      alignItems:'flex-end',
+      width:'90%',
+    },
+    btn:{
+      display:'flex',
+      flexDirection:'row',
       alignItems:'center',
-      justifyContent:'center'
+      justifyContent:'center',
+      marginTop:10,
+      width:'45%',
+      backgroundColor:'white',
+      paddingVertical:5,
+      borderRadius:8,
+      elevation:10
     },
     btnText:{
       color:COLORS.black,
       fontSize:SIZES.small,
       fontWeight:'bold',
-      
+      marginLeft:6
     }
 })
