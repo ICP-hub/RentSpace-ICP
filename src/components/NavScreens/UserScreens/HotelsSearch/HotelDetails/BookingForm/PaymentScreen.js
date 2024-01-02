@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View,TextInput, TouchableOpacity } from 'react-native'
-import { createTokenActor } from './utils'
+import { createTokenActor, formatTokenMetaData } from './utils'
 import {Principal} from "@dfinity/principal"
 import React, { useEffect, useState } from 'react'
 import { COLORS,SIZES } from '../../../../../../constants/themes'
@@ -13,43 +13,50 @@ const PaymentScreen =({booking,item,self}) => {
     const {principle}=useSelector(state=>state.principleReducer)
     const [userId,setUserId]=useState("sample")
   const [metaData,setMetaData] = useState(null);
-  
+  const [Balance,setBalance]=useState(0)
   async function settingToken(){
     // console.log("first")
     // setTokenActor(createTokenActor("ryjl3-tyaaa-aaaaa-aaaba-cai"));
     console.log("token actor",actors?.tokenActor)
     await actors.tokenActor.icrc1_metadata().then((res)=>{
       console.log(res)
-      setMetaData(res)
+      
+      setMetaData(formatTokenMetaData(res))
     }).catch((err)=>{console.log(err)})
     console.log("metadate:",metaData);
   }
 
   // function  for the transfer
+  const getBalance=async()=>{
+    let bal=await actors?.tokenActor.icrc1_balance_of({ owner: Principal.fromText(principle) , subaccount: [] })
+    console.log("balance : ",parseInt(bal))
+    setBalance(parseInt(bal))
+    return parseInt(bal)
+  }
   const transfer=async (sendAmount,sendPrincipal) =>{
-    console.log("metaData[decimals]",parseInt(metaData[0][1]["Nat"]))
-    let transaction = {
-      amount: parseInt(Number(sendAmount) * Math.pow(10, parseInt(metaData[0][1]["Nat"]))),
-      from_subaccount: [],
-      to: {
-        owner: Principal.fromText(sendPrincipal),
-        subaccount: [],
-      },
-      fee: [parseInt(metaData[3][1]["Nat"])],
-      memo: [],
-      created_at_time: [],
-    };
-    console.log("metadata inside transfer",metaData)
-  let response = await actors?.tokenActor.icrc1_transfer(transaction);
-  let data = displayObject(response);
-      if (response.Err) {
-       return toast.error(data);
-      } else {
-        toast.success("Transaction successful");
-        let balance = await actors?.tokenActor.icrc1_balance_of({ owner: sendPrincipal , subaccount: [] });
-        balance = parseInt(balance) / Math.pow(10, tokenMetaData?.metadata?.["icrc1:decimals"]);
-        return balance
-      }
+    console.log("metaData[decimals]",metaData)
+    let amnt=parseInt(Number(sendAmount) * Math.pow(10, parseInt(metaData?.["icrc1:decimals"])))
+    console.log("amount",getBalance())
+    if(Balance>=amnt){
+      let transaction = {
+        amount: amnt,
+        from_subaccount: [],
+        to: {
+          owner: Principal.fromText(sendPrincipal),
+          subaccount: [],
+        },
+        fee: [metaData?.["icrc1:fee"]],
+        memo: [],
+        created_at_time: [],
+      };
+      console.log("metadata inside transfer fee",metaData?.["icrc1:fee"])
+    let response = await actors?.tokenActor.icrc1_transfer(transaction);
+    console.log(response)
+    alert("transaction successful!")
+    self.current.dismiss()
+    }else{
+      alert("Insufficient balance")
+    }
     };
     
     const getOwner=()=>{
@@ -75,7 +82,7 @@ const PaymentScreen =({booking,item,self}) => {
         // placeholderTextColor={COLORS.textLightGrey}
         // onChangeText={value=>setPayment(value.toString())}/> */}
         <TouchableOpacity style={styles.btn} onPress={()=>{
-          transfer(2000000000,"qkb5l-wokwi-xjxsf-i73hq-iyk3j-qb723-vpmes-oxzvs-e37yb-ih7kp-iqe")
+          transfer(payment/1000000000,userId)
         }}>
             <Text style={styles.btnText}>Confirm Payment</Text>
         </TouchableOpacity>
