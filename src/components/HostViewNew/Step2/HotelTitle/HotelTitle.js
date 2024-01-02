@@ -17,7 +17,7 @@ const HotelTitle = ({setHostModal,pos}) => {
             alert("You cannot leave title empty")
             return false
         }else{
-            dispatch(setListing({...listing,hotelTitle:title}))
+            dispatch(setListing({...listing,hotelTitle:title,createdAt:"to be set"}))
             return true
         }
     }

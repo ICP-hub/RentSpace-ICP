@@ -1,35 +1,53 @@
-import { StyleSheet, Text, View,TouchableOpacity, TextInput, Modal } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, View,TouchableOpacity, TextInput, Modal, ActivityIndicator } from 'react-native'
+import React, { useRef, useState } from 'react'
 import { COLORS,SIZES } from '../../../../../../constants/themes'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { useSelector } from 'react-redux'
 import { Calendar } from 'react-native-calendars'
+import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import PaymentScreen from './PaymentScreen'
 
-const BookingForm = ({setOpen,setShowBookHotel}) => {
+const BookingForm = ({item,setOpen,setShowBookHotel}) => {
   const {user}=useSelector(state=>state.userReducer)
+  const {actors}=useSelector(state=>state.actorReducer)
+  const {principle}=useSelector(state=>state.principleReducer)
   const [selected, setSelected] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
+  const [loading,setLoading]=useState(false)
   const [booking,setBooking]=useState({
-    userId:user?.userId,
+    userId:principle,
     date:"Check-in date",
-    bookingDuration:'',
+    bookingDuration:'0',
     cancelStatus:false,
     refundStatus:false,
     paymentStatus:false,
-    paymentId:""
+    paymentId:"payId"
   })
+  const btmPayment=useRef(null)
 
   const [guests,setGuests]=useState(0)
 
-  const proceedPayment=()=>{
-    console.log(booking)
-    alert("Your booking is confirmed!")
-    setOpen(false)
-    setShowBookHotel(false)
+  const proceedPayment=async()=>{ 
+    // setLoading(true)
+    // await actors?.bookingActor.bookHotel(item?.id,booking).then((res)=>{
+    //   console.log(res)
+    //   console.log(booking)
+    //   setLoading(false)
+    //   alert("Your booking is confirmed!")
+    //   setOpen(false)
+    //   setShowBookHotel(false)
+    // }).catch((err)=>{
+    //   console.log(booking,item?.id)
+    //   console.log(err)
+    //   alert(err)
+    //   setLoading(false)
+    // })
+    btmPayment.current.present()
   }
   return (
+    <BottomSheetModalProvider>
     <View style={styles.view}>
-      <TouchableOpacity style={styles.backIcon} onPress={()=>setShowReviews(false)}>
+      <TouchableOpacity style={styles.backIcon} onPress={()=>setShowBookHotel(false)}>
         <Icon name="angle-left" size={25} color={COLORS.textLightGrey}/> 
     </TouchableOpacity>
       <Text style={styles.title}>Book your room</Text>
@@ -39,7 +57,7 @@ const BookingForm = ({setOpen,setShowBookHotel}) => {
         value={guests}
         placeholder="Number of Guests"
         placeholderTextColor={COLORS.textLightGrey}
-        onChangeText={value=>setGuests(value)}/>
+        onChangeText={value=>setGuests(value.toString())}/>
       <TouchableOpacity style={styles.inputs} onPress={()=>setShowCalendar(true)}>
           <Text style={styles.dateText}>{booking?.date}</Text> 
         </TouchableOpacity>  
@@ -58,7 +76,7 @@ const BookingForm = ({setOpen,setShowBookHotel}) => {
           <Calendar
             onDayPress={day => {
               setSelected(day.dateString);
-              setBooking({...booking,date:`${day.day}/${day.month}/${day.year}`});
+              setBooking({...booking,date:`${day.day}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`});
               setShowCalendar(false);
             }}
             style={styles.calendar}
@@ -72,7 +90,12 @@ const BookingForm = ({setOpen,setShowBookHotel}) => {
           />
         </View>
       </Modal>
+      <ActivityIndicator size={50} animating={loading} style={styles.loader}/>
     </View>
+    <BottomSheetModal  style={{borderRadius:20,backgroundColor:'white',elevation:10}} snapPoints={["60%"]} ref={btmPayment}>
+      <PaymentScreen booking={booking} item={item} self={btmPayment}/>
+    </BottomSheetModal>
+    </BottomSheetModalProvider>
   )
 }
 
@@ -146,5 +169,10 @@ const styles = StyleSheet.create({
     fontSize:SIZES.medium,
     color:'white',
     fontWeight:'bold'
+  },
+  loader:{
+    position:'absolute',
+    top:'45%',
+    left:'45%',
   }
 })

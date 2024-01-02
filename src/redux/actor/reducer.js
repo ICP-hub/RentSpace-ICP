@@ -5,13 +5,15 @@ import { hotel } from '../../declarations/hotel'
 import { setUser } from '../users/actions'
 import { useDispatch } from 'react-redux'
 import store from '../store'
+import { booking } from '../../declarations/booking'
 
 // const dispatch=useDispatch()
 const initialState={
     actors:{
         backendActor:backend,
         userActor:User,
-        hotelActor:hotel
+        hotelActor:hotel,
+        bookingActor:booking
     }
 }
 // async function who(actor){

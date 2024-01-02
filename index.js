@@ -33,6 +33,7 @@ import {View, Text, StyleSheet, TouchableOpacity, Image,Modal,Linking, Platform,
 import { createActor } from './src/declarations/backend';
 import { createActor as createUserActor } from './src/declarations/User';
 import { createActor as createHotelActor } from './src/declarations/hotel';
+import { createActor as createBookingActor } from './src/declarations/booking';
 import store from './src/redux/store';
 import { setActor } from './src/redux/actor/actions';
 import { setPrinciple } from './src/redux/principle/actions';
@@ -76,7 +77,7 @@ const RootComponent: React.FC = () => {
       resp=res
     console.log("running handle login",res)
     try {
-      const url = `http://127.0.0.1:4943/?canisterId=be2us-64aaa-aaaaa-qaabq-cai&publicKey=${toHex(res.getPublicKey().toDer())}`;
+      const url = `http://127.0.0.1:4943/?canisterId=b77ix-eeaaa-aaaaa-qaada-cai&publicKey=${toHex(res.getPublicKey().toDer())}`;
       if (await InAppBrowser.isAvailable()) {
         const result = await InAppBrowser.open(url, {
           // iOS Properties
@@ -142,13 +143,15 @@ const RootComponent: React.FC = () => {
     actor = createActor('bkyz2-fmaaa-aaaaa-qaaaq-cai', {
       agent,
     });
-    let actorUser=createUserActor('br5f7-7uaaa-aaaaa-qaaca-cai',{agent})
-    let actorHotel=createHotelActor('bw4dl-smaaa-aaaaa-qaacq-cai',{agent})
-   
+    let actorUser=createUserActor('be2us-64aaa-aaaaa-qaabq-cai',{agent})
+    let actorHotel=createHotelActor('br5f7-7uaaa-aaaaa-qaaca-cai',{agent})
+    let actorBooking=createBookingActor('by6od-j4aaa-aaaaa-qaadq-cai',{agent})
+
     store.dispatch(setActor({
       backendActor:actor,
       userActor:actorUser,
-      hotelActor:actorHotel
+      hotelActor:actorHotel,
+      bookingActor:actorBooking
     }))
     console.log("actor : ",actor)
     let whoami = await actor.whoami();

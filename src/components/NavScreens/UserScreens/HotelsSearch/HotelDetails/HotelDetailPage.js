@@ -31,14 +31,13 @@ const HotelDetailPage = ({item,setOpen}) => {
       <View style={styles.hotelTitleReviewCont}>
         <View style={styles.hotelTitleCont}>
             <Text style={styles.hotelTitle}>{item?.hotelTitle}</Text>
-            <Text style={styles.hotelTitle}>{item?.hotelTitle}</Text>
             <TouchableOpacity style={styles.likeCont}>
                 <Icon2 name="hearto" size={20} color={COLORS.textLightGrey} />
             </TouchableOpacity>    
         </View>
         <View style={styles.hotelReviewCont}>
             <Icon2 name='star' size={12} color={COLORS.inputBorder} style={{marginRight:5}}/>
-            <Text style={styles.hotelReviewText}>4.92 • 432 reviews • {item?.hotelLocation}</Text>
+            
             <Text style={styles.hotelReviewText}>4.92 • 432 reviews • {item?.hotelLocation}</Text>
         </View>
         
@@ -54,7 +53,7 @@ const HotelDetailPage = ({item,setOpen}) => {
         <ReserveBtn item={item} onClick={()=>setShowBookHotel(true)}/>
       </BottomSheetModal>
       <Modal animationType='slide' visible={showBookHotel}>
-        <BookingForm setOpen={setOpen} setShowBookHotel={setShowBookHotel} /> 
+        <BookingForm item={item} setOpen={setOpen} setShowBookHotel={setShowBookHotel} /> 
       </Modal> 
     </View>
     </ScrollView>

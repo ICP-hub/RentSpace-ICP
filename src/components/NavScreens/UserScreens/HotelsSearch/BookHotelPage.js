@@ -3,24 +3,44 @@ import React, { useEffect, useState } from 'react'
 import { images } from '../../../../constants'
 import { COLORS, SIZES } from '../../../../constants/themes'
 import HotelCard from './HotelDetails/cards/HotelCard'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { setHotelList } from '../../../../redux/hotelList/actions'
+import { setBookings } from '../../../../redux/UserBookings/actions'
 
 const BookHotelPage = () => {
 
   const {user}=useSelector(state=>state.userReducer)
   const {hotels}=useSelector(state=>state.hotelsReducer)
   const {actors}=useSelector(state=>state.actorReducer)
-
-  const [hotelList,setHotelList]=useState([])
+  const dispatch=useDispatch()
+  const [hotelsList,setHotelsList]=useState([])
+  const [showReservation,setShowReservations]=useState(true)
   const sampleName='DreamLiner Hotel'
   const sampleDes='2972 Westheimer Rd. Santa Ana, Illinois 85486 '
+  async function getReservations(){
+    setShowReservations(true)
+    await actors?.bookingActor.getBookingId().then((res)=>{
+      let bookingList=[]
+      res.map(async(r)=>{
+        console.log("booking-->",r[0])
+        await actors?.bookingActor.getBookingDetials(r[0]).then((resp)=>{
+          
+          bookingList.push(resp[0])
+        }).catch((err)=>console.log(err))
+      })
+      dispatch(setBookings(bookingList))
+      // console.log("bookings : ",res[0][0])
+    }).catch((err)=>console.log(err))
+  }
   async function getHotelDetails(){
-    setHotelList([])
+    setHotelsList([])
     for(let i=0;i<hotels?.length;i++){
       await actors.hotelActor?.getHotel(hotels[i]).then((res)=>{
-        setHotelList(hotelList=>[...hotelList,res[0]])
+        setHotelsList(hotelsList=>[...hotelsList,{...res[0],id:hotels[i]}])
+        console.log({...res[0],id:hotels[i]})
       })
     }
+    dispatch(setHotelList(hotelsList))
   }
   useEffect(()=>{
     getHotelDetails()
@@ -28,10 +48,14 @@ const BookHotelPage = () => {
 
   if(hotels?.length>0){
     return(
-      <FlatList data={hotelList} style={{marginBottom:80}}  renderItem={(item)=>(
+      <>
+      <TouchableOpacity style={styles.btn} onPress={getReservations}>
+        <Text style={styles.btnText}>Show my bookings</Text>
+      </TouchableOpacity>
+      <FlatList data={hotelsList} style={{marginBottom:80}}  renderItem={(item)=>(
         <HotelCard item={item.item}  />
       )}/>
-      
+      </>
     )
   }else{
   return (
@@ -122,5 +146,17 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         width:'80%',
         alignItems:'center'
+    },
+    btn:{
+      display:'flex',
+      flexDirection:'column',
+      alignItems:'center',
+      justifyContent:'center'
+    },
+    btnText:{
+      color:COLORS.black,
+      fontSize:SIZES.small,
+      fontWeight:'bold',
+      
     }
 })

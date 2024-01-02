@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View ,ActivityIndicator} from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View ,ActivityIndicator, Alert} from 'react-native'
 import React,{useState} from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
 import SaveBtn from '../../Reusables/SaveBtn'
@@ -24,7 +24,10 @@ const Congratulations = ({setHostModal,pos}) => {
       setHostModal(false)
     })
 
-  }).catch((err)=>{console.log(err)})
+  }).catch((err)=>{
+    setLoading(false)
+    alert(err)
+    console.log(err)})
   }
   return (
     <View style={styles.view}>

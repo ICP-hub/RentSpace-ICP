@@ -51,8 +51,18 @@ const UserDetailDemo = ({navigation}) => {
   const makeHost=async()=>{
     setLoading(true)
     console.log("You are host now")
-    await actors.userActor?.updateUserInfo({...user,userType:'Host',hostStatus:true}).then(async(res)=>{
+    console.log({...user
+      ,userType:'Host',
+      hostStatus:true,
+      userProfile:(user?.userProfile)!=""?user?.userProfile:"img",
+      userGovId:((user?.userGovId==""||user?.userGovId==null)?"nothing":user?.userGovId)})
+    await actors.userActor?.updateUserInfo({...user
+      ,userType:'Host',
+      hostStatus:true,
+      userProfile:(user?.userProfile)!=""?user?.userProfile:"img",
+      userGovId:((user?.userGovId==""||user?.userGovId==null)?"nothing":user?.userGovId)}).then(async(res)=>{
       console.log(res)
+      
       setLoading(false)
       alert('You are a host now!')
       setCreateHotel(true)
@@ -61,9 +71,17 @@ const UserDetailDemo = ({navigation}) => {
         dispatch(setUser(res[0]))
       }).then(()=>{
         getHotelList()
-      }).catch((err)=>console.log(err))
+      }).catch((err)=>{
+        setLoading(false)
+        alert(err)
+        console.log(err)
+      })
 
-    }).catch((err)=>{console.log(err)})
+    }).catch((err)=>{
+      setLoading(false)
+      alert(err)
+      console.log(err)
+    })
   }
 
   return (

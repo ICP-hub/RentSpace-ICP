@@ -33,23 +33,14 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
       lastName:lname,
       dob:DOB,
       userEmail:email,
-      userType:'',
-      userProfile:'',
-      userGovId:'',
-      hostStatus:false,
-      verificationStatus:false,
-      createdAt:""
     }
-    await actors.userActor?.createUser(fname,lname,DOB,email,"user").then(async(res)=>{
-      //setUser(res[0])
+    // await actors.userActor?.createUser(fname,lname,DOB,email,"user").then(async(res)=>{
+    await actors.userActor?.createUser(userObj).then(async(res)=>{
       console.log(res)
       setLoading(false)
       alert(`Welcome ${fname}! You are successfully registered `)
-      
-      //alert('Welcome'+res[0]?.firstName)
       await actors.userActor?.getUserInfo().then((res)=>{
         console.log(res[0]),
-        // setUser(res[0])
         dispatch(setUser(res[0]))
         openComm()
         closeModal()
@@ -57,6 +48,7 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
       })
     }).catch((err)=>{
       alert(err)
+      console.log(err)
       setLoading(false)
     })
     //alert(email)
@@ -142,7 +134,7 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
           <Calendar
             onDayPress={day => {
               setSelected(day.dateString);
-              setDOB(`${day.day}/${day.month}/${day.year}`);
+              setDOB(`${day.day}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`);
               setShowCalendar(false);
             }}
             style={styles.calendar}
