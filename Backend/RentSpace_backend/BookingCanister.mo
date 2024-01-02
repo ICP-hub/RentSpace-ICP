@@ -79,7 +79,7 @@ shared ({caller = owner}) actor class Booking({
         let userIdentity = Principal.toText(user);
         assert (Principal.isAnonymous(user) == false);
         assert (bookingInfo.userId != "" and bookingInfo.date != "" and bookingInfo.bookingDuration != "" and bookingInfo.bookingDuration != "" and bookingInfo.paymentId != "");
-        assert (Text.size(bookingInfo.userId) <= 50 and Text.size(bookingInfo.date) <= 20 and Text.size(bookingInfo.bookingDuration) <= 20 and Text.size(bookingInfo.bookingDuration) <= 10 and Text.size(bookingInfo.paymentId) <= 20);
+        assert (Text.size(bookingInfo.userId) <= 70 and Text.size(bookingInfo.date) <= 20 and Text.size(bookingInfo.bookingDuration) <= 20 and Text.size(bookingInfo.bookingDuration) <= 10 and Text.size(bookingInfo.paymentId) <= 20);
 
         let bookingDate = utils.getDate();
         let sortKey = await createBookingId(userIdentity, hotelId);

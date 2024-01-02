@@ -40,9 +40,9 @@ module {
         var month = "";
         var year = "";
         for (c in iterdate) {
-            if (i != 10) {
-                return false;
-            };
+            // if (i != 10) {
+            //     return false;
+            // };
             if (i < 2) {
                 day := day # Text.fromChar(c);
             };
