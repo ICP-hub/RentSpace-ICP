@@ -10,7 +10,7 @@ export { idlFactory } from "./booking.did.js";
  * beginning in dfx 0.15.0
  */
 export const canisterId =
-  "by6od-j4aaa-aaaaa-qaadq-cai";
+  "asrmz-lmaaa-aaaaa-qaaeq-cai";
 
 export const createActor = (canisterId, options = {}) => {
   const agent = options.agent || new HttpAgent({ ...options.agentOptions });

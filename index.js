@@ -147,7 +147,7 @@ const RootComponent: React.FC = () => {
     });
     let actorUser=createUserActor('be2us-64aaa-aaaaa-qaabq-cai',{agent})
     let actorHotel=createHotelActor('br5f7-7uaaa-aaaaa-qaaca-cai',{agent})
-    let actorBooking=createBookingActor('by6od-j4aaa-aaaaa-qaadq-cai',{agent})
+    let actorBooking=createBookingActor('asrmz-lmaaa-aaaaa-qaaeq-cai',{agent})
     let actorToken=Actor.createActor(idlFactory, {
       agent,
       blsVerify:()=>true,
