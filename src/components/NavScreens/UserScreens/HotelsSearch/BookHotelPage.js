@@ -24,7 +24,7 @@ const BookHotelPage = () => {
     // setShowReservations(true)
     setBookingList([])
     await actors?.bookingActor.getBookingId().then((res)=>{
-      
+      console.log("all bookings1: ",res.length)
       res.map(async(r)=>{
         console.log("booking-->",r[0])
         let hotelId=r[0].split("#")[0]+"#"+r[0].split("#")[1]

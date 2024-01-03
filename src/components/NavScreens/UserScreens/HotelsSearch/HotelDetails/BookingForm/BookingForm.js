@@ -28,21 +28,29 @@ const BookingForm = ({item,setOpen,setShowBookHotel}) => {
   const [guests,setGuests]=useState(0)
 
   const proceedPayment=async()=>{ 
-    // setLoading(true)
-    // await actors?.bookingActor.bookHotel(item?.id,booking).then((res)=>{
-    //   console.log(res)
-    //   console.log(booking)
-    //   setLoading(false)
-    //   alert("Your booking is confirmed!")
-    //   setOpen(false)
-    //   setShowBookHotel(false)
-    // }).catch((err)=>{
-    //   console.log(booking,item?.id)
-    //   console.log(err)
-    //   alert(err)
-    //   setLoading(false)
-    // })
+    
     btmPayment.current.present()
+  }
+  const book=async()=>{
+    if(booking.paymentStatus){
+      setLoading(true)
+      await actors?.bookingActor.bookHotel(item?.id,booking).then((res)=>{
+        console.log(res)
+        console.log(booking)
+        setLoading(false)
+        alert("Your booking is confirmed!")
+        setOpen(false)
+        setShowBookHotel(false)
+      }).catch((err)=>{
+        console.log(booking,item?.id)
+        console.log(err)
+        alert(err)
+        setLoading(false)
+      })
+    }else{
+      alert("You need to complete the payment first!")
+    }
+    
   }
   return (
     <BottomSheetModalProvider>
@@ -71,6 +79,9 @@ const BookingForm = ({item,setOpen,setShowBookHotel}) => {
         <TouchableOpacity style={styles.btn} onPress={proceedPayment}>
           <Text style={styles.btnText}>Proceed to pay</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.btn} onPress={book}>
+          <Text style={styles.btnText}>Confirm Booking</Text>
+        </TouchableOpacity>
         <Modal visible={showCalendar} animationType="slide" transparent>
         <View>
           <Calendar
@@ -93,7 +104,7 @@ const BookingForm = ({item,setOpen,setShowBookHotel}) => {
       <ActivityIndicator size={50} animating={loading} style={styles.loader}/>
     </View>
     <BottomSheetModal  style={{borderRadius:20,backgroundColor:'white',elevation:10}} snapPoints={["70%"]} ref={btmPayment}>
-      <PaymentScreen booking={booking} item={item} self={btmPayment}/>
+      <PaymentScreen setBooking={setBooking} booking={booking} item={item} self={btmPayment} />
     </BottomSheetModal>
     </BottomSheetModalProvider>
   )
@@ -163,7 +174,8 @@ const styles = StyleSheet.create({
     borderRadius:12,
     backgroundColor:COLORS.hostTitle,
     width:'80%',
-    paddingVertical:15
+    paddingVertical:15,
+    marginBottom:15
   },
   btnText:{
     fontSize:SIZES.medium,

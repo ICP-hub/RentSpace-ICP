@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { COLORS,SIZES } from '../../../../../../constants/themes'
 import { useSelector } from 'react-redux'
 
-const PaymentScreen =({booking,item,self}) => {
+const PaymentScreen =({setBooking,booking,item,self}) => {
 
   // code for the transation starts from here
   const [payment,setPayment]=useState(0)
@@ -33,10 +33,14 @@ const PaymentScreen =({booking,item,self}) => {
     setBalance(parseInt(bal))
     return parseInt(bal)
   }
+  useEffect(()=>{
+    getBalance()
+  },[])
   const transfer=async (sendAmount,sendPrincipal) =>{
     console.log("metaData[decimals]",metaData)
     let amnt=parseInt(Number(sendAmount) * Math.pow(10, parseInt(metaData?.["icrc1:decimals"])))
-    console.log("amount",getBalance())
+    
+    console.log("amount",amnt)
     if(Balance>=amnt){
       let transaction = {
         amount: amnt,
@@ -53,6 +57,7 @@ const PaymentScreen =({booking,item,self}) => {
     let response = await actors?.tokenActor.icrc1_transfer(transaction);
     console.log(response)
     alert("transaction successful!")
+    setBooking({...booking,paymentStatus:true})
     self.current.dismiss()
     }else{
       alert("Insufficient balance")
