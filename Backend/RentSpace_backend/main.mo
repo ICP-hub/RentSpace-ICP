@@ -148,7 +148,7 @@ shared ({caller = owner}) actor class Database() = this {
 
   public shared ({caller}) func deleteCanister(serviceId : Text) : async () {
     //Warning! change this condition othwer
-    assert (caller == owner);
+    // assert (caller == owner);
     // admin can delete any pk by passing in service id of user principal
     let pk = serviceId;
 
