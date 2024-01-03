@@ -1,47 +1,64 @@
 import { StyleSheet, Text, View,TextInput, TouchableOpacity } from 'react-native'
-import { createTokenActor } from './utils'
+import { createTokenActor, formatTokenMetaData } from './utils'
 import {Principal} from "@dfinity/principal"
 import React, { useEffect, useState } from 'react'
 import { COLORS,SIZES } from '../../../../../../constants/themes'
 import { useSelector } from 'react-redux'
 
-const PaymentScreen = async ({booking,item,self}) => {
+const PaymentScreen =({booking,item,self}) => {
 
   // code for the transation starts from here
-  const [tokenActor,setTokenActor] = useState(null);
-  const [metaData,setMetaData] = useState(null);
-  setMetaData(await tokenActor.icrc1_metadata())
-  setTokenActor(createTokenActor("ryjl3-tyaaa-aaaaa-aaaba-cai"));
-  console.log(metaData);
-
-  // function  for the transfer
-  const transfer=async (sendAmount,sendPrincipal) =>{
-    let transaction = {
-      amount: parseInt(Number(sendAmount) * Math.pow(10, parseInt(metaData?.metadata?.["icrc1:decimals"]))),
-      from_subaccount: [],
-      to: {
-        owner: Principal.fromText(sendPrincipal),
-        subaccount: [],
-      },
-      fee: [parseInt(metaData?.metadata?.["icrc1:fee"])],
-      memo: [],
-      created_at_time: [],
-    };
-  let response = await tokenActor.icrc1_transfer(transaction);
-  let data = displayObject(response);
-      if (response.Err) {
-       return toast.error(data);
-      } else {
-        toast.success("Transaction successful");
-        let balance = await tokenActor.icrc1_balance_of({ owner: sendPrincipal , subaccount: [] });
-        return balance = parseInt(balance) / Math.pow(10, tokenMetaData?.metadata?.["icrc1:decimals"]);
-       
-      }
-    };
-    const [payment,setPayment]=useState(0)
+  const [payment,setPayment]=useState(0)
     const {actors}=useSelector(state=>state.actorReducer)
     const {principle}=useSelector(state=>state.principleReducer)
     const [userId,setUserId]=useState("sample")
+  const [metaData,setMetaData] = useState(null);
+  const [Balance,setBalance]=useState(0)
+  async function settingToken(){
+    // console.log("first")
+    // setTokenActor(createTokenActor("ryjl3-tyaaa-aaaaa-aaaba-cai"));
+    console.log("token actor",actors?.tokenActor)
+    await actors.tokenActor.icrc1_metadata().then((res)=>{
+      console.log(res)
+      
+      setMetaData(formatTokenMetaData(res))
+    }).catch((err)=>{console.log(err)})
+    console.log("metadate:",metaData);
+  }
+
+  // function  for the transfer
+  const getBalance=async()=>{
+    let bal=await actors?.tokenActor.icrc1_balance_of({ owner: Principal.fromText(principle) , subaccount: [] })
+    console.log("balance : ",parseInt(bal))
+    setBalance(parseInt(bal))
+    return parseInt(bal)
+  }
+  const transfer=async (sendAmount,sendPrincipal) =>{
+    console.log("metaData[decimals]",metaData)
+    let amnt=parseInt(Number(sendAmount) * Math.pow(10, parseInt(metaData?.["icrc1:decimals"])))
+    console.log("amount",getBalance())
+    if(Balance>=amnt){
+      let transaction = {
+        amount: amnt,
+        from_subaccount: [],
+        to: {
+          owner: Principal.fromText(sendPrincipal),
+          subaccount: [],
+        },
+        fee: [metaData?.["icrc1:fee"]],
+        memo: [],
+        created_at_time: [],
+      };
+      console.log("metadata inside transfer fee",metaData?.["icrc1:fee"])
+    let response = await actors?.tokenActor.icrc1_transfer(transaction);
+    console.log(response)
+    alert("transaction successful!")
+    self.current.dismiss()
+    }else{
+      alert("Insufficient balance")
+    }
+    };
+    
     const getOwner=()=>{
         setUserId(item?.id.split('#')[0])
         console.log(userId)
@@ -50,20 +67,23 @@ const PaymentScreen = async ({booking,item,self}) => {
     }
     useEffect(()=>{
         getOwner()
+        settingToken()
     },[])
   return (
     <View style={styles.view}>
       <Text style={styles.title}>Your Current Balance : {100}</Text>
       <Text style={styles.title}>Hotel Name: {item?.hotelTitle}</Text>
-      <Text style={styles.title}>Sender's id: {"  "}<Text style={{color:COLORS.hostTitle}}>"{principle?.toString()}"</Text></Text>
-      <Text style={styles.title}>Receiver's id:{"  "} <Text style={{color:COLORS.hostTitle}}>"{userId.toString()}"</Text></Text>
+      {/* <Text style={styles.title}>Sender's id: {"  "}<Text style={{color:COLORS.hostTitle}}>"{principle?.toString()}"</Text></Text>
+      <Text style={styles.title}>Receiver's id:{"  "} <Text style={{color:COLORS.hostTitle}}>"{userId.toString()}"</Text></Text> */}
       <TextInput 
         style={styles.inputs}
         value={"$"+payment.toString()}/>
         {/* // placeholder="Amount"
         // placeholderTextColor={COLORS.textLightGrey}
         // onChangeText={value=>setPayment(value.toString())}/> */}
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity style={styles.btn} onPress={()=>{
+          transfer(payment/1000000000,userId)
+        }}>
             <Text style={styles.btnText}>Confirm Payment</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btn} onPress={()=>self.current.dismiss()}>
