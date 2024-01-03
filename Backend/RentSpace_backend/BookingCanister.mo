@@ -7,7 +7,7 @@ import Text "mo:base/Text";
 import Time "mo:base/Time";
 import Prelude "mo:base/Prelude";
 import List "mo:base/List";
-
+import Error "mo:base/Error";
 import Entity "mo:candb/Entity";
 import CanDB "mo:candb/CanDB";
 import CA "mo:candb/CanisterActions";
@@ -131,11 +131,11 @@ shared ({caller = owner}) actor class Booking({
         };
     };
 
-    public shared query ({caller = user}) func getBookingId() : async ?(Text, List.List<Text>) {
+    public shared query ({caller = user}) func getBookingId() : async [Text] {
         assert (Principal.isAnonymous(user) == false);
         switch (RBT.get<Text, List.List<Text>>(bookingIdTree, Text.compare, Principal.toText(user))) {
-            case (null) {null};
-            case (?result) {result};
+            case null {[]};
+            case (?result) {List.toArray<Text>(result)};
         };
     };
 
