@@ -6,6 +6,10 @@ import { useSelector } from 'react-redux'
 import BookingCard from './BookingCard'
 
 const ShowBookings = ({bookingList,setShowReservations}) => {
+  const {authData}=useSelector(state=>state.authDataReducer)
+  useEffect(()=>{
+    console.log('authData',authData)
+  },[])
   return (
     <View style={styles.view}>
       <TouchableOpacity style={styles.backIcon} onPress={()=>setShowReservations(false)}>

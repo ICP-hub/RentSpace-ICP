@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Image, Touchable,TouchableOpacity,FlatList, Modal } from 'react-native'
+import { StyleSheet, Text, View,Image, Touchable,TouchableOpacity,FlatList, Modal, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { images } from '../../../../constants'
 import { COLORS, SIZES } from '../../../../constants/themes'
@@ -8,12 +8,14 @@ import { setHotelList } from '../../../../redux/hotelList/actions'
 import { setBookings } from '../../../../redux/UserBookings/actions'
 import ShowBookings from './HotelDetails/ShowBookings/ShowBookings'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import Icon2 from 'react-native-vector-icons/Ionicons'
 
 const BookHotelPage = () => {
 
   const {user}=useSelector(state=>state.userReducer)
   const {hotels}=useSelector(state=>state.hotelsReducer)
   const {actors}=useSelector(state=>state.actorReducer)
+  // const {authData}=useSelector(state=>state.authDataReducer)
   const dispatch=useDispatch()
   const [hotelsList,setHotelsList]=useState([])
   const [showReservation,setShowReservations]=useState(false)
@@ -24,28 +26,33 @@ const BookHotelPage = () => {
     // setShowReservations(true)
     setBookingList([])
     await actors?.bookingActor.getBookingId().then((res)=>{
+      console.log("getid resp : ",res)
+      
       console.log("all bookings1: ",res[0])
       res.map(async(r)=>{
-        console.log("booking-->",r[0])
-        let hotelId=r[0].split("#")[0]+"#"+r[0].split("#")[1]
+        console.log("booking-->",r)
+        let hotelId=r.split("#")[0]+"#"+r.split("#")[1]
         console.log(hotelId)
-        await actors?.bookingActor.getBookingDetials(r[0]).then(async(resp)=>{
+        await actors?.bookingActor.getBookingDetials(r).then(async(resp)=>{
           let hotel=null
           await actors?.hotelActor.getHotel(hotelId).then((hRes)=>{
             hotel=hRes[0]
           }).catch((err)=>{console.log(err)})
+          console.log("booking details : ",resp)
           console.log({...resp[0],hotel:hotel})
           setBookingList(b=>[...b,{...resp[0],hotel:hotel}])
         }).catch((err)=>console.log(err))
       })
-    }).catch((err)=>console.log(err))
+    }).catch((err)=>{
+      console.log("getid err :",err)
+      alert(err)
+    })
     console.log("bookingList",bookingList)
   }
   async function dispatchBookingData(){
-      
+      setShowReservations(true)
       console.log("final booking",bookingList)
       
-      setShowReservations(true)
   }
   async function getHotelDetails(){
     setHotelsList([])
@@ -60,6 +67,12 @@ const BookHotelPage = () => {
     }catch(err){console.log(err)}
     
   }
+  const reloadData=()=>{
+    getHotelDetails()
+    getReservations()
+    // console.log("authData : ",authData)
+
+  }
   useEffect(()=>{
     getHotelDetails()
     getReservations()
@@ -69,6 +82,11 @@ const BookHotelPage = () => {
     return(
       <>
       <View style={styles.btnCont}>
+
+      <TouchableOpacity style={[styles.btn]} onPress={reloadData}>
+          <Icon2 name="reload-circle-sharp" size={20} color={COLORS.black}/>
+          <Text style={styles.btnText}>Reload Data</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.btn} onPress={dispatchBookingData}>
           <Icon name="address-book" size={20} color={COLORS.black}/>
           <Text style={styles.btnText}>Show my bookings</Text>
@@ -174,9 +192,11 @@ const styles = StyleSheet.create({
     },
     btnCont:{
       display:'flex',
-      flexDirection:'column',
-      alignItems:'flex-end',
-      width:'90%',
+      flexDirection:'row',
+      alignItems:'center',
+      justifyContent:'space-between',
+      width:'100%',
+      paddingHorizontal:'8%'
     },
     btn:{
       display:'flex',

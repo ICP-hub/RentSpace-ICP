@@ -13,11 +13,6 @@ type ScalingLimitType =
    count: nat;
    heapSize: nat;
  };
-type List = 
- opt record {
-       text;
-       List;
-     };
 type BookingInfo = 
  record {
    bookingDuration: text;
@@ -32,10 +27,7 @@ type Booking =
  service {
    bookHotel: (text, BookingInfo) -> ();
    getBookingDetials: (text) -> (opt BookingInfo) query;
-   getBookingId: () -> (opt record {
-                              text;
-                              List;
-                            }) query;
+   getBookingId: () -> (vec text) query;
    getPK: () -> (text) query;
    scanBooking: (text, text, nat, opt bool) -> (ScanBooking) query;
    skExists: (text) -> (bool) query;

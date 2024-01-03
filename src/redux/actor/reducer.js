@@ -26,10 +26,8 @@ const initialState={
 export function actorReducer(state=initialState,action){
     switch(action.type){
         case SET_ACTOR:
-            console.log({...state,actors:action.payload})
+            // console.log({...state,actors:action.payload})
             state = {...state,actors:action.payload};
-            // who(state.actors.backendActor)
-            console.log("action payload : ",action.payload)
             return {...state,actors:action.payload}
         case UPDATE_USER:
             updateUser(state.actors.userActor,action.payload)
@@ -42,9 +40,9 @@ export function actorReducer(state=initialState,action){
 async function updateUser(actor,user){
     console.log("executing : actor -->",actor,"user-->",user)
     await actor.updateUserInfo(user).then(async(res)=>{
-        console.log("update result : ",res)
+        // console.log("update result : ",res)
         await actor.getUserInfo().then((resp)=>{
-            console.log("updated user redux",resp[0])   
+            // console.log("updated user redux",resp[0])   
             // store.dispatch(setUser(resp))
         })
     })

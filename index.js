@@ -27,7 +27,7 @@ import { hotel } from './src/declarations/hotel';
 import { backend } from './src/declarations/backend';
 import PolyfillCrypto from 'react-native-webview-crypto'
 import {DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain} from "@dfinity/identity";
-import {Actor, HttpAgent, toHex} from "@dfinity/agent";
+import {Actor, HttpAgent, toHex,fromHex} from "@dfinity/agent";
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import {View, Text, StyleSheet, TouchableOpacity, Image,Modal,Linking, Platform, Alert} from 'react-native';
 import { createActor } from './src/declarations/backend';
@@ -41,6 +41,7 @@ import { setUser } from './src/redux/users/actions';
 import ChatContainer from './src/components/NavScreens/UserScreens/ChatPage/ChatContainer/ChatContainer';
 import { idlFactory } from './Backend/RentSpace_backend/wallet/legder.did';
 import { createTokenActor } from './src/components/NavScreens/UserScreens/HotelsSearch/HotelDetails/BookingForm/utils';
+import { setAuthData } from './src/redux/authData/actions';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,7 +53,6 @@ const RootComponent: React.FC = () => {
 
   const btmSheetLoginRef = useRef(null);
   const btmSheetFinishRef = useRef(null);
-
   const [middleKeyIdentity, setMiddleKeyIdentity] = useState('');
   const generateIdentity = async () => {
     let p = new Promise(async(resolve,reject)=>{
@@ -121,7 +121,7 @@ const RootComponent: React.FC = () => {
     const deepLink = event.url;
     const urlObject = new URL(deepLink);
     const delegation = urlObject.searchParams.get('delegation');
-
+    	// console.log("signature",delegation)
     const chain = DelegationChain.fromJSON(
       JSON.parse(decodeURIComponent(delegation)),
     );
@@ -129,6 +129,7 @@ const RootComponent: React.FC = () => {
       resp,
       chain,
     );
+    // console.log("middleID : ",middleIdentity)
     const agent = new HttpAgent({identity: middleIdentity,fetchOptions: {
       reactNative: {
         __nativeResponseType: 'base64',
@@ -141,13 +142,53 @@ const RootComponent: React.FC = () => {
     },
     blsVerify: () => true,
     host: 'http://127.0.0.1:4943',});
-   
+    let signObj;
+    async function getSignObject(){
+      const principalM=middleIdentity.getPrincipal().toString()
+      const encoder=new TextEncoder()
+      let message=encoder.encode(principalM)
+      // let publicKey=toHex(middleIdentity.getPublicKey().toDer())
+      let publicKey = await crypto.subtle.exportKey('raw', middleIdentity._inner._keyPair.publicKey);
+      let signature;
+      await middleIdentity.sign(message).then((res)=>{
+        signature=res
+        console.log(`principal : ${principalM} \n public key : ${toHex(publicKey)} \n signature : ${toHex(signature)}`)
+        console.log({
+          principal:principalM,
+          publicKey:toHex(publicKey),
+          signature:toHex(signature)
+        })
+        signObj=
+        {
+          principal:principalM,
+          publicKey:toHex(publicKey),
+          signature:toHex(signature)
+        }
+      }).catch((err)=>{console.log(err)})
+      
+    }
+    await getSignObject().then(()=>{
+      console.log("getting sign obj : ",signObj)
+      store.dispatch(
+        setAuthData(signObj)
+      )
+    })
+    
+    // const signObject=urlObject.searchParams.get('signObject')
+    // console.log("signature Object : ",signObject)
+    // console.log("midId",middleIdentity.sign())
+    // console.log("public key : ",toHex(middleIdentity.getPublicKey().toDer()))
+    // console.log("principal : ",middleIdentity.getPrincipal().toString())
+    // console.log("signature : ",agent)
+    // console.log("signature : ",delegation["delegations"])
+  //  console.log("signature : ",await middleIdentity.sign(middleIdentity.getPublicKey().toDer()))
+    // console.log("signature : ",chain.delegations[0])
     actor = createActor('bkyz2-fmaaa-aaaaa-qaaaq-cai', {
       agent,
     });
     let actorUser=createUserActor('be2us-64aaa-aaaaa-qaabq-cai',{agent})
     let actorHotel=createHotelActor('br5f7-7uaaa-aaaaa-qaaca-cai',{agent})
-    let actorBooking=createBookingActor('asrmz-lmaaa-aaaaa-qaaeq-cai',{agent})
+    let actorBooking=createBookingActor('a4tbr-q4aaa-aaaaa-qaafq-cai',{agent})
     let actorToken=Actor.createActor(idlFactory, {
       agent,
       blsVerify:()=>true,
@@ -160,6 +201,7 @@ const RootComponent: React.FC = () => {
       bookingActor:actorBooking,
       tokenActor:actorToken
     }))
+    
     console.log("actor : ",actor)
     let whoami = await actor.whoami();
     store.dispatch(setPrinciple(whoami))

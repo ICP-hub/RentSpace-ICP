@@ -8,7 +8,7 @@ export type AutoScalingCanisterSharedFunctionHook = ActorMethod<
 export interface Booking {
   'bookHotel' : ActorMethod<[string, BookingInfo], undefined>,
   'getBookingDetials' : ActorMethod<[string], [] | [BookingInfo]>,
-  'getBookingId' : ActorMethod<[], [] | [[string, List]]>,
+  'getBookingId' : ActorMethod<[], Array<string>>,
   'getPK' : ActorMethod<[], string>,
   'scanBooking' : ActorMethod<
     [string, string, bigint, [] | [boolean]],
@@ -27,7 +27,6 @@ export interface BookingInfo {
   'paymentId' : string,
   'cancelStatus' : boolean,
 }
-export type List = [] | [[string, List]];
 export type ScalingLimitType = { 'heapSize' : bigint } |
   { 'count' : bigint };
 export interface ScalingOptions {

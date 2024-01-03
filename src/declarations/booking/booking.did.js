@@ -1,5 +1,4 @@
 export const idlFactory = ({ IDL }) => {
-  const List = IDL.Rec();
   const AutoScalingCanisterSharedFunctionHook = IDL.Func(
       [IDL.Text],
       [IDL.Text],
@@ -22,7 +21,6 @@ export const idlFactory = ({ IDL }) => {
     'paymentId' : IDL.Text,
     'cancelStatus' : IDL.Bool,
   });
-  List.fill(IDL.Opt(IDL.Tuple(IDL.Text, List)));
   const ScanBooking = IDL.Record({
     'bookings' : IDL.Vec(BookingInfo),
     'nextKey' : IDL.Opt(IDL.Text),
@@ -34,11 +32,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(BookingInfo)],
         ['query'],
       ),
-    'getBookingId' : IDL.Func(
-        [],
-        [IDL.Opt(IDL.Tuple(IDL.Text, List))],
-        ['query'],
-      ),
+    'getBookingId' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
     'getPK' : IDL.Func([], [IDL.Text], ['query']),
     'scanBooking' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Nat, IDL.Opt(IDL.Bool)],
