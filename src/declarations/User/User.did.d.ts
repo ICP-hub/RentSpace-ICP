@@ -20,6 +20,7 @@ export interface User {
   'getOwner' : ActorMethod<[], string>,
   'getPK' : ActorMethod<[], string>,
   'getUserInfo' : ActorMethod<[], [] | [UserInfo]>,
+  'getUserInfoByPrincipal' : ActorMethod<[Principal], [] | [UserInfo]>,
   'scanUsers' : ActorMethod<[string, string, bigint, [] | [boolean]], ScanUser>,
   'skExists' : ActorMethod<[string], boolean>,
   'transferCycles' : ActorMethod<[], undefined>,

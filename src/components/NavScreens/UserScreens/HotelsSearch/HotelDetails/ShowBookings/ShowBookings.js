@@ -33,6 +33,13 @@ const styles = StyleSheet.create({
         width:'100%',
         height:'100%'
       },
+      header:{
+        display:'flex',
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center',
+        width:'90%'
+      },
       title:{
         color:COLORS.black,
         position:'absolute',

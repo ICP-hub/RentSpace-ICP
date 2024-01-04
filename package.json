@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
-    "@dfinity/agent": "^0.15.1",
+    "@dfinity/agent": "^0.18.1",
     "@dfinity/auth-client": "^0.20.2",
     "@dfinity/candid": "^0.20.1",
     "@dfinity/identity": "^0.20.2",
@@ -23,11 +23,10 @@
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
     "@reduxjs/toolkit": "^2.0.1",
-    "crypto": "^1.0.1",
+    "axios": "^1.6.4",
     "crypto": "^1.0.1",
     "deprecated-react-native-prop-types": "^5.0.0",
     "fast-text-encoding": "^1.0.6",
-    "flatted": "^3.2.9",
     "flatted": "^3.2.9",
     "ic-mops": "^0.34.4",
     "isomorphic-fetch": "^3.0.0",
@@ -52,8 +51,6 @@
     "react-native-slider": "^0.11.0",
     "react-native-splash-screen": "^3.3.0",
     "react-native-vector-icons": "^10.0.2",
-    "react-native-webview": "^13.6.3",
-    "react-native-webview-crypto": "^0.0.25",
     "react-native-webview": "^13.6.3",
     "react-native-webview-crypto": "^0.0.25",
     "react-redux": "^9.0.4",
@@ -93,9 +90,6 @@
   },
   "engines": {
     "node": ">=16"
-  },
-  "react-native": {
-    "crypto": "react-native-crypto"
   },
   "react-native": {
     "crypto": "react-native-crypto"

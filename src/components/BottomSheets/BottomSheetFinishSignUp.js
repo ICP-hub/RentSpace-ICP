@@ -47,7 +47,7 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
         console.log(user)
       })
     }).catch((err)=>{
-      alert(err)
+      // alert(err)
       console.log(err)
       setLoading(false)
     })

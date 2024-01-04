@@ -42,6 +42,7 @@ import ChatContainer from './src/components/NavScreens/UserScreens/ChatPage/Chat
 import { idlFactory } from './Backend/RentSpace_backend/wallet/legder.did';
 import { createTokenActor } from './src/components/NavScreens/UserScreens/HotelsSearch/HotelDetails/BookingForm/utils';
 import { setAuthData } from './src/redux/authData/actions';
+import axios from 'axios';
 
 const Stack = createNativeStackNavigator();
 
@@ -167,26 +168,27 @@ const RootComponent: React.FC = () => {
       }).catch((err)=>{console.log(err)})
       
     }
-    await getSignObject().then(()=>{
+    await getSignObject().then(async()=>{
       console.log("getting sign obj : ",signObj)
       store.dispatch(
         setAuthData(signObj)
       )
+      await axios.post(`https://rentspace.kaifoundry.com/api/v1/register/user`,signObj).then((res)=>{
+        console.log("chat register resp : ",res)
+      }).catch((err)=>{
+        console.log("chat register error : ",err)
+        if(err?.response?.data?.error=="User already exists"){
+          console.log("chat user already exists!")
+        }else{
+          console.log("err resp : ",err?.response?.data?.error)
+        }
+      })
     })
     
-    // const signObject=urlObject.searchParams.get('signObject')
-    // console.log("signature Object : ",signObject)
-    // console.log("midId",middleIdentity.sign())
-    // console.log("public key : ",toHex(middleIdentity.getPublicKey().toDer()))
-    // console.log("principal : ",middleIdentity.getPrincipal().toString())
-    // console.log("signature : ",agent)
-    // console.log("signature : ",delegation["delegations"])
-  //  console.log("signature : ",await middleIdentity.sign(middleIdentity.getPublicKey().toDer()))
-    // console.log("signature : ",chain.delegations[0])
     actor = createActor('bkyz2-fmaaa-aaaaa-qaaaq-cai', {
       agent,
     });
-    let actorUser=createUserActor('be2us-64aaa-aaaaa-qaabq-cai',{agent})
+    let actorUser=createUserActor('aovwi-4maaa-aaaaa-qaagq-cai',{agent})
     let actorHotel=createHotelActor('br5f7-7uaaa-aaaaa-qaaca-cai',{agent})
     let actorBooking=createBookingActor('a4tbr-q4aaa-aaaaa-qaafq-cai',{agent})
     let actorToken=Actor.createActor(idlFactory, {

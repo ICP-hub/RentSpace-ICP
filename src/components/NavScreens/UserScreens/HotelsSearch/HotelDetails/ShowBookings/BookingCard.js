@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { COLORS, SIZES } from '../../../../../../constants/themes'
+import Icon from 'react-native-vector-icons/Feather'
 
 const BookingCard = ({item}) => {
   const [date,setDate]=useState("date")
@@ -24,19 +25,30 @@ const BookingCard = ({item}) => {
   return (
     
     <View style={styles.card}>
-      <Text style={styles.name}>{item?.hotel?.hotelTitle}</Text>
-      <Text style={styles.normalText}>
-         Check-In date : {date}
-      </Text>
-      <Text style={styles.normalText}>
-        Price per night : ${Number(item?.hotel?.hotelPrice)}
-      </Text>
-      <Text style={styles.normalText}>
-        Duration of stay : {Number(item?.bookingDuration)} days
-      </Text>
-      <Text style={styles.normalText}>
-        Amount paid : ${Number(item?.hotel?.hotelPrice)*Number(item?.bookingDuration)}
-      </Text>
+      <TouchableOpacity style={styles.editBtn}>
+        
+        <Icon name='edit-3' color='white' size={16}/>
+        <Text style={styles.editText}>Review</Text>
+      </TouchableOpacity>
+      <View style={styles.textCont}>
+        <Text style={styles.title}>
+           Travel Destination
+        </Text>
+        <Text style={styles.normalText}>
+          {item?.hotel?.hotelTitle}
+        </Text>
+      </View>
+      <View style={styles.textCont}>
+        <Text style={styles.title}>Details</Text>
+        <Text style={styles.normalText}>Check In : {date}</Text>
+        <Text style={styles.normalText}>Duration of Stay : {Number(item?.bookingDuration)} days</Text>
+        <Text style={styles.normalText}>Price per night : ${Number(item?.hotel?.hotelPrice)}</Text>
+      </View>
+      <View style={styles.whiteHR}/>
+      <View style={styles.priceCont}>
+        <Text style={styles.total}>Total</Text>
+        <Text style={styles.total}>${Number(item?.hotel?.hotelPrice)*Number(item?.bookingDuration)}</Text>
+      </View>
     </View>
   )
 }
@@ -47,26 +59,63 @@ const styles = StyleSheet.create({
     card:{
         display:'flex',
         flexDirection:'column',
-        justifyContent:'center',
-        alignItems:'flex-start',
-        borderColor:COLORS.hostTitle,
-        borderWidth:1,
-        width:'90%',
+        justifyContent:'flex-start',
+        alignItems:'center',
+        backgroundColor:COLORS.royalPurple,
+        width:'92%',
         marginLeft:'5%',
-        paddingHorizontal:20,
-        paddingVertical:12,
+        paddingVertical:20,
         borderRadius:12,
-        marginBottom:20
+        marginBottom:20,
+        elevation:10
     },
-    name:{
-      color:COLORS.black,
+    textCont:{
+      width:'85%',
+      display:'flex',
+      flexDirection:'column',
+      alignItems:'flex-start',
+      marginBottom:10
+    },
+    title:{
       fontSize:SIZES.preMedium,
-      fontWeight:'500',
-      marginBottom:6
+      color:'white',
+      fontWeight:'600',
+      marginBottom:0
     },
     normalText:{
       fontSize:SIZES.small,
-      color:COLORS.textLightGrey,
+      color:'white',
       fontWeight:'300'
+    },
+    priceCont:{
+      display:'flex',
+      flexDirection:'row',
+      width:'85%',
+      justifyContent:'space-between'
+    },
+    whiteHR:{
+      backgroundColor:'white',
+      width:'85%',
+      height:1,
+      marginBottom:7
+    },
+    total:{
+      fontSize:SIZES.preMedium,
+      color:'white',
+      fontWeight:'600',
+    },
+    editBtn:{
+      padding:5,
+      position:'absolute',
+      right:'7.5%',
+      top:'12%',
+      display:'flex',
+      flexDirection:'row'
+    },
+    editText:{
+      marginLeft:2,
+      fontSize:SIZES.small,
+      color:'white',
+      fontWeight:'bold'
     }
 })

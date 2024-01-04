@@ -24,6 +24,7 @@ type User =
    getOwner: () -> (text) query;
    getPK: () -> (text) query;
    getUserInfo: () -> (opt UserInfo) query;
+   getUserInfoByPrincipal: (principal) -> (opt UserInfo) query;
    scanUsers: (text, text, nat, opt bool) -> (ScanUser) query;
    skExists: (text) -> (bool) query;
    transferCycles: () -> ();
