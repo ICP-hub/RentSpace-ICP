@@ -10,7 +10,7 @@ import ShowBookings from './HotelDetails/ShowBookings/ShowBookings'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Icon2 from 'react-native-vector-icons/Ionicons'
 
-const BookHotelPage = () => {
+const BookHotelPage = ({navigation}) => {
 
   const {user}=useSelector(state=>state.userReducer)
   const {hotels}=useSelector(state=>state.hotelsReducer)
@@ -45,7 +45,7 @@ const BookHotelPage = () => {
       })
     }).catch((err)=>{
       console.log("getid err :",err)
-      alert(err)
+      // alert(err)
     })
     console.log("bookingList",bookingList)
   }
@@ -93,7 +93,7 @@ const BookHotelPage = () => {
         </TouchableOpacity>
       </View>
       <FlatList data={hotelsList} style={{marginBottom:80}}  renderItem={(item)=>(
-        <HotelCard item={item.item}  />
+        <HotelCard item={item.item} navigation={navigation} />
       )}/>
       <Modal animationType='slide' visible={showReservation}>
         <ShowBookings bookingList={bookingList} setShowReservations={setShowReservations}/>

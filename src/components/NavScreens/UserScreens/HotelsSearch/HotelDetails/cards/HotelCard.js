@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Entypo'
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'
 import HotelDetailPage from '../HotelDetailPage'
 
-const HotelCard = ({item}) => {
+const HotelCard = ({item,navigation}) => {
     const [open,setOpen]=useState(false)
   return (
     <View style={styles.cardCont}>
@@ -26,7 +26,7 @@ const HotelCard = ({item}) => {
             </View>
         </View>
         <Modal animationType='slide' visible={open}>
-            <HotelDetailPage item={item} setOpen={setOpen}/>
+            <HotelDetailPage item={item} setOpen={setOpen} navigation={navigation}/>
         </Modal>
     </View>
   )

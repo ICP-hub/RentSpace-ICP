@@ -3,8 +3,10 @@ import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome6'
 import { COLORS } from '../../../../../constants/themes'
 
-const TypingField = ({setMessages,messages}) => {
-  const [message,setMessage]=useState("")
+const TypingField = ({setMessages,messages,setMessage,message,sendMessage}) => {
+
+
+
   return (
     <View style={styles.field}>
       <TextInput 
@@ -16,10 +18,7 @@ const TypingField = ({setMessages,messages}) => {
        value={message}
        onChangeText={value=>setMessage(value)}
       />
-      <TouchableOpacity style={styles.icon} onPress={()=>{
-        setMessages([...messages,{self:true,message:message}])
-        setMessage("")
-      }}>
+      <TouchableOpacity style={styles.icon} onPress={sendMessage}>
         <Icon name='location-arrow' color={COLORS.hostTitle} size={30}/>
       </TouchableOpacity>
       

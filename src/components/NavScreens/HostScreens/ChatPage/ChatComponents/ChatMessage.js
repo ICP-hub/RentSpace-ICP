@@ -1,14 +1,19 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { COLORS,SIZES } from '../../../../../constants/themes'
 import { images } from '../../../../../constants'
+import { useSelector } from 'react-redux'
 
 const ChatMessage = ({item}) => {
+  const {principle}=useSelector(state=>state.principleReducer)
+  // useEffect(()=>{
+  //   console.log(principle)
+  // },[])
   return (
     
-    <View style={[styles.card,(item?.self)?{justifyContent:'flex-end'}:{justifyContent:'flex-start'}]}>
+    <View style={[styles.card,(item?.fromPrincipal==principle)?{justifyContent:'flex-end'}:{justifyContent:'flex-start'}]}>
       {
-        (item?.self)?
+        (item?.fromPrincipal==principle)?
         <>
           <Text style={styles.text}>{item?.message}</Text>
           <Image source={images.hotelImg1} style={styles.img}/>

@@ -148,21 +148,23 @@ const RootComponent: React.FC = () => {
       const principalM=middleIdentity.getPrincipal().toString()
       const encoder=new TextEncoder()
       let message=encoder.encode(principalM)
-      // let publicKey=toHex(middleIdentity.getPublicKey().toDer())
-      let publicKey = await crypto.subtle.exportKey('raw', middleIdentity._inner._keyPair.publicKey);
+      let publicKey=toHex(middleIdentity.getPublicKey().toDer())
+      let pubKey = await crypto.subtle.exportKey('raw', middleIdentity._inner._keyPair.publicKey);
       let signature;
       await middleIdentity.sign(message).then((res)=>{
         signature=res
         console.log(`principal : ${principalM} \n public key : ${toHex(publicKey)} \n signature : ${toHex(signature)}`)
         console.log({
           principal:principalM,
-          publicKey:toHex(publicKey),
+          publicKey:publicKey,
+          pubKey:toHex(pubKey),
           signature:toHex(signature)
         })
         signObj=
         {
           principal:principalM,
-          publicKey:toHex(publicKey),
+          publicKey:publicKey,
+          pubKey:toHex(pubKey),
           signature:toHex(signature)
         }
       }).catch((err)=>{console.log(err)})
@@ -237,7 +239,7 @@ const RootComponent: React.FC = () => {
       <Stack.Navigator initialRouteName="Launch">
         <Stack.Screen options={{headerShown:false}} name="Launch" component={Main} initialParams={{handleLogin,btmSheetLoginRef,btmSheetFinishRef
         }}/>
-        <Stack.Screen options={{headerShown:false}} name='UserChat' component={ChatContainer} />
+        <Stack.Screen options={{headerShown:false}} name='UserChat' component={ChatContainer} initialParams={{newChat:''}}/>
         <Stack.Screen options={{headerShown:false}} name='profile' component={UserDetailDemo} />
         <Stack.Screen options={{headerShown:false}} name='mapSearch' component={Map}/>
         <Stack.Screen options={{headerShown:false}} name='reels' component={Reels}/>

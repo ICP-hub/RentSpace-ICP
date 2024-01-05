@@ -11,7 +11,7 @@ import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet
 import Reviews from './subComponents/Reviews/Reviews'
 import BookingForm from './BookingForm/BookingForm'
 
-const HotelDetailPage = ({item,setOpen}) => {
+const HotelDetailPage = ({item,setOpen,navigation}) => {
     const btmBtn=useRef(null)
     const [showBookHotel,setShowBookHotel]=useState(false)
     useEffect(()=>{
@@ -48,7 +48,12 @@ const HotelDetailPage = ({item,setOpen}) => {
       </View>
       <View style={styles.hrLine}></View>
       <Reviews/>  
-
+        <TouchableOpacity style={styles.btn} onPress={()=>{
+            navigation.navigate('UserChat',{newChat:item.id.split('#')[0]})
+            setOpen(false)
+        }}>
+            <Text style={styles.btnText}>Chat with Host</Text>
+        </TouchableOpacity>
       <BottomSheetModal ref={btmBtn} index={0} snapPoints={['12']} style={{elevation:10,backgroundColor:'white'}}>
         <ReserveBtn item={item} onClick={()=>setShowBookHotel(true)}/>
       </BottomSheetModal>
@@ -140,5 +145,19 @@ const styles = StyleSheet.create({
         borderBottomColor:COLORS.hrLine,
         width:"100%",
         marginBottom:20
+    },
+    btn:{
+        width:'80%',
+        borderRadius:12,
+        display:'flex',
+        flexDirection:'column',
+        alignItems:'center',
+        paddingVertical:15,
+        backgroundColor:COLORS.hostTitle
+    },
+    btnText:{
+        fontSize:SIZES.preMedium,
+        color:'white',
+        fontWeight:'bold'
     }
 })

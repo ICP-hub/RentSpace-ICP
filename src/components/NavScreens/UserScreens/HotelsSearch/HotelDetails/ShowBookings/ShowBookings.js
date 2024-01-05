@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import { COLORS,SIZES } from '../../../../../../constants/themes'
 import { useSelector } from 'react-redux'
 import BookingCard from './BookingCard'
+import Icon2 from 'react-native-vector-icons/MaterialIcons'
 
 const ShowBookings = ({bookingList,setShowReservations}) => {
   const {authData}=useSelector(state=>state.authDataReducer)
@@ -15,7 +16,13 @@ const ShowBookings = ({bookingList,setShowReservations}) => {
       <TouchableOpacity style={styles.backIcon} onPress={()=>setShowReservations(false)}>
         <Icon name="angle-left" size={25} color={COLORS.textLightGrey}/> 
     </TouchableOpacity>
-    <Text style={styles.title}>Your Bookings</Text>
+    <View style={styles.header}>
+      <Text style={styles.title}>Your Bookings</Text>
+      <TouchableOpacity style={styles.reloadIcon}>
+      <Icon2 name="assignment-add" size={30} color={COLORS.black} onPress={()=>setShowReservations(false)}/>
+      </TouchableOpacity>
+    </View>
+    {/* <Text style={styles.title}>Your Bookings</Text> */}
     <FlatList contentContainerStyle={styles.list} style={styles.Flist} data={bookingList} renderItem={(item)=>(
       <BookingCard item={item.item}/>
     )}/>
@@ -38,14 +45,13 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'space-between',
         alignItems:'center',
-        width:'90%'
+        width:'80%',
       },
       title:{
         color:COLORS.black,
-        position:'absolute',
         top:'2%',
         fontWeight:'bold',
-        fontSize:SIZES.medium
+        fontSize:SIZES.xLarge
       },
       backIcon:{
         display:'flex',
@@ -65,5 +71,11 @@ const styles = StyleSheet.create({
           paddingVertical:20,
           width:'90%',
           marginLeft:'5%'
+      },
+      reloadIcon:{
+        display:'flex',
+        flexDirection:'column',
+        alignItems:'center',
+        justifyContent:'center',
       }
 })

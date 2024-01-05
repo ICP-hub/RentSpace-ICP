@@ -1,9 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { COLORS, SIZES } from '../../../../../../constants/themes'
 import Icon from 'react-native-vector-icons/Feather'
+import AddReview from '../AddReview/AddReview'
 
 const BookingCard = ({item}) => {
+  const [showAddReview,setAddReview]=useState(false)
   const [date,setDate]=useState("date")
   const getDate=()=>{
     try{
@@ -49,6 +51,9 @@ const BookingCard = ({item}) => {
         <Text style={styles.total}>Total</Text>
         <Text style={styles.total}>${Number(item?.hotel?.hotelPrice)*Number(item?.bookingDuration)}</Text>
       </View>
+      <Modal animationType='slide' visible={showAddReview}>
+        <AddReview item={item} setAddReview={setAddReview}/>
+      </Modal>
     </View>
   )
 }
