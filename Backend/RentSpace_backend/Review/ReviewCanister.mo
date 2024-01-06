@@ -61,7 +61,7 @@ shared ({caller = owner}) actor class Review({
         let identityStatus = await skExists(userIdentity);
 
         assert (userIdentity != "" and reviewData.bookingId != "" and reviewData.rating <= 0 and reviewData.title != "" and reviewData.des != "");
-        assert (Text.size(reviewData.bookingId) <= 50 and Text.size(reviewData.title) <= 25 and Text.size(reviewData.title) <= 500);
+        assert (Text.size(reviewData.bookingId) <= 250 and Text.size(reviewData.title) <= 25 and Text.size(reviewData.title) <= 500);
         let date = utils.getDate();
         createReviewId(userIdentity, bookingId);
         //inserts the entity into CanDB
