@@ -66,7 +66,7 @@ shared ({caller = owner}) actor class User({
         let identityStatus = await skExists(userIdentity);
 
         assert (userIdentity != "" and userData.firstName != "" and userData.lastName != "" and userData.dob != "" and userData.userEmail != "");
-        assert (Text.size(userData.firstName) <= 25 and Text.size(userData.lastName) <= 25 and Text.size(userData.userEmail) <= 50 and utils.checkDate(userData.dob) == false and utils.checkEmail(userData.userEmail));
+        // assert (Text.size(userData.firstName) <= 25 and Text.size(userData.lastName) <= 25 and Text.size(userData.userEmail) <= 50 and utils.checkDate(userData.dob) == false and utils.checkEmail(userData.userEmail));
         let date = utils.getDate();
         //inserts the entity into CanDB
         await* CanDB.put(
@@ -137,6 +137,21 @@ shared ({caller = owner}) actor class User({
         };
     };
     ///----function to get the getUserInfo data using the by passing uuid as sortkey------///
+
+    public query func getUserInfoByPrincipal(user:Principal) : async ?Types.UserInfo {
+
+        let userIdentity = Principal.toText(user);
+        let userInfo = switch (CanDB.get(db, {sk = userIdentity})) {
+            case null {null};
+            case (?userEntity) {unWarpUserInfo(userEntity)};
+        };
+        switch (userInfo) {
+            case null {null};
+            case (?u) {
+                ?u;
+            };
+        };
+    };
 
     public shared query ({caller = user}) func getUserInfo() : async ?Types.UserInfo {
 
