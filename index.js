@@ -34,6 +34,7 @@ import { createActor } from './src/declarations/backend';
 import { createActor as createUserActor } from './src/declarations/User';
 import { createActor as createHotelActor } from './src/declarations/hotel';
 import { createActor as createBookingActor } from './src/declarations/booking';
+import { createActor as createReviewActor } from './src/declarations/Review';
 import store from './src/redux/store';
 import { setActor } from './src/redux/actor/actions';
 import { setPrinciple } from './src/redux/principle/actions';
@@ -198,12 +199,15 @@ const RootComponent: React.FC = () => {
       blsVerify:()=>true,
       canisterId:'ryjl3-tyaaa-aaaaa-aaaba-cai'
     })
+    let actorReview=createReviewActor('ahw5u-keaaa-aaaaa-qaaha-cai',{agent})
+    console.log("actor review : ",actorReview)
     store.dispatch(setActor({
       backendActor:actor,
       userActor:actorUser,
       hotelActor:actorHotel,
       bookingActor:actorBooking,
-      tokenActor:actorToken
+      tokenActor:actorToken,
+      reviewActor:actorReview
     }))
     
     console.log("actor : ",actor)

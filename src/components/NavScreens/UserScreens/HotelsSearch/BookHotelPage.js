@@ -36,11 +36,11 @@ const BookHotelPage = ({navigation}) => {
         await actors?.bookingActor.getBookingDetials(r).then(async(resp)=>{
           let hotel=null
           await actors?.hotelActor.getHotel(hotelId).then((hRes)=>{
-            hotel=hRes[0]
+            hotel={...hRes[0],hotelId:hotelId}
           }).catch((err)=>{console.log(err)})
           console.log("booking details : ",resp)
-          console.log({...resp[0],hotel:hotel})
-          setBookingList(b=>[...b,{...resp[0],hotel:hotel}])
+          console.log({...resp[0],hotel:hotel,bookingId:r})
+          setBookingList(b=>[...b,{...resp[0],hotel:hotel,bookingId:r}])
         }).catch((err)=>console.log(err))
       })
     }).catch((err)=>{

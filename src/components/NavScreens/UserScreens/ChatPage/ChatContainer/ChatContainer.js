@@ -30,6 +30,7 @@ const ChatContainer = ({navigation}) => {
     const {newChat}=route.params
     const baseUrl="https://rentspace.kaifoundry.com"
     const chatLogin=async()=>{
+        setChatUsers([])
         setLoading(true)
         setChats([])
         console.log(`authData : ${authData}\n principal : ${authData.principal}\n publicKey : ${authData.publicKey}`)
@@ -63,31 +64,38 @@ const ChatContainer = ({navigation}) => {
         })
     }
     const getAllChatUser=async()=>{
+        setChatUsers(c=>[])
         console.log("using function : ",actors?.userActor?.getUserInfoByPrincipal)
         console.log("getting all users!")
         let fromPrinciples=[]
         let toPrinciples=[]
         chats.map((chat)=>{
             fromPrinciples.push(chat.fromPrincipal)
-            console.log("from map : ",chat.fromPrincipal)
+            console.log("from map : ",{id:chat.fromPrincipal,updateAt:chat.updatedAt})
             
         })
         chats.map((chat)=>{
             if(!(fromPrinciples.includes(chat.toPrincipal))){
                 console.log("to map : ",chat.toPrincipal)
-                toPrinciples.push(chat.toPrincipal)
+                toPrinciples.push(chat.toPrincipal)   
             }
         })
+        fromPrinciples=new Set(fromPrinciples)
+        toPrinciples=new Set(toPrinciples)
+        fromPrinciples=Array.from(fromPrinciples)
+        toPrinciples=Array.from(toPrinciples)
         console.log("fromPrinciples : ",fromPrinciples)
         console.log("toPrinciples : ",toPrinciples)
-        fromPrinciples.concat(toPrinciples)
+        fromPrinciples=fromPrinciples.concat(toPrinciples)
+        console.log("concatinated : ",fromPrinciples.concat(toPrinciples))
         fromPrinciples.map(async(chat,index)=>{
             console.log(`user ${index} : ${chat}`)
             
             await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(chat.toString()))
             .then((res)=>{
                 console.log(res[0])
-                setChatUsers([...chatUsers,{...res[0],id:chat}])
+                // console.log([...chatUsers,{...res[0],id:chat}])
+                setChatUsers(c=>[...c,{...res[0],id:chat}])
                 setLoading(false)
             }).catch((err)=>{
                 console.log("chatuser fetching err : ",err)
@@ -102,7 +110,7 @@ const ChatContainer = ({navigation}) => {
             await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(newChat))
             .then((res)=>{
                 console.log(res[0])
-                setChatUsers([...chatUsers,{...res[0],id:newChat}])
+                setChatUsers(c=>[...c,{...res[0],id:newChat}])
                 setLoading(false)
             }).catch((err)=>{
                 console.log("new chatuser fetching er : ",err)
@@ -113,7 +121,7 @@ const ChatContainer = ({navigation}) => {
     }
     useEffect(()=>{
         chatLogin()
-        setChatUsers([])
+        // setChatUsers([])
     },[])
     useEffect(()=>{
         
@@ -139,9 +147,13 @@ const ChatContainer = ({navigation}) => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <FlatList style={styles.list} data={chatUsers} renderItem={(item)=>(
-                        <ChatCard item={item?.item} setOpenChat={setOpenChat} openChat={openChat} setChat={setChatItem}/>
-                )}/>
+                    <FlatList style={styles.list} data={chatUsers} renderItem={(item)=>{
+                        console.log("from flatlist : ",chatUsers)
+                        return(
+                            <ChatCard item={item?.item} setOpenChat={setOpenChat} openChat={openChat} setChat={setChatItem}/>
+                        )
+                        
+                }}/>
                     <BottomNav navigation={navigation}/>
                     <Modal animationType='slide' visible={openChat}>
                         <Chat item={chatItem} setOpenChat={setOpenChat}/>

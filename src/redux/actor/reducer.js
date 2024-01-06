@@ -14,7 +14,8 @@ const initialState={
         userActor:User,
         hotelActor:hotel,
         bookingActor:booking,
-        tokenActor:{}
+        tokenActor:{},
+        reviewActor:{}
     }
 }
 // async function who(actor){

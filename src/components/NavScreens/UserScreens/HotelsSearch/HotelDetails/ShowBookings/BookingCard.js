@@ -27,7 +27,7 @@ const BookingCard = ({item}) => {
   return (
     
     <View style={styles.card}>
-      <TouchableOpacity style={styles.editBtn}>
+      <TouchableOpacity style={styles.editBtn} onPress={()=>{setAddReview(true)}}>
         
         <Icon name='edit-3' color='white' size={16}/>
         <Text style={styles.editText}>Review</Text>

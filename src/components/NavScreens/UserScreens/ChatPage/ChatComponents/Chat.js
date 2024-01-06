@@ -17,13 +17,13 @@ const Chat = ({item,setOpenChat}) => {
 
   const pin="bzyut-cxk7l-tkb6p-6kxev-4k2lf-fajro-7biwv-yxlii-ingdb-flzdj-jae"
   // const checkSendMessage=()=>{
-  //   const newMessage = {
-  //     fromPrincipal: principle,
-  //     toPrincipal: pin,
-  //     message: "Hi revant this is a test",
-  //     privateToken: token
-  //   };
-  //   socket.emit('sendMessage', JSON.stringify(newMessage));
+    // const newMessage = {
+    //   fromPrincipal: principle,
+    //   toPrincipal: pin,
+    //   message: "Hi revant this is a test",
+    //   privateToken: token
+    // };
+    // socket.emit('sendMessage', JSON.stringify(newMessage));
   //       // setMessages([...messages, newMessage]);
   //       // setMessage('');
   //       console.log("message sent")
@@ -68,8 +68,14 @@ const Chat = ({item,setOpenChat}) => {
     newSocket.on('receiveMessage', (data) => {
       setMessages([...messages,data]);
     });
-
-    
+    newSocket.emit('setPrincipal',JSON.stringify(principle))
+    // const newMessage = {
+    //   fromPrincipal: principle,
+    //   toPrincipal: pin,
+    //   message: "Hi revant this is a test2",
+    //   privateToken: token
+    // };
+    // newSocket.emit('sendMessage', JSON.stringify(newMessage));
     return () => newSocket.close();
 
   },[])
