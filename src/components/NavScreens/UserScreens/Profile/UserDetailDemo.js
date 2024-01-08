@@ -60,7 +60,11 @@ const UserDetailDemo = ({navigation}) => {
       ,userType:'Host',
       hostStatus:true,
       userProfile:(user?.userProfile)!=""?user?.userProfile:"img",
-      userGovId:((user?.userGovId==""||user?.userGovId==null)?"nothing":user?.userGovId)}).then(async(res)=>{
+      userGovId:((user?.userGovId==""||user?.userGovId==null)?"nothing":user?.userGovId
+      
+      ),
+      agreementStatus:user?.agreementStatus
+    }).then(async(res)=>{
       console.log(res)
       
       setLoading(false)

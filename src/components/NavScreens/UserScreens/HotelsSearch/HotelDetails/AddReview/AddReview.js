@@ -23,7 +23,7 @@ const AddReview = ({item,setAddReview}) => {
       console.log("review creation response : ",res)
       setLoading(false)
       alert('Thanks for giving your valueble feedback!')
-      
+      setAddReview(false)
     }).catch((err)=>{
       console.log(err)
       setLoading(false)

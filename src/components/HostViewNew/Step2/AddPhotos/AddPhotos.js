@@ -8,18 +8,29 @@ import Icon from 'react-native-vector-icons/Entypo'
 import { useDispatch, useSelector } from 'react-redux'
 import { setListing } from '../../../../redux/NewListing/actions'
 import { launchImageLibrary } from 'react-native-image-picker'
+import { setFiles } from '../../../../redux/files/actions'
 
 const AddPhotos = ({setHostModal,pos}) => {
   const [images,setImages]=useState("img2")
-  const [hotelImgs,setHotelImgs]=useState([])
+  const [hotelImgs,setHotelImgs]=useState(null)
   const {listing} = useSelector(state=>state.listingReducer)
   const dispatch=useDispatch()
-  const [video,setVideo]=useState([])
+  const [video,setVideo]=useState(null)
   const checkEmpty=()=>{
-    if(images==""){
+    console.log(video,hotelImgs)
+    if(hotelImgs==null){
       alert("Please add atleast one image")
+      console.log("no images")
       return false
-    }else{
+    }
+    else if(video==null){
+      alert("Please add a Video")
+      console.log("no video")
+      return false
+    }
+    else{
+      console.log(video,...hotelImgs)
+      dispatch(setFiles([video,...hotelImgs]))
       dispatch(setListing({...listing,hotelImage:images}))
       return true
     }

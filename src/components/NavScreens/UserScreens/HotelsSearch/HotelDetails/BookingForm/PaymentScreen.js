@@ -4,6 +4,7 @@ import {Principal} from "@dfinity/principal"
 import React, { useEffect, useState } from 'react'
 import { COLORS,SIZES } from '../../../../../../constants/themes'
 import { useSelector } from 'react-redux'
+import PushNotification from 'react-native-push-notification'
 
 const PaymentScreen =({setBooking,booking,item,self}) => {
 
@@ -14,6 +15,8 @@ const PaymentScreen =({setBooking,booking,item,self}) => {
     const [userId,setUserId]=useState("sample")
   const [metaData,setMetaData] = useState(null);
   const [Balance,setBalance]=useState(0)
+  const {user}=useSelector(state=>state.userReducer)
+  const [loading,setLoading]=useState(false)
   async function settingToken(){
     // console.log("first")
     // setTokenActor(createTokenActor("ryjl3-tyaaa-aaaaa-aaaba-cai"));
@@ -35,6 +38,10 @@ const PaymentScreen =({setBooking,booking,item,self}) => {
   }
   useEffect(()=>{
     getBalance()
+    PushNotification.createChannel({
+      channelId:'1',
+      channelName:'booking'
+    },()=>{console.log(("booking norification channel created!"))})
   },[])
   const transfer=async (sendAmount,sendPrincipal) =>{
     console.log("metaData[decimals]",metaData)
@@ -56,8 +63,13 @@ const PaymentScreen =({setBooking,booking,item,self}) => {
       console.log("metadata inside transfer fee",metaData?.["icrc1:fee"])
     let response = await actors?.tokenActor.icrc1_transfer(transaction);
     console.log(response)
-    alert("transaction successful!")
+    // alert("transaction successful!")
     setBooking({...booking,paymentStatus:true})
+    PushNotification.localNotification({
+      title:"Booking Successful!",
+      message:`${user?.firstName}, your booking for ${item?.hotelTitle} is successful!`,
+      channelId:"1"
+    })
     self.current.dismiss()
     }else{
       alert("Insufficient balance")

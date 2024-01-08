@@ -8,8 +8,8 @@ const MapScreen = () => {
   const [location, setLocation] = useState({
     latitude: 10,
     longitude: 10,
-    latitudeDelta: 0.001,
-    longitudeDelta: 0.001,
+    latitudeDelta: 0.043,
+    longitudeDelta: 0.041,
   });
 
   useEffect(()=>{

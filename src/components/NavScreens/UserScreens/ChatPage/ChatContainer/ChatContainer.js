@@ -88,15 +88,29 @@ const ChatContainer = ({navigation}) => {
         console.log("toPrinciples : ",toPrinciples)
         fromPrinciples=fromPrinciples.concat(toPrinciples)
         console.log("concatinated : ",fromPrinciples.concat(toPrinciples))
+        
         fromPrinciples.map(async(chat,index)=>{
             console.log(`user ${index} : ${chat}`)
             
             await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(chat.toString()))
-            .then((res)=>{
+            .then(async(res)=>{
                 console.log(res[0])
                 // console.log([...chatUsers,{...res[0],id:chat}])
                 setChatUsers(c=>[...c,{...res[0],id:chat}])
                 setLoading(false)
+                if(newChat!="" && !(fromPrinciples.includes(newChat))){
+                    console.log(`new user : ${newChat}`)
+                    console.log("Creating new chat")
+                    await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(newChat))
+                    .then((res)=>{
+                        console.log(res[0])
+                        setChatUsers(c=>[...c,{...res[0],id:newChat}])
+                        setLoading(false)
+                    }).catch((err)=>{
+                        console.log("new chatuser fetching er : ",err)
+                        setLoading(false)
+                    })
+                }
             }).catch((err)=>{
                 console.log("chatuser fetching err : ",err)
                 setLoading(false)
@@ -104,20 +118,8 @@ const ChatContainer = ({navigation}) => {
         })
         console.log(chatUsers)
         
-        if(newChat!="" && !(fromPrinciples.includes(newChat))){
-            console.log(`new user : ${newChat}`)
-            console.log("Creating new chat")
-            await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(newChat))
-            .then((res)=>{
-                console.log(res[0])
-                setChatUsers(c=>[...c,{...res[0],id:newChat}])
-                setLoading(false)
-            }).catch((err)=>{
-                console.log("new chatuser fetching er : ",err)
-                setLoading(false)
-            })
-        }
-        setLoading(false)
+        
+        // setLoading(false)
     }
     useEffect(()=>{
         chatLogin()

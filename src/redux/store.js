@@ -10,6 +10,7 @@ import { hotelListReducer } from './hotelList/reducer';
 import { bookingsReducer } from './UserBookings/reducer';
 import { authDataReducer } from './authData/reducer';
 import { chatTokenReducer } from './chatToken/reducer';
+import { filesReducer } from './files/reducer';
 
 const rootReducer = combineReducers({ 
   userReducer,
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
   hotelListReducer,
   bookingsReducer,
   authDataReducer,
-  chatTokenReducer
+  chatTokenReducer,
+  filesReducer
 });
 
 export default Store= configureStore({

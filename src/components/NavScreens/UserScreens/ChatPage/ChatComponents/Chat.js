@@ -6,6 +6,7 @@ import ChatMessage from './ChatMessage'
 import { io } from 'socket.io-client'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
+import PushNotification from 'react-native-push-notification'
 
 const Chat = ({item,setOpenChat}) => {
   const [messages,setMessages]=useState([])
@@ -13,6 +14,7 @@ const Chat = ({item,setOpenChat}) => {
   const {principle}=useSelector(state=>state.principleReducer)
   const [message,setMessage]=useState("")
   const [socket,setSocket]=useState(null)
+  const {user}=useSelector(state=>state.userReducer)
   const baseUrl="https://rentspace.kaifoundry.com"
 
   const pin="bzyut-cxk7l-tkb6p-6kxev-4k2lf-fajro-7biwv-yxlii-ingdb-flzdj-jae"
@@ -39,6 +41,11 @@ const Chat = ({item,setOpenChat}) => {
         };
 
         socket.emit('sendMessage', JSON.stringify(newMessage));
+        PushNotification.localNotification({
+          title:"Message sent!",
+          message:`Message is sent to ${item.firstName}`,
+          channelId:'2'
+        })
         setMessages([...messages, newMessage]);
         setMessage('');
     }
@@ -57,6 +64,12 @@ const Chat = ({item,setOpenChat}) => {
     })
   }
   useEffect(()=>{
+
+    PushNotification.createChannel({
+      channelId:'2',
+      channelName:"chat"
+
+    },console.log("chat notification channel created!"))
     
     console.log("token : ",token,"principal : ",principle)
     getPreviousMessages()
@@ -67,6 +80,12 @@ const Chat = ({item,setOpenChat}) => {
 
     newSocket.on('receiveMessage', (data) => {
       setMessages([...messages,data]);
+      console.log(data)
+      PushNotification.localNotification({
+        title:'New message received',
+        message:`${user.firstName} you received a new message`,
+        channelId:"2"
+      })
     });
     newSocket.emit('setPrincipal',JSON.stringify(principle))
     // const newMessage = {

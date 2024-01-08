@@ -1,27 +1,84 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View ,ActivityIndicator, Alert} from 'react-native'
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
 import SaveBtn from '../../Reusables/SaveBtn'
 import BottomBtn from '../../Reusables/BottomBtn'
 import { images } from '../../../../constants'
 import {useDispatch, useSelector} from 'react-redux'
 import { setHotels } from '../../../../redux/hotels/actions'
+import { setChatToken } from '../../../../redux/chatToken/actions'
+import axios, { formToJSON } from 'axios'
 
 const Congratulations = ({setHostModal,pos}) => {
   const [loading,setLoading]=useState(false)
+  const [token,setToken]=useState("")
   const {listing}=useSelector(state=>state.listingReducer)
   const {actors}=useSelector(state=>state.actorReducer)
+  const {authData}=useSelector(state=>state.authDataReducer)
   const dispatch=useDispatch()
+  const baseUrl="https://rentspace.kaifoundry.com"
+  const {files}=useSelector(state=>state.filesReducer)
+  
+  const ApiLogin=async()=>{
+    console.log(`authData : ${authData}\n principal : ${authData.principal}\n publicKey : ${authData.publicKey}`)
+    console.log({
+        principal:authData.principal,
+        publicKey:authData.publicKey
+     })
+     await axios.post(`${baseUrl}/api/v1/login/user`,{
+        principal:authData.principal,
+        publicKey:authData.publicKey
+     }).then((res)=>{
+        console.log('hotel login api : ',res.data.userToken)
+        dispatch(setChatToken(res.data.userToken))
+        setToken(res.data.userToken)
+     })
+    }
+    useEffect(()=>{
+      ApiLogin()
+    },[])
+    const ApiHotelFilters=async()=>{
+      await axios.get(`${baseUrl}/api/v1/hotel/filters`).then((res)=>{
+        console.log("hotel filters resp : ",res)
+      }).catch((err)=>{console.log("hotel filters err : ",err)})
+    }
+    const ApiHotelCreate=async()=>{
+      const data={
+        hotelTitle:listing?.hotelTitle,
+        hotelDes:listing?.hotelDes,
+        hotelPrice:listing?.hotelPrice,
+        hotelLocation:listing?.hotelLocation,
+        longitude:parseFloat(listing?.hotelLocation.split('#')[0]),
+        latitude:parseFloat(listing?.hotelLocation.split('#')[1])
+      }
+      const formData = new FormData();
+      Object.entries(data).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+      formData.append("files",files)
+      console.log(formData)
+      await axios.post(`${baseUrl}/api/v1/hotel/register`,formData,{
+        headers:{
+          "x-principal":authData.principal,
+          "x-private-token":token
+        }
+      }).then((res)=>{
+        console.log("hotel creation api response : ",res)
+      }).catch((err)=>{
+        console.log("hotel creation api err : ",err)
+      })
+    }
   const createHotel=async()=>{
     console.log('create hotel')
     setLoading(true)
-  await actors.hotelActor?.createHotel(listing).then(async(res)=>{
+  await actors.hotelActor?.createHotel({...listing,hotelLocation:"Ludhiana"}).then(async(res)=>{
     setLoading(false)
-   
     await actors.hotelActor?.getHotelId().then(async(res)=>{
       console.log(res)
       dispatch(setHotels(res))
       setHostModal(false)
+      ApiHotelFilters()
+      ApiHotelCreate()
     })
 
   }).catch((err)=>{

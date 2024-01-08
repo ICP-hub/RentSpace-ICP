@@ -10,31 +10,31 @@ const RatingCont = ({review,setReview}) => {
       <View style={styles.startCont}>
         <TouchableOpacity 
             style={(review.rating>0)?styles.star:[styles.star,{opacity:0.3}]} 
-            onPress={()=>setReview({...review,rating:1})}
+            onPress={()=>setReview({...review,rating:1.0})}
         >
             <Icon name='star' color={(review.rating>0)?COLORS.gold:COLORS.hostTitle} size={35}/>
         </TouchableOpacity>
         <TouchableOpacity 
             style={(review.rating>1)?styles.star:[styles.star,{opacity:0.3}]} 
-            onPress={()=>setReview({...review,rating:2})}
+            onPress={()=>setReview({...review,rating:2.0})}
         >
             <Icon name='star' color={(review.rating>1)?COLORS.gold:COLORS.hostTitle} size={35}/>
         </TouchableOpacity>
         <TouchableOpacity 
             style={(review.rating>2)?styles.star:[styles.star,{opacity:0.3}]} 
-            onPress={()=>setReview({...review,rating:3})}
+            onPress={()=>setReview({...review,rating:3.0})}
         >
             <Icon name='star' color={(review.rating>2)?COLORS.gold:COLORS.hostTitle} size={35}/>
         </TouchableOpacity>
         <TouchableOpacity 
             style={(review.rating>3)?styles.star:[styles.star,{opacity:0.3}]} 
-            onPress={()=>setReview({...review,rating:4})}
+            onPress={()=>setReview({...review,rating:4.0})}
         >
             <Icon name='star' color={(review.rating>3)?COLORS.gold:COLORS.hostTitle} size={35}/>
         </TouchableOpacity>
         <TouchableOpacity 
             style={(review.rating>4)?styles.star:[styles.star,{opacity:0.3}]} 
-            onPress={()=>setReview({...review,rating:5})}
+            onPress={()=>setReview({...review,rating:5.0})}
         >
             <Icon name='star' color={(review.rating>4)?COLORS.gold:COLORS.hostTitle} size={35}/>
         </TouchableOpacity>

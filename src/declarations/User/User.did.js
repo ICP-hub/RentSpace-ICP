@@ -25,6 +25,7 @@ export const idlFactory = ({ IDL }) => {
     'userGovId' : IDL.Text,
     'createdAt' : IDL.Text,
     'hostStatus' : IDL.Bool,
+    'agreementStatus' : IDL.Bool,
     'userProfile' : IDL.Text,
     'lastName' : IDL.Text,
     'verificationStatus' : IDL.Bool,

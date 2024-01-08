@@ -1,6 +1,8 @@
 /**
  * @format
  */
+import PushNotification from 'react-native-push-notification';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import 'react-native-polyfill-globals/auto';
 import 'react-native-fetch-api';
 import 'fast-text-encoding';
@@ -44,12 +46,68 @@ import { idlFactory } from './Backend/RentSpace_backend/wallet/legder.did';
 import { createTokenActor } from './src/components/NavScreens/UserScreens/HotelsSearch/HotelDetails/BookingForm/utils';
 import { setAuthData } from './src/redux/authData/actions';
 import axios from 'axios';
+// import {initializeApp} from '@react-native-firebase/app'
+// const firebaseConfig={}
 
+// initializeApp(firebaseConfig);
+
+// initiali
 const Stack = createNativeStackNavigator();
 
 const linking = {
   prefixes: ['rentspace://'],
 };
+
+PushNotification.configure({
+  // (optional) Called when Token is generated (iOS and Android)
+  onRegister: function (token) {
+    console.log("TOKEN:", token);
+  },
+
+  // (required) Called when a remote is received or opened, or local notification is opened
+  onNotification: function (notification) {
+    console.log("NOTIFICATION:", notification);
+
+    // process the notification
+
+    // (required) Called when a remote is received or opened, or local notification is opened
+    notification.finish(PushNotificationIOS.FetchResult.NoData);
+  },
+
+  // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
+  // onAction: function (notification) {
+  //   console.log("ACTION:", notification.action);
+  //   console.log("NOTIFICATION:", notification);
+
+  //   // process the action
+  // },
+
+  // // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
+  // onRegistrationError: function(err) {
+  //   console.error(err.message, err);
+  // },
+
+  // IOS ONLY (optional): default: all - Permissions to register.
+  permissions: {
+    alert: true,
+    badge: true,
+    sound: true,
+  },
+
+  // Should the initial notification be popped automatically
+  // default: true
+  popInitialNotification: true,
+
+  /**
+   * (optional) default: true
+   * - Specified if permissions (ios) and token (android and ios) will requested or not,
+   * - if not, you must call PushNotificationsHandler.requestPermissions() later
+   * - if you are not using remote notification or do not have Firebase installed, use this:
+   *     requestPermissions: Platform.OS === 'ios'
+   */
+  requestPermissions: Platform.OS==="ios",
+  channelId:'1',
+});
 
 const RootComponent: React.FC = () => {
 
@@ -191,7 +249,7 @@ const RootComponent: React.FC = () => {
     actor = createActor('bkyz2-fmaaa-aaaaa-qaaaq-cai', {
       agent,
     });
-    let actorUser=createUserActor('aovwi-4maaa-aaaaa-qaagq-cai',{agent})
+    let actorUser=createUserActor('cpmcr-yeaaa-aaaaa-qaala-cai',{agent})
     let actorHotel=createHotelActor('br5f7-7uaaa-aaaaa-qaaca-cai',{agent})
     let actorBooking=createBookingActor('a4tbr-q4aaa-aaaaa-qaafq-cai',{agent})
     let actorToken=Actor.createActor(idlFactory, {
@@ -199,7 +257,7 @@ const RootComponent: React.FC = () => {
       blsVerify:()=>true,
       canisterId:'ryjl3-tyaaa-aaaaa-aaaba-cai'
     })
-    let actorReview=createReviewActor('ahw5u-keaaa-aaaaa-qaaha-cai',{agent})
+    let actorReview=createReviewActor('cgpjn-omaaa-aaaaa-qaakq-cai',{agent})
     console.log("actor review : ",actorReview)
     store.dispatch(setActor({
       backendActor:actor,

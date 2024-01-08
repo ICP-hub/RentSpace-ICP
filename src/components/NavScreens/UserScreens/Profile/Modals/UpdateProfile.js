@@ -31,7 +31,8 @@ const UpdateProfile = ({setEditProfile}) => {
           ...updatedUser,
           userType:user?.userType,
           hostStatus:(user?.userType=='host')?true:false,
-          verificationStatus:false
+          verificationStatus:false,
+          agreementStatus:user?.agreementStatus
         })
         console.log("2")
         
