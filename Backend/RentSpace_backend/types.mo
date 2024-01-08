@@ -23,6 +23,7 @@ module {
         hostStatus : Bool;
         verificationStatus : Bool;
         createdAt : Text;
+        agreementStatus:Bool;
     };
     public type HotelInfo = {
         hotelTitle : Text;
