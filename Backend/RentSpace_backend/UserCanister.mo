@@ -8,9 +8,9 @@ import Prelude "mo:base/Prelude";
 import List "mo:base/List";
 import Error "mo:base/Error";
 
-import Entity "mo:candb/Entity";
-import CanDB "mo:candb/CanDB";
-import CA "mo:candb/CanisterActions";
+import Entity "mo:new-candb/Entity";
+import CanDB "mo:new-candb/CanDB";
+import CA "mo:new-candb/CanisterActions";
 
 import RBT "mo:stable-rbtree/StableRBTree";
 
@@ -69,7 +69,7 @@ shared ({caller = owner}) actor class User({
         // assert (Text.size(userData.firstName) <= 25 and Text.size(userData.lastName) <= 25 and Text.size(userData.userEmail) <= 50 and utils.checkDate(userData.dob) == false and utils.checkEmail(userData.userEmail));
         let date = utils.getDate();
         //inserts the entity into CanDB
-        await* CanDB.put(
+        await CanDB.put(
             db,
             {
                 sk = userIdentity;
@@ -138,7 +138,7 @@ shared ({caller = owner}) actor class User({
     };
     ///----function to get the getUserInfo data using the by passing uuid as sortkey------///
 
-    public query func getUserInfoByPrincipal(user:Principal) : async ?Types.UserInfo {
+    public query func getUserInfoByPrincipal(user : Principal) : async ?Types.UserInfo {
 
         let userIdentity = Principal.toText(user);
         let userInfo = switch (CanDB.get(db, {sk = userIdentity})) {
@@ -179,7 +179,7 @@ shared ({caller = owner}) actor class User({
         assert (userIdentity != "" and userData.firstName != "" and userData.lastName != "" and userData.dob != "" and userData.userEmail != "" and userData.userProfile != "" and userData.userGovId != "");
         assert (Text.size(userData.firstName) <= 25 and Text.size(userData.lastName) <= 25 and Text.size(userData.dob) <= 11 and Text.size(userData.userEmail) <= 50 and Text.size(userData.userType) <= 6 and Text.size(userData.userProfile) <= 1000 and Text.size(userData.userGovId) <= 1000);
 
-        let userInfo = await* CanDB.replace(
+        let userInfo = await CanDB.replace(
             db,
             {
                 sk = userIdentity;
