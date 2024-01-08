@@ -5,6 +5,7 @@ module {
         #booking;
         #hotel;
         #user;
+        #review;
     };
     public type User = {
         firstName : Text;
