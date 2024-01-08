@@ -33,6 +33,7 @@ export interface UserInfo {
   'userGovId' : string,
   'createdAt' : string,
   'hostStatus' : boolean,
+  'agreementStatus' : boolean,
   'userProfile' : string,
   'lastName' : string,
   'verificationStatus' : boolean,

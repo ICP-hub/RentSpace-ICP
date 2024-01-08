@@ -7,6 +7,7 @@ type User__1 =
  };
 type UserInfo = 
  record {
+   agreementStatus: bool;
    createdAt: text;
    dob: text;
    firstName: text;

@@ -84,6 +84,7 @@ shared ({caller = owner}) actor class User({
                     ("hostStatus", #bool(false)),
                     ("verificationStatus", #bool(false)),
                     ("createdAt", #text(date)),
+                    ("agreementStatus",#bool(false))
                 ];
             },
         );
@@ -104,8 +105,9 @@ shared ({caller = owner}) actor class User({
         let hostStatusValue = Entity.getAttributeMapValueForKey(attributes, "hostStatus");
         let verificationStatusValue = Entity.getAttributeMapValueForKey(attributes, "verificationStatus");
         let createdAtValue = Entity.getAttributeMapValueForKey(attributes, "createdAt");
+        let agreementStatusValue=Entity.getAttributeMapValueForKey(attributes,"agreementStatus");
 
-        switch (firstNameValue, lastNameValue, dobValue, userEmailValue, userTypeValue, userProfileValue, userGovIdValue, hostStatusValue, verificationStatusValue, createdAtValue) {
+        switch (firstNameValue, lastNameValue, dobValue, userEmailValue, userTypeValue, userProfileValue, userGovIdValue, hostStatusValue, verificationStatusValue, createdAtValue,agreementStatusValue) {
             case (
                 ?(#text(firstName)),
                 ?(#text(lastName)),
@@ -117,6 +119,7 @@ shared ({caller = owner}) actor class User({
                 ?(#bool(hostStatus)),
                 ?(#bool(verificationStatus)),
                 ?(#text(createdAt)),
+                ?(#bool(agreementStatus)),
             ) {
                 ?{
                     firstName;
@@ -129,6 +132,7 @@ shared ({caller = owner}) actor class User({
                     hostStatus;
                     verificationStatus;
                     createdAt;
+                    agreementStatus;
                 };
             };
             case _ {
@@ -194,6 +198,7 @@ shared ({caller = owner}) actor class User({
                     ("hostStatus", #bool(userData.hostStatus)),
                     ("verificationStatus", #bool(userData.verificationStatus)),
                     ("createdAt", #text(utils.getDate())),
+                    ("agreementStatus",#bool(userData.agreementStatus))
                 ];
             },
         );
