@@ -8,9 +8,9 @@ import Time "mo:base/Time";
 import Prelude "mo:base/Prelude";
 import List "mo:base/List";
 import Error "mo:base/Error";
-import Entity "mo:new-candb/Entity";
-import CanDB "mo:new-candb/CanDB";
-import CA "mo:new-candb/CanisterActions";
+import Entity "mo:candb/Entity";
+import CanDB "mo:candb/CanDB";
+import CA "mo:candb/CanisterActions";
 import RBT "mo:stable-rbtree/StableRBTree";
 import DateTime "mo:datetime/DateTime";
 
@@ -87,7 +87,7 @@ shared ({caller = owner}) actor class Booking({
         if (hotelId == "" or bookingInfo.date == "" or sortKey == "") {
             return;
         };
-        await CanDB.put(
+        await* CanDB.put(
             db,
             {
                 sk = sortKey;
@@ -179,7 +179,7 @@ shared ({caller = owner}) actor class Booking({
         assert (Principal.isAnonymous(user) == false and checkBookingId != false);
         assert (bookingInfo.userId != "" and bookingInfo.date != "" and bookingInfo.bookingDuration != "" and bookingInfo.bookingDuration != "" and bookingInfo.paymentId != "");
         assert (Text.size(bookingInfo.userId) <= 50 and Text.size(bookingInfo.date) <= 20 and Text.size(bookingInfo.bookingDuration) <= 20 and Text.size(bookingInfo.bookingDuration) <= 10 and Text.size(bookingInfo.paymentId) <= 20);
-        await CanDB.put(
+        await* CanDB.put(
             db,
             {
                 sk = sortKey;

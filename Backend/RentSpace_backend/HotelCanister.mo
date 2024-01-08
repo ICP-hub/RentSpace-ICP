@@ -6,9 +6,9 @@ import List "mo:base/List";
 import Error "mo:base/Error";
 import Char "mo:base/Char";
 
-import Entity "mo:new-candb/Entity";
-import CanDB "mo:new-candb/CanDB";
-import CA "mo:new-candb/CanisterActions";
+import Entity "mo:candb/Entity";
+import CanDB "mo:candb/CanDB";
+import CA "mo:candb/CanisterActions";
 import RBT "mo:stable-rbtree/StableRBTree";
 
 import utils "utils";
@@ -38,9 +38,6 @@ shared ({caller = owner}) actor class Hotel({
         btreeOrder = null;
     });
 
-    public query func getOwner() : async ?[Principal] {
-        owners;
-    };
     // @recommended (not required) public API
     public query func getPK() : async Text {db.pk};
 
@@ -89,7 +86,7 @@ shared ({caller = owner}) actor class Hotel({
         assert (Text.size(hotelData.hotelTitle) <= 40 and Text.size(hotelData.hotelDes) <= 300 and Text.size(hotelData.hotelLocation) <= 30 and Text.size(hotelData.hotelPrice) <= 15);
         let getTime = utils.getDate();
         await putHotelId(userIdentity, hotelId, hotelData);
-        await CanDB.put(
+        await* CanDB.put(
             db,
             {
                 sk = hotelId;
@@ -165,7 +162,7 @@ shared ({caller = owner}) actor class Hotel({
         assert (Principal.isAnonymous(user) and hotelId != "" and hotelData.hotelTitle != "" and hotelData.hotelDes != "" and hotelData.hotelLocation != "" and hotelData.hotelImage != "" and hotelData.hotelPrice != "" and hotelExist != false);
         assert (Text.size(hotelData.hotelTitle) <= 40 and Text.size(hotelData.hotelDes) <= 300 and Text.size(hotelData.hotelLocation) <= 30 and Text.size(hotelData.hotelPrice) <= 15);
 
-        let newData = await CanDB.put(
+        let newData = await* CanDB.put(
             db,
             {
                 sk = sortKey;

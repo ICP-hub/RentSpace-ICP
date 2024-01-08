@@ -5,8 +5,9 @@ import Debug "mo:base/Debug";
 import Cycles "mo:base/ExperimentalCycles";
 
 import Buffer "mo:stablebuffer/StableBuffer";
-import CanisterMap "mo:new-candb/CanisterMap";
-import CA "mo:new-candb/CanisterActions";
+import CanisterMap "mo:candb/CanisterMap";
+import CA "mo:candb/CanisterActions";
+import Utils "mo:candb/Utils";
 
 import Review "ReviewCanister";
 import Types "../types";
@@ -48,16 +49,9 @@ shared ({caller = owner}) actor class ReviewParent() = this {
         Debug.print("creating new hello service canister with pk=" # pk);
 
         Cycles.add(300_000_000_000);
-        let newCanister  = await Review.Review({
-            partitonKey = pk;
-            scalingOptions = {
-                autoScalingCanisterId = Principal.toText(Principal.fromActor(this));
-                limit = 20_000_000;
-                limitType = #heapSize;
-            };
-            owners = controllers;
-        });
-        let newCanisterPrincipal = Principal.fromActor(newCanister);
+        let newCanisterPrincipal : Principal = Principal.fromActor(await Review.Review({partitonKey = pk; scalingOptions = {autoScalingHook = autoScaleCanister; sizeLimit = #heapSize(475_000_000)};
+
+        owners = controllers}));
 
         await CA.updateCanisterSettings({
             canisterId = newCanisterPrincipal;
@@ -86,6 +80,16 @@ shared ({caller = owner}) actor class ReviewParent() = this {
         } else {
             Debug.print(pk # "already exists");
             null;
+        };
+    };
+
+    public shared ({caller = caller}) func autoScaleCanister(pk : Text) : async Text {
+        // Auto-Scaling Authorization - if the request to auto-scale the partition is not coming from an existing canister in the partition, reject it
+        if (Utils.callingCanisterOwnsPK(caller, pkToCanisterMap, pk)) {
+            Debug.print("creating an additional canister for pk=" # pk);
+            await createCanister(pk, ?[owner, Principal.fromActor(this)]);
+        } else {
+            throw Error.reject("not authorized");
         };
     };
 
