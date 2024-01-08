@@ -10,16 +10,16 @@ import UUID "mo:uuid/UUID";
 import Source "mo:uuid/async/SourceV4";
 import Buffer "mo:stablebuffer/StableBuffer";
 
-import CA "mo:candb/CanisterActions";
-import CanisterMap "mo:candb/CanisterMap";
-import Utils "mo:candb/Utils";
-import Entity "mo:candb/Entity";
-import Admin "mo:candb/CanDBAdmin";
-import CanDB "mo:candb/CanDB";
+import CA "mo:new-candb/CanisterActions";
+import CanisterMap "mo:new-candb/CanisterMap";
+import Entity "mo:new-candb/Entity";
+import Admin "mo:new-candb/CanDBAdmin";
+import CanDB "mo:new-candb/CanDB";
 
 import User "UserCanister";
 import Hotel "HotelCanister";
 import Booking "BookingCanister";
+import Review "ReviewCanister";
 import Types "types";
 
 shared ({caller = owner}) actor class Database() = this {
@@ -62,23 +62,31 @@ shared ({caller = owner}) actor class Database() = this {
     Cycles.add(300_000_000_000);
     let newCanisterPrincipal : Principal = switch (canister) {
       case (#booking) {
-        Principal.fromActor(await Booking.Booking({partitonKey = pk; scalingOptions = {autoScalingHook = autoScaleBookingCanister; sizeLimit = #heapSize(475_000_000)};
+        Principal.fromActor(await Booking.Booking({partitonKey = pk; scalingOptions = {autoScalingCanisterId = Principal.toText(Principal.fromActor(this)); limit = 20_000_000; limitType = #heapSize};
 
         owners = controllers}));
       };
 
       case (#hotel) {
-        Principal.fromActor(await Hotel.Hotel({partitonKey = pk; scalingOptions = {autoScalingHook = autoScaleBookingCanister; sizeLimit = #heapSize(475_000_000)};
+        Principal.fromActor(await Hotel.Hotel({partitonKey = pk; scalingOptions = {autoScalingCanisterId = Principal.toText(Principal.fromActor(this)); limit = 20_000_000; limitType = #heapSize};
 
         owners = controllers}));
       };
       case (#user) {
-        Principal.fromActor(await User.User({partitonKey = pk; scalingOptions = {autoScalingHook = autoScaleBookingCanister; sizeLimit = #heapSize(475_000_000)};
+        Principal.fromActor(await User.User({partitonKey = pk; scalingOptions = {autoScalingCanisterId = Principal.toText(Principal.fromActor(this)); limit = 20_000_000; limitType = #heapSize};
 
         /* Scale out at 475MB */
         /* for auto-scaling testing */
         /* sizeLimit = #count(3); // Scale out at 3 entities inserted */
         owners = controllers}));
+      };
+      case (#review) {
+        Principal.fromActor(await Review.Review({partitonKey = pk; scalingOptions = {autoScalingCanisterId = Principal.toText(Principal.fromActor(this)); limit = 20_000_000; limitType = #heapSize};
+        /* Scale out at 475MB */
+        /* for auto-scaling testing */
+        /* sizeLimit = #count(3); // Scale out at 3 entities inserted */
+        owners = controllers}));
+
       };
     };
     await CA.updateCanisterSettings({
@@ -98,9 +106,12 @@ shared ({caller = owner}) actor class Database() = this {
     Debug.print("new User canisterId=" # newCanisterId);
     newCanisterId;
   };
-
+  public shared query ({caller = user}) func getOwner() : async Principal {
+    assert (user == owner);
+    user;
+  };
   public shared ({caller = creator}) func createNewCanister(canisterName : Text, canister : Types.Canister) : async ?Text {
-    // assert (creator == owner);
+    assert (creator == owner);
     Debug.print(debug_show (creator));
     let pk = canisterName;
     let canisterIds = getCanistersIdsIfExists(pk);
@@ -112,39 +123,7 @@ shared ({caller = owner}) actor class Database() = this {
     };
   };
 
-  public shared ({caller = caller}) func autoScaleUserCanister(pk : Text) : async Text {
-    // Auto-Scaling Authorization - if the request to auto-scale the partition is not coming from an existing canister in the partition, reject it
-    if (Utils.callingCanisterOwnsPK(caller, pkToCanisterMap, pk)) {
-      Debug.print("creating an additional canister for pk=" # pk);
-      await createCanister(pk, ?[owner, Principal.fromActor(this)], #user);
-    } else {
-      throw Error.reject("not authorized");
-    };
-  };
-
-  public shared ({caller = caller}) func autoScaleHotelCanister(pk : Text) : async Text {
-    assert (caller == owner);
-
-    // Auto-Scaling Authorization - if the request to auto-scale the partition is not coming from an existing canister in the partition, reject it
-    if (Utils.callingCanisterOwnsPK(caller, pkToCanisterMap, pk)) {
-      Debug.print("creating an additional canister for pk=" # pk);
-      await createCanister(pk, ?[owner, Principal.fromActor(this)], #hotel);
-    } else {
-      throw Error.reject("not authorized");
-    };
-  };
-
   // Spins up a new HelloService canister with the provided pk and controllers
-
-  public shared ({caller = caller}) func autoScaleBookingCanister(pk : Text) : async Text {
-    // Auto-Scaling Authorization - if the request to auto-scale the partition is not coming from an existing canister in the partition, reject it
-    if (Utils.callingCanisterOwnsPK(owner, pkToCanisterMap, pk)) {
-      Debug.print("creating an additional canister for pk=" # pk);
-      await createCanister(pk, ?[owner, Principal.fromActor(this)], #booking);
-    } else {
-      throw Error.reject("not authorized");
-    };
-  };
 
   public shared ({caller}) func deleteCanister(serviceId : Text) : async () {
     //Warning! change this condition othwer
@@ -166,8 +145,9 @@ shared ({caller = owner}) actor class Database() = this {
     assert (caller == owner);
     let pk = serviceId;
     let scalingOptions = {
-      autoScalingHook = autoScaleUserCanister;
-      sizeLimit = #heapSize(475_000_000); // Scale out at 475MB
+      autoScalingCanisterId = Principal.toText(Principal.fromActor(this));
+      limit = 20_000_000;
+      limitType = #heapSize;
     };
 
     let result = await Admin.upgradeCanistersByPK(pkToCanisterMap, pk, wasmModule, scalingOptions);
@@ -176,10 +156,6 @@ shared ({caller = owner}) actor class Database() = this {
   };
   public shared query ({caller}) func whoami() : async Text {
     return Principal.toText(caller);
-  };
-
-  public query func getOwner() : async Text {
-    return Principal.toText(owner);
   };
 
 };

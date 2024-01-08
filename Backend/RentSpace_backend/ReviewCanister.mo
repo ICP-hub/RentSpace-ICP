@@ -8,8 +8,8 @@ import CA "mo:new-candb/CanisterActions";
 import Entity "mo:new-candb/Entity";
 import StableRbTree "mo:stable-rbtree/StableRBTree";
 import {print} "mo:base/Debug";
-import Types "../types";
-import utils "../utils";
+import Types "types";
+import utils "utils";
 
 shared ({caller = owner}) actor class Review({
     partitonKey : Text;
@@ -179,7 +179,7 @@ shared ({caller = owner}) actor class Review({
         let userIdentity = Principal.toText(user);
 
         assert (userIdentity != "" and reviewData.rating <= 0 and reviewData.title != "" and reviewData.des != "");
-        assert (Text.size(reviewData.bookingId) <= 200 and Text.size(reviewData.title) <= 25 and Text.size(reviewData.title) <= 500);
+        assert (Text.size(reviewData.bookingId) <= 50 and Text.size(reviewData.title) <= 25 and Text.size(reviewData.title) <= 500);
 
         let reviewInfo = await CanDB.replace(
             db,
