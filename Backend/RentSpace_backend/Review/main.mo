@@ -45,7 +45,7 @@ shared ({caller = owner}) actor class ReviewParent() = this {
             case (?canisterIdsBuffer) {Buffer.toArray(canisterIdsBuffer)};
         };
     };
-    func createCanister(pk : Text, controllers : ?[Principal], canister : Types.Canister) : async Text {
+    func createCanister(pk : Text, controllers : ?[Principal]) : async Text {
         Debug.print("creating new hello service canister with pk=" # pk);
 
         Cycles.add(300_000_000_000);
@@ -70,13 +70,13 @@ shared ({caller = owner}) actor class ReviewParent() = this {
         Debug.print("new User canisterId=" # newCanisterId);
         newCanisterId;
     };
-    public shared ({caller = creator}) func createNewCanister(canisterName : Text, canister : Types.Canister) : async ?Text {
-        assert (creator == owner);
+    public shared ({caller = creator}) func createNewCanister(canisterName : Text) : async ?Text {
+        // assert (creator == owner);
         Debug.print(debug_show (creator));
         let pk = canisterName;
         let canisterIds = getCanistersIdsIfExists(pk);
         if (canisterIds == []) {
-            ?(await createCanister(pk, ?[owner, Principal.fromActor(this)], canister));
+            ?(await createCanister(pk, ?[owner, Principal.fromActor(this)]));
         } else {
             Debug.print(pk # "already exists");
             null;
@@ -87,7 +87,7 @@ shared ({caller = owner}) actor class ReviewParent() = this {
         // Auto-Scaling Authorization - if the request to auto-scale the partition is not coming from an existing canister in the partition, reject it
         if (Utils.callingCanisterOwnsPK(caller, pkToCanisterMap, pk)) {
             Debug.print("creating an additional canister for pk=" # pk);
-            await createCanister(pk, ?[owner, Principal.fromActor(this)], #user);
+            await createCanister(pk, ?[owner, Principal.fromActor(this)]);
         } else {
             throw Error.reject("not authorized");
         };
