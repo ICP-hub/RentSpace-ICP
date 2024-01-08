@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'column',
         width:'100%',
-        alignItems:'center',marginBottom:90
+        alignItems:'center',
+        marginBottom:20
     },
     headerCont:{
         display:'flex',

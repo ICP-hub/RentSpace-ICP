@@ -12,7 +12,7 @@ const ChatCard = ({item,setOpenChat,openChat,setChat}) => {
       setChat(item)
       }}>
         <Image source={images.profileSample} style={styles.img}/>
-      <Text style={styles.title}>{item?.name}</Text>
+      <Text style={styles.title}>{item?.firstName}</Text>
       <Text style={styles.time}>Mon</Text>
     </TouchableOpacity>
     
@@ -51,10 +51,10 @@ const styles = StyleSheet.create({
         top:'30%'
     },
     img:{
-      width:50,
+      width:70,
       height:50,
-      borderRadius:30,
-      marginLeft:20,
+      borderRadius:10,
+      marginLeft:14,
       objectFit:'contain'
     }
 })

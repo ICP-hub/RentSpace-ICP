@@ -39,6 +39,11 @@ export const idlFactory = ({ IDL }) => {
     'getOwner' : IDL.Func([], [IDL.Text], ['query']),
     'getPK' : IDL.Func([], [IDL.Text], ['query']),
     'getUserInfo' : IDL.Func([], [IDL.Opt(UserInfo)], ['query']),
+    'getUserInfoByPrincipal' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Opt(UserInfo)],
+        ['query'],
+      ),
     'scanUsers' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Nat, IDL.Opt(IDL.Bool)],
         [ScanUser],

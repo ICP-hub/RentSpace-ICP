@@ -137,7 +137,7 @@ const Main = ({navigation}) => {
         <HeaderSearch />
 
         {/* <UserDetailDemo user={user}/> */}
-        <BookHotelPage
+        <BookHotelPage navigation={navigation}
         />
 
         {/* BottomSheets */}

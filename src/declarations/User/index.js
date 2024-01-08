@@ -9,7 +9,7 @@ export { idlFactory } from "./User.did.js";
  * process.env.CANISTER_ID_<CANISTER_NAME_UPPERCASE>
  * beginning in dfx 0.15.0
  */
-export const canisterId ="be2us-64aaa-aaaaa-qaabq-cai"
+export const canisterId ="aovwi-4maaa-aaaaa-qaagq-cai"
 
 export const createActor = (canisterId, options = {}) => {
   const agent = options.agent || new HttpAgent({ ...options.agentOptions });
@@ -34,25 +34,8 @@ export const createActor = (canisterId, options = {}) => {
   return Actor.createActor(idlFactory, {
     agent,
     canisterId,
-    blsVerify: () => true,
     ...options.actorOptions,
   });
 };
 
-
-export const User = createActor(canisterId, {
-  agentOptions: {
-    fetchOptions: {
-      reactNative: {
-        __nativeResponseType: 'base64',
-      },
-    },
-    callOptions: {
-      reactNative: {
-        textStreaming: true,
-      },
-    },
-    blsVerify: () => true,
-    host: 'http://127.0.0.1:4943',
-  },
-});
+export const User = createActor(canisterId);

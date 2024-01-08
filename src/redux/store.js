@@ -8,6 +8,8 @@ import {listingReducer} from './NewListing/reducer';
 // import { agentReducer } from './agent/reducer';
 import { hotelListReducer } from './hotelList/reducer';
 import { bookingsReducer } from './UserBookings/reducer';
+import { authDataReducer } from './authData/reducer';
+import { chatTokenReducer } from './chatToken/reducer';
 
 const rootReducer = combineReducers({ 
   userReducer,
@@ -16,7 +18,9 @@ const rootReducer = combineReducers({
   actorReducer,
   listingReducer,
   hotelListReducer,
-  bookingsReducer
+  bookingsReducer,
+  authDataReducer,
+  chatTokenReducer
 });
 
 export default Store= configureStore({
