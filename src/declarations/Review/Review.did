@@ -5,13 +5,14 @@ type ScanReview =
  };
 type ScalingOptions = 
  record {
-   autoScalingHook: AutoScalingCanisterSharedFunctionHook;
-   sizeLimit: ScalingLimitType;
+   autoScalingCanisterId: text;
+   limit: nat;
+   limitType: ScalingLimitType;
  };
 type ScalingLimitType = 
  variant {
-   count: nat;
-   heapSize: nat;
+   count;
+   heapSize;
  };
 type Review__1 = 
  record {
@@ -24,17 +25,18 @@ type Review__1 =
 type Review = 
  service {
    createReview: (text, Review__1) -> ();
+   getHotelId: () -> (vec text) query;
    getOwner: () -> (text) query;
    getPk: () -> (text) query;
-   getReviewInfo: () -> (opt Review__1) query;
+   getReviewIdsFromHotelId: (text) -> (vec text) query;
+   getReviewInfo: (text) -> (opt Review__1) query;
    scanUsers: (text, text, nat, opt bool) -> (ScanReview) query;
    skExists: (text) -> (bool) query;
    transferCycles: () -> ();
    updateReviewInfo: (text, Review__1) -> (opt Review__1);
  };
-type AutoScalingCanisterSharedFunctionHook = func (text) -> (text);
 service : (record {
              owners: opt vec principal;
-             partitonKey: text;
+             partitionKey: text;
              scalingOptions: ScalingOptions;
            }) -> Review

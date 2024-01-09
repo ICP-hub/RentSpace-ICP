@@ -64,7 +64,7 @@ const ChatContainer = ({navigation}) => {
         })
     }
     const getAllChatUser=async()=>{
-        setChatUsers(c=>[])
+        const arr=[]
         console.log("using function : ",actors?.userActor?.getUserInfoByPrincipal)
         console.log("getting all users!")
         let fromPrinciples=[]
@@ -88,7 +88,9 @@ const ChatContainer = ({navigation}) => {
         console.log("toPrinciples : ",toPrinciples)
         fromPrinciples=fromPrinciples.concat(toPrinciples)
         console.log("concatinated : ",fromPrinciples.concat(toPrinciples))
-        
+        if(fromPrinciples.length==0){
+            setLoading(false)
+        }
         fromPrinciples.map(async(chat,index)=>{
             console.log(`user ${index} : ${chat}`)
             
@@ -96,26 +98,32 @@ const ChatContainer = ({navigation}) => {
             .then(async(res)=>{
                 console.log(res[0])
                 // console.log([...chatUsers,{...res[0],id:chat}])
-                setChatUsers(c=>[...c,{...res[0],id:chat}])
+                console.log({...res[0],id:chat})
+                arr.push({...res[0],id:chat})
+                // setChatUsers(c=>[...c,{...res[0],id:chat}])
                 setLoading(false)
-                if(newChat!="" && !(fromPrinciples.includes(newChat))){
-                    console.log(`new user : ${newChat}`)
-                    console.log("Creating new chat")
-                    await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(newChat))
-                    .then((res)=>{
-                        console.log(res[0])
-                        setChatUsers(c=>[...c,{...res[0],id:newChat}])
-                        setLoading(false)
-                    }).catch((err)=>{
-                        console.log("new chatuser fetching er : ",err)
-                        setLoading(false)
-                    })
-                }
+                setChatUsers(arr)
             }).catch((err)=>{
                 console.log("chatuser fetching err : ",err)
                 setLoading(false)
             })
         })
+        if(newChat!="" && !(fromPrinciples.includes(newChat))){
+            console.log(`new user : ${newChat}`)
+            console.log("Creating new chat")
+            await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(newChat))
+            .then((res)=>{
+                console.log(res[0])
+                arr.push({...res[0],id:newChat})
+                // setChatUsers(c=>[...c,{...res[0],id:newChat}])
+                setLoading(false)
+                setChatUsers(arr)
+            }).catch((err)=>{
+                console.log("new chatuser fetching er : ",err)
+                setLoading(false)
+            })
+        }
+        
         console.log(chatUsers)
         
         

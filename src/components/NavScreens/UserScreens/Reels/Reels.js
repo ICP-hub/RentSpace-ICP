@@ -3,12 +3,13 @@ import React from 'react'
 import BottomNav from '../../../Navigation/BottomNav'
 import HeaderSearch from '../Reusables/Header/HeaderSearch'
 import { COLORS,SIZES } from '../../../../constants/themes'
+import ReelObject from './ReelObject'
 
 const Reels = ({navigation}) => {
   return (
     <View style={styles.view}>
-      <HeaderSearch/>
-      <Text style={styles.simpleText}>Reels</Text>
+      {/* <HeaderSearch/> */}
+      <ReelObject/>
       <BottomNav navigation={navigation}/>
     </View>
   )

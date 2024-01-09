@@ -28,6 +28,9 @@ import hotelImg4 from '../assets/images/hostView/hotelImg4.png'
 import hotelImg5 from '../assets/images/hostView/hotelImg5.png'
 import congrats from '../assets/images/hostView/VectorpartyPopper.png'
 import IDAbout from '../assets/images/hostView/IDAbout.png'
+import reelBG from '../assets/images/ReelBg.png'
+import sampleReel from '../assets/video/sampleReel.mp4'
+// import saple
 
 export default {
     favourite,
@@ -59,5 +62,7 @@ export default {
     hotelImg4,
     hotelImg5,
     congrats,
-    IDAbout
+    IDAbout,
+    reelBG,
+    sampleReel
 }

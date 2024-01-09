@@ -3,16 +3,16 @@ import React from 'react'
 import Icon from 'react-native-vector-icons/AntDesign'
 import { COLORS,SIZES } from '../../../../../constants/themes'
 
-const SearchBar = () => {
+const SearchBar = ({filterAction}) => {
   return (
     <View style={styles.searchBarCont}>
       <View style={styles.searchBar}>
         <Icon name="search1" size={22} color={'white'}/>
         <TextInput style={styles.input} placeholder='Where are you going?' placeholderTextColor={'white'} />
       </View>
-      <View style={styles.filterCont}>
+      <TouchableOpacity style={styles.filterCont} onPress={filterAction}>
         <Icon name="filter" size={25} color={'white'}/>
-      </View>
+      </TouchableOpacity>
     </View>
   )
 }

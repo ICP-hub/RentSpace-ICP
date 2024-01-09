@@ -20,6 +20,7 @@ const Congratulations = ({setHostModal,pos}) => {
   const {files}=useSelector(state=>state.filesReducer)
   
   const ApiLogin=async()=>{
+    console.log("files",files)
     console.log(`authData : ${authData}\n principal : ${authData.principal}\n publicKey : ${authData.publicKey}`)
     console.log({
         principal:authData.principal,
@@ -39,7 +40,7 @@ const Congratulations = ({setHostModal,pos}) => {
     },[])
     const ApiHotelFilters=async()=>{
       await axios.get(`${baseUrl}/api/v1/hotel/filters`).then((res)=>{
-        console.log("hotel filters resp : ",res)
+        console.log("hotel filters resp : ",res.data)
       }).catch((err)=>{console.log("hotel filters err : ",err)})
     }
     const ApiHotelCreate=async()=>{
@@ -60,16 +61,18 @@ const Congratulations = ({setHostModal,pos}) => {
       await axios.post(`${baseUrl}/api/v1/hotel/register`,formData,{
         headers:{
           "x-principal":authData.principal,
-          "x-private-token":token
+          "x-private-token":token,
+          "Content-Type":"multipart/form-data"
         }
       }).then((res)=>{
-        console.log("hotel creation api response : ",res)
+        console.log("hotel creation api response videos : ",res.data.hotels[res.data.hotels.length-1].videoUrls)
+        console.log("hotels images : ",res.data.hotels[res.data.hotels.length-1].imagesUrls)
       }).catch((err)=>{
-        console.log("hotel creation api err : ",err)
+        console.log("hotel creation api err : ",err.response.data)
       })
     }
   const createHotel=async()=>{
-    console.log('create hotel')
+    console.log('create hotel : ',listing)
     setLoading(true)
   await actors.hotelActor?.createHotel({...listing,hotelLocation:"Ludhiana"}).then(async(res)=>{
     setLoading(false)

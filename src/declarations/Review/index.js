@@ -10,7 +10,7 @@ export { idlFactory } from "./Review.did.js";
  * beginning in dfx 0.15.0
  */
 export const canisterId =
-  "cgpjn-omaaa-aaaaa-qaakq-cai";
+  "dfdal-2uaaa-aaaaa-qaama-cai";
 
 export const createActor = (canisterId, options = {}) => {
   const agent = options.agent || new HttpAgent({ ...options.agentOptions });

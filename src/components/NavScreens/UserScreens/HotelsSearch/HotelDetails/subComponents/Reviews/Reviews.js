@@ -6,10 +6,10 @@ import ReviewCard from './ReviewCard'
 import AllReviews from './AllReviews'
 
 
-const reviews=require('./sampleReviews.json')
+const reviewsSample=require('./sampleReviews.json')
 
-const Reviews = () => {
-
+const Reviews = ({reviews}) => {
+    console.log("reviews : ",reviews)
   const [showReview,setShowReviews]=useState(false)
   return (
     <View style={styles.reviewCont}>
@@ -17,10 +17,22 @@ const Reviews = () => {
             <Icon name="star" size={16} color={COLORS.hostTitle} />
             <Text style={styles.reviewText}>4.92 • 432 reviews</Text>
         </View>
-        <FlatList contentContainerStyle={styles.list} data={reviews} renderItem={(item)=>(
+        {
+            reviews.map((r)=>{console.log("review element : ",r)})
+        }
+        {
+            (reviews?.length==0)?
+            <FlatList contentContainerStyle={styles.list} data={reviewsSample} renderItem={(item)=>(
+            <ReviewCard item={item?.item}/>
+            )} horizontal/>:
+            <FlatList contentContainerStyle={styles.list} data={reviews} renderItem={(item)=>(
+            <ReviewCard item={item?.item}/>
+            )} horizontal/>
+        }
+        {/* <FlatList contentContainerStyle={styles.list} data={reviewsSample} renderItem={(item)=>(
             <ReviewCard item={item?.item}/>
         )}
-        horizontal/>
+        horizontal/> */}
         
         <TouchableOpacity style={styles.btn} onPress={()=>{
             setShowReviews(!showReview)
@@ -28,7 +40,7 @@ const Reviews = () => {
             <Text style={styles.btnText}>Show all reviews</Text>
         </TouchableOpacity>
         <Modal animationType='slide' visible={showReview}>
-            <AllReviews setShowReviews={setShowReviews}/>
+            <AllReviews setShowReviews={setShowReviews} reviews={reviews}/>
         </Modal>
     </View>
   )

@@ -257,7 +257,7 @@ const RootComponent: React.FC = () => {
       blsVerify:()=>true,
       canisterId:'ryjl3-tyaaa-aaaaa-aaaba-cai'
     })
-    let actorReview=createReviewActor('cgpjn-omaaa-aaaaa-qaakq-cai',{agent})
+    let actorReview=createReviewActor('dfdal-2uaaa-aaaaa-qaama-cai',{agent})
     console.log("actor review : ",actorReview)
     store.dispatch(setActor({
       backendActor:actor,

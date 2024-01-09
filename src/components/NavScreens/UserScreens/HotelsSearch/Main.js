@@ -29,6 +29,7 @@ import { setPrinciple } from '../../../../redux/principle/actions';
 import { setActor} from '../../../../redux/actor/actions'
 import { useRoute } from '@react-navigation/native';
 import { setAgent } from '../../../../redux/agent/actions';
+import Filters from './Filters/Filters';
 global.Buffer = require('buffer').Buffer;
 
 const Main = ({navigation}) => {
@@ -45,6 +46,8 @@ const Main = ({navigation}) => {
   const [cancelModal, setCancelModal] = useState(false);
   const [rulesModal, setRulesModal] = useState(false);
   const [hotelCreateForm, setHotelCreateForm] = useState(false);
+  const [showFilters,setShowFilters]=useState(false)
+  const [filtersQuery,setFiltersQuery]=useState("")
 
   useEffect(() => {
     SplashScreen.hide();
@@ -76,6 +79,10 @@ const Main = ({navigation}) => {
   const handlePresentModal = () => {
     btmSheetLoginRef.current.present();
   };
+  const openFilters=()=>{
+    console.log("executing")
+    setShowFilters(true)
+  }
 
   const getUserData=async()=>{
     
@@ -106,6 +113,8 @@ const Main = ({navigation}) => {
     btmSheetNotiRef.current.present();
   };
 
+
+
   return (
     // Necessary for capturing touch gestures in the screen
     <GestureHandlerRootView style={styles.view}>
@@ -126,7 +135,9 @@ const Main = ({navigation}) => {
         <Modal visible={hotelCreateForm} animationType="slide">
           <HotelCreationForm setHotelCreateForm={setHotelCreateForm} />
         </Modal>
-        
+        <Modal visible={showFilters} animationType='slide' transparent>
+          <Filters setShowFilters={setShowFilters}/>
+        </Modal>
 
         {/* navigation Bar */}
         <BottomNav
@@ -134,7 +145,7 @@ const Main = ({navigation}) => {
         />
 
         {/* searchBar Top */}
-        <HeaderSearch />
+        <HeaderSearch filterAction={openFilters}/>
 
         {/* <UserDetailDemo user={user}/> */}
         <BookHotelPage navigation={navigation}

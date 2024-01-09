@@ -1,16 +1,12 @@
 export const idlFactory = ({ IDL }) => {
-  const AutoScalingCanisterSharedFunctionHook = IDL.Func(
-      [IDL.Text],
-      [IDL.Text],
-      [],
-    );
   const ScalingLimitType = IDL.Variant({
-    'heapSize' : IDL.Nat,
-    'count' : IDL.Nat,
+    'heapSize' : IDL.Null,
+    'count' : IDL.Null,
   });
   const ScalingOptions = IDL.Record({
-    'autoScalingHook' : AutoScalingCanisterSharedFunctionHook,
-    'sizeLimit' : ScalingLimitType,
+    'limitType' : ScalingLimitType,
+    'limit' : IDL.Nat,
+    'autoScalingCanisterId' : IDL.Text,
   });
   const Review__1 = IDL.Record({
     'des' : IDL.Text,
@@ -25,9 +21,15 @@ export const idlFactory = ({ IDL }) => {
   });
   const Review = IDL.Service({
     'createReview' : IDL.Func([IDL.Text, Review__1], [], []),
+    'getHotelId' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
     'getOwner' : IDL.Func([], [IDL.Text], ['query']),
     'getPk' : IDL.Func([], [IDL.Text], ['query']),
-    'getReviewInfo' : IDL.Func([], [IDL.Opt(Review__1)], ['query']),
+    'getReviewIdsFromHotelId' : IDL.Func(
+        [IDL.Text],
+        [IDL.Vec(IDL.Text)],
+        ['query'],
+      ),
+    'getReviewInfo' : IDL.Func([IDL.Text], [IDL.Opt(Review__1)], ['query']),
     'scanUsers' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Nat, IDL.Opt(IDL.Bool)],
         [ScanReview],
@@ -44,23 +46,19 @@ export const idlFactory = ({ IDL }) => {
   return Review;
 };
 export const init = ({ IDL }) => {
-  const AutoScalingCanisterSharedFunctionHook = IDL.Func(
-      [IDL.Text],
-      [IDL.Text],
-      [],
-    );
   const ScalingLimitType = IDL.Variant({
-    'heapSize' : IDL.Nat,
-    'count' : IDL.Nat,
+    'heapSize' : IDL.Null,
+    'count' : IDL.Null,
   });
   const ScalingOptions = IDL.Record({
-    'autoScalingHook' : AutoScalingCanisterSharedFunctionHook,
-    'sizeLimit' : ScalingLimitType,
+    'limitType' : ScalingLimitType,
+    'limit' : IDL.Nat,
+    'autoScalingCanisterId' : IDL.Text,
   });
   return [
     IDL.Record({
       'owners' : IDL.Opt(IDL.Vec(IDL.Principal)),
-      'partitonKey' : IDL.Text,
+      'partitionKey' : IDL.Text,
       'scalingOptions' : ScalingOptions,
     }),
   ];

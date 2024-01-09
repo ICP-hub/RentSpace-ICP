@@ -36,7 +36,7 @@ const AddPhotos = ({setHostModal,pos}) => {
     }
   }
   const chooseUserImg=async()=>{
-    const result=await launchImageLibrary({selectionLimit:5,mediaType:'image',includeBase64:true},
+    const result=await launchImageLibrary({selectionLimit:5,mediaType:'image',includeBase64:false},
     (res)=>{
       //console.log(res)
       setHotelImgs(res.assets)

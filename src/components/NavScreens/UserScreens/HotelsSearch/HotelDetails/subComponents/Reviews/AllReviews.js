@@ -4,9 +4,9 @@ import ReviewCard from './ReviewCard'
 import { COLORS, SIZES } from '../../../../../../../constants/themes'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
-const reviews=require('./sampleReviews.json')
+// const reviews=require('./sampleReviews.json')
 
-const AllReviews = ({setShowReviews}) => {
+const AllReviews = ({setShowReviews,reviews}) => {
   return (
     <View style={styles.view}>
     <TouchableOpacity style={styles.backIcon} onPress={()=>setShowReviews(false)}>

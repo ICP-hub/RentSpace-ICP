@@ -4,10 +4,10 @@ import SearchBar from './SearchBar'
 import { COLORS,SIZES } from '../../../../../constants/themes'
 import HeaderTitles from './HeaderTitles'
 
-const HeaderSearch = ({map}) => {
+const HeaderSearch = ({filterAction,map}) => {
   return (
     <View style={map?[styles.headerCont]:[styles.headerCont,{paddingBottom:20}]}>
-      <SearchBar/>
+      <SearchBar filterAction={filterAction}/>
       {
         map?<HeaderTitles/>:<></>
       }

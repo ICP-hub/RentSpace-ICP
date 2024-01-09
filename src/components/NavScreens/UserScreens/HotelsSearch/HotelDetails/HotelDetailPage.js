@@ -10,12 +10,37 @@ import ReserveBtn from './cards/ReserveBtn'
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import Reviews from './subComponents/Reviews/Reviews'
 import BookingForm from './BookingForm/BookingForm'
+import { useSelector } from 'react-redux'
 
 const HotelDetailPage = ({item,setOpen,navigation}) => {
     const btmBtn=useRef(null)
     const [showBookHotel,setShowBookHotel]=useState(false)
+    const [hotelReviews,setHotelReviews]=useState([])
+    const {actors}=useSelector(state=>state.actorReducer)
+    // const firstRender=useRef
+    const getAllReviews=async()=>{
+        // setHotelReviews([])
+        console.log(actors?.reviewActor.getReviewIdsFromHotelId)
+        console.log(item?.id)
+        let Revs=[]
+        await actors?.reviewActor.getReviewIdsFromHotelId(item?.id).then((res)=>{
+            console.log(res)
+            setHotelReviews([])
+            res.map(async(r)=>{
+                await actors?.reviewActor.getReviewInfo(r).then((res)=>{
+                    console.log(res) 
+                    Revs.push(res[0])
+                    setHotelReviews(Revs)
+                }).catch((err)=>{console.log(err)})
+            })
+            
+        }).catch((err)=>console.log(err))
+        // console.log("reviews list : ",Revs)
+    }
     useEffect(()=>{
         btmBtn.current.present()
+        // if()
+        getAllReviews()
     },[])
   return (
     <BottomSheetModalProvider>
@@ -47,7 +72,7 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
         <HotelFacilityCard />
       </View>
       <View style={styles.hrLine}></View>
-      <Reviews/>  
+      <Reviews reviews={hotelReviews}/>  
         <TouchableOpacity style={styles.btn} onPress={()=>{
             navigation.navigate('UserChat',{newChat:item.id.split('#')[0]})
             setOpen(false)
