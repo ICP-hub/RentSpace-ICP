@@ -3,26 +3,26 @@ import Text "mo:base/Text";
 import Array "mo:base/Array";
 import List "mo:base/List";
 
-import CanDB "mo:candb/CanDB";
-import CA "mo:candb/CanisterActions";
-import Entity "mo:candb/Entity";
+import CanDB "mo:new-candb/CanDB";
+import CA "mo:new-candb/CanisterActions";
+import Entity "mo:new-candb/Entity";
 import StableRbTree "mo:stable-rbtree/StableRBTree";
-
+import {print} "mo:base/Debug";
 import Types "../types";
 import utils "../utils";
 
 shared ({caller = owner}) actor class Review({
-    partitonKey : Text;
+    partitionKey : Text;
     scalingOptions : CanDB.ScalingOptions;
     owners : ?[Principal];
 }) {
 
     stable let db = CanDB.init({
-        pk = partitonKey;
+        pk = partitionKey;
         scalingOptions = scalingOptions;
         btreeOrder = null;
     });
-
+    stable var hotelIdMapReviewId = StableRbTree.init<Text, List.List<Text>>();
     stable var reviewIdTree = StableRbTree.init<Text, List.List<Text>>();
 
     public query func getPk() : async Text {db.pk};
@@ -47,6 +47,41 @@ shared ({caller = owner}) actor class Review({
             };
         };
     };
+    func linkReviewIdwithHotelId(bookingId : Text) {
+        let reviewId = Text.split(bookingId, #text "#");
+        var loopCount = 0;
+        var hotelId = "";
+        for (i in reviewId){
+            if(loopCount < 1){
+                hotelId:=hotelId # i;
+            };
+            if(loopCount == 1){
+                hotelId := hotelId # "#" #i;
+            };
+            loopCount:=loopCount+1;
+        };
+        // for (i in reviewId) {
+        //     if (loopCount < 2) {
+        //         hotelId := hotelId # "#" #i;
+        //     };
+        //     loopCount := loopCount +1;
+        // };
+        print(debug_show (hotelId));
+        switch (StableRbTree.get(hotelIdMapReviewId, Text.compare, hotelId)) {
+            case (?result) {
+                let data = List.push(bookingId, result);
+                hotelIdMapReviewId := StableRbTree.put(hotelIdMapReviewId, Text.compare, hotelId, data);
+                return;
+            };
+            case null {
+                var reviewIdList = List.nil<Text>();
+                reviewIdList := List.push(bookingId, reviewIdList);
+                hotelIdMapReviewId := StableRbTree.put(hotelIdMapReviewId, Text.compare, hotelId, reviewIdList);
+                return;
+            };
+        };
+    };
+
     //@required public API (Do not delete or change)
     public shared ({caller = user}) func transferCycles() : async () {
         if (user == owner) {
@@ -63,9 +98,11 @@ shared ({caller = owner}) actor class Review({
         assert (userIdentity != "" and reviewData.bookingId != "" and reviewData.rating > 0 and reviewData.title != "" and reviewData.des != "");
         assert (Text.size(reviewData.bookingId) <= 250 and Text.size(reviewData.title) <= 25 and Text.size(reviewData.title) <= 500);
         let date = utils.getDate();
+
         createReviewId(userIdentity, bookingId);
+        linkReviewIdwithHotelId(bookingId);
         //inserts the entity into CanDB
-        await* CanDB.put(
+        await CanDB.put(
             db,
             {
                 sk = bookingId;
@@ -111,12 +148,11 @@ shared ({caller = owner}) actor class Review({
         };
     };
 
-    public shared query ({caller = user}) func getReviewInfo() : async ?Types.Review {
+    public query func getReviewInfo(bookingId : Text) : async ?Types.Review {
 
-        assert (Principal.isAnonymous(user) == false);
+        // assert (Principal.isAnonymous(user) == false)
 
-        let userIdentity = Principal.toText(user);
-        let userInfo = switch (CanDB.get(db, {sk = userIdentity})) {
+        let userInfo = switch (CanDB.get(db, {sk = bookingId})) {
             case null {null};
             case (?userEntity) {unWarpReviewInfo(userEntity)};
         };
@@ -128,15 +164,33 @@ shared ({caller = owner}) actor class Review({
         };
     };
 
+    public query func getReviewIdsFromHotelId(hotelId : Text) : async [Text] {
+
+        // assert (Principal.isAnonymous(user) == false)
+        let data : [Text] = switch (StableRbTree.get(hotelIdMapReviewId, Text.compare, hotelId)) {
+            case (null) {[]};
+            case (?result) {List.toArray(result)};
+        };
+    };
+    public shared query ({caller = user}) func getHotelId() : async [Text] {
+        let userIdentity = Principal.toText(user);
+        assert (Principal.isAnonymous(user) == false);
+
+        switch (StableRbTree.get(reviewIdTree, Text.compare, userIdentity)) {
+            case (null) {[]};
+            case (?result) {List.toArray(result)};
+        };
+    };
+
     public shared ({caller = user}) func updateReviewInfo(bookingId : Text, reviewData : Types.Review) : async ?Types.Review {
 
         assert (Principal.isAnonymous(user) == false);
         let userIdentity = Principal.toText(user);
 
         assert (userIdentity != "" and reviewData.rating <= 0 and reviewData.title != "" and reviewData.des != "");
-        assert (Text.size(reviewData.bookingId) <= 200 and Text.size(reviewData.title) <= 25 and Text.size(reviewData.title) <= 500);
+        assert (Text.size(reviewData.bookingId) <= 50 and Text.size(reviewData.title) <= 25 and Text.size(reviewData.title) <= 500);
 
-        let reviewInfo = await* CanDB.replace(
+        let reviewInfo = await CanDB.replace(
             db,
             {
                 sk = userIdentity;
