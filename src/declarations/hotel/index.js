@@ -2,6 +2,7 @@ import { Actor, HttpAgent } from "@dfinity/agent";
 
 // Imports and re-exports candid interface
 import { idlFactory } from "./hotel.did.js";
+import { host, ids } from "../../../DevelopmentConfig.js";
 export { idlFactory } from "./hotel.did.js";
 
 /* CANISTER_ID is replaced by webpack based on node environment
@@ -9,7 +10,7 @@ export { idlFactory } from "./hotel.did.js";
  * process.env.CANISTER_ID_<CANISTER_NAME_UPPERCASE>
  * beginning in dfx 0.15.0
  */
-export const canisterId ="br5f7-7uaaa-aaaaa-qaaca-cai"
+export const canisterId =ids.hotelCan
 
 export const createActor = (canisterId, options = {}) => {
   const agent = options.agent || new HttpAgent({ ...options.agentOptions });
@@ -53,6 +54,6 @@ export const hotel = createActor(canisterId, {
       },
     },
     blsVerify: () => true,
-    host: 'http://127.0.0.1:4943',
+    host: host,
   },
 });

@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import { setHotels } from '../../../../redux/hotels/actions'
 import { setChatToken } from '../../../../redux/chatToken/actions'
 import axios, { formToJSON } from 'axios'
+import { FileSystem } from 'react-native-file-access'
 
 const Congratulations = ({setHostModal,pos}) => {
   const [loading,setLoading]=useState(false)
@@ -16,20 +17,22 @@ const Congratulations = ({setHostModal,pos}) => {
   const {actors}=useSelector(state=>state.actorReducer)
   const {authData}=useSelector(state=>state.authDataReducer)
   const dispatch=useDispatch()
-  const baseUrl="https://rentspace.kaifoundry.com"
+  // const baseUrl="https://rentspace.kaifoundry.com"
+  const baseUrl="http://localhost:5000"
   const {files}=useSelector(state=>state.filesReducer)
   
   const ApiLogin=async()=>{
     console.log("files",files)
-    console.log(`authData : ${authData}\n principal : ${authData.principal}\n publicKey : ${authData.publicKey}`)
-    console.log({
-        principal:authData.principal,
-        publicKey:authData.publicKey
-     })
-     await axios.post(`${baseUrl}/api/v1/login/user`,{
-        principal:authData.principal,
-        publicKey:authData.publicKey
-     }).then((res)=>{
+    // console.log(`authData : ${authData}\n principal : ${authData.principal}\n publicKey : ${authData.publicKey}`)
+    // console.log({
+    //     principal:authData.principal,
+    //     publicKey:authData.publicKey
+    //  })
+     await axios.post(`${baseUrl}/api/v1/login/user`,{},{headers:{
+      "x-private":authData.privateKey,
+      "x-public":authData.publicKey,
+      "x-delegation":authData.delegation
+     }}).then((res)=>{
         console.log('hotel login api : ',res.data.userToken)
         dispatch(setChatToken(res.data.userToken))
         setToken(res.data.userToken)
@@ -40,7 +43,7 @@ const Congratulations = ({setHostModal,pos}) => {
     },[])
     const ApiHotelFilters=async()=>{
       await axios.get(`${baseUrl}/api/v1/hotel/filters`).then((res)=>{
-        console.log("hotel filters resp : ",res.data)
+        console.log("hotel filters resp : ")
       }).catch((err)=>{console.log("hotel filters err : ",err)})
     }
     const ApiHotelCreate=async()=>{
@@ -48,46 +51,95 @@ const Congratulations = ({setHostModal,pos}) => {
         hotelTitle:listing?.hotelTitle,
         hotelDes:listing?.hotelDes,
         hotelPrice:listing?.hotelPrice,
-        hotelLocation:listing?.hotelLocation,
+        hotelLocation:"Ludhiana",
         longitude:parseFloat(listing?.hotelLocation.split('#')[0]),
         latitude:parseFloat(listing?.hotelLocation.split('#')[1])
       }
+      
       const formData = new FormData();
       Object.entries(data).forEach(([key, value]) => {
         formData.append(key, value);
       });
-      formData.append("files",files)
+      let newFiles=[]
+      await FileSystem.readFile(files[0].uri,'base64').then((res)=>{
+        console.log(res)
+        files.map((file,index)=>{
+          // if(index==0){
+          //   newFiles.push({...file,fileIndex:`file${index}`,base64:res})
+          //   formData.append(`file${index}`,file)
+          // }else{
+            newFiles.push({...file,fileIndex:`file${index}`})
+            formData.append(`file${index}`,file)
+          // }
+          
+          // console.log(`file${index}`,file)
+        })
+      })
+      
+      
+      // let newFiles=[]
+      // const filePromises = files.map(async function (file) {
+      //   const res = await FileSystem.readFile(file.uri);
+      //   // console.log(res)
+      //   return { ...file, buffer: res };
+      // });
+      
+      formData.append("files",JSON.stringify(newFiles))
+      
+      
+      // Promise.all(filePromises)
+      //   .then((newFiles) => {
+      //     const regularNewFiles = newFiles.map((file) => Object.assign({}, file));
+      //     newFiles.forEach((file) => {
+      //       console.log("File Object: ", file);
+      //     });
+      //     // console.log("files: ", JSON.stringify(regularNewFiles));
+      //     formData.append("files", JSON.stringify(regularNewFiles));
+          
+      
+      //     // Continue with the rest of your code that depends on newFiles
+      //   })
+      //   .catch((error) => {
+      //     // Handle errors if any of the promises are rejected
+      //     console.error("Error reading files:", error);
+      //   });
       console.log(formData)
       await axios.post(`${baseUrl}/api/v1/hotel/register`,formData,{
         headers:{
-          "x-principal":authData.principal,
-          "x-private-token":token,
+          "x-private":authData.privateKey,
+          "x-public":authData.publicKey,
+          "x-delegation":authData.delegation,
           "Content-Type":"multipart/form-data"
         }
-      }).then((res)=>{
-        console.log("hotel creation api response videos : ",res.data.hotels[res.data.hotels.length-1].videoUrls)
-        console.log("hotels images : ",res.data.hotels[res.data.hotels.length-1].imagesUrls)
+      }).then(async(res)=>{
+        setHostModal(false)
+        
+        console.log("hotel creation api response videos : ",res.data)
+        // console.log("hotels images : ",res.data.hotels[res.data.hotels.length-1].imagesUrls)
       }).catch((err)=>{
-        console.log("hotel creation api err : ",err.response.data)
+        console.log("hotel creation api err : ",err)
+        alert(err)
+        setHostModal(false)
       })
     }
   const createHotel=async()=>{
     console.log('create hotel : ',listing)
-    setLoading(true)
-  await actors.hotelActor?.createHotel({...listing,hotelLocation:"Ludhiana"}).then(async(res)=>{
-    setLoading(false)
-    await actors.hotelActor?.getHotelId().then(async(res)=>{
-      console.log(res)
-      dispatch(setHotels(res))
-      setHostModal(false)
+  //   setLoading(true)
+  // await actors.hotelActor?.createHotel({...listing,hotelLocation:"Ludhiana"}).then(async(res)=>{
+  //   setLoading(false)
+  //   await actors.hotelActor?.getHotelId().then(async(res)=>{
+  //     console.log(res)
+  //     dispatch(setHotels(res))
+      
       ApiHotelFilters()
       ApiHotelCreate()
-    })
+    // })
 
-  }).catch((err)=>{
-    setLoading(false)
-    alert(err)
-    console.log(err)})
+  // }).catch((err)=>{
+  //   setLoading(false)
+  //   alert(err)
+  //   console.log(err)})
+  // }
   }
   return (
     <View style={styles.view}>

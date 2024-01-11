@@ -46,12 +46,10 @@ import { idlFactory } from './Backend/RentSpace_backend/wallet/legder.did';
 import { createTokenActor } from './src/components/NavScreens/UserScreens/HotelsSearch/HotelDetails/BookingForm/utils';
 import { setAuthData } from './src/redux/authData/actions';
 import axios from 'axios';
-// import {initializeApp} from '@react-native-firebase/app'
-// const firebaseConfig={}
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {host, ids} from './DevelopmentConfig'
 
-// initializeApp(firebaseConfig);
 
-// initiali
 const Stack = createNativeStackNavigator();
 
 const linking = {
@@ -64,56 +62,140 @@ PushNotification.configure({
     console.log("TOKEN:", token);
   },
 
-  // (required) Called when a remote is received or opened, or local notification is opened
   onNotification: function (notification) {
     console.log("NOTIFICATION:", notification);
-
-    // process the notification
-
-    // (required) Called when a remote is received or opened, or local notification is opened
     notification.finish(PushNotificationIOS.FetchResult.NoData);
   },
-
-  // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
-  // onAction: function (notification) {
-  //   console.log("ACTION:", notification.action);
-  //   console.log("NOTIFICATION:", notification);
-
-  //   // process the action
-  // },
-
-  // // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
-  // onRegistrationError: function(err) {
-  //   console.error(err.message, err);
-  // },
-
-  // IOS ONLY (optional): default: all - Permissions to register.
   permissions: {
     alert: true,
     badge: true,
     sound: true,
   },
-
-  // Should the initial notification be popped automatically
-  // default: true
   popInitialNotification: true,
 
-  /**
-   * (optional) default: true
-   * - Specified if permissions (ios) and token (android and ios) will requested or not,
-   * - if not, you must call PushNotificationsHandler.requestPermissions() later
-   * - if you are not using remote notification or do not have Firebase installed, use this:
-   *     requestPermissions: Platform.OS === 'ios'
-   */
   requestPermissions: Platform.OS==="ios",
   channelId:'1',
 });
 
 const RootComponent: React.FC = () => {
 
+
+  // const [loading,setLoading]
   const btmSheetLoginRef = useRef(null);
   const btmSheetFinishRef = useRef(null);
   const [middleKeyIdentity, setMiddleKeyIdentity] = useState('');
+
+
+
+  async function delegationValidation(pubKey,priKey,delegation){
+    // setLoading(true)
+    try{
+      let publicKey = await crypto.subtle.importKey("raw",
+      Buffer.from(fromHex(pubKey)),
+      { name: "ECDSA", namedCurve: "P-256" }, // Adjust the algorithm and curve as needed
+      true, // Whether the key is extractable
+      ["verify"] )
+      // console.log("generateKey._keyPair.publicKey",publicKey)
+      
+      let privateKey = await crypto.subtle.importKey("pkcs8",
+      Buffer.from(fromHex(priKey)),
+      { name: "ECDSA", namedCurve: "P-256" }, // Adjust the algorithm and curve as needed
+      true, // Whether the key is extractable
+      ["sign"] )
+      console.log("generateKey._keyPair.privateKey",privateKey)
+      let newKeyPair = await ECDSAKeyIdentity.fromKeyPair({privateKey,publicKey})
+      // console.log("newKeyPair",toHex(newKeyPair.getPublicKey().toDer()));
+  
+      const Delchain = DelegationChain.fromJSON(
+          JSON.parse(decodeURIComponent(delegation)),
+        );
+        console.log("chain",Delchain);
+        const middleIdentity = DelegationIdentity.fromDelegation(
+          newKeyPair,
+          Delchain,
+        );
+        console.log("middleIdentity",middleIdentity);
+        const agent = new HttpAgent({identity: middleIdentity,fetchOptions: {
+          reactNative: {
+            __nativeResponseType: 'base64',
+          },
+        },
+        callOptions: {
+          reactNative: {
+            textStreaming: true,
+          },
+        },
+        fetch,
+        blsVerify: () => true,
+        host: host,
+        verifyQuerySignatures: false,
+      });
+  
+        // console.log("agent",agent);
+  
+        newActor = createActor(ids.backendCan, {
+          agent,
+        });
+        // console.log("actor",newActor);
+  
+        console.log("middleIdentityy",middleIdentity.getPrincipal().toString())
+  
+        let principal = await newActor?.whoami().catch(async(err)=>{
+          console.log(err)
+          await AsyncStorage.clear()
+          // setLoading(false)
+          alert('no previous data found!')
+        })
+        if(principal=="2vxsx-fae"){
+          await AsyncStorage.clear()
+          // setLoading(false)
+        }else{
+          btmSheetLoginRef.current.dismiss()
+        }
+        let actorUser=createUserActor(ids.userCan,{agent})
+        let actorHotel=createHotelActor(ids.hotelCan,{agent})
+        let actorBooking=createBookingActor(ids.bookingCan,{agent})
+        let actorToken=Actor.createActor(idlFactory, {
+          agent,
+          blsVerify:()=>true,
+          canisterId:ids.tokenCan
+        })
+        let actorReview=createReviewActor(ids.reviewCan,{agent})
+        // console.log("actor review : ",actorReview)
+        store.dispatch(setActor({
+          backendActor:newActor,
+          userActor:actorUser,
+          hotelActor:actorHotel,
+          bookingActor:actorBooking,
+          tokenActor:actorToken,
+          reviewActor:actorReview
+        })) 
+        
+        store.dispatch(setPrinciple(principal))
+        console.log("user",principal)
+      
+  
+        await actorUser?.getUserInfo().then((res)=>{
+          if(res[0]?.firstName!=null){
+            store.dispatch(setUser(res[0]))
+            btmSheetLoginRef.current.dismiss()
+            alert(`welcome back ${res[0]?.firstName}!`)
+            
+          }else{
+            alert('Now please follow the registeration process!')
+            btmSheetLoginRef.current.dismiss()
+            btmSheetFinishRef.current.present()
+          }
+        }).catch((err)=>console.error(err))
+        console.log("principal from new login : ",principal);
+        
+      }catch(err){
+        console.log(err)
+        alert("No previous data found!")
+      }
+    }
+
+
   const generateIdentity = async () => {
     let p = new Promise(async(resolve,reject)=>{
       await ECDSAKeyIdentity.generate({extractable: true})
@@ -135,10 +217,13 @@ const RootComponent: React.FC = () => {
   let resp;
 
   const handleLogin = async () => {
+    
     await generateIdentity().then(async(res)=>{
       resp=res
-    console.log("running handle login",res)
+    // console.log("running handle login",res)
+    // console.log("ids : ",ids)
     try {
+      // const url = `https://sldpd-dyaaa-aaaag-acifq-cai.icp0.io?publicKey=${toHex(res.getPublicKey().toDer())}`;
       const url = `http://127.0.0.1:4943/?canisterId=b77ix-eeaaa-aaaaa-qaada-cai&publicKey=${toHex(res.getPublicKey().toDer())}`;
       if (await InAppBrowser.isAvailable()) {
         const result = await InAppBrowser.open(url, {
@@ -181,7 +266,7 @@ const RootComponent: React.FC = () => {
     const deepLink = event.url;
     const urlObject = new URL(deepLink);
     const delegation = urlObject.searchParams.get('delegation');
-    	// console.log("signature",delegation)
+    	console.log("del signature",delegation)
     const chain = DelegationChain.fromJSON(
       JSON.parse(decodeURIComponent(delegation)),
     );
@@ -201,32 +286,46 @@ const RootComponent: React.FC = () => {
       },
     },
     blsVerify: () => true,
-    host: 'http://127.0.0.1:4943',});
+    verifyQuerySignatures: false,
+    host: host,});
+
+    //New Login through api
+
+    
+
+    let pubKey = toHex(await crypto.subtle.exportKey("raw",middleIdentity._inner._keyPair.publicKey));
+    let priKey = toHex(await crypto.subtle.exportKey("pkcs8",middleIdentity._inner._keyPair.privateKey));
+
+    // delegationValidation(pubKey,priKey,delegation)
+
+    //New Login through api end
+    console.log(`new private : ${priKey}\n new public : ${pubKey}`)
     let signObj;
     async function getSignObject(){
       const principalM=middleIdentity.getPrincipal().toString()
       const encoder=new TextEncoder()
       let message=encoder.encode(principalM)
       let publicKey=toHex(middleIdentity.getPublicKey().toDer())
-      let pubKey = await crypto.subtle.exportKey('raw', middleIdentity._inner._keyPair.publicKey);
+      // let pubKey = await crypto.subtle.exportKey('raw', middleIdentity._inner._keyPair.publicKey);
       let signature;
-      await middleIdentity.sign(message).then((res)=>{
-        signature=res
-        console.log(`principal : ${principalM} \n public key : ${toHex(publicKey)} \n signature : ${toHex(signature)}`)
-        console.log({
-          principal:principalM,
-          publicKey:publicKey,
-          pubKey:toHex(pubKey),
-          signature:toHex(signature)
-        })
+      let pubKey = toHex(await crypto.subtle.exportKey("raw",middleIdentity._inner._keyPair.publicKey));
+    let priKey = toHex(await crypto.subtle.exportKey("pkcs8",middleIdentity._inner._keyPair.privateKey));
+      // await middleIdentity.sign(message).then((res)=>{
+      //   signature=res
+      //   console.log(`principal : ${principalM} \n public key : ${toHex(publicKey)} \n signature : ${toHex(signature)}`)
+        // console.log({
+          // privateKey:priKey,
+          // publicKey:pubKey,
+          // delegation:delegation
+        // })
         signObj=
         {
-          principal:principalM,
-          publicKey:publicKey,
-          pubKey:toHex(pubKey),
-          signature:toHex(signature)
+          privateKey:priKey,
+          publicKey:pubKey,
+          delegation:delegation
         }
-      }).catch((err)=>{console.log(err)})
+        console.log(signObj)
+      // }).catch((err)=>{console.log(err)})
       
     }
     await getSignObject().then(async()=>{
@@ -234,7 +333,15 @@ const RootComponent: React.FC = () => {
       store.dispatch(
         setAuthData(signObj)
       )
-      await axios.post(`https://rentspace.kaifoundry.com/api/v1/register/user`,signObj).then((res)=>{
+      const baseUrl="http://localhost:5000"
+      // const baseUrl="https://rentspace.kaifoundry.com"
+      await axios.post(`${baseUrl}/api/v1/register/user`,{},{
+        headers:{
+          "x-private":signObj.privateKey,
+          "x-public":signObj.publicKey,
+          "x-delegation":signObj.delegation
+        }
+      }).then((res)=>{
         console.log("chat register resp : ",res)
       }).catch((err)=>{
         console.log("chat register error : ",err)
@@ -246,19 +353,19 @@ const RootComponent: React.FC = () => {
       })
     })
     
-    actor = createActor('bkyz2-fmaaa-aaaaa-qaaaq-cai', {
+    actor = createActor(ids.backendCan, {
       agent,
     });
-    let actorUser=createUserActor('cpmcr-yeaaa-aaaaa-qaala-cai',{agent})
-    let actorHotel=createHotelActor('br5f7-7uaaa-aaaaa-qaaca-cai',{agent})
-    let actorBooking=createBookingActor('a4tbr-q4aaa-aaaaa-qaafq-cai',{agent})
+    let actorUser=createUserActor(ids.userCan,{agent})
+    let actorHotel=createHotelActor(ids.hotelCan,{agent})
+    let actorBooking=createBookingActor(ids.bookingCan,{agent})
     let actorToken=Actor.createActor(idlFactory, {
       agent,
       blsVerify:()=>true,
-      canisterId:'ryjl3-tyaaa-aaaaa-aaaba-cai'
+      canisterId:ids.tokenCan
     })
-    let actorReview=createReviewActor('dfdal-2uaaa-aaaaa-qaama-cai',{agent})
-    console.log("actor review : ",actorReview)
+    let actorReview=createReviewActor(ids.reviewCan,{agent})
+    // console.log("actor review : ",actorReview)
     store.dispatch(setActor({
       backendActor:actor,
       userActor:actorUser,
@@ -268,7 +375,7 @@ const RootComponent: React.FC = () => {
       reviewActor:actorReview
     }))
     
-    console.log("actor : ",actor)
+    // console.log("actor : ",actor)
     let whoami = await actor.whoami();
     store.dispatch(setPrinciple(whoami))
     console.log("user",whoami)
@@ -299,7 +406,7 @@ const RootComponent: React.FC = () => {
     <Provider store={Store}>
     <NavigationContainer linking={linking}>
       <Stack.Navigator initialRouteName="Launch">
-        <Stack.Screen options={{headerShown:false}} name="Launch" component={Main} initialParams={{handleLogin,btmSheetLoginRef,btmSheetFinishRef
+        <Stack.Screen options={{headerShown:false}} name="Launch" component={Main} initialParams={{handleLogin,btmSheetLoginRef,btmSheetFinishRef,delegationValidation
         }}/>
         <Stack.Screen options={{headerShown:false}} name='UserChat' component={ChatContainer} initialParams={{newChat:''}}/>
         <Stack.Screen options={{headerShown:false}} name='profile' component={UserDetailDemo} />

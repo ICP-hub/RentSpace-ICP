@@ -44,6 +44,8 @@
     "react-native-eject": "^0.2.0",
     "react-native-element-dropdown": "^2.10.1",
     "react-native-fetch-api": "^3.0.0",
+    "react-native-file-access": "^3.0.4",
+    "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-hr": "^1.1.4",
     "react-native-image-picker": "^7.1.0",

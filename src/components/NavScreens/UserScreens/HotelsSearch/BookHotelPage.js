@@ -10,7 +10,7 @@ import ShowBookings from './HotelDetails/ShowBookings/ShowBookings'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Icon2 from 'react-native-vector-icons/Ionicons'
 
-const BookHotelPage = ({navigation}) => {
+const BookHotelPage = ({navigation,queryHotels}) => {
 
   const {user}=useSelector(state=>state.userReducer)
   const {hotels}=useSelector(state=>state.hotelsReducer)
@@ -60,6 +60,19 @@ const BookHotelPage = ({navigation}) => {
       await actors.hotelActor?.getHotel(hotels[i]).then((res)=>{
         setHotelsList(hotelsList=>[...hotelsList,{...res[0],id:hotels[i]}])
         console.log({...res[0],id:hotels[i]})
+      })
+    }
+    try{
+      dispatch(setHotelList(hotelsList))
+    }catch(err){console.log(err)}
+    
+  }
+  async function getQueryHotelDetails(){
+    setHotelsList([])
+    for(let i=0;i<queryHotels?.length;i++){
+      await actors.hotelActor?.getHotel(queryHotels[i]).then((res)=>{
+        setHotelsList(hotelsList=>[...hotelsList,{...res[0],id:queryHotels[i]}])
+        console.log({...res[0],id:queryHotels[i]})
       })
     }
     try{

@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setListing } from '../../../../redux/NewListing/actions'
 import { launchImageLibrary } from 'react-native-image-picker'
 import { setFiles } from '../../../../redux/files/actions'
+import RNFS from 'react-native-fs'
 
 const AddPhotos = ({setHostModal,pos}) => {
   const [images,setImages]=useState("img2")
@@ -36,7 +37,7 @@ const AddPhotos = ({setHostModal,pos}) => {
     }
   }
   const chooseUserImg=async()=>{
-    const result=await launchImageLibrary({selectionLimit:5,mediaType:'image',includeBase64:false},
+    const result=await launchImageLibrary({selectionLimit:5,mediaType:'image',includeBase64:true},
     (res)=>{
       //console.log(res)
       setHotelImgs(res.assets)
@@ -45,13 +46,21 @@ const AddPhotos = ({setHostModal,pos}) => {
     console.log(result)
   }
   const chooseVideo=async()=>{
-    const result=await launchImageLibrary({mediaType:'video',videoQuality:'medium'},
-      (res)=>{
-        setVideo(res.assets[0])
+    const result=await launchImageLibrary({mediaType:'video',videoQuality:'medium',includeBase64:true},
+      async(res)=>{
+        await RNFS.readFile(res.assets[0].uri,'base64').then((resp)=>{{
+          console.log(resp)
+          setVideo({...res.assets[0],base64:resp})
+        }}).catch((err)=>{{
+          console.log(err)
+          alert('Unsupported format!')
+        }})
+        
       }
     ).catch((err)=>{
       console.log(err)
     })
+    // await RNFS.readFile(result.assets,'base64').then((res)=>console.log(res)).catch((err)=>{err})
     console.log(result)
   }
   return (
