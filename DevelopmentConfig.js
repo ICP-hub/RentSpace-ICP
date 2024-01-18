@@ -6,10 +6,10 @@ export const host=(production)?"https://icp-api.io":"http://127.0.0.1:4943"
 export const ids={
     userCan:(production)?
         "tassb-3qaaa-aaaan-qloxq-cai":
-        "cpmcr-yeaaa-aaaaa-qaala-cai",
+        "by6od-j4aaa-aaaaa-qaadq-cai",
     hotelCan:(production)?
         "r5p4j-iyaaa-aaaan-qloya-cai":
-        "br5f7-7uaaa-aaaaa-qaaca-cai",
+        "avqkn-guaaa-aaaaa-qaaea-cai",
     backendCan:(production)?
         "thtuv-wiaaa-aaaan-qloxa-cai":
         "bkyz2-fmaaa-aaaaa-qaaaq-cai",

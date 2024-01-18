@@ -26,7 +26,8 @@ shared ({caller = owner}) actor class Booking({
     owners : ?[Principal];
 }) {
 
-    stable var bookingIdTree = RBT.init<Text, List.List<Text>>();
+    stable var userXbookingIdTree = RBT.init<Text, List.List<Text>>();
+    stable var hotelXBookingIdTree = RBT.init<Text, List.List<Text>>();
 
     /// @required (may wrap, but must be present in some form in the canister)
     stable let db = CanDB.init({
@@ -54,23 +55,38 @@ shared ({caller = owner}) actor class Booking({
         let uuid = await utils.getUuid();
         let date = utils.getDate();
         let bookingId = hotelId # "#" # date # "#" #uuid;
+        linkHotelIdBookingId(hotelId, bookingId);
         putUserId(userIdentity, bookingId);
     };
 
     func putUserId(userIdentity : Text, bookingId : Text) : Text {
 
-        switch (RBT.get(bookingIdTree, Text.compare, userIdentity)) {
+        switch (RBT.get(userXbookingIdTree, Text.compare, userIdentity)) {
             case (?result) {
                 Debug.print(debug_show (result));
                 let data = List.push(bookingId, result);
-                bookingIdTree := RBT.put(bookingIdTree, Text.compare, userIdentity, data);
+                userXbookingIdTree := RBT.put(userXbookingIdTree, Text.compare, userIdentity, data);
                 return bookingId;
             };
             case null {
                 var bookingIdList = List.nil<Text>();
                 bookingIdList := List.push(bookingId, bookingIdList);
-                bookingIdTree := RBT.put(bookingIdTree, Text.compare, userIdentity, bookingIdList);
+                userXbookingIdTree := RBT.put(userXbookingIdTree, Text.compare, userIdentity, bookingIdList);
                 return bookingId;
+            };
+        };
+    };
+    func linkHotelIdBookingId(hotelId : Text, bookingId : Text) {
+        switch (RBT.get(hotelXBookingIdTree, Text.compare, hotelId)) {
+            case (?result) {
+                let data = List.push(bookingId, result);
+                hotelXBookingIdTree := RBT.put(hotelXBookingIdTree, Text.compare, hotelId, data);
+
+            };
+            case (null) {
+                var bookingIdList = List.nil<Text>();
+                bookingIdList := List.push(bookingId, bookingIdList);
+                hotelXBookingIdTree := RBT.put(hotelXBookingIdTree, Text.compare, hotelId, bookingIdList);
             };
         };
     };
@@ -133,7 +149,14 @@ shared ({caller = owner}) actor class Booking({
 
     public shared query ({caller = user}) func getBookingId() : async [Text] {
         // assert (Principal.isAnonymous(user) == false);
-        switch (RBT.get<Text, List.List<Text>>(bookingIdTree, Text.compare, Principal.toText(user))) {
+        switch (RBT.get<Text, List.List<Text>>(userXbookingIdTree, Text.compare, Principal.toText(user))) {
+            case null {[]};
+            case (?result) {List.toArray<Text>(result)};
+        };
+    };
+    public query func gethotelXBookingId(hotelId : Text) : async [Text] {
+        // assert (Principal.isAnonymous(user) == false);
+        switch (RBT.get<Text, List.List<Text>>(hotelXBookingIdTree, Text.compare, hotelId)) {
             case null {[]};
             case (?result) {List.toArray<Text>(result)};
         };
