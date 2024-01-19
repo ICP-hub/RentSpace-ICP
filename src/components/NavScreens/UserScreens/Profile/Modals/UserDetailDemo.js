@@ -1,28 +1,29 @@
 import { ActivityIndicator, StyleSheet, Text, Image, TouchableOpacity, View, Modal, ScrollView } from 'react-native'
 import  { useEffect, useState } from 'react'
-import { COLORS, SIZES } from '../../../../constants/themes'
-import { User } from '../../../../declarations/User/index.js'
-import {hotel} from '../../../../declarations/hotel/index.js'
-import { images } from '../../../../constants'
+import { COLORS, SIZES } from '../../../../../constants/themes'
+import { User } from '../../../../../declarations/User/index.js'
+import {hotel} from '../../../../../declarations/hotel/index.js'
+import { images } from '../../../../../constants'
 import Icon from 'react-native-vector-icons/AntDesign'
 import Icon2 from 'react-native-vector-icons/Entypo'
 import Icon3 from 'react-native-vector-icons/MaterialIcons'
 import { useSelector,useDispatch } from 'react-redux'
-import { setUser } from '../../../../redux/users/actions'
-import { setHotels } from '../../../../redux/hotels/actions'
-import HostWelcomeManager from '../../../HostViewNew/HostWelcomeManager'
-import Step1Manager from '../../../HostViewNew/Step1Manager'
-import Step2Manager from '../../../HostViewNew/Step2Manager'
-import Step3Manager from '../../../HostViewNew/Step3Manager'
-import BottomNav from '../../../Navigation/BottomNav'
-import UpdateProfile from './Modals/UpdateProfile'
+import { setUser } from '../../../../../redux/users/actions'
+import { setHotels } from '../../../../../redux/hotels/actions'
+import HostWelcomeManager from '../../../../HostViewNew/HostWelcomeManager'
+import Step1Manager from '../../../../HostViewNew/Step1Manager'
+import Step2Manager from '../../../../HostViewNew/Step2Manager'
+import Step3Manager from '../../../../HostViewNew/Step3Manager'
+import BottomNav from '../../../../Navigation/BottomNav'
+import UpdateProfile from './UpdateProfile'
 import { useRoute } from '@react-navigation/native'
-import { createActor as createUserActor  } from '../../../../declarations/User'
-import { createActor as createHotelActor } from '../../../../declarations/hotel'
-import { createActor } from '../../../../declarations/backend'
-import { setActor } from '../../../../redux/actor/actions'
+import { createActor as createUserActor  } from '../../../../../declarations/User'
+import { createActor as createHotelActor } from '../../../../../declarations/hotel'
+import { createActor } from '../../../../../declarations/backend'
+import { setActor } from '../../../../../redux/actor/actions'
+import MainProfile from '../MainProfile/MainProfile'
 
-const UserDetailDemo = ({navigation}) => {
+const UserDetailDemo = ({navigation,setShowDetails}) => {
 
   const {user}=useSelector(state=>state.userReducer)
   const {actors}=useSelector(state=>state.actorReducer)
@@ -31,7 +32,7 @@ const UserDetailDemo = ({navigation}) => {
   const [createHotel,setCreateHotel]=useState(false)
   const [noListing,setNoListing]=useState(false)
   const [loading,setLoading]=useState(false)
-
+  const [newProfile,setNewProfile]=useState(false)
 
   const getHotelList=async()=>{
     await actors.hotelActor.getHotelId().then((res)=>{
@@ -134,12 +135,12 @@ const UserDetailDemo = ({navigation}) => {
           <TouchableOpacity style={styles.btn} onPress={()=>setEditProfile(true)}>
             <Text style={styles.btnText}>Edit</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn} onPress={()=>navigation.navigate('Launch')}>
-            <Text style={styles.btnText}>Book</Text>
+          <TouchableOpacity style={styles.btn} onPress={()=>setShowDetails(false)}>
+            <Text style={styles.btnText}>Back</Text>
           </TouchableOpacity>
           </View>
         
-        {
+        {/* {
           (user?.userType!='Host')? 
           <TouchableOpacity style={styles.updateBtn} onPress={()=>{
             makeHost()
@@ -153,7 +154,7 @@ const UserDetailDemo = ({navigation}) => {
         </TouchableOpacity>
           
        
-        }
+        } */}
         
           
       </View>
@@ -161,19 +162,7 @@ const UserDetailDemo = ({navigation}) => {
       <Modal animationType='slide' visible={editProfile}>
         <UpdateProfile setEditProfile={setEditProfile} />
       </Modal>
-      {/* <Modal animationType='slide' visible={(hostModal>0 && hostModal<=3)?true:false}>
-        <HostWelcomeManager hostModal={hostModal} setHostModal={setHostModal}/>
-      </Modal>
-      <Modal animationType='slide' visible={(hostModal>3 && hostModal<=8)?true:false}>
-        <Step1Manager hostModal={hostModal} setHostModal={setHostModal}/>
-      </Modal>
-      <Modal animationType='slide' visible={(hostModal>8 && hostModal<=16)?true:false}>
-        <Step2Manager hostModal={hostModal} setHostModal={setHostModal}/>
-      </Modal>
-      <Modal animationType='slide' visible={(hostModal>16 && hostModal<=23)?true:false}>
-        <Step3Manager hostModal={hostModal} setHostModal={setHostModal}/>
-      </Modal> */}
-      <BottomNav navigation={navigation}/>
+      {/* <BottomNav navigation={navigation}/> */}
     </ScrollView>
   )
 }
@@ -261,7 +250,7 @@ const styles = StyleSheet.create({
       flexDirection:'row',
       width:'100%',
       justifyContent:'space-between',
-      marginTop:20
+      marginTop:60
     },
     btn:{
       width:'40%',

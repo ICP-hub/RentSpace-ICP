@@ -11,6 +11,7 @@ import {Calendar} from 'react-native-calendars';
 import {User} from '../../declarations/User/index.js';
 import { useSelector,useDispatch } from 'react-redux';
 import { setUser } from '../../redux/users/actions';
+// const signUp=require('./signup')
 
 const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
   const [fname, setFname] = useState('');
@@ -24,8 +25,10 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
   const {user} =useSelector(state=>state.userReducer)
   const {actors}=useSelector(state=>state.actorReducer)
   const dispatch=useDispatch()
+  // const SIGNUP=()=>{
+  //   signUp.signUp(fname,lname,DOB,email,actors,setLoading,openComm,closeModal,dispatch)
+  // }
   
-
   async function signUp(){
     console.log(actors?.userActor.createUser)
     setLoading(true)

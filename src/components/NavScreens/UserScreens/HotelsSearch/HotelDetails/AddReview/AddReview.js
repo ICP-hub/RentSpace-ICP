@@ -18,14 +18,14 @@ const AddReview = ({item,setAddReview}) => {
   const addNewReview=async()=>{
     setLoading(true)
     console.log("reviewObj : ",review)
-    console.log("reviewActors : ",actors.reviewActor)
+    console.log("reviewActors : ",await actors.reviewActor.getPk())
     await actors.reviewActor.createReview(item?.bookingId,review).then((res)=>{
       console.log("review creation response : ",res)
       setLoading(false)
       alert('Thanks for giving your valueble feedback!')
       setAddReview(false)
     }).catch((err)=>{
-      console.log(err)
+      console.log("review err :",err)
       setLoading(false)
     })
   }

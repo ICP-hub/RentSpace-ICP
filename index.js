@@ -21,15 +21,15 @@ import HostHome from './src/components/NavScreens/HostScreens/HostHome/HostHome'
 import MenuPage from './src/components/NavScreens/HostScreens/MenuPage/MenuPage';
 import Listings from './src/components/NavScreens/HostScreens/Listings/Listings';
 import AllChats from './src/components/NavScreens/HostScreens/ChatPage/AllChats/AllChats';
-import UserDetailDemo from './src/components/NavScreens/UserScreens/Profile/UserDetailDemo';
+import UserDetailDemo from './src/components/NavScreens/UserScreens/Profile/Modals/UserDetailDemo';
 import Map from './src/components/NavScreens/UserScreens/Map/Map';
 import Reels from './src/components/NavScreens/UserScreens/Reels/Reels';
 import { User } from './src/declarations/User';
 import { hotel } from './src/declarations/hotel';
 import { backend } from './src/declarations/backend';
 import PolyfillCrypto from 'react-native-webview-crypto'
-import {DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain} from "@dfinity/identity";
-import {Actor, HttpAgent, toHex,fromHex} from "@dfinity/agent";
+// import {DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain, Ed25519KeyIdentity} from "@dfinity/identity";
+// import {Actor, HttpAgent, toHex,fromHex} from "@dfinity/agent";
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import {View, Text, StyleSheet, TouchableOpacity, Image,Modal,Linking, Platform, Alert} from 'react-native';
 import { createActor } from './src/declarations/backend';
@@ -48,6 +48,16 @@ import { setAuthData } from './src/redux/authData/actions';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {host, ids} from './DevelopmentConfig'
+import MainProfile from './src/components/NavScreens/UserScreens/Profile/MainProfile/MainProfile';
+import {AuthClient} from '@dfinity/auth-client';
+import {Actor,HttpAgent,fromHex,toHex} from '@dfinity/agent';
+import {
+  DelegationIdentity,
+  Ed25519PublicKey,
+  ECDSAKeyIdentity,
+  DelegationChain,
+  Ed25519KeyIdentity,
+} from '@dfinity/identity';
 
 
 const Stack = createNativeStackNavigator();
@@ -88,111 +98,111 @@ const RootComponent: React.FC = () => {
 
 
   async function delegationValidation(pubKey,priKey,delegation){
-    // setLoading(true)
-    try{
-      let publicKey = await crypto.subtle.importKey("raw",
-      Buffer.from(fromHex(pubKey)),
-      { name: "ECDSA", namedCurve: "P-256" }, // Adjust the algorithm and curve as needed
-      true, // Whether the key is extractable
-      ["verify"] )
-      // console.log("generateKey._keyPair.publicKey",publicKey)
+    // // setLoading(true)
+    // try{
+    //   let publicKey = await crypto.subtle.importKey("raw",
+    //   Buffer.from(fromHex(pubKey)),
+    //   { name: "ECDSA", namedCurve: "P-256" }, // Adjust the algorithm and curve as needed
+    //   true, // Whether the key is extractable
+    //   ["verify"] )
+    //   // console.log("generateKey._keyPair.publicKey",publicKey)
       
-      let privateKey = await crypto.subtle.importKey("pkcs8",
-      Buffer.from(fromHex(priKey)),
-      { name: "ECDSA", namedCurve: "P-256" }, // Adjust the algorithm and curve as needed
-      true, // Whether the key is extractable
-      ["sign"] )
-      console.log("generateKey._keyPair.privateKey",privateKey)
-      let newKeyPair = await ECDSAKeyIdentity.fromKeyPair({privateKey,publicKey})
-      // console.log("newKeyPair",toHex(newKeyPair.getPublicKey().toDer()));
+    //   let privateKey = await crypto.subtle.importKey("pkcs8",
+    //   Buffer.from(fromHex(priKey)),
+    //   { name: "ECDSA", namedCurve: "P-256" }, // Adjust the algorithm and curve as needed
+    //   true, // Whether the key is extractable
+    //   ["sign"] )
+    //   console.log("generateKey._keyPair.privateKey",privateKey)
+    //   let newKeyPair = await ECDSAKeyIdentity.fromKeyPair({privateKey,publicKey})
+    //   // console.log("newKeyPair",toHex(newKeyPair.getPublicKey().toDer()));
   
-      const Delchain = DelegationChain.fromJSON(
-          JSON.parse(decodeURIComponent(delegation)),
-        );
-        console.log("chain",Delchain);
-        const middleIdentity = DelegationIdentity.fromDelegation(
-          newKeyPair,
-          Delchain,
-        );
-        console.log("middleIdentity",middleIdentity);
-        const agent = new HttpAgent({identity: middleIdentity,fetchOptions: {
-          reactNative: {
-            __nativeResponseType: 'base64',
-          },
-        },
-        callOptions: {
-          reactNative: {
-            textStreaming: true,
-          },
-        },
-        fetch,
-        blsVerify: () => true,
-        host: host,
-        verifyQuerySignatures: false,
-      });
+    //   const Delchain = DelegationChain.fromJSON(
+    //       JSON.parse(decodeURIComponent(delegation)),
+    //     );
+    //     console.log("chain",Delchain);
+    //     const middleIdentity = DelegationIdentity.fromDelegation(
+    //       newKeyPair,
+    //       Delchain,
+    //     );
+    //     console.log("middleIdentity",middleIdentity);
+    //     const agent = new HttpAgent({identity: middleIdentity,fetchOptions: {
+    //       reactNative: {
+    //         __nativeResponseType: 'base64',
+    //       },
+    //     },
+    //     callOptions: {
+    //       reactNative: {
+    //         textStreaming: true,
+    //       },
+    //     },
+    //     fetch,
+    //     blsVerify: () => true,
+    //     host: host,
+    //     verifyQuerySignatures: false,
+    //   });
   
-        // console.log("agent",agent);
+    //     // console.log("agent",agent);
   
-        newActor = createActor(ids.backendCan, {
-          agent,
-        });
-        // console.log("actor",newActor);
+    //     newActor = createActor(ids.backendCan, {
+    //       agent,
+    //     });
+    //     // console.log("actor",newActor);
   
-        console.log("middleIdentityy",middleIdentity.getPrincipal().toString())
+    //     console.log("middleIdentityy",middleIdentity.getPrincipal().toString())
   
-        let principal = await newActor?.whoami().catch(async(err)=>{
-          console.log(err)
-          await AsyncStorage.clear()
-          // setLoading(false)
-          alert('no previous data found!')
-        })
-        if(principal=="2vxsx-fae"){
-          await AsyncStorage.clear()
-          // setLoading(false)
-        }else{
-          btmSheetLoginRef.current.dismiss()
-        }
-        let actorUser=createUserActor(ids.userCan,{agent})
-        let actorHotel=createHotelActor(ids.hotelCan,{agent})
-        let actorBooking=createBookingActor(ids.bookingCan,{agent})
-        let actorToken=Actor.createActor(idlFactory, {
-          agent,
-          blsVerify:()=>true,
-          canisterId:ids.tokenCan
-        })
-        let actorReview=createReviewActor(ids.reviewCan,{agent})
-        // console.log("actor review : ",actorReview)
-        store.dispatch(setActor({
-          backendActor:newActor,
-          userActor:actorUser,
-          hotelActor:actorHotel,
-          bookingActor:actorBooking,
-          tokenActor:actorToken,
-          reviewActor:actorReview
-        })) 
+    //     let principal = await newActor?.whoami().catch(async(err)=>{
+    //       console.log(err)
+    //       await AsyncStorage.clear()
+    //       // setLoading(false)
+    //       alert('no previous data found!')
+    //     })
+    //     if(principal=="2vxsx-fae"){
+    //       await AsyncStorage.clear()
+    //       // setLoading(false)
+    //     }else{
+    //       btmSheetLoginRef.current.dismiss()
+    //     }
+    //     let actorUser=createUserActor(ids.userCan,{agent})
+    //     let actorHotel=createHotelActor(ids.hotelCan,{agent})
+    //     let actorBooking=createBookingActor(ids.bookingCan,{agent})
+    //     let actorToken=Actor.createActor(idlFactory, {
+    //       agent,
+    //       blsVerify:()=>true,
+    //       canisterId:ids.tokenCan
+    //     })
+    //     let actorReview=createReviewActor(ids.reviewCan,{agent})
+    //     // console.log("actor review : ",actorReview)
+    //     store.dispatch(setActor({
+    //       backendActor:newActor,
+    //       userActor:actorUser,
+    //       hotelActor:actorHotel,
+    //       bookingActor:actorBooking,
+    //       tokenActor:actorToken,
+    //       reviewActor:actorReview
+    //     })) 
         
-        store.dispatch(setPrinciple(principal))
-        console.log("user",principal)
+    //     store.dispatch(setPrinciple(principal))
+    //     console.log("user",principal)
       
   
-        await actorUser?.getUserInfo().then((res)=>{
-          if(res[0]?.firstName!=null){
-            store.dispatch(setUser(res[0]))
-            btmSheetLoginRef.current.dismiss()
-            alert(`welcome back ${res[0]?.firstName}!`)
+    //     await actorUser?.getUserInfo().then((res)=>{
+    //       if(res[0]?.firstName!=null){
+    //         store.dispatch(setUser(res[0]))
+    //         btmSheetLoginRef.current.dismiss()
+    //         alert(`welcome back ${res[0]?.firstName}!`)
             
-          }else{
-            alert('Now please follow the registeration process!')
-            btmSheetLoginRef.current.dismiss()
-            btmSheetFinishRef.current.present()
-          }
-        }).catch((err)=>console.error(err))
-        console.log("principal from new login : ",principal);
+    //       }else{
+    //         alert('Now please follow the registeration process!')
+    //         btmSheetLoginRef.current.dismiss()
+    //         btmSheetFinishRef.current.present()
+    //       }
+    //     }).catch((err)=>console.error(err))
+    //     console.log("principal from new login : ",principal);
         
-      }catch(err){
-        console.log(err)
-        alert("No previous data found!")
-      }
+    //   }catch(err){
+    //     console.log(err)
+    //     alert("No previous data found!")
+    //   }
     }
 
 
@@ -220,11 +230,14 @@ const RootComponent: React.FC = () => {
     
     await generateIdentity().then(async(res)=>{
       resp=res
-    // console.log("running handle login",res)
+    console.log("running handle login",toHex(res.getPublicKey().toDer()))
     // console.log("ids : ",ids)
+    let el=await Ed25519KeyIdentity.generate()
+      console.log(toHex(el.getPublicKey().toDer()))
     try {
+      
       // const url = `https://sldpd-dyaaa-aaaag-acifq-cai.icp0.io?publicKey=${toHex(res.getPublicKey().toDer())}`;
-      const url = `http://127.0.0.1:4943/?canisterId=b77ix-eeaaa-aaaaa-qaada-cai&publicKey=${toHex(res.getPublicKey().toDer())}`;
+      const url = `http://127.0.0.1:4943/?canisterId=bkyz2-fmaaa-aaaaa-qaaaq-cai&publicKey=${toHex(res.getPublicKey().toDer())}`;
       if (await InAppBrowser.isAvailable()) {
         const result = await InAppBrowser.open(url, {
           // iOS Properties
@@ -288,7 +301,7 @@ const RootComponent: React.FC = () => {
     blsVerify: () => true,
     verifyQuerySignatures: false,
     host: host,});
-
+    await agent.fetchRootKey()
     //New Login through api
 
     
@@ -333,8 +346,8 @@ const RootComponent: React.FC = () => {
       store.dispatch(
         setAuthData(signObj)
       )
-      const baseUrl="http://localhost:5000"
-      // const baseUrl="https://rentspace.kaifoundry.com"
+      // const baseUrl="http://localhost:5000"
+      const baseUrl="https://rentspace.kaifoundry.com"
       await axios.post(`${baseUrl}/api/v1/register/user`,{},{
         headers:{
           "x-private":signObj.privateKey,
@@ -379,6 +392,7 @@ const RootComponent: React.FC = () => {
     let whoami = await actor.whoami();
     store.dispatch(setPrinciple(whoami))
     console.log("user",whoami)
+    console.log("ids : ",ids)
    
 
     await actorUser?.getUserInfo().then((res)=>{
@@ -409,7 +423,7 @@ const RootComponent: React.FC = () => {
         <Stack.Screen options={{headerShown:false}} name="Launch" component={Main} initialParams={{handleLogin,btmSheetLoginRef,btmSheetFinishRef,delegationValidation
         }}/>
         <Stack.Screen options={{headerShown:false}} name='UserChat' component={ChatContainer} initialParams={{newChat:''}}/>
-        <Stack.Screen options={{headerShown:false}} name='profile' component={UserDetailDemo} />
+        <Stack.Screen options={{headerShown:false}} name='profile' component={MainProfile} />
         <Stack.Screen options={{headerShown:false}} name='mapSearch' component={Map}/>
         <Stack.Screen options={{headerShown:false}} name='reels' component={Reels}/>
         <Stack.Screen options={{headerShown:false}} name='hostHome' component={HostHome}/>

@@ -39,7 +39,8 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'flex-start',
         width:'85%',
-        marginVertical:20
+        marginVertical:20,
+        marginLeft:'7.5%'
     },
     sliderTrack:{
         borderRadius:20,

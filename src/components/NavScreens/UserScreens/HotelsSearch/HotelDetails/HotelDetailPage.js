@@ -11,11 +11,13 @@ import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet
 import Reviews from './subComponents/Reviews/Reviews'
 import BookingForm from './BookingForm/BookingForm'
 import { useSelector } from 'react-redux'
+import BookingFormComp from './BookingForm/BookingFormComp'
 
 const HotelDetailPage = ({item,setOpen,navigation}) => {
     const btmBtn=useRef(null)
     const [showBookHotel,setShowBookHotel]=useState(false)
     const [hotelReviews,setHotelReviews]=useState([])
+    const [bookingForm,setBookingForm]=useState(false)
     const {actors}=useSelector(state=>state.actorReducer)
     // const firstRender=useRef
     const getAllReviews=async()=>{
@@ -80,11 +82,14 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
             <Text style={styles.btnText}>Chat with Host</Text>
         </TouchableOpacity>
       <BottomSheetModal ref={btmBtn} index={0} snapPoints={['12']} style={{elevation:10,backgroundColor:'white'}}>
-        <ReserveBtn item={item} onClick={()=>setShowBookHotel(true)}/>
+        <ReserveBtn item={item} onClick={()=>setBookingForm(true)}/>
       </BottomSheetModal>
       <Modal animationType='slide' visible={showBookHotel}>
         <BookingForm item={item} setOpen={setOpen} setShowBookHotel={setShowBookHotel} /> 
       </Modal> 
+      <Modal animationType='slide' visible={bookingForm}>
+        <BookingFormComp setBookingForm={setBookingForm}/>
+      </Modal>
     </View>
     </ScrollView>
     </BottomSheetModalProvider>

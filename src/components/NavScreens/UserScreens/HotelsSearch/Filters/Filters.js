@@ -1,26 +1,59 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { COLORS, SIZES } from '../../../../../constants/themes'
-import Icon from 'react-native-vector-icons/Entypo'
+import Iconn from 'react-native-vector-icons/Entypo'
 import TypeOfPlace from './TypeOfPlace'
 import Line from './ReUsables/Line'
 import PriceRange from './PriceRange'
+import PropertyTypes from './PropertyTypes/PropertyTypes'
+import Amenities from './Amenities/Amenities'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import Icon2 from 'react-native-vector-icons/FontAwesome6'
+import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons'
+import Icon4 from 'react-native-vector-icons/Fontisto'
+import Icon5 from 'react-native-vector-icons/MaterialIcons'
 
+const amenitiesList=[
+    {name:'wifi',icon:<Icon name='wifi' size={28} color={COLORS.black} />},
+    {name:'gym',icon:<Icon2 name='dumbbell' size={28} color={COLORS.black} />},
+    {name:'tv',icon:<Icon name='tv' size={28} color={COLORS.black} />},
+    {name:'laundry',icon:<Icon3 name='washing-machine' size={28} color={COLORS.black} />},
+    {name:'parking',icon:<Icon4 name='car' size={28} color={COLORS.black} />},
+    {name:'medication',icon:<Icon2 name='briefcase-medical' size={28} color={COLORS.black} />},
+    {name:'gaming',icon:<Icon name='gamepad' size={28} color={COLORS.black} />},
+    {name:'dining',icon:<Icon5 name='local-dining' size={28} color={COLORS.black} />},
+]
+const propertyTypesList=[
+    {name:'House',icon:<Icon name='home' size={24} color={COLORS.black} />},
+    {name:'Guest House',icon:<Icon2 name='warehouse' size={24} color={COLORS.black} />},
+    {name:'Flat',icon:<Icon3 name='city-variant' size={24} color={COLORS.black} />},
+    {name:'Hotel',icon:<Icon name='building-o' size={24} color={COLORS.black} />},
+    {name:'Resort',icon:<Icon4 name='holiday-village' size={24} color={COLORS.black} />},
+    {name:'Palace',icon:<Icon name='fort-awesome' size={24} color={COLORS.black} />},
+]
 
 const Filters = ({setShowFilters}) => {
     const [maxPrice,setMaxPrice]=useState(800)
+    const [propertyType,setPropertyType]=useState(propertyTypesList[0].name)
+    const [amenities,setAmenities]=useState([])
   return (
     <View style={styles.view}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.cross} onPress={()=>setShowFilters(false)}>
-            <Icon name='cross' color={COLORS.black} size={22}/>
+            <Iconn name='cross' color={COLORS.black} size={22}/>
         </TouchableOpacity>
         <Text style={styles.title}>Filters</Text>
       </View>
-      <TypeOfPlace/>
-      <Line/>
-      <PriceRange maxPrice={maxPrice} setMaxPrice={setMaxPrice}/>
-      <Line/>
+      <ScrollView style={styles.scrollPart}>
+            <TypeOfPlace/>
+            <Line/>
+            <PriceRange maxPrice={maxPrice} setMaxPrice={setMaxPrice}/>
+            <Line/>
+            <PropertyTypes list={propertyTypesList} propertyType={propertyType} setPropertyType={setPropertyType}/>
+            <Line/>
+            <Amenities amenitiesList={amenitiesList} amenities={amenities} setAmenities={setAmenities}/>
+            <Line/>
+      </ScrollView>
       <View style={styles.footer}>
         <View style={styles.placeHolder}/>
         <TouchableOpacity>
@@ -112,5 +145,9 @@ const styles = StyleSheet.create({
         borderRadius:2,
         top:'15%',
         opacity:0.5
+    },
+    scrollPart:{
+        width:'100%',
+        marginBottom:100
     }
 })

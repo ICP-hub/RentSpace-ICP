@@ -75,9 +75,9 @@ const BookHotelPage = ({navigation,queryHotels}) => {
         console.log({...res[0],id:queryHotels[i]})
       })
     }
-    try{
-      dispatch(setHotelList(hotelsList))
-    }catch(err){console.log(err)}
+    // try{
+    //   dispatch(setHotelList(hotelsList))
+    // }catch(err){console.log(err)}
     
   }
   const reloadData=()=>{

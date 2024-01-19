@@ -62,9 +62,9 @@ const PaymentScreen =({setBooking,booking,item,self}) => {
       };
       console.log("metadata inside transfer fee",metaData?.["icrc1:fee"])
     let response = await actors?.tokenActor.icrc1_transfer(transaction);
-    console.log(response)
+    console.log(parseInt(response?.Ok))
     // alert("transaction successful!")
-    setBooking({...booking,paymentStatus:true})
+    setBooking({...booking,paymentStatus:true,paymentId:parseInt(response?.Ok).toString()})
     PushNotification.localNotification({
       title:"Booking Successful!",
       message:`${user?.firstName}, your booking for ${item?.hotelTitle} is successful!`,

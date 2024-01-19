@@ -42,14 +42,15 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'flex-start',
         width:'85%',
-        marginVertical:20
+        marginVertical:20,
+        marginLeft:'7.5%'
     },
     btnCont:{
       display:'flex',
       flexDirection:'row',
       justifyContent:'flex-start',
       alignItems:'center',
-      height:70,
+      height:50,
       marginVertical:15
     },
     btnSelected:{

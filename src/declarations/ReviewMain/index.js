@@ -40,4 +40,19 @@ export const createActor = (canisterId, options = {}) => {
   });
 };
 
-export const ReviewMain = createActor(canisterId);
+export const ReviewMain = createActor(canisterId, {
+  agentOptions: {
+     fetchOptions: {
+        reactNative: {
+         __nativeResponseType: 'base64',
+        },
+     },
+     callOptions: {
+     reactNative: {
+        textStreaming: true,
+     },
+  },
+     blsVerify: () => true,
+     host: host,
+  },
+});

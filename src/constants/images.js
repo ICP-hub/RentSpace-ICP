@@ -30,6 +30,8 @@ import congrats from '../assets/images/hostView/VectorpartyPopper.png'
 import IDAbout from '../assets/images/hostView/IDAbout.png'
 import reelBG from '../assets/images/ReelBg.png'
 import sampleReel from '../assets/video/sampleReel.mp4'
+import newProfile from '../assets/images/newProfile.png'
+import logo from '../assets/logos/whiteLogo.png'
 // import saple
 
 export default {
@@ -64,5 +66,7 @@ export default {
     congrats,
     IDAbout,
     reelBG,
-    sampleReel
+    sampleReel,
+    newProfile,
+    logo
 }
