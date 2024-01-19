@@ -28,8 +28,8 @@ import { User } from './src/declarations/User';
 import { hotel } from './src/declarations/hotel';
 import { backend } from './src/declarations/backend';
 import PolyfillCrypto from 'react-native-webview-crypto'
-// import {DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain, Ed25519KeyIdentity} from "@dfinity/identity";
-// import {Actor, HttpAgent, toHex,fromHex} from "@dfinity/agent";
+import {DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain} from "@dfinity/identity";
+import {Actor, HttpAgent, toHex,fromHex} from "@dfinity/agent";
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import {View, Text, StyleSheet, TouchableOpacity, Image,Modal,Linking, Platform, Alert} from 'react-native';
 import { createActor } from './src/declarations/backend';
@@ -49,15 +49,6 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {host, ids} from './DevelopmentConfig'
 import MainProfile from './src/components/NavScreens/UserScreens/Profile/MainProfile/MainProfile';
-import {AuthClient} from '@dfinity/auth-client';
-import {Actor,HttpAgent,fromHex,toHex} from '@dfinity/agent';
-import {
-  DelegationIdentity,
-  Ed25519PublicKey,
-  ECDSAKeyIdentity,
-  DelegationChain,
-  Ed25519KeyIdentity,
-} from '@dfinity/identity';
 
 
 const Stack = createNativeStackNavigator();
@@ -230,12 +221,9 @@ const RootComponent: React.FC = () => {
     
     await generateIdentity().then(async(res)=>{
       resp=res
-    console.log("running handle login",toHex(res.getPublicKey().toDer()))
+    // console.log("running handle login",res)
     // console.log("ids : ",ids)
-    let el=await Ed25519KeyIdentity.generate()
-      console.log(toHex(el.getPublicKey().toDer()))
     try {
-      
       // const url = `https://sldpd-dyaaa-aaaag-acifq-cai.icp0.io?publicKey=${toHex(res.getPublicKey().toDer())}`;
       const url = `http://127.0.0.1:4943/?canisterId=bkyz2-fmaaa-aaaaa-qaaaq-cai&publicKey=${toHex(res.getPublicKey().toDer())}`;
       if (await InAppBrowser.isAvailable()) {
