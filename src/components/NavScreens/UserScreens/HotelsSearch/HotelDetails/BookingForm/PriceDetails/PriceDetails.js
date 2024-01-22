@@ -21,14 +21,27 @@ const PriceDetails = ({basePrice,nights}) => {
     ]
   return (
     <View style={styles.sec}>
-      <Text style={styles.heading}>PriceDetails</Text>
+      <Text style={styles.title}>PriceDetails</Text>
       {
         prices.map((item,index)=>(
             <PriceCard item={item} key={index}/>
         ))
       }
       <View style={styles.line}/>
+      <View style={styles.textCont}>
+        <Text style={styles.heading}>Total(USD)</Text>
+        <Text style={styles.heading}>${finalPrice}</Text>
+      </View>
+      
       <View style={styles.line}/>
+      <View style={styles.textCont}>
+        <Text style={styles.heading}>Due now</Text>
+        <Text style={styles.heading}>${finalPrice}</Text>
+      </View>
+      <View style={styles.textCont}>
+        <Text style={styles.lightText}>Due on 30th Dec</Text>
+        <Text style={styles.lightText}>${finalPrice}</Text>
+      </View>
     </View>
   )
 }
@@ -46,6 +59,11 @@ const styles = StyleSheet.create({
         color:COLORS.black,
         fontWeight:'800',
         fontSize:SIZES.preMedium,
+    },
+    title:{
+        color:COLORS.black,
+        fontWeight:'800',
+        fontSize:SIZES.preMedium,
         marginBottom:15
     },
     line:{
@@ -54,5 +72,16 @@ const styles = StyleSheet.create({
         height:0.5,
         opacity:0.5,
         marginVertical:15
+    },
+    textCont:{
+        display:'flex',
+        flexDirection:'row',
+        justifyContent:'space-between',
+        width:'100%'
+    },
+    lightText:{
+        color:COLORS.black,
+        fontWeight:'500',
+        fontSize:SIZES.preMedium,
     }
 })

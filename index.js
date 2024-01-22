@@ -224,8 +224,8 @@ const RootComponent: React.FC = () => {
     // console.log("running handle login",res)
     // console.log("ids : ",ids)
     try {
-      // const url = `https://sldpd-dyaaa-aaaag-acifq-cai.icp0.io?publicKey=${toHex(res.getPublicKey().toDer())}`;
-      const url = `http://127.0.0.1:4943/?canisterId=bkyz2-fmaaa-aaaaa-qaaaq-cai&publicKey=${toHex(res.getPublicKey().toDer())}`;
+      const url = `https://sldpd-dyaaa-aaaag-acifq-cai.icp0.io?publicKey=${toHex(res.getPublicKey().toDer())}`;
+      // const url = `http://127.0.0.1:4943/?canisterId=bkyz2-fmaaa-aaaaa-qaaaq-cai&publicKey=${toHex(res.getPublicKey().toDer())}`;
       if (await InAppBrowser.isAvailable()) {
         const result = await InAppBrowser.open(url, {
           // iOS Properties

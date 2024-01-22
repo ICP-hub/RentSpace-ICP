@@ -23,5 +23,11 @@ const styles = StyleSheet.create({
         color:COLORS.black,
         fontWeight:'800',
         fontSize:SIZES.preMedium
+    },
+    subHeading:{
+
+    },
+    normalText:{
+      
     }
 })
