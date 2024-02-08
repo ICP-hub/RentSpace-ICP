@@ -1,12 +1,12 @@
 {
   "canisters": {
-    "Admin_frontend": {
+    "frontend": {
       "frontend": {
-        "entrypoint": "src/Admin_frontend/src/index.html"
+        "entrypoint": "frontend/src/index.html"
       },
       "source": [
-        "src/Admin_frontend/assets",
-        "dist/Admin_frontend/"
+        "frontend/assets",
+        "dist/frontend/"
       ],
       "type": "assets"
     }
