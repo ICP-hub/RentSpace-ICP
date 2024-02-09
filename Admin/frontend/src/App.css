@@ -1,13 +1,15 @@
 :root{
     --main-color-bg:#F1F1F1;
     --nav-color-bg:#11002C;
-    --btn-bg-main:#4B1FD5;
+    --btn-bg-main-2:#4B1FD5;
+    --btn-bg-main-1:#8E0FF0;
     --text-light:white;
     --text-dark:black;
-    --text-colour:#4B1FD5;
+    --text-blue:#4B1FD5;
     --bg-light-grey:#D9D9D9;
+    --base-gradient:linear-gradient(to left,var(--btn-bg-main-1),var(--btn-bg-main-2));
 }
-body {
+body,* {
     margin:0;
     padding:0;
 }
@@ -16,4 +18,13 @@ body {
     flex-direction: row;
     width: 100vw;
     min-height: 100vh;
+    background-color: var(--main-color-bg);
+}
+.page{
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 2vh;
+    min-height: 97vh;
 }

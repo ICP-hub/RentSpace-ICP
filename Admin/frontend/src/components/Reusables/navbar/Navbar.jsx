@@ -1,17 +1,20 @@
 import React, { useState } from 'react'
 import {useNavigate} from 'react-router-dom'
 import './nav.css'
+import Icon from 'react-web-vector-icons'
 
 const Navbar = () => {
     const navg=useNavigate()
   return (
     <div className='navbar'>
-        <img src='logo2.svg' className='logo'/>
+        <div className='logo'>
+            <Icon name='user' font='FontAwesome' size={55} color='black'/>
+        </div>
         <ul className='linkCont'>
               <li className='link' onClick={() => {
                   navg('/')
               }}>
-                  DashBoard
+                  Dashboard
               </li>
               <li className='link' onClick={() => {
                   navg('/stats')

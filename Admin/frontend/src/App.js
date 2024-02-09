@@ -5,7 +5,7 @@ import Stats from "./pages/Stats";
 import Reports from "./pages/Reports";
 import SupportChat from "./pages/SupportChat";
 import Hotels from "./pages/Hotels";
-import Navbar from "./components/Reusables/Navbar";
+import Navbar from "./components/Reusables/navbar/Navbar";
 import './App.css'
 
 const App = () => {
