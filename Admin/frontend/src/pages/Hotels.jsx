@@ -15,7 +15,7 @@ const hotelsList=new Array(10).fill({
 
 const Hotels = () => {
   const nav=useNavigate()
-  const [showDetail,setShowDetail]=useState(true)
+  const [showDetail,setShowDetail]=useState(false)
   return (
     <>
       {
