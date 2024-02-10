@@ -1,13 +1,7 @@
 import React from 'react'
 import HotelIListItem from './HotelIListItem'
 
-const hotelsList=new Array(10).fill({
-    name:"Aashiyana",
-    host:"Lucy",
-    country:"India" 
-})
-
-const HotelList = () => {
+const HotelList = ({hotelsList,setShowDetail}) => {
     
   return (
     <div className='hotel-list'>
@@ -20,12 +14,12 @@ const HotelList = () => {
         <div className='hotel-list-cont'>
             {
                 hotelsList.map((hotel,index)=>(
-                    <HotelIListItem hotel={hotel} key={index}/>
+                    <HotelIListItem hotel={hotel} key={index} setShowDetail={setShowDetail}/>
                 ))
             }
         </div>
     </div>
   )
-}
+} 
 
 export default HotelList

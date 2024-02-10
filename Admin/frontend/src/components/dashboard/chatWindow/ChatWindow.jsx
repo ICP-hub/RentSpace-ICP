@@ -14,7 +14,7 @@ const userChats=[
     }
 ]
 
-const ChatWindow = () => {
+const ChatWindow = ({nav}) => {
   return (
     <div className='chatWindow'>
         {
@@ -24,7 +24,7 @@ const ChatWindow = () => {
                 <h1 className='chat-day'>Today</h1>
                 {
                     userChats.map((chat,index)=>(
-                        <ChatCard chat={chat} key={index}/>
+                        <ChatCard chat={chat} key={index} nav={nav}/>
                     ))
                 }
             </>    

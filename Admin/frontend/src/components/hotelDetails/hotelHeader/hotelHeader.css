@@ -1,0 +1,226 @@
+.header-video-cont{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    width: 40%;
+}
+.video-img{
+    width: 100%;
+}
+.header-video-cont-btn{
+    background: var(--base-gradient);
+    color: white;
+    font-size: 0.58em;
+    font-weight: 600;
+    padding: 0.8em 0;
+    width: 100%;
+    border-radius: 0.5em;
+    border: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.header-host-email{
+    font-size: 0.8em;
+    font-weight: 400;
+}
+.header-video-cont-btn:hover{
+    background: var(--reverse-gradient);
+}
+.header-video-cont-btn:active{
+    opacity: 0.5;
+}
+.header-hotel-data-cont{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 58%;
+}
+.header-title-cont{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 100%;
+}
+.header-hotel-name{
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 0.7em;
+}
+.header-hotel-price{
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 0.8em;
+}
+.header-rating-cont{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 1vh 0;
+}
+.header-star-icon{
+    font-size: 0.6em;
+    color: var(--btn-bg-main-1);
+    margin-right: 0.5vw;
+}
+.header-rating-text{
+    font-size: 0.5em;
+    color: var(--text-dark);
+    opacity: 0.7;
+}
+.header-host-about{
+    font-size: 0.55em;
+    color: var(--text-dark);
+    opacity: 0.6;
+    width: 80%;
+}
+
+/* host sub sec styling */
+
+.header-host-data-cont{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 1vh 0;
+}
+.host-img{
+    width: 4em;
+    height: 4em;
+    margin: 0 0.5vw 0 0;
+}
+.host-further-detail{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 50%;
+}
+.host-img-head-cont{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin: 0.6vh 0;
+}
+.host-img-head{
+    font-size: 0.57em;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+.host-join-date{
+    font-size: 0.52em;
+    color: var(--text-dark);
+    font-weight: 400;
+    opacity: 0.5;
+}
+.hotel-rooms{
+    font-size: 0.45em;
+    color: var(--text-dark);
+    font-weight: 600;
+    opacity: 0.4;
+}
+
+/* co host styling */
+
+.co-host-data-cont{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2vh 0;
+}
+.co-host-label{
+    font-size: 0.55em;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+.co-host-card-cont{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 60%;
+}
+.co-host-card{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+.co-host-img{
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 1em;
+    margin: 0 0.5vw 0 0;
+}
+.co-host-name{
+    font-size: 0.52em;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+
+/* hidden gov id styling */
+
+.header-host-gov-id-cont{
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2vh 0;
+}
+.host-id-label{
+    font-size: 0.57em;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+.host-id-cont{
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    background-color: var(--bg-light-grey);
+    border-radius: 0.3em;
+    align-items: center;
+}
+.host-id{
+    text-align: center;
+    height: 100%;
+    font-size: 0.6em;
+    color: var(--bg-light-grey);
+    font-weight: 600;
+    width: 70%;
+}
+.host-id-view{
+    width: 30%;
+    background: var(--base-gradient);
+    color: var(--text-light);
+    font-size: 0.55em;
+    padding: 0.8em 0;
+    border-radius: 0.5em;
+    border: none;
+}
+.host-id-view:active{
+    opacity: 0.4;
+}
+.host-id-view:hover{
+    background: var(--reverse-gradient);
+    transition: 5s;
+}
+.verify-cont{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.host-verify-icon{
+    font-size: 0.7em;
+}
+.host-verify-text{
+    font-size: 0.55em;
+    color: var(--text-dark);
+    margin: 0 0 0 0.25vw;
+}

@@ -1,9 +1,9 @@
 import React from 'react'
 import { FaUser } from "react-icons/fa";
 
-const ChatCard = ({chat}) => {
+const ChatCard = ({chat,nav}) => {
   return (
-    <div className='chat-card'>
+    <div className='chat-card' onClick={()=>nav('/supportChat')}>
       <div className='chat-card-icon-cont'>
         <FaUser className='chat-card-user-icon'/>
       </div>

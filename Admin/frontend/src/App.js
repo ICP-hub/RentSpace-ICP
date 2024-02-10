@@ -9,17 +9,16 @@ import Navbar from "./components/Reusables/navbar/Navbar";
 import './App.css'
 
 const App = () => {
-
   return (
     <div className="app">
         <Router>
             <Navbar/>
         <Routes>
-            <Route path="/supportChat" element={<DashBoard />} />
+            <Route path="/hotels" element={<DashBoard />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/reports" element={<Reports />} />
-            <Route path="/" element={<SupportChat />} />
-            <Route path="/hotels" element={<Hotels />} />
+            <Route path="/supportChat" element={<SupportChat />} />
+            <Route path="/" element={<Hotels />} />
         </Routes>
         </Router>
     </div>

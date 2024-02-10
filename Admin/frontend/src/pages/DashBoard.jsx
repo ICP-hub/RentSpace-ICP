@@ -22,7 +22,7 @@ const DashBoard = () => {
         </div>
         {
           chat?
-          <ChatWindow/>
+          <ChatWindow nav={nav}/>
           :
           <></>
         }
