@@ -1,12 +1,27 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {useNavigate } from 'react-router-dom'
 import Header from '../components/Reusables/header/Header'
 import { FaQuestion } from "react-icons/fa6";
 import '../components/reports/reports.css'
+import ReportList from '../components/reports/ReportList';
+import ReportDetail from '../components/reports/reportDetail/ReportDetail';
 
 const Reports = () => {
+
   
-  const reports=[1]
+  const reports=[
+    {
+      name:"Vikas"
+    },
+    {
+      name:"Raghav"
+    }
+  ]
+  const [reportDetail,showReportDetail]=useState({})
+
+  useEffect(()=>{
+    console.log(reportDetail?.name,reportDetail?.name!=undefined)
+  },[reportDetail])
 
   const nav=useNavigate()
   return (
@@ -24,7 +39,16 @@ const Reports = () => {
         </p>
       </div>
       :
-      <></>
+      <div className="reports-main">
+        <ReportList reports={reports} showReportDetail={showReportDetail} reportDetail={reportDetail}/>
+        {
+            
+            reportDetail?.name!=undefined?
+            <ReportDetail report={reportDetail}/>
+            :
+            <></>
+        }
+      </div>
       }
       
     </div>
