@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import './hotelChart.css'
+import Barchart from '../../../charts/Barchart'
+
+const dataComplete=require('../../../charts/data.json')
 
 const HotelChart = () => {
     
@@ -24,7 +27,9 @@ const HotelChart = () => {
                 </select>
             </div>
         </div>
-        <div className='hotel-chart'></div>
+        <div className='hotel-chart'>
+            <Barchart label={"Hotels Registered"} data={dataComplete[0]?.hotels}/>
+        </div>
     </div>
   )
 }

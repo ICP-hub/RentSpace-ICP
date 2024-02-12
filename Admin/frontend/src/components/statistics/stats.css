@@ -1,8 +1,25 @@
-.booking-chart-sec{
+.stats-main-cont{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
     width: 100%;
+    min-height: 80vh;
+}
+.pie-chart-cont{
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    justify-content: space-between;
+    margin: 4vh 0;
+}
+
+/* pie chart card styling */
+
+.stats-pie-chart-sec{
+    width: 45%;
     background-color: white;
     border-radius: 0.3em;
-    height: 57vh;
+    height: 35vh;
     margin-top: 3vh;
     display: flex;
     flex-direction: column;
@@ -11,7 +28,7 @@
     padding: 4vh 0;
     box-shadow: 0 0 8px 0 var(--btn-bg-main-2);
 }
-.booking-chart-header{
+.stats-pie-chart-header{
     width: 92%;
     display: flex;
     flex-direction: row;
@@ -19,35 +36,35 @@
     align-items: flex-start;
     height: 16%;
 }
-.booking-chart-text-cont{
+.stats-pie-chart-text-cont{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
-    height: 100%;
+    width: 100%;
 }
-.booking-chart-count-label{
+.stats-pie-chart-count-label{
     color: var(--text-blue);
     font-size: 0.75em;
 }
-.booking-chart-count{
+.stats-pie-chart-count{
     color: var(--text-blue);
     font-size: 1.1em;
     font-weight: bold;
 }
-.booking-chart-timeline{
+.stats-pie-chart-timeline{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 38%;
     align-items: center;
 }
-.booking-chart-year{
+.stats-pie-chart-year{
     color: var(--text-dark);
     font-weight: 700;
     font-size: 0.75em;
 }
-.booking-chart-year-select{
+.stats-pie-chart-year-select{
     font-size: 0.75em;
     border: none;
     margin-right: 2vw;
@@ -55,11 +72,11 @@
     opacity: 0.4;
     font-weight: 600;
 }
-.booking-chart-year-option{
+.stats-pie-chart-year-option{
     font-size: 0.75em;
     border: none;
 }
-.booking-chart{
+.stats-pie-chart{
     width: 92%;
     height: 80%;
     display: flex;
