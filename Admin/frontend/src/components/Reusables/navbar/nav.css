@@ -59,3 +59,12 @@
     border-radius: 12px;
     opacity: 0.6;
 }
+
+@media only screen and (max-width: 1000px) {
+    .navbar{
+        visibility:collapse;
+        height: 0;
+        width: 0;
+        margin: 0;
+    }
+  }

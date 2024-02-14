@@ -63,4 +63,13 @@
 .hotel-chart{
     width: 92%;
     height: 80%;
+    min-width: 500px;
+}
+
+@media only screen and (max-width: 1000px) {
+    .hotel-chart-sec{
+        width: 90%;
+        /* min-width: 500px; */
+        overflow-x: scroll;
+    }
 }

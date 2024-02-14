@@ -23,3 +23,15 @@
 .header-line{
     margin: 1vh 0 2vh 0 ;
 }
+
+@media only screen and (max-width: 1000px) {
+    .chat-icon {
+      visibility: collapse;
+    }
+    .header-text{
+        justify-content: center;
+    }
+    .header-line{
+        visibility: collapse;
+    }
+  }

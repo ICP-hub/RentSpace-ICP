@@ -115,3 +115,30 @@
     font-weight: 400;
     font-size: 0.95em;
 }
+
+@media only screen and (max-width: 750px) and (min-width: 350px) {
+    .reports-main{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .report-list-cont{
+        width: 90%;
+        margin: 2vh;
+        min-height: 0;
+    }
+    
+}
+@media only screen and (max-width: 350px) {
+    .reports-main{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .report-list-cont{
+        width: 100%;
+        margin: 2vh;
+        min-height: 0;
+    }
+    
+}

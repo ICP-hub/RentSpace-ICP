@@ -5,11 +5,13 @@
     min-height: 89vh;
     justify-content: space-between;
     margin: 0;
+    /* overflow-x: scroll; */
 }
 .dashboard-main-info{
     display: flex;
     flex-direction: column;
     width: 68%;
+   
 }
 .dashboard-infoCards-cont{
     display: flex;
@@ -29,6 +31,7 @@
     border-radius: 0.2em;
     width: 49%;
     height: 4.2em;
+    min-width: 240px;
 }
 .info-card-icon-cont{
     display: flex;
@@ -64,3 +67,32 @@
     color:white;
     font-size: 1.3em;
 }
+
+@media only screen and (max-width: 1000px) and (min-width: 730px) {
+    .dashboard-main-info{
+        width: 100%;
+        align-items: center;
+    }
+    .dashboard-infoCards-cont{
+        width: 70%;
+    }
+    
+  }
+
+  @media only screen and (max-width: 730px) {
+    .dashboard-main-info{
+        width: 100%;
+        align-items: center;
+    }
+    .dashboard-infoCards-cont{
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .info-card{
+        width: 90%;
+        margin: 2vh 0;
+    }
+    
+  }

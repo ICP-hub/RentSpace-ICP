@@ -10,13 +10,15 @@
     --base-gradient:linear-gradient(to left,var(--btn-bg-main-1),var(--btn-bg-main-2));
     --reverse-gradient:linear-gradient(to right,var(--btn-bg-main-1),var(--btn-bg-main-2));
 }
-body,* {
+* {
     margin:0;
     padding:0;
     /* overflow-x: hidden; */
 }
 body{
     overflow-x: hidden;
+    margin: 0;
+    padding:0;
 }
 .app {
     display:flex;
@@ -24,15 +26,17 @@ body{
     width: 100vw;
     min-height: 100vh;
     background-color: var(--main-color-bg);
-   
+   /* background-color: #11002C; */
 }
 .page{
     width: 75%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-top: 2vh;
+    margin: 2vh 0 0 0;
     min-height: 97vh;
+    
+    /* background-color: #8E0FF0; */
 }
 .page-full-width{
     width: 75%;
@@ -42,3 +46,9 @@ body{
     margin-top: 2vh;
     min-height: 97vh;
 }
+@media only screen and (max-width: 1000px) {
+    .page{
+        width: 100%;
+        overflow-x: hidden;
+    }
+  }

@@ -136,3 +136,18 @@
     justify-content: flex-end;
     width: 90%;
 }
+
+@media only screen and (max-width: 750px) and (min-width: 350px) {
+    
+    .chat{
+        width: 90%;
+        margin: 2vh 0;
+    }
+}
+@media only screen and (max-width: 350px) {
+    .chat{
+        width: 100%;
+        margin: 2vh 0;
+    }
+    
+}

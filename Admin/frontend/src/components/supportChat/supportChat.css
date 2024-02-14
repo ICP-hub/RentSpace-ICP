@@ -127,3 +127,30 @@
     color: var(--text-dark);
     opacity: 0.4;
 }
+
+@media only screen and (max-width: 750px) and (min-width: 350px) {
+    
+    .chat-main-cont{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .chatlist{
+        width: 90%;
+        min-height: 0;
+        margin: 2vh 0;
+    }
+}
+@media only screen and (max-width: 350px) {
+    .chat-main-cont{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .chatlist{
+        width: 100%;
+        min-height: 0;
+        margin: 2vh 0;
+    }
+    
+}
