@@ -224,3 +224,53 @@
     color: var(--text-dark);
     margin: 0 0 0 0.25vw;
 }
+
+@media only screen and (max-width: 1000px) and (min-width:600px) {
+    .header-video-cont{
+        width: 95%;
+        /* background-color: red; */
+        height: fit-content;
+        align-items: center;
+    }
+    .header-video-cont-btn{
+        width: 50%;
+        margin: 2vh 0;
+    }
+    .header-hotel-data-cont{
+        width: 95%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .header-video-cont{
+        width: 95%;
+        height: fit-content;
+        align-items: center;
+        visibility: collapse;
+        height: 0;
+    }
+    .header-video-cont-btn{
+        width: 80%;
+        margin: 2vh 0;
+    }
+    .header-hotel-data-cont{
+        width: 95%;
+    }
+    .co-host-card-cont,.co-host-label{
+        visibility: hidden;
+        height: 0;
+    }
+    .host-img-head-cont{
+        flex-direction: column;
+    }
+    .host-img-head{
+        margin: 2vh 0;
+    }
+    .verify-cont{
+        display: none;
+        width: 0;
+    }
+    .header-host-gov-id-cont{
+        width: 95%;
+    }
+}

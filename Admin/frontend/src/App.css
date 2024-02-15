@@ -51,4 +51,8 @@ body{
         width: 100%;
         overflow-x: hidden;
     }
+    .page-full-width{
+        width: 100%;
+        align-items: center;
+    }
   }
