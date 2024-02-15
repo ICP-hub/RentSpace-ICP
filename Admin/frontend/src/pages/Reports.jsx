@@ -5,6 +5,7 @@ import { FaQuestion } from "react-icons/fa6";
 import '../components/reports/reports.css'
 import ReportList from '../components/reports/ReportList';
 import ReportDetail from '../components/reports/reportDetail/ReportDetail';
+import Navbar from '../components/Reusables/menuNavBar/Navbar';
 
 const Reports = () => {
 
@@ -26,6 +27,7 @@ const Reports = () => {
   const nav=useNavigate()
   return (
     <div className='page'>
+      <Navbar nav={nav}/>
       <Header title={'Reports'}/>
       {
         (reports?.length==0)?

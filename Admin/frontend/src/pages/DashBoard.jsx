@@ -5,12 +5,14 @@ import '../components/dashboard/dashboard.css'
 import InfoCards from '../components/dashboard/InfoCards'
 import ChatWindow from '../components/dashboard/chatWindow/ChatWindow'
 import BookingChart from '../components/dashboard/bookingChart/BookingChart'
+import Navbar from '../components/Reusables/menuNavBar/Navbar'
 
 const DashBoard = () => {
   const nav=useNavigate()
   const [chat,showChat]=useState(true)
   return (
     <div className='page'>
+      <Navbar nav={nav}/>
       <Header title={'Dashboard Overview'} onClick={()=>showChat(!chat)}/>
       <div className='dashboard-main'>
         <div className='dashboard-main-info'>

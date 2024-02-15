@@ -5,6 +5,7 @@ import '../components/hotels/hotels.css'
 import HotelList from '../components/hotels/HotelList'
 import HotelChart from '../components/hotels/hotelChart/HotelChart'
 import HotelDetails from '../components/hotelDetails/HotelDetails'
+import Navbar from '../components/Reusables/menuNavBar/Navbar'
 
 const hotelsList=new Array(10).fill({
   name:"Aashiyana",
@@ -15,13 +16,14 @@ const hotelsList=new Array(10).fill({
 
 const Hotels = () => {
   const nav=useNavigate()
-  const [showDetail,setShowDetail]=useState(true)
+  const [showDetail,setShowDetail]=useState(false)
   return (
     <>
       {
         showDetail?
         <>
           <div className='page-full-width'>
+            <Navbar nav={nav}/>
             <Header title={'Registered hotels'} onClick={()=>alert('hotels page')}/>
             <HotelDetails/>
           </div>
@@ -29,6 +31,7 @@ const Hotels = () => {
         :
         <>
         <div className='page'>
+        <Navbar nav={nav}/>
           <Header title={'Hotels Registered'} onClick={()=>alert('hotels page')}/>
           <div className='hotel-main-cont'>
             <HotelChart/>

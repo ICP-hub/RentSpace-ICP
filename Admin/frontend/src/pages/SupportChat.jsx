@@ -4,6 +4,7 @@ import Header from '../components/Reusables/header/Header'
 import '../components/supportChat/supportChat.css'
 import ChatList from '../components/supportChat/ChatList'
 import Chat from '../components/supportChat/chat/Chat'
+import Navbar from '../components/Reusables/menuNavBar/Navbar'
 
 
 const SupportChat = () => {
@@ -11,6 +12,7 @@ const SupportChat = () => {
   const [chat,setChat]=useState("")
   return (
     <div className='page'>
+      <Navbar nav={nav}/>
       <Header title={'Support Chat'}/>
       <div className="chat-main-cont">
           <ChatList currChat={chat} setChat={setChat}/>
