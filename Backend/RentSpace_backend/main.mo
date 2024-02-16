@@ -68,12 +68,12 @@ shared ({caller = owner}) actor class Database() = this {
       };
 
       case (#hotel) {
-        Principal.fromActor(await Hotel.Hotel({partitonKey = pk; scalingOptions = {autoScalingHook = autoScaleBookingCanister; sizeLimit = #heapSize(475_000_000)};
+        Principal.fromActor(await Hotel.Hotel({partitonKey = pk; scalingOptions = {autoScalingHook = autoScaleHotelCanister; sizeLimit = #heapSize(475_000_000)};
 
         owners = controllers}));
       };
       case (#user) {
-        Principal.fromActor(await User.User({partitonKey = pk; scalingOptions = {autoScalingHook = autoScaleBookingCanister; sizeLimit = #heapSize(475_000_000)};
+        Principal.fromActor(await User.User({partitonKey = pk; scalingOptions = {autoScalingHook = autoScaleUserCanister; sizeLimit = #heapSize(475_000_000)};
 
         /* Scale out at 475MB */
         /* for auto-scaling testing */
@@ -181,5 +181,7 @@ shared ({caller = owner}) actor class Database() = this {
   public query func getOwner() : async Text {
     return Principal.toText(owner);
   };
-
+  public query func getBalance() : async Nat {
+    Cycles.balance();
+  };
 };
