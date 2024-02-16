@@ -1,0 +1,37 @@
+.header{
+    width: 100%;
+}
+.chat-icon{
+    color: var(--btn-bg-main-2);
+    font-size: 1.4em;
+    transition:1s;
+}
+.chat-icon:hover{
+    opacity: 0.6;
+    transform: rotateY(180deg);
+   
+}
+.header-text{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.heading{
+    font-size: 1.1em;
+    color: var(--text-blue);
+}
+.header-line{
+    margin: 1vh 0 2vh 0 ;
+}
+
+@media only screen and (max-width: 1000px) {
+    .chat-icon {
+      visibility: collapse;
+    }
+    .header-text{
+        justify-content: center;
+    }
+    .header-line{
+        visibility: collapse;
+    }
+  }

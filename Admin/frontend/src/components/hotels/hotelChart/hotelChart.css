@@ -1,0 +1,75 @@
+.hotel-chart-sec{
+    width: 100%;
+    background-color: white;
+    border-radius: 0.3em;
+    height: 44vh;
+    margin: 3vh 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 4vh 0;
+    box-shadow: 0 0 8px 0 var(--btn-bg-main-2);
+}
+.hotel-chart-header{
+    width: 92%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 16%;
+}
+.hotel-chart-text-cont{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    width: 35%;
+}
+.hotel-chart-count-label{
+    color: var(--text-blue);
+    font-size: 0.75em;
+}
+.hotel-chart-count{
+    color: var(--text-blue);
+    font-size: 1.1em;
+    font-weight: bold;
+}
+.hotel-chart-timeline{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 38%;
+    align-items: center;
+}
+.hotel-chart-year{
+    color: var(--text-dark);
+    font-weight: 700;
+    font-size: 0.75em;
+}
+.hotel-chart-year-select{
+    font-size: 0.75em;
+    border: none;
+    margin-right: 2vw;
+    color: var(--text-dark);
+    opacity: 0.4;
+    font-weight: 600;
+}
+.hotel-chart-year-option{
+    font-size: 0.75em;
+    border: none;
+}
+.hotel-chart{
+    width: 92%;
+    height: 80%;
+    min-width: 500px;
+}
+
+@media only screen and (max-width: 1000px) {
+    .hotel-chart-sec{
+        width: 90%;
+        /* min-width: 500px; */
+        overflow-x: scroll;
+    }
+}

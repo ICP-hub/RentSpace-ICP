@@ -1,0 +1,22 @@
+{
+  "canisters": {
+    "frontend": {
+      "frontend": {
+        "entrypoint": "frontend/src/index.html"
+      },
+      "source": [
+        "frontend/assets",
+        "dist/frontend/"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}

@@ -1,0 +1,120 @@
+.stats-main-cont{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100%;
+    min-height: 80vh;
+}
+.pie-chart-cont{
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    justify-content: space-between;
+    /* margin: 4vh 0;
+    overflow-x: scroll; */
+    
+}
+
+/* pie chart card styling */
+
+.stats-pie-chart-sec{
+    width: 45%;
+    background-color: white;
+    border-radius: 0.3em;
+    height: 35vh;
+    margin-top: 3vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 4vh 0;
+    box-shadow: 0 0 8px 0 var(--btn-bg-main-2);
+    
+}
+.stats-pie-chart-header{
+    width: 92%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 16%;
+}
+.stats-pie-chart-text-cont{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+}
+.stats-pie-chart-count-label{
+    color: var(--text-blue);
+    font-size: 0.75em;
+}
+.stats-pie-chart-count{
+    color: var(--text-blue);
+    font-size: 1.1em;
+    font-weight: bold;
+}
+.stats-pie-chart-timeline{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 38%;
+    align-items: center;
+}
+.stats-pie-chart-year{
+    color: var(--text-dark);
+    font-weight: 700;
+    font-size: 0.75em;
+}
+.stats-pie-chart-year-select{
+    font-size: 0.75em;
+    border: none;
+    margin-right: 2vw;
+    color: var(--text-dark);
+    opacity: 0.4;
+    font-weight: 600;
+}
+.stats-pie-chart-year-option{
+    font-size: 0.75em;
+    border: none;
+}
+.stats-pie-chart{
+    width: 92%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+@media only screen and (max-width: 1000px) and (min-width: 410px) {
+    .stats-main-cont{
+        justify-content: center;
+    }
+    .pie-chart-cont{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* padding: 0 0 0 30vw; */
+    }
+    .stats-pie-chart-sec{
+        width: 80%;
+    }
+  }
+
+@media only screen and (max-width: 410px) {
+    .stats-main-cont{
+        justify-content: center;
+    }
+    .pie-chart-cont{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* padding: 0 0 0 30vw; */
+        min-width: 400px;
+    }
+    .stats-pie-chart-sec{
+        width: 80%;
+    }
+
+}
