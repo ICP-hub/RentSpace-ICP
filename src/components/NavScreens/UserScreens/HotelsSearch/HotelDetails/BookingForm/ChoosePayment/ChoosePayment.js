@@ -4,19 +4,19 @@ import { COLORS,SIZES } from '../../../../../../../constants/themes'
 import Option from './Option'
 
 
-const ChoosePayment = ({fullPayment,setFullPayment}) => {
+const ChoosePayment = ({fullPayment,setFullPayment,price}) => {
   const items=[
     {
       fullPayment:true,
-      amount:400,
+      amount:price,
       text:'Pay in Full',
       subText:'Pay the total'
     },
     {
       fullPayment:false,
-      amount:200,
+      amount:price/2,
       text:'Pay part now, pay later',
-      subText:`pay $${200} now pay $${200} later on Check-In`
+      subText:`pay $${price/2} now pay $${price/2} later on Check-In`
     }
   ]
   return (

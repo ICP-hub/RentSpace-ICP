@@ -60,6 +60,6 @@ const styles = StyleSheet.create({
     radioCheck:{
         width:'60%',
         height:'60%',
-        borderRadius:20
+        borderRadius:100
     }
 })

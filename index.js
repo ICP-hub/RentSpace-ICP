@@ -6,10 +6,10 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import 'react-native-polyfill-globals/auto';
 import 'react-native-fetch-api';
 import 'fast-text-encoding';
-import {AppRegistry} from 'react-native';
+import {AppRegistry, AppState} from 'react-native';
 import App from './App';
 import {name as appName} from './app.json';
-import {NavigationContainer} from '@react-navigation/native';
+import {Link, NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React, { useEffect, useState,useRef } from 'react';
 import Main from './src/components/NavScreens/UserScreens/HotelsSearch/Main';
@@ -37,6 +37,7 @@ import { createActor as createUserActor } from './src/declarations/User';
 import { createActor as createHotelActor } from './src/declarations/hotel';
 import { createActor as createBookingActor } from './src/declarations/booking';
 import { createActor as createReviewActor } from './src/declarations/Review';
+import { createActor as createCommentActor } from './src/declarations/Comment';
 import store from './src/redux/store';
 import { setActor } from './src/redux/actor/actions';
 import { setPrinciple } from './src/redux/principle/actions';
@@ -81,121 +82,136 @@ PushNotification.configure({
 const RootComponent: React.FC = () => {
 
 
-  // const [loading,setLoading]
   const btmSheetLoginRef = useRef(null);
   const btmSheetFinishRef = useRef(null);
   const [middleKeyIdentity, setMiddleKeyIdentity] = useState('');
 
 
-
   async function delegationValidation(pubKey,priKey,delegation){
-    // // setLoading(true)
-    // try{
-    //   let publicKey = await crypto.subtle.importKey("raw",
-    //   Buffer.from(fromHex(pubKey)),
-    //   { name: "ECDSA", namedCurve: "P-256" }, // Adjust the algorithm and curve as needed
-    //   true, // Whether the key is extractable
-    //   ["verify"] )
-    //   // console.log("generateKey._keyPair.publicKey",publicKey)
+    try{
+      let publicKey = await crypto.subtle.importKey("raw",
+      Buffer.from(fromHex(pubKey)),
+      { name: "ECDSA", namedCurve: "P-256" }, // Adjust the algorithm and curve as needed
+      true, // Whether the key is extractable
+      ["verify"] )
+      // console.log("generateKey._keyPair.publicKey",publicKey)
       
-    //   let privateKey = await crypto.subtle.importKey("pkcs8",
-    //   Buffer.from(fromHex(priKey)),
-    //   { name: "ECDSA", namedCurve: "P-256" }, // Adjust the algorithm and curve as needed
-    //   true, // Whether the key is extractable
-    //   ["sign"] )
-    //   console.log("generateKey._keyPair.privateKey",privateKey)
-    //   let newKeyPair = await ECDSAKeyIdentity.fromKeyPair({privateKey,publicKey})
-    //   // console.log("newKeyPair",toHex(newKeyPair.getPublicKey().toDer()));
+      let privateKey = await crypto.subtle.importKey("pkcs8",
+      Buffer.from(fromHex(priKey)),
+      { name: "ECDSA", namedCurve: "P-256" }, // Adjust the algorithm and curve as needed
+      true, // Whether the key is extractable
+      ["sign"] )
+      console.log("generateKey._keyPair.privateKey",privateKey)
+      let newKeyPair = await ECDSAKeyIdentity.fromKeyPair({privateKey,publicKey})
+      console.log("newKeyPair",toHex(newKeyPair.getPublicKey().toDer()));
   
-    //   const Delchain = DelegationChain.fromJSON(
-    //       JSON.parse(decodeURIComponent(delegation)),
-    //     );
-    //     console.log("chain",Delchain);
-    //     const middleIdentity = DelegationIdentity.fromDelegation(
-    //       newKeyPair,
-    //       Delchain,
-    //     );
-    //     console.log("middleIdentity",middleIdentity);
-    //     const agent = new HttpAgent({identity: middleIdentity,fetchOptions: {
-    //       reactNative: {
-    //         __nativeResponseType: 'base64',
-    //       },
-    //     },
-    //     callOptions: {
-    //       reactNative: {
-    //         textStreaming: true,
-    //       },
-    //     },
-    //     fetch,
-    //     blsVerify: () => true,
-    //     host: host,
-    //     verifyQuerySignatures: false,
-    //   });
+      const Delchain = DelegationChain.fromJSON(
+          JSON.parse(decodeURIComponent(delegation)),
+        );
+        console.log("chain",Delchain);
+        const middleIdentity = DelegationIdentity.fromDelegation(
+          newKeyPair,
+          Delchain,
+        );
+        console.log("middleIdentity",middleIdentity);
+        const agent = new HttpAgent({identity: middleIdentity,fetchOptions: {
+          reactNative: {
+            __nativeResponseType: 'base64',
+          },
+        },
+        callOptions: {
+          reactNative: {
+            textStreaming: true,
+          },
+        },
+        fetch,
+        blsVerify: () => true,
+        host: host,
+        verifyQuerySignatures: false,
+      });
   
-    //     // console.log("agent",agent);
+        // console.log("agent",agent);
   
-    //     newActor = createActor(ids.backendCan, {
-    //       agent,
-    //     });
-    //     // console.log("actor",newActor);
+        newActor = createActor(ids.backendCan, {
+          agent,
+        });
+        // console.log("actor",newActor);
   
-    //     console.log("middleIdentityy",middleIdentity.getPrincipal().toString())
+        console.log("middleIdentityy",middleIdentity.getPrincipal().toString())
   
-    //     let principal = await newActor?.whoami().catch(async(err)=>{
-    //       console.log(err)
-    //       await AsyncStorage.clear()
-    //       // setLoading(false)
-    //       alert('no previous data found!')
-    //     })
-    //     if(principal=="2vxsx-fae"){
-    //       await AsyncStorage.clear()
-    //       // setLoading(false)
-    //     }else{
-    //       btmSheetLoginRef.current.dismiss()
-    //     }
-    //     let actorUser=createUserActor(ids.userCan,{agent})
-    //     let actorHotel=createHotelActor(ids.hotelCan,{agent})
-    //     let actorBooking=createBookingActor(ids.bookingCan,{agent})
-    //     let actorToken=Actor.createActor(idlFactory, {
-    //       agent,
-    //       blsVerify:()=>true,
-    //       canisterId:ids.tokenCan
-    //     })
-    //     let actorReview=createReviewActor(ids.reviewCan,{agent})
-    //     // console.log("actor review : ",actorReview)
-    //     store.dispatch(setActor({
-    //       backendActor:newActor,
-    //       userActor:actorUser,
-    //       hotelActor:actorHotel,
-    //       bookingActor:actorBooking,
-    //       tokenActor:actorToken,
-    //       reviewActor:actorReview
-    //     })) 
+        let principal = await newActor?.whoami().catch(async(err)=>{
+          console.log(err)
+          // await AsyncStorage.clear()
+          console.log(err)
+          // alert('no previous data found!')
+        })
+        console.log(`principal from del validation : ${principal}`)
+        if(principal=="2vxsx-fae"){
+          await AsyncStorage.clear()
+        }else{
+          btmSheetLoginRef.current.dismiss()
+        }
+        let actorUser=createUserActor(ids.userCan,{agent})
+        let actorHotel=createHotelActor(ids.hotelCan,{agent})
+        let actorBooking=createBookingActor(ids.bookingCan,{agent})
+        let actorToken=Actor.createActor(idlFactory, {
+          agent,
+          blsVerify:()=>true,
+          canisterId:ids.tokenCan
+        })
+        let actorReview=createReviewActor(ids.reviewCan,{agent})
+        let actorComment=createCommentActor(ids.commentCan,{agent})
+        // console.log("actor review : ",actorReview)
+        store.dispatch(setActor({
+          backendActor:newActor,
+          userActor:actorUser,
+          hotelActor:actorHotel,
+          bookingActor:actorBooking,
+          tokenActor:actorToken,
+          reviewActor:actorReview,
+          commentActor:actorComment
+        })) 
         
-    //     store.dispatch(setPrinciple(principal))
-    //     console.log("user",principal)
+        store.dispatch(setPrinciple(principal))
+        console.log("user",principal)
       
   
-    //     await actorUser?.getUserInfo().then((res)=>{
-    //       if(res[0]?.firstName!=null){
-    //         store.dispatch(setUser(res[0]))
-    //         btmSheetLoginRef.current.dismiss()
-    //         alert(`welcome back ${res[0]?.firstName}!`)
+        await actorUser?.getUserInfo().then((res)=>{
+          if(res[0]?.firstName!=null){
+            store.dispatch(setUser(res[0]))
+            btmSheetLoginRef.current.dismiss()
+            alert(`welcome back ${res[0]?.firstName}!`)
             
-    //       }else{
-    //         alert('Now please follow the registeration process!')
-    //         btmSheetLoginRef.current.dismiss()
-    //         btmSheetFinishRef.current.present()
-    //       }
-    //     }).catch((err)=>console.error(err))
-    //     console.log("principal from new login : ",principal);
+          }else{
+            alert('Now please follow the registeration process!')
+            btmSheetLoginRef.current.dismiss()
+            btmSheetFinishRef.current.present()
+          }
+        }).catch((err)=>console.error(err))
+        console.log("principal from new login : ",principal);
         
-    //   }catch(err){
-    //     console.log(err)
-    //     alert("No previous data found!")
-    //   }
+      }catch(err){
+        console.log(err)
+        // alert("No previous data found!")
+      }
     }
-
+ const storeInAsyncStorage=async(key,item)=>{
+    await AsyncStorage.setItem(key,item).catch((err)=>{
+      console.log(`Asyncstorage err set ietm : ${err}`)
+    }).then((res)=>{
+      console.log(`Response for setitem Async store : ${res}`)
+    })
+ }
+ const getFromAsyncStore=async(key)=>{
+    let data;
+    await AsyncStorage.getItem(key).then((res)=>{
+      data=res
+      console.log(`Async store get item res : ${res}`)
+    }).catch((err)=>{
+      console.log(`Async store get item err : ${err}`)
+    })
+    return data
+ }
 
   const generateIdentity = async () => {
     let p = new Promise(async(resolve,reject)=>{
@@ -219,55 +235,81 @@ const RootComponent: React.FC = () => {
 
   const handleLogin = async () => {
     
+    const newDel=await getFromAsyncStore("delegation")
+    const newPri=await getFromAsyncStore("prikey")
+    const newpub=await getFromAsyncStore("pubkey")
+    // delegationValidation(newpub,newPri,newDel)
+    // console.log("stringified key iden : ",JSON.parse(JSON.stringify(await getFromAsyncStore("keyIden"))))
+
     await generateIdentity().then(async(res)=>{
       resp=res
-    // console.log("running handle login",res)
+    console.log("running handle login",res)
     // console.log("ids : ",ids)
     try {
-      const url = `https://sldpd-dyaaa-aaaag-acifq-cai.icp0.io?publicKey=${toHex(res.getPublicKey().toDer())}`;
-      // const url = `http://127.0.0.1:4943/?canisterId=bkyz2-fmaaa-aaaaa-qaaaq-cai&publicKey=${toHex(res.getPublicKey().toDer())}`;
-      if (await InAppBrowser.isAvailable()) {
-        const result = await InAppBrowser.open(url, {
-          // iOS Properties
-          dismissButtonStyle: 'cancel',
-          preferredBarTintColor: '#453AA4',
-          preferredControlTintColor: 'white',
-          readerMode: false,
-          animated: true,
-          modalPresentationStyle: 'fullScreen',
-          modalTransitionStyle: 'coverVertical',
-          modalEnabled: true,
-          enableBarCollapsing: false,
-          // Android Properties
-          showTitle: true,
-          toolbarColor: '#6200EE',
-          secondaryToolbarColor: 'black',
-          navigationBarColor: 'black',
-          navigationBarDividerColor: 'white',
-          enableUrlBarHiding: true,
-          enableDefaultShare: true,
-          forceCloseOnRedirection: false,
-          animations: {
-            startEnter: 'slide_in_right',
-            startExit: 'slide_out_left',
-            endEnter: 'slide_in_left',
-            endExit: 'slide_out_right',
-          },
-          headers: {
-            'my-custom-header': 'my custom header value',
-          },
-        });
-        Linking.addEventListener('url', handleDeepLink);
-        await this.sleep(800);
-      } else Linking.openURL(url);
-    } catch (error) {console.log(error)}}).catch((err)=>{console.log(err)})
+      Linking.addEventListener('url', handleDeepLink);
+      setTimeout(async() => {
+        const url = `https://sldpd-dyaaa-aaaag-acifq-cai.icp0.io?publicKey=${toHex(res.getPublicKey().toDer())}`;
+        // const url = `http://127.0.0.1:4943/?canisterId=bkyz2-fmaaa-aaaaa-qaaaq-cai&publicKey=${toHex(res.getPublicKey().toDer())}`;
+        if (await InAppBrowser.isAvailable()) {
+          const result = await InAppBrowser.open(url, {
+            // iOS Properties
+            dismissButtonStyle: 'cancel',
+            preferredBarTintColor: '#453AA4',
+            preferredControlTintColor: 'white',
+            readerMode: false,
+            animated: true,
+            modalPresentationStyle: 'fullScreen',
+            modalTransitionStyle: 'coverVertical',
+            modalEnabled: true,
+            enableBarCollapsing: false,
+            // Android Properties
+            showTitle: true,
+            toolbarColor: '#6200EE',
+            secondaryToolbarColor: 'black',
+            navigationBarColor: 'black',
+            navigationBarDividerColor: 'white',
+            enableUrlBarHiding: true,
+            enableDefaultShare: true,
+            forceCloseOnRedirection: false,
+            animations: {
+              startEnter: 'slide_in_right',
+              startExit: 'slide_out_left',
+              endEnter: 'slide_in_left',
+              endExit: 'slide_out_right',
+            },
+            headers: {
+              'my-custom-header': 'my custom header value',
+            },
+          });
+          
+          // AppState.addEventListener('change',handleDeepLink)
+          // await this.sleep(800);
+          // console.log(await Linking.getInitialURL())
+        } else {
+          Linking.openURL(url)
+          alert('opening external link')
+        };
+      }, 5000);
+      
+    } catch (error) {
+      console.log(error)
+      alert(error)
+    }}).catch((err)=>{
+      console.log(err)
+      alert(err)
+    })
   };
   const handleDeepLink = async event => {
+    alert('inside handle deeplink')
+    try{
+
+      alert('inside handle deeplink try')
     let actor=backend
     const deepLink = event.url;
     const urlObject = new URL(deepLink);
     const delegation = urlObject.searchParams.get('delegation');
     	console.log("del signature",delegation)
+    alert('Getting delegation')
     const chain = DelegationChain.fromJSON(
       JSON.parse(decodeURIComponent(delegation)),
     );
@@ -292,7 +334,7 @@ const RootComponent: React.FC = () => {
     await agent.fetchRootKey()
     //New Login through api
 
-    
+    alert('ágent created')
 
     let pubKey = toHex(await crypto.subtle.exportKey("raw",middleIdentity._inner._keyPair.publicKey));
     let priKey = toHex(await crypto.subtle.exportKey("pkcs8",middleIdentity._inner._keyPair.privateKey));
@@ -301,6 +343,9 @@ const RootComponent: React.FC = () => {
 
     //New Login through api end
     console.log(`new private : ${priKey}\n new public : ${pubKey}`)
+
+    alert('Retrieved keypair')
+
     let signObj;
     async function getSignObject(){
       const principalM=middleIdentity.getPrincipal().toString()
@@ -329,13 +374,15 @@ const RootComponent: React.FC = () => {
       // }).catch((err)=>{console.log(err)})
       
     }
+    alert('try registering user')
     await getSignObject().then(async()=>{
       console.log("getting sign obj : ",signObj)
       store.dispatch(
         setAuthData(signObj)
       )
-      // const baseUrl="http://localhost:5000"
-      const baseUrl="https://rentspace.kaifoundry.com"
+      const baseUrl="http://localhost:5000"
+      alert('implementing chat register')
+      // const baseUrl="https://rentspace.kaifoundry.com"
       await axios.post(`${baseUrl}/api/v1/register/user`,{},{
         headers:{
           "x-private":signObj.privateKey,
@@ -353,7 +400,7 @@ const RootComponent: React.FC = () => {
         }
       })
     })
-    
+    alert('craeting actor')
     actor = createActor(ids.backendCan, {
       agent,
     });
@@ -366,6 +413,7 @@ const RootComponent: React.FC = () => {
       canisterId:ids.tokenCan
     })
     let actorReview=createReviewActor(ids.reviewCan,{agent})
+    let actorComment=createCommentActor(ids.commentCan,{agent})
     // console.log("actor review : ",actorReview)
     store.dispatch(setActor({
       backendActor:actor,
@@ -373,33 +421,51 @@ const RootComponent: React.FC = () => {
       hotelActor:actorHotel,
       bookingActor:actorBooking,
       tokenActor:actorToken,
-      reviewActor:actorReview
+      reviewActor:actorReview,
+      commentActor:actorComment
     }))
     
     // console.log("actor : ",actor)
+    alert('calling whoami')
     let whoami = await actor.whoami();
     store.dispatch(setPrinciple(whoami))
     console.log("user",whoami)
     console.log("ids : ",ids)
-   
+    storeInAsyncStorage("delegation",delegation)
+    storeInAsyncStorage("keyIden",JSON.stringify(resp))
+    storeInAsyncStorage("prikey",priKey)
+    storeInAsyncStorage("pubkey",pubKey)
 
-    await actorUser?.getUserInfo().then((res)=>{
-      if(res[0]?.firstName!=null){
-        store.dispatch(setUser(res[0]))
-        btmSheetLoginRef.current.dismiss()
-        alert(`welcome back ${res[0]?.firstName}!`)
-        
-      }else{
-        alert('Now please follow the registeration process!')
-        btmSheetLoginRef.current.dismiss()
-        btmSheetFinishRef.current.present()
-      }
-    }).catch((err)=>console.error(err))
+    console.log("Getting user data")
+    setTimeout(async() => {
+      await actorUser?.getUserInfo().then((res)=>{
+        if(res[0]?.firstName!=null){
+          store.dispatch(setUser(res[0]))
+          btmSheetLoginRef.current.dismiss()
+          alert(`welcome back ${res[0]?.firstName}!`)
+  
+        }else{
+          alert('Now please follow the registeration process!')
+          btmSheetLoginRef.current.dismiss()
+          btmSheetFinishRef.current.present()
+  
+        }
+      }).catch((err)=>{
+        console.error(err)
+        alert('got error while fetching user data')
+      })
+    }, 2000);
+
+    
     // await AsyncStorage.setItem('user',JSON.stringify(middleIdentity))
     //   .then((res)=>console.log('data stored successfully',middleIdentity))
     //   .catch((err)=>console.log(err))
     //   alert(whoami);
       // getUserData()
+    }catch(err){
+      console.log(err)
+      alert(err)
+    }
   };
 
   return (
@@ -407,7 +473,7 @@ const RootComponent: React.FC = () => {
     <PolyfillCrypto/>
     <Provider store={Store}>
     <NavigationContainer linking={linking}>
-      <Stack.Navigator initialRouteName="Launch">
+      <Stack.Navigator initialRouteName="reels">
         <Stack.Screen options={{headerShown:false}} name="Launch" component={Main} initialParams={{handleLogin,btmSheetLoginRef,btmSheetFinishRef,delegationValidation
         }}/>
         <Stack.Screen options={{headerShown:false}} name='UserChat' component={ChatContainer} initialParams={{newChat:''}}/>

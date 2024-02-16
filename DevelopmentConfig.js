@@ -7,12 +7,12 @@ export const ids={
     userCan:(production)?
         // "tassb-3qaaa-aaaan-qloxq-cai":
         "5fiim-aiaaa-aaaan-qlqsq-cai":
-        "br5f7-7uaaa-aaaaa-qaaca-cai",
+        "by6od-j4aaa-aaaaa-qaadq-cai",
         
     hotelCan:(production)?
-        // "r5p4j-iyaaa-aaaan-qloya-cai":'
-        "5mldq-waaaa-aaaan-qlqta-cai":
-        "bw4dl-smaaa-aaaaa-qaacq-cai",
+        "r5p4j-iyaaa-aaaan-qloya-cai":
+        // "5mldq-waaaa-aaaan-qlqta-cai":
+        "avqkn-guaaa-aaaaa-qaaea-cai",
         
     backendCan:(production)?
         // "thtuv-wiaaa-aaaan-qloxa-cai":
@@ -20,12 +20,16 @@ export const ids={
         "be2us-64aaa-aaaaa-qaabq-cai",
     reviewCan:(production)?
         "rtnrb-tiaaa-aaaan-qloza-cai":
-        "avqkn-guaaa-aaaaa-qaaea-cai",
+        "a4tbr-q4aaa-aaaaa-qaafq-cai",
     bookingCan:(production)?
         "r2o25-faaaa-aaaan-qloyq-cai":
-        "b77ix-eeaaa-aaaaa-qaada-cai",
+        "asrmz-lmaaa-aaaaa-qaaeq-cai",
     tokenCan:(production)?
         "ryjl3-tyaaa-aaaaa-aaaba-cai"
-        :"ryjl3-tyaaa-aaaaa-aaaba-cai",
+        :"bw4dl-smaaa-aaaaa-qaacq-cai",
+    commentCan:(production)?
+        "d4pxt-taaaa-aaaan-qls5a-cai"
+        :
+        "",
 }
 

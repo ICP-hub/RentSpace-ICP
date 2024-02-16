@@ -24,6 +24,8 @@ const AllChats = ({navigation}) => {
     const [chatItem,setChatItem]=useState({})
     const {actors}=useSelector(state=>state.actorReducer)
     const {authData}=useSelector(state=>state.authDataReducer)
+    const {principle}=useSelector(state=>state.principleReducer)
+
     const [token,setToken]=useState('')
     const dispatch=useDispatch()
     const route=useRoute()
@@ -42,12 +44,16 @@ const AllChats = ({navigation}) => {
          await axios.post(`${baseUrl}/api/v1/login/user`,{
             principal:authData.principal,
             publicKey:authData.publicKey
-         }).then(async(res)=>{
+         },{headers:{
+            "x-private":authData.privateKey,
+          "x-public":authData.publicKey,
+          "x-delegation":authData.delegation,
+         }}).then(async(res)=>{
             console.log("chat login resp : ",res.data.userToken)
             setToken(res.data.userToken)
             dispatch(setChatToken(res.data.userToken))
             await axios.post(`${baseUrl}/api/v1/chat/history`,{},{headers:{
-                "x-principal":authData.principal,
+                "x-principal":principle,
                 "x-private-token":res.data.userToken
             }}).then((resp)=>{
                 console.log("history : ",resp.data)
@@ -65,38 +71,51 @@ const AllChats = ({navigation}) => {
         })
     }
     const getAllChatUser=async()=>{
+        const arr=[]
+
         console.log("using function : ",actors?.userActor?.getUserInfoByPrincipal)
         console.log("getting all users!")
         let fromPrinciples=[]
         let toPrinciples=[]
         chats.map((chat)=>{
             fromPrinciples.push(chat.fromPrincipal)
-            console.log("from map : ",chat.fromPrincipal)
+            console.log("from map : ",{id:chat.fromPrincipal,updateAt:chat.updatedAt})
             
         })
         chats.map((chat)=>{
             if(!(fromPrinciples.includes(chat.toPrincipal))){
                 console.log("to map : ",chat.toPrincipal)
-                toPrinciples.push(chat.toPrincipal)
+                toPrinciples.push(chat.toPrincipal)   
             }
         })
+        fromPrinciples=new Set(fromPrinciples)
+        toPrinciples=new Set(toPrinciples)
+        fromPrinciples=Array.from(fromPrinciples)
+        toPrinciples=Array.from(toPrinciples)
         console.log("fromPrinciples : ",fromPrinciples)
         console.log("toPrinciples : ",toPrinciples)
-        fromPrinciples.concat(toPrinciples)
+        fromPrinciples=fromPrinciples.concat(toPrinciples)
+        console.log("concatinated : ",fromPrinciples.concat(toPrinciples))
+        if(fromPrinciples.length==0){
+            setLoading(false)
+        }
         fromPrinciples.map(async(chat,index)=>{
             console.log(`user ${index} : ${chat}`)
             
             await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(chat.toString()))
-            .then((res)=>{
+            .then(async(res)=>{
                 console.log(res[0])
-                setChatUsers([...chatUsers,{...res[0],id:chat}])
+                // console.log([...chatUsers,{...res[0],id:chat}])
+                console.log({...res[0],id:chat})
+                arr.push({...res[0],id:chat})
+                // setChatUsers(c=>[...c,{...res[0],id:chat}])
                 setLoading(false)
+                setChatUsers(arr)
             }).catch((err)=>{
                 console.log("chatuser fetching err : ",err)
                 setLoading(false)
             })
         })
-        console.log(chatUsers)
         
         // if(newChat!="" && !(fromPrinciples.includes(newChat))){
         //     console.log(`new user : ${newChat}`)

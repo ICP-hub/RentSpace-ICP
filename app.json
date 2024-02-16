@@ -8,5 +8,12 @@
     "resizeMode": "contain",
     "backgroundColor": "rgba(58, 18, 82, 0.36)"
   },
-  "description": "Discover and book hotels with RentSpace. Your perfect stay is just a click away!"
+  "description": "Discover and book hotels with RentSpace. Your perfect stay is just a click away!",
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "eb7bd455-affa-4a98-8c2d-90fddb8d286b"
+      }
+    }
+  }
 }

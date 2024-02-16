@@ -10,6 +10,7 @@ import ProfileSection from './ProfileSection'
 import Icon3 from 'react-native-vector-icons/SimpleLineIcons'
 import Icon4 from 'react-native-vector-icons/FontAwesome6'
 import Icon5 from 'react-native-vector-icons/MaterialIcons'
+import Icon6 from 'react-native-vector-icons/Ionicons'
 import { useDispatch, useSelector } from 'react-redux'
 import { setActor } from '../../../../../redux/actor/actions'
 import { setUser } from '../../../../../redux/users/actions'
@@ -19,6 +20,8 @@ import { backend } from '../../../../../declarations/backend'
 import { User } from '../../../../../declarations/User'
 import { hotel } from '../../../../../declarations/hotel'
 import UserDetailDemo from '../Modals/UserDetailDemo'
+import Report from '../Report/Report'
+import Feedback from '../Feedback/Feedback'
 
 
 
@@ -29,6 +32,8 @@ const MainProfile = ({navigation}) => {
   const dispatch=useDispatch()
   const [loading,setLoading]=useState(false)
   const [showDetails,setShowDetails]=useState(false)
+  const [reportPage,setReportPage]=useState(false)
+  const [feedbackPage,setFeedbackPage]=useState(false)
 
   const logout=()=>{
     dispatch(setActor({
@@ -148,13 +153,18 @@ const makeHost=async()=>{
     },
     {
       text:"Feedback",
-      onClick:()=>{},
+      onClick:()=>{setFeedbackPage(true)},
       icon:<Icon3 color={COLORS.black} name='pencil' size={20}/>
     },
     {
       text:"How RentSpace works",
       onClick:()=>{},
       icon:<Icon2 color={COLORS.black} name='book-open' size={20}/>
+    },
+    {
+      text:"Report",
+      icon:<Icon6 name='warning' color={COLORS.black} size={20}/>,
+      onClick:()=>setReportPage(true)
     }
   ]
   const legalList=[
@@ -204,6 +214,12 @@ const makeHost=async()=>{
         </ScrollView>
         <Modal visible={showDetails} animationType='slide'>
           <UserDetailDemo navigation={navigation} setShowDetails={setShowDetails}/>
+        </Modal>
+        <Modal visible={reportPage} animationType='slide'>
+          <Report setReportPage={setReportPage}/>
+        </Modal>
+        <Modal visible={feedbackPage} animationType='slide'>
+          <Feedback setFeedbackPage={setFeedbackPage}/>
         </Modal>
     </View>
   )

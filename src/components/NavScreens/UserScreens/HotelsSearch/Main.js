@@ -117,7 +117,7 @@ const Main = ({navigation}) => {
     let arr=[]
     setQueryHotels([])
     console.log("filter query func")
-    await axios.get(`${baseQueryUrl}maxPrice=${maxQueryPrice}`).then((res)=>{
+    await axios.get(`${baseQueryUrl}maxPrice=${maxQueryPrice}&pageSize=${50}`).then((res)=>{
       res?.data?.hotels.map((r)=>{
         console.log("filters hotel element : ",r.hotelId)
         setQueryHotels(h=>[...h,r.hotelId])
@@ -199,7 +199,7 @@ const Main = ({navigation}) => {
           snapPoints={snapPoints}
           enablePanDownToClose={false}
           >
-          <BottomSheetLogin handleLogin={handleLogin} delegationValidation={delegationValidation} />
+          <BottomSheetLogin handleLogin={handleLogin} delegationValidation={delegationValidation}/>
         </BottomSheetModal>
         <BottomSheetModal
           ref={btmSheetFinishRef}
@@ -245,7 +245,8 @@ export default Main;
 const styles = StyleSheet.create({
   view:{
     width:'100%',
-    height:'100%'
+    height:'100%',
+    backgroundColor:'white'
   },
   loader:{
     position:'absolute',

@@ -6,6 +6,13 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 
 // const reviews=require('./sampleReviews.json')
 
+const itemSample={
+  title:"Great place",
+  des:'Loved every second of the stay, great hospitality',
+  rating:4
+}
+
+
 const AllReviews = ({setShowReviews,reviews}) => {
   return (
     <View style={styles.view}>
@@ -14,11 +21,12 @@ const AllReviews = ({setShowReviews,reviews}) => {
     </TouchableOpacity>
     <Text style={styles.title}>Reviews</Text>    
     <ScrollView contentContainerStyle={styles.list}>
-      {
+      {/* {
         reviews.map((review,index)=>(
             <ReviewCard item={review} key={index}/>
         ))
-      }
+      } */}
+      <ReviewCard item={itemSample}/>
     </ScrollView>
     </View>
   )

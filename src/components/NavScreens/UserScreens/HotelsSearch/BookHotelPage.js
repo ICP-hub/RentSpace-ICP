@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View,Image, Touchable,TouchableOpacity,FlatList, Modal, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useRef } from 'react'
 import { images } from '../../../../constants'
 import { COLORS, SIZES } from '../../../../constants/themes'
 import HotelCard from './HotelDetails/cards/HotelCard'
@@ -12,9 +12,11 @@ import Icon2 from 'react-native-vector-icons/Ionicons'
 
 const BookHotelPage = ({navigation,queryHotels}) => {
 
+  const firstRender=useRef(true)
   const {user}=useSelector(state=>state.userReducer)
   const {hotels}=useSelector(state=>state.hotelsReducer)
   const {actors}=useSelector(state=>state.actorReducer)
+  const {principle}=useSelector(state=>state.principleReducer)
   // const {authData}=useSelector(state=>state.authDataReducer)
   const dispatch=useDispatch()
   const [hotelsList,setHotelsList]=useState([])
@@ -70,10 +72,17 @@ const BookHotelPage = ({navigation,queryHotels}) => {
   async function getQueryHotelDetails(){
     setHotelsList([])
     for(let i=0;i<queryHotels?.length;i++){
-      await actors.hotelActor?.getHotel(queryHotels[i]).then((res)=>{
-        setHotelsList(hotelsList=>[...hotelsList,{...res[0],id:queryHotels[i]}])
-        console.log({...res[0],id:queryHotels[i]})
-      })
+      // console.log(queryHotels[i].id)
+      if(!(queryHotels[i].length<40)){
+        console.log("el",queryHotels[i])
+        await actors.hotelActor?.getHotel(queryHotels[i]).then((res)=>{
+          console.log("resp : ",res)
+          setHotelsList(hotelsList=>[...hotelsList,{...res[0],id:queryHotels[i]}])
+          console.log({...res[0],id:queryHotels[i]})
+        }).catch((err)=>console.log(err))
+      
+    }
+    
     }
     // try{
     //   dispatch(setHotelList(hotelsList))
@@ -81,17 +90,28 @@ const BookHotelPage = ({navigation,queryHotels}) => {
     
   }
   const reloadData=()=>{
-    getHotelDetails()
+    // getHotelDetails()
+    console.log(queryHotels)
+    getQueryHotelDetails()
     getReservations()
+    getHotelDetails()
     // console.log("authData : ",authData)
 
   }
   useEffect(()=>{
-    getHotelDetails()
-    getReservations()
-  },[hotels])
+    // console.log(queryHotels)
+    if(firstRender.current){
+      console.log(firstRender.current)
+      firstRender.current=false
+    }else{
+      getQueryHotelDetails()
+      // getHotelDetails()
+      getReservations()
+    }
+   
+  },[queryHotels,principle])
 
-  if(hotels?.length>0){
+  if(hotelsList?.length>0){
     return(
       <>
       <View style={styles.btnCont}>
@@ -105,7 +125,7 @@ const BookHotelPage = ({navigation,queryHotels}) => {
           <Text style={styles.btnText}>Show my bookings</Text>
         </TouchableOpacity>
       </View>
-      <FlatList data={hotelsList} style={{marginBottom:80}}  renderItem={(item)=>(
+      <FlatList data={hotelsList} style={{marginBottom:70,backgroundColor:'white'}}  renderItem={(item)=>(
         <HotelCard item={item.item} navigation={navigation} />
       )}/>
       <Modal animationType='slide' visible={showReservation}>
@@ -116,7 +136,8 @@ const BookHotelPage = ({navigation,queryHotels}) => {
   }else{
   return (
     <>
-    <HotelCard name={sampleName} des={sampleDes} rating={4} />
+    {/* <HotelCard name={sampleName} des={sampleDes} rating={4} /> */}
+    <Text style={styles.empty}>Sorry nothing to show</Text>
     
     </>
   )
@@ -209,7 +230,9 @@ const styles = StyleSheet.create({
       alignItems:'center',
       justifyContent:'space-between',
       width:'100%',
-      paddingHorizontal:'8%'
+      paddingHorizontal:'8%',
+      backgroundColor:'white',
+      paddingBottom:10
     },
     btn:{
       display:'flex',
@@ -228,5 +251,18 @@ const styles = StyleSheet.create({
       fontSize:SIZES.small,
       fontWeight:'bold',
       marginLeft:6
+    },
+    empty:{
+      width:'90%',
+      height:200,
+      fontSize:SIZES.preMedium,
+      color:'red',
+      fontWeight:'300',
+      backgroundColor:COLORS.lighterGrey,
+      borderRadius:20,
+      marginTop:40,
+      marginLeft:'5%',
+      textAlign:'center',
+      paddingTop:20
     }
 })

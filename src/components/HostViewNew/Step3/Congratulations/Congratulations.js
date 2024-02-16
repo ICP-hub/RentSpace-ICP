@@ -17,8 +17,8 @@ const Congratulations = ({setHostModal,pos}) => {
   const {actors}=useSelector(state=>state.actorReducer)
   const {authData}=useSelector(state=>state.authDataReducer)
   const dispatch=useDispatch()
-  const baseUrl="https://rentspace.kaifoundry.com"
-  // const baseUrl="http://localhost:5000"
+  // const baseUrl="https://rentspace.kaifoundry.com"
+  const baseUrl="http://localhost:5000"
   const {files}=useSelector(state=>state.filesReducer)
   
   const ApiLogin=async()=>{
@@ -64,45 +64,13 @@ const Congratulations = ({setHostModal,pos}) => {
       await FileSystem.readFile(files[0].uri,'base64').then((res)=>{
         console.log(res)
         files.map((file,index)=>{
-          // if(index==0){
-          //   newFiles.push({...file,fileIndex:`file${index}`,base64:res})
-          //   formData.append(`file${index}`,file)
-          // }else{
             newFiles.push({...file,fileIndex:`file${index}`})
             formData.append(`file${index}`,file)
-          // }
-          
-          // console.log(`file${index}`,file)
         })
       })
       
       
-      // let newFiles=[]
-      // const filePromises = files.map(async function (file) {
-      //   const res = await FileSystem.readFile(file.uri);
-      //   // console.log(res)
-      //   return { ...file, buffer: res };
-      // });
-      
       formData.append("files",JSON.stringify(newFiles))
-      
-      
-      // Promise.all(filePromises)
-      //   .then((newFiles) => {
-      //     const regularNewFiles = newFiles.map((file) => Object.assign({}, file));
-      //     newFiles.forEach((file) => {
-      //       console.log("File Object: ", file);
-      //     });
-      //     // console.log("files: ", JSON.stringify(regularNewFiles));
-      //     formData.append("files", JSON.stringify(regularNewFiles));
-          
-      
-      //     // Continue with the rest of your code that depends on newFiles
-      //   })
-      //   .catch((error) => {
-      //     // Handle errors if any of the promises are rejected
-      //     console.error("Error reading files:", error);
-      //   });
       console.log(formData)
       await axios.post(`${baseUrl}/api/v1/hotel/register`,formData,{
         headers:{
@@ -112,11 +80,14 @@ const Congratulations = ({setHostModal,pos}) => {
           "Content-Type":"multipart/form-data"
         }
       }).then(async(res)=>{
+        setLoading(false)
         setHostModal(false)
         
         console.log("hotel creation api response videos : ",res.data)
         // console.log("hotels images : ",res.data.hotels[res.data.hotels.length-1].imagesUrls)
+        
       }).catch((err)=>{
+        setLoading(false)
         console.log("hotel creation api err : ",err)
         alert(err)
         setHostModal(false)
@@ -126,7 +97,7 @@ const Congratulations = ({setHostModal,pos}) => {
     console.log('create hotel : ',listing)
     setLoading(true)
   await actors.hotelActor?.createHotel({...listing,hotelLocation:"Ludhiana"}).then(async(res)=>{
-    setLoading(false)
+    // setLoading(false)
     await actors.hotelActor?.getHotelId().then(async(res)=>{
       console.log(res)
       dispatch(setHotels(res))

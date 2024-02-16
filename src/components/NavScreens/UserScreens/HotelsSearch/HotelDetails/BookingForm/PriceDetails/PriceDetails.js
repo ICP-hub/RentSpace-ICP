@@ -3,7 +3,9 @@ import React, { useState } from 'react'
 import { COLORS,SIZES } from '../../../../../../../constants/themes'
 import PriceCard from './PriceCard'
 
-const PriceDetails = ({basePrice,nights}) => {
+const months=["Jan","Feb","Mar","Apr","May","June","July","Aug","Sep","Oct","Nov","Dec"]
+const PriceDetails = ({basePrice,nights,fullPayment,checkIn}) => {
+
     const [finalPrice,setFinalPrice]=useState(((basePrice*nights)*0.15)+((basePrice*nights)*0.10)+(basePrice*nights))
     const prices=[
         {
@@ -16,7 +18,7 @@ const PriceDetails = ({basePrice,nights}) => {
         },
         {
             label:'Taxes',
-            price:finalPrice
+            price:finalPrice*0.10
         }
     ]
   return (
@@ -34,14 +36,29 @@ const PriceDetails = ({basePrice,nights}) => {
       </View>
       
       <View style={styles.line}/>
-      <View style={styles.textCont}>
-        <Text style={styles.heading}>Due now</Text>
-        <Text style={styles.heading}>${finalPrice}</Text>
-      </View>
-      <View style={styles.textCont}>
-        <Text style={styles.lightText}>Due on 30th Dec</Text>
-        <Text style={styles.lightText}>${finalPrice}</Text>
-      </View>
+      {
+        fullPayment==true?
+        <>
+        <View style={styles.textCont}>
+          <Text style={styles.heading}>Due now</Text>
+          <Text style={styles.heading}>${finalPrice}</Text>
+        </View>
+        </>
+        :
+        <>
+        <View style={styles.textCont}>
+          <Text style={styles.heading}>Due now</Text>
+          <Text style={styles.heading}>${finalPrice/2}</Text>
+        </View>
+        <View style={styles.textCont}>
+          <Text style={styles.lightText}>
+            Due on {checkIn.split("/")[0]} 
+            {" "+months[parseInt(checkIn.split("/")[1])-1]}
+          </Text>
+          <Text style={styles.lightText}>${finalPrice/2}</Text>
+        </View>
+        </>
+        }
     </View>
   )
 }

@@ -12,6 +12,7 @@ import Reviews from './subComponents/Reviews/Reviews'
 import BookingForm from './BookingForm/BookingForm'
 import { useSelector } from 'react-redux'
 import BookingFormComp from './BookingForm/BookingFormComp'
+import FirstForm from './BookingForm/FirstForm'
 
 const HotelDetailPage = ({item,setOpen,navigation}) => {
     const btmBtn=useRef(null)
@@ -25,8 +26,10 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
         console.log(actors?.reviewActor.getReviewIdsFromHotelId)
         console.log(item?.id)
         let Revs=[]
-        await actors?.reviewActor.getReviewIdsFromHotelId(item?.id).then((res)=>{
-            console.log(res)
+        await actors?.reviewActor.getReviewIdsFromHotelId(item?.id).then(async(res)=>{
+            console.log("reviewActors : ",await actors.reviewActor.getPk())
+
+            console.log("review ids: ",res)
             setHotelReviews([])
             res.map(async(r)=>{
                 await actors?.reviewActor.getReviewInfo(r).then((res)=>{
@@ -87,8 +90,9 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
       <Modal animationType='slide' visible={showBookHotel}>
         <BookingForm item={item} setOpen={setOpen} setShowBookHotel={setShowBookHotel} /> 
       </Modal> 
-      <Modal animationType='slide' visible={bookingForm}>
-        <BookingFormComp setBookingForm={setBookingForm}/>
+      <Modal animationType='slide' visible={bookingForm} transparent>
+        {/* <BookingFormComp setBookingForm={setBookingForm}/> */}
+        <FirstForm setBookingForm={setBookingForm} item={item} setOpen={setOpen}/>
       </Modal>
     </View>
     </ScrollView>

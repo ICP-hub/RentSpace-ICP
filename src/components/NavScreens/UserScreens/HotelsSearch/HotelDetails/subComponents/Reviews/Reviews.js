@@ -8,6 +8,12 @@ import AllReviews from './AllReviews'
 
 const reviewsSample=require('./sampleReviews.json')
 
+const itemSample={
+    title:"Great place",
+    des:'Loved every second of the stay, great hospitality',
+    rating:4
+}
+
 const Reviews = ({reviews}) => {
     console.log("reviews : ",reviews)
   const [showReview,setShowReviews]=useState(false)
@@ -22,9 +28,9 @@ const Reviews = ({reviews}) => {
         }
         {
             (reviews?.length==0)?
-            <FlatList contentContainerStyle={styles.list} data={reviewsSample} renderItem={(item)=>(
-            <ReviewCard item={item?.item}/>
-            )} horizontal/>:
+            // <Text style={styles.empty}>No Reviews to show yet</Text>
+            <ReviewCard item={itemSample}/>
+            :
             <FlatList contentContainerStyle={styles.list} data={reviews} renderItem={(item)=>(
             <ReviewCard item={item?.item}/>
             )} horizontal/>
@@ -91,5 +97,14 @@ const styles = StyleSheet.create({
     list:{
         paddingHorizontal:20,
         paddingVertical:15
-    }
+    },
+    empty:{
+        width:'100%',
+        fontSize:SIZES.preMedium,
+        color:'red',
+        fontWeight:'300',
+        // backgroundColor:COLORS.black,
+        textAlign:'center',
+        marginVertical:40
+      }
 })

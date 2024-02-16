@@ -23,6 +23,7 @@ const ChatContainer = ({navigation}) => {
     const [chatItem,setChatItem]=useState({})
     const {actors}=useSelector(state=>state.actorReducer)
     const {authData}=useSelector(state=>state.authDataReducer)
+    const {principle}=useSelector(state=>state.principleReducer)
     const [token,setToken]=useState('')
     const dispatch=useDispatch()
     const route=useRoute()
@@ -41,12 +42,16 @@ const ChatContainer = ({navigation}) => {
          await axios.post(`${baseUrl}/api/v1/login/user`,{
             principal:authData.principal,
             publicKey:authData.publicKey
-         }).then(async(res)=>{
+         },{headers:{
+            "x-private":authData.privateKey,
+          "x-public":authData.publicKey,
+          "x-delegation":authData.delegation,
+         }}).then(async(res)=>{
             console.log("chat login resp : ",res.data.userToken)
             setToken(res.data.userToken)
             dispatch(setChatToken(res.data.userToken))
             await axios.post(`${baseUrl}/api/v1/chat/history`,{},{headers:{
-                "x-principal":authData.principal,
+                "x-principal":principle,
                 "x-private-token":res.data.userToken
             }}).then((resp)=>{
                 console.log("history : ",resp.data)
