@@ -1,92 +1,122 @@
-import Iter "mo:base/Iter";
+import Types "Types";
 import Principal "mo:base/Principal";
-import Error "mo:base/Error";
+import HashMap "mo:base/HashMap";
+import List "mo:base/List";
 import Debug "mo:base/Debug";
-import Cycles "mo:base/ExperimentalCycles";
+import Text "mo:base/Text";
+import Utils "../utils";
 
-import Buffer "mo:stablebuffer/StableBuffer";
-import CanisterMap "mo:new-candb/CanisterMap";
-import CA "mo:new-candb/CanisterActions";
+shared ({caller = owner}) actor class Review() {
+    var hotelIdReviewIdMap = HashMap.HashMap<Types.HotelId, List.List<Types.ReviewId>>(0, Text.equal, Text.hash);
+    var reviewDataMap = HashMap.HashMap<Types.ReviewId, Types.Review>(0, Text.equal, Text.hash);
+    var reviewIdMap = HashMap.HashMap<Types.UserId, List.List<Types.ReviewId>>(0, Text.equal, Text.hash);
 
-import Review "ReviewCanister";
-import Types "../types";
+    func createReviewId(userIdentity : Text, bookingId : Text) : () {
+        switch (reviewIdMap.get(userIdentity)) {
+            case (?result) {
+                let data = List.push(bookingId, result);
+                reviewIdMap.put(userIdentity, data);
+                return;
+            };
+            case null {
+                var reviewIdList = List.nil<Text>();
+                reviewIdList := List.push(bookingId, reviewIdList);
+                reviewIdMap.put(userIdentity, reviewIdList);
+                return;
+            };
+        };
 
-shared ({caller = owner}) actor class ReviewParent() = this {
-
-    // @required stable variable (do not delete or change)
-
-    //holds the canisterMap of PK -> CanisterIdList
-    stable var pkToCanisterMap = CanisterMap.init();
-
-    // @required API (do not delete or Change)
-
-    // Get all canister for an specific PK
-    public shared query ({caller = caller}) func getCanistersByPK(pk : Text) : async [Text] {
-        getCanistersIdsIfExists(pk);
     };
 
-    // returns all partitions
-    public query func getPKs() : async [Text] {
-        let allPks = CanisterMap.entries(pkToCanisterMap);
+    func linkReviewIdwithHotelId(bookingId : Text) {
+        let reviewId = Text.split(bookingId, #text "#");
+        var loopCount = 0;
+        var hotelId = "";
+        for (i in reviewId) {
+            if (loopCount < 1) {
+                hotelId := hotelId # i;
+            };
+            if (loopCount == 1) {
+                hotelId := hotelId # "#" #i;
+            };
+            loopCount := loopCount +1;
+        };
 
-        let iterOfPks = Iter.map<(Text, CanisterMap.CanisterIdList), Text>(
-            allPks,
-            func(e) {
-                e.0;
-            },
-        );
-        return Iter.toArray(iterOfPks);
-    };
-
-    func getCanistersIdsIfExists(pk : Text) : [Text] {
-        switch (CanisterMap.get(pkToCanisterMap, pk)) {
-            case null {[]};
-            case (?canisterIdsBuffer) {Buffer.toArray(canisterIdsBuffer)};
+        Debug.print(debug_show (hotelId));
+        switch (hotelIdReviewIdMap.get(hotelId)) {
+            case (?result) {
+                let data = List.push(bookingId, result);
+                hotelIdReviewIdMap.put(hotelId, data);
+                return;
+            };
+            case null {
+                var reviewIdList = List.nil<Text>();
+                reviewIdList := List.push(bookingId, reviewIdList);
+                hotelIdReviewIdMap.put(hotelId, reviewIdList);
+                return;
+            };
         };
     };
-    func createCanister(pk : Text, controllers : ?[Principal]) : async Text {
-        Debug.print("creating new hello service canister with pk=" # pk);
-
-        Cycles.add(300_000_000_000);
-        let newCanister  = await Review.Review({
-            partitionKey = pk;
-            scalingOptions = {
-                autoScalingCanisterId = Principal.toText(Principal.fromActor(this));
-                limit = 20_000_000;
-                limitType = #heapSize;
-            };
-            owners = controllers;
-        });
-        let newCanisterPrincipal = Principal.fromActor(newCanister);
-
-        await CA.updateCanisterSettings({
-            canisterId = newCanisterPrincipal;
-            settings = {
-                controllers = controllers;
-                compute_allocation = ?0;
-                memory_allocation = ?0;
-                freezing_threshold = ?2592000;
-            };
-        });
-
-        let newCanisterId = Principal.toText(newCanisterPrincipal);
-        // After creating the new Hello Service canister, add it to the pkToCanisterMap
-        pkToCanisterMap := CanisterMap.add(pkToCanisterMap, pk, newCanisterId);
-
-        Debug.print("new User canisterId=" # newCanisterId);
-        newCanisterId;
-    };
-    public shared ({caller = creator}) func createNewCanister(canisterName : Text) : async ?Text {
-        // assert (creator == owner);
-        Debug.print(debug_show (creator));
-        let pk = canisterName;
-        let canisterIds = getCanistersIdsIfExists(pk);
-        if (canisterIds == []) {
-            ?(await createCanister(pk, ?[owner, Principal.fromActor(this)]));
-        } else {
-            Debug.print(pk # "already exists");
-            null;
+    func validate(reviewData : Types.Review) {
+        if (Utils.validText(reviewData.bookingId, 70) == false or reviewData.rating <= 5 or Utils.validText(reviewData.title, 70) == false or Utils.validText(reviewData.createdAt, 20) == false) {
+            Debug.trap("Error! Text overflow");
         };
+    };
+    public shared ({caller}) func createReview(bookingId : Text, reviewData : Types.Review) {
+        let userIdentity = Principal.toText(caller);
+        if (Principal.isAnonymous(caller) == true) {
+            Debug.trap("NO acess");
+        };
+        validate(reviewData);
+        let date = Utils.getDate();
+        createReviewId(userIdentity, bookingId);
+        linkReviewIdwithHotelId(bookingId);
+        let review = {
+            bookingId = reviewData.bookingId;
+            rating = reviewData.rating;
+            title = reviewData.title;
+            des = reviewData.des;
+            createdAt = date;
+        };
+        reviewDataMap.put(bookingId, review);
+    };
+    public query func getReviewInfo(bookingId : Text) : async ?Types.Review {
+        reviewDataMap.get(bookingId);
+    };
+
+    public query func getReviewIdsFromHotelId(hotelId : Types.HotelId) : async [Types.ReviewId] {
+
+        // assert (Principal.isAnonymous(user) == false)
+        let data : [Text] = switch (hotelIdReviewIdMap.get(hotelId)) {
+            case (null) {[]};
+            case (?result) {List.toArray(result)};
+        };
+    };
+    public shared query ({caller = user}) func getHotelId() : async [Types.ReviewId] {
+        let userIdentity = Principal.toText(user);
+
+        switch (reviewIdMap.get(userIdentity)) {
+            case (null) {[]};
+            case (?result) {List.toArray(result)};
+        };
+    };
+
+    public shared ({caller = user}) func updateReviewInfo(bookingId : Text, reviewData : Types.Review) : async ?Types.Review {
+
+        if (Principal.isAnonymous(user) == false or Utils.checkKeyExist<Types.ReviewId, Types.Review>(bookingId, reviewDataMap) == false) {
+            Debug.trap("No Access");
+        };
+
+        let userIdentity = Principal.toText(user);
+
+        let review = {
+            bookingId = bookingId;
+            rating = reviewData.rating;
+            title = reviewData.title;
+            des = reviewData.des;
+            createdAt = Utils.getDate();
+        };
+        reviewDataMap.replace(bookingId, review);
     };
 
 };

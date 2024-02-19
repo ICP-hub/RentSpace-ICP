@@ -9,23 +9,23 @@
       "id": "rdmx6-jaaaa-aaaaa-aaadq-cai"
     },
     "User": {
-      "main": "Backend/RentSpace_backend/UserCanister.mo",
+      "main": "Backend/RentSpace_backend/UserCanister/main.mo",
       "type": "motoko"
     },
     "Review": {
-      "main": "Backend/RentSpace_backend/Review/ReviewCanister.mo",
-      "type": "motoko"
-    },
-    "ReviewMain": {
       "main": "Backend/RentSpace_backend/Review/main.mo",
       "type": "motoko"
     },
     "hotel": {
-      "main": "Backend/RentSpace_backend/HotelCanister.mo",
+      "main": "Backend/RentSpace_backend/HotelCanister/main.mo",
       "type": "motoko"
     },
     "booking": {
       "main": "Backend/RentSpace_backend/BookingCanister.mo",
+      "type": "motoko"
+    },
+    "comment": {
+      "main": "Backend/RentSpace_backend/commentCanister.mo",
       "type": "motoko"
     },
     "LoginWeb": {
