@@ -4,6 +4,7 @@ import HashMap "mo:base/HashMap";
 import List "mo:base/List";
 import Debug "mo:base/Debug";
 import Text "mo:base/Text";
+import Iter "mo:base/Iter";
 import Utils "../utils";
 
 shared ({caller = owner}) actor class Review() {
@@ -118,5 +119,12 @@ shared ({caller = owner}) actor class Review() {
         };
         reviewDataMap.replace(bookingId, review);
     };
+    public shared query ({caller}) func whoami() : async Text {
+        Principal.toText(caller);
+    };
+    public shared func scanReview(pageNo : Nat, chunkSize : Nat) : async [(Types.ReviewId, Types.Review)] {
 
+        let allData = Utils.paginate<Types.ReviewId, Types.Review>(Iter.toArray(reviewDataMap.entries()), chunkSize);
+        allData[pageNo];
+    };
 };

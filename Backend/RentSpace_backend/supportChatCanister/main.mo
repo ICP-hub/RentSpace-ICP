@@ -67,6 +67,9 @@ shared ({caller = owner}) actor class () {
         };
         List.toArray(resolvedIssue);
     };
+    public shared query ({caller}) func whoami() : async Text {
+        Principal.toText(caller);
+    };
 
     system func preupgrade() {
         entries := Iter.toArray(issueDataMap.entries());

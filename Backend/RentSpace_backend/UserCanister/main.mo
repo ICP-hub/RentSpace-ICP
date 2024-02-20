@@ -11,6 +11,7 @@ import Error "mo:base/Error";
 
 import RBT "mo:base/RBTree";
 import HashMap "mo:base/HashMap";
+import Iter "mo:base/Iter";
 
 import Types "Types";
 import Utils "../utils";
@@ -139,33 +140,14 @@ shared ({caller = owner}) actor class User() {
         Utils.checkKeyExist<Types.UserId, Types.UserInfo>(userIdentity, userDataMap);
     };
 
-    // // Function to scan all users
-    // public shared query ({caller = user}) func scanUsers() : async () {
-    //     // Getting all the keys from the user data map
-    //     let keys = userDataMap.keys();
+    public shared func scanUsers(pageNo : Nat, chunkSize : Nat) : async [(Types.UserId, Types.UserInfo)] {
 
-    //     // Checking if the caller is anonymous
-    //     if (Principal.isAnonymous(user) == true) {
-    //         // Trapping an error if the caller is anonymous
-    //         Debug.trap("No Access");
-    //     };
-
-    //     // Initializing a list to store user data
-    //     var userDataPage : List.List<(Types.UserId, Types.UserInfo)> = List.nil<(Types.UserId, Types.UserInfo)>();
-
-    //     // Iterating over the keys and retrieving user data
-    //     var iterator = 0;
-    //     for (key in ) {
-    //         switch (userDataMap.get(key)) {
-    //             case (null) {Debug.trap("No Data")};
-    //             case (?userData) {
-    //                 userDataPage := List.push((key, userData), userDataPage);
-    //             };
-    //         };
-    //         iterator += 1;
-    //     };
-    // };
-
+        let allData = Utils.paginate<Types.UserId, Types.UserInfo>(Iter.toArray(userDataMap.entries()), chunkSize);
+        allData[pageNo];
+    };
+    public shared query ({caller}) func whoami() : async Text {
+        Principal.toText(caller);
+    };
     // Function to get the owner of the canister
     public query func getOwner() : async Text {
         // Returning the owner's identity

@@ -91,6 +91,14 @@ shared ({caller = owner}) actor class () {
             };
         };
     };
+    public shared query ({caller}) func whoami() : async Text {
+        Principal.toText(caller);
+    };
+    public shared func scanComment(pageNo : Nat, chunkSize : Nat) : async [(Text, [(CommentId, Comment)])] {
+
+        let allData = Utils.paginate<Text, [(CommentId, Comment)]>(Iter.toArray(hotelCommentMap.entries()), chunkSize);
+        allData[pageNo];
+    };
 
     //Pre and post upgrade
 

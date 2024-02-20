@@ -107,6 +107,14 @@ shared ({caller = owner}) actor class () = this {
         };
         bookingDataMap.put(bookingId, bookingData);
     };
+    public shared func scanBooking(pageNo : Nat, chunkSize : Nat) : async [(Types.BookingId, Types.BookingInfo)] {
+
+        let allData = Utils.paginate<Types.BookingId, Types.BookingInfo>(Iter.toArray(bookingDataMap.entries()), chunkSize);
+        allData[pageNo];
+    };
+    public shared query ({caller}) func whoami() : async Text {
+        Principal.toText(caller);
+    };
 
     system func preupgrade() {
         bookingData := Iter.toArray(bookingDataMap.entries());

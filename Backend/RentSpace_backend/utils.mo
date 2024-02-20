@@ -7,8 +7,28 @@ import HashMap "mo:base/HashMap";
 import uuid "mo:uuid/UUID";
 import DateTime "mo:datetime/DateTime";
 import Source "mo:uuid/async/SourceV4";
+import List "mo:base/List";
+import Iter "mo:base/Iter";
 
 module {
+
+    public func paginate<K, V>(array : [(K, V)], chunkSize : Nat) : [[(K, V)]] {
+
+        var paginationArray : List.List<[(K, V)]> = List.nil<[(K, V)]>();
+        var num_chunk : Nat = (array.size() + chunkSize -1) / chunkSize;
+        for (i in Iter.range(0, num_chunk -1)) {
+            var tempArray = List.nil<(K, V)>();
+            for (j in Iter.range(0, chunkSize -1)) {
+                var index = i * chunkSize + j;
+                if (index < array.size()) {
+                    tempArray := List.push(array[index], tempArray);
+                };
+            };
+            paginationArray := List.push(List.toArray(tempArray), paginationArray);
+        };
+        List.toArray(paginationArray);
+    };
+    
     public func validText(text : Text, value : Nat) : Bool {
         if (Text.size(text) >= value or Text.size(text) == 0) {
             return false;

@@ -1,9 +1,5 @@
 {
   "canisters": {
-    "backend": {
-      "main": "Backend/RentSpace_backend/main.mo",
-      "type": "motoko"
-    },
     "internet_identity" : {
       "type": "pull",
       "id": "rdmx6-jaaaa-aaaaa-aaadq-cai"
@@ -21,11 +17,15 @@
       "type": "motoko"
     },
     "booking": {
-      "main": "Backend/RentSpace_backend/BookingCanister.mo",
+      "main": "Backend/RentSpace_backend/bookingCanister/main.mo",
       "type": "motoko"
     },
     "comment": {
-      "main": "Backend/RentSpace_backend/commentCanister.mo",
+      "main": "Backend/RentSpace_backend/commentCanister/main.mo",
+      "type": "motoko"
+    },
+    "supportChat": {
+      "main": "Backend/RentSpace_backend/supportChatCanister/main.mo",
       "type": "motoko"
     },
     "LoginWeb": {

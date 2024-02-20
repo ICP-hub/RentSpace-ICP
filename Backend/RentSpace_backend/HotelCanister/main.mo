@@ -4,12 +4,11 @@ import List "mo:base/List";
 import Principal "mo:base/Principal";
 import Debug "mo:base/Debug";
 import HashMap "mo:base/HashMap";
+import Iter "mo:base/Iter";
 
 import uuid "mo:uuid/UUID";
 import DateTime "mo:datetime/DateTime";
 import Source "mo:uuid/async/SourceV4";
-
-import User "canister:User";
 import Types "Types";
 import Utils "../utils";
 
@@ -25,8 +24,7 @@ shared ({caller = owner}) actor class () {
     };
 
     public shared ({caller}) func createHotel(hotelData : Types.HotelInfo) : async () {
-        let userStatus = await User.checkUserExist();
-        if (Principal.isAnonymous(caller) == true or Utils.checkKeyExist<Types.HotelId, Types.HotelInfo>(Principal.toText(caller), hotelDataMap) == false or userStatus == false) {
+        if (Principal.isAnonymous(caller) == true or Utils.checkKeyExist<Types.HotelId, Types.HotelInfo>(Principal.toText(caller), hotelDataMap) == false) {
             Debug.trap("No Access");
         };
         createHotelValidation(hotelData);
@@ -51,9 +49,8 @@ shared ({caller = owner}) actor class () {
         hotelDataMap.get(hotelId);
     };
     public shared ({caller}) func updateHotel(hotelId : Types.HotelId, hotelData : Types.HotelInfo) : async ?Types.HotelInfo {
-        let userStatus = await User.checkUserExist();
 
-        if (Principal.isAnonymous(caller) == true or Utils.checkKeyExist<Types.HotelId, Types.HotelInfo>(Principal.toText(caller), hotelDataMap) == false or userStatus == false) {
+        if (Principal.isAnonymous(caller) == true or Utils.checkKeyExist<Types.HotelId, Types.HotelInfo>(Principal.toText(caller), hotelDataMap) == false) {
             Debug.trap("No Access");
         };
         createHotelValidation(hotelData);
@@ -69,6 +66,14 @@ shared ({caller = owner}) actor class () {
             createdAt = getTime;
         };
         hotelDataMap.replace(hotelId, hotelInfo);
+    };
+    public shared query ({caller}) func whoami() : async Text {
+        Principal.toText(caller);
+    };
+    public shared func scanHotel(pageNo : Nat, chunkSize : Nat) : async [(Types.HotelId, Types.HotelInfo)] {
+
+        let allData = Utils.paginate<Types.HotelId, Types.HotelInfo>(Iter.toArray(hotelDataMap.entries()), chunkSize);
+        allData[pageNo];
     };
 
 };
