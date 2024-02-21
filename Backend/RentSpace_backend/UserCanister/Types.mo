@@ -1,4 +1,5 @@
 module {
+    public type AdminId = Text;
     public type UserId = Text;
     public type User = {
         firstName : Text;

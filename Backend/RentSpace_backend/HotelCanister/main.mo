@@ -16,6 +16,7 @@ shared ({caller = owner}) actor class () {
 
     var hotelDataMap = HashMap.HashMap<Types.HotelId, Types.HotelInfo>(0, Text.equal, Text.hash);
     var hotelIdMap = HashMap.HashMap<Types.HotelId, List.List<Text>>(0, Text.equal, Text.hash);
+    stable var admin : [Types.AdminId] = [];
 
     func createHotelValidation(hotelData : Types.HotelInfo) {
         if (Utils.validText(hotelData.hotelTitle, 40) == false or Utils.validText(hotelData.hotelDes, 300) == false or Utils.validText(hotelData.hotelLocation, 30) == false or Utils.validText(hotelData.hotelPrice, 15) == false) {
@@ -70,10 +71,32 @@ shared ({caller = owner}) actor class () {
     public shared query ({caller}) func whoami() : async Text {
         Principal.toText(caller);
     };
-    public shared func scanHotel(pageNo : Nat, chunkSize : Nat) : async [(Types.HotelId, Types.HotelInfo)] {
 
+    public shared ({caller}) func deleteHotel(hotelId : Types.HotelId) : async Text {
+        if (Utils.getOwnerFromArray(caller, admin) == false) {
+            Debug.trap("No Access");
+        };
+        hotelDataMap.delete(hotelId);
+        "Suceessfully Deleted the hotel"
+    };
+    public shared query({caller}) func scanHotel(pageNo : Nat, chunkSize : Nat) : async [(Types.HotelId, Types.HotelInfo)] {
+        if (Utils.getOwnerFromArray(caller, admin) == false) {
+            Debug.trap("No Access");
+        };
         let allData = Utils.paginate<Types.HotelId, Types.HotelInfo>(Iter.toArray(hotelDataMap.entries()), chunkSize);
         allData[pageNo];
     };
-
+    public shared ({caller}) func addOwner(ownerIds : Text) : async Text {
+        if (caller == owner) {
+            let list = List.push(ownerIds, List.fromArray(admin));
+            admin := List.toArray(list);
+            "Successfully inserted data";
+        } else if (Utils.getOwnerFromArray(caller, admin) == true) {
+            let list = List.push(ownerIds, List.fromArray(admin));
+            admin := List.toArray(list);
+            "Successfully inserted data";
+        } else {
+            Debug.trap("No Access to Add Owner");
+        };
+    };
 };

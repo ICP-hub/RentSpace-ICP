@@ -1,4 +1,5 @@
 module {
+    public type AdminId  = Text;
     public type HotelId = Text;
     public type BookingId = Text;
     public type UserId = Text;

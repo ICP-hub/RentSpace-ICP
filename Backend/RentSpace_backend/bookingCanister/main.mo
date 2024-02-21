@@ -20,6 +20,8 @@ shared ({caller = owner}) actor class () = this {
     private var userXBookingIdMap = HashMap.HashMap<Types.UserId, List.List<Types.BookingId>>(0, Text.equal, Text.hash);
     private var hotelXBookingIdMap = HashMap.HashMap<Types.HotelId, List.List<Types.BookingId>>(0, Text.equal, Text.hash);
 
+    stable var admin : [Types.AdminId] = [];
+
     func validate(bookingData : Types.BookingInfo) {
         if (Utils.validText(bookingData.userId, 70) == false or Utils.validText(bookingData.date, 20) == false or Utils.validText(bookingData.bookingDuration, 20) == false or Utils.validText(bookingData.paymentId, 20) == false) {
             Debug.trap("Error! Text overflow");
@@ -107,8 +109,10 @@ shared ({caller = owner}) actor class () = this {
         };
         bookingDataMap.put(bookingId, bookingData);
     };
-    public shared func scanBooking(pageNo : Nat, chunkSize : Nat) : async [(Types.BookingId, Types.BookingInfo)] {
-
+    public shared query ({caller}) func scanBooking(pageNo : Nat, chunkSize : Nat) : async [(Types.BookingId, Types.BookingInfo)] {
+        if (Utils.getOwnerFromArray(caller, admin) == false) {
+            Debug.trap("Not Authorased");
+        };
         let allData = Utils.paginate<Types.BookingId, Types.BookingInfo>(Iter.toArray(bookingDataMap.entries()), chunkSize);
         allData[pageNo];
     };
@@ -116,6 +120,19 @@ shared ({caller = owner}) actor class () = this {
         Principal.toText(caller);
     };
 
+    public shared ({caller}) func addOwner(ownerIds : Types.AdminId) : async Text {
+        if (caller == owner) {
+            let list = List.push(ownerIds, List.fromArray(admin));
+            admin := List.toArray(list);
+            "Successfully inserted data";
+        } else if (Utils.getOwnerFromArray(caller, admin) == true) {
+            let list = List.push(ownerIds, List.fromArray(admin));
+            admin := List.toArray(list);
+            "Successfully inserted data";
+        } else {
+            Debug.trap("No Access to Add Owner");
+        };
+    };
     system func preupgrade() {
         bookingData := Iter.toArray(bookingDataMap.entries());
         userXBookingId := Iter.toArray(userXBookingIdMap.entries());

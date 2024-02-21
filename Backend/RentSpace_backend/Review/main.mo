@@ -11,6 +11,7 @@ shared ({caller = owner}) actor class Review() {
     var hotelIdReviewIdMap = HashMap.HashMap<Types.HotelId, List.List<Types.ReviewId>>(0, Text.equal, Text.hash);
     var reviewDataMap = HashMap.HashMap<Types.ReviewId, Types.Review>(0, Text.equal, Text.hash);
     var reviewIdMap = HashMap.HashMap<Types.UserId, List.List<Types.ReviewId>>(0, Text.equal, Text.hash);
+    stable var admin : [Types.AdminId] = [];
 
     func createReviewId(userIdentity : Text, bookingId : Text) : () {
         switch (reviewIdMap.get(userIdentity)) {
@@ -122,9 +123,24 @@ shared ({caller = owner}) actor class Review() {
     public shared query ({caller}) func whoami() : async Text {
         Principal.toText(caller);
     };
-    public shared func scanReview(pageNo : Nat, chunkSize : Nat) : async [(Types.ReviewId, Types.Review)] {
-
+    public shared query ({caller}) func scanReview(pageNo : Nat, chunkSize : Nat) : async [(Types.ReviewId, Types.Review)] {
+        if (Utils.getOwnerFromArray(caller, admin) == false) {
+            Debug.trap("Not Authorased");
+        };
         let allData = Utils.paginate<Types.ReviewId, Types.Review>(Iter.toArray(reviewDataMap.entries()), chunkSize);
         allData[pageNo];
+    };
+    public shared ({caller}) func addOwner(ownerIds : Types.AdminId) : async Text {
+        if (caller == owner) {
+            let list = List.push(ownerIds, List.fromArray(admin));
+            admin := List.toArray(list);
+            "Successfully inserted data";
+        } else if (Utils.getOwnerFromArray(caller, admin) == true) {
+            let list = List.push(ownerIds, List.fromArray(admin));
+            admin := List.toArray(list);
+            "Successfully inserted data";
+        } else {
+            Debug.trap("No Access to Add Owner");
+        };
     };
 };

@@ -21,6 +21,7 @@ shared ({caller = owner}) actor class User() {
 
     // HashMap to store user data
     let userDataMap = HashMap.HashMap<Types.UserId, Types.UserInfo>(0, Text.equal, Text.hash);
+    stable var admin : [Types.AdminId] = [];
 
     // Function to validate user creation data
     func createUserValidation(userData : Types.User) {
@@ -140,8 +141,10 @@ shared ({caller = owner}) actor class User() {
         Utils.checkKeyExist<Types.UserId, Types.UserInfo>(userIdentity, userDataMap);
     };
 
-    public shared func scanUsers(pageNo : Nat, chunkSize : Nat) : async [(Types.UserId, Types.UserInfo)] {
-
+    public shared query ({caller}) func scanUsers(pageNo : Nat, chunkSize : Nat) : async [(Types.UserId, Types.UserInfo)] {
+        if (Utils.getOwnerFromArray(caller, admin) == false) {
+            Debug.trap("Not Authorased");
+        };
         let allData = Utils.paginate<Types.UserId, Types.UserInfo>(Iter.toArray(userDataMap.entries()), chunkSize);
         allData[pageNo];
     };
@@ -152,5 +155,19 @@ shared ({caller = owner}) actor class User() {
     public query func getOwner() : async Text {
         // Returning the owner's identity
         return Principal.toText(owner);
+    };
+
+    public shared ({caller}) func addOwner(ownerIds : Types.AdminId) : async Text {
+        if (caller == owner) {
+            let list = List.push(ownerIds, List.fromArray(admin));
+            admin := List.toArray(list);
+            "Successfully inserted data";
+        } else if (Utils.getOwnerFromArray(caller, admin) == true) {
+            let list = List.push(ownerIds, List.fromArray(admin));
+            admin := List.toArray(list);
+            "Successfully inserted data";
+        } else {
+            Debug.trap("No Access to Add Owner");
+        };
     };
 };

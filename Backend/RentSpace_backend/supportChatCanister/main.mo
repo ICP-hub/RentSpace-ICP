@@ -150,7 +150,7 @@ shared ({caller = owner}) actor class () {
     };
 
     public shared query ({caller = user}) func getUserTicketsByAdmin(userId : Text) : async [(TicketId, Ticket)] {
-        if (getOwnerFromArray(user) == false) {
+        if (Utils.getOwnerFromArray(user, admin) == false) {
             Debug.trap("Not Authorased");
         };
         switch (ticketMap.get(userId)) {
@@ -161,7 +161,7 @@ shared ({caller = owner}) actor class () {
     };
 
     public shared ({caller = user}) func resolveTicketRaised(ticketId : Text, userId : Text) : async Result {
-        if (getOwnerFromArray(user) == false) {
+        if (Utils.getOwnerFromArray(user, admin) == false) {
             Debug.trap("Not Authorased");
         };
         try {
@@ -238,21 +238,13 @@ shared ({caller = owner}) actor class () {
             #err(code, message);
         };
     };
-    func getOwnerFromArray(caller : Principal) : Bool {
-        switch (Array.find<Text>(admin, func(x) : Bool {x == Principal.toText(caller)})) {
-            case (null) {false};
-            case (?r) {
-                true;
-            };
-        };
-    };
 
     public shared ({caller}) func addOwner(ownerIds : AdminId) : async Text {
         if (caller == owner) {
             let list = List.push(ownerIds, List.fromArray(admin));
             admin := List.toArray(list);
             "Successfully inserted data";
-        } else if (getOwnerFromArray(caller) == true) {
+        } else if (Utils.getOwnerFromArray(caller, admin) == true) {
             let list = List.push(ownerIds, List.fromArray(admin));
             admin := List.toArray(list);
             "Successfully inserted data";

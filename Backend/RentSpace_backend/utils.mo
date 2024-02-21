@@ -9,8 +9,18 @@ import DateTime "mo:datetime/DateTime";
 import Source "mo:uuid/async/SourceV4";
 import List "mo:base/List";
 import Iter "mo:base/Iter";
+import Array "mo:base/Array";
+import Principal "mo:base/Principal";
 
 module {
+    public func getOwnerFromArray<K>(caller : Principal, admin : [Text]) : Bool {
+        switch (Array.find<Text>(admin, func(x) : Bool {x == Principal.toText(caller)})) {
+            case (null) {false};
+            case (?r) {
+                true;
+            };
+        };
+    };
 
     public func paginate<K, V>(array : [(K, V)], chunkSize : Nat) : [[(K, V)]] {
 
@@ -28,7 +38,7 @@ module {
         };
         List.toArray(paginationArray);
     };
-    
+
     public func validText(text : Text, value : Nat) : Bool {
         if (Text.size(text) >= value or Text.size(text) == 0) {
             return false;
