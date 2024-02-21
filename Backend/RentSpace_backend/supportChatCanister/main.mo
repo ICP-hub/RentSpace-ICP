@@ -150,8 +150,9 @@ shared ({caller = owner}) actor class () {
     };
 
     public shared query ({caller = user}) func getUserTicketsByAdmin(userId : Text) : async [(TicketId, Ticket)] {
-        assert (Principal.toText(user) == admin);
-
+        if (getOwnerFromArray(user) == false) {
+            Debug.trap("Not Authorased");
+        };
         switch (ticketMap.get(userId)) {
             case (null) {Debug.trap("no Issue found raised by this user")};
             case (?value) {value};
@@ -160,7 +161,9 @@ shared ({caller = owner}) actor class () {
     };
 
     public shared ({caller = user}) func resolveTicketRaised(ticketId : Text, userId : Text) : async Result {
-        assert (Principal.toText(user) == admin);
+        if (getOwnerFromArray(user) == false) {
+            Debug.trap("Not Authorased");
+        };
         try {
 
             var resultMessage = "";
