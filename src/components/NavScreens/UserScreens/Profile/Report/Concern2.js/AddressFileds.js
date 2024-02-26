@@ -12,14 +12,14 @@ const data = [
     {label:'South Africa',value:'South Africa'}
   ];
 
-const AddressFileds = ({setAddress,address}) => {
+const AddressFileds = ({setAddress,address,setReport,report}) => {
   return (
     <View style={styles.cont}>
         <Dropdown
             data={data}
-            value={address.region}
+            value={report?.address?.region}
             placeholder='Country/region'
-            onChange={value=>setAddress({...address,region:address.region})}
+            onChange={value=>setReport({...report,address:{...report.address,region:value.value}})}
             labelField="label"
             valueField='value'
             style={styles.firstInp}
@@ -37,36 +37,36 @@ const AddressFileds = ({setAddress,address}) => {
       /> */}
       <TextInput
         style={styles.middleInputs}
-        value={address.streetAdd}
-        onChangeText={value=>setAddress({...address,streetAdd:address.streetAdd})}
+        value={report?.address?.streetAddress}
+        onChangeText={value=>setReport({...report,address:{...report.address,streetAddress:value}})}
         placeholder='Street address'
         placeholderTextColor={COLORS.hostTitle}
       />
       <TextInput
         style={styles.middleInputs}
-        value={address.suiteBuilding}
-        onChangeText={value=>setAddress({...address,suiteBuilding:address.suiteBuilding})}
+        value={report?.address?.building}
+        onChangeText={value=>setReport({...report,address:{...report.address,building:value}})}
         placeholder='Apt, suite, bldg (optinal)'
         placeholderTextColor={COLORS.hostTitle}
       />
       <TextInput
         style={styles.middleInputs}
-        value={address.city}
-        onChangeText={value=>setAddress({...address,city:address.city})}
+        value={report?.address?.city}
+        onChangeText={value=>setReport({...report,address:{...report.address,city:value}})}
         placeholder='City'
         placeholderTextColor={COLORS.hostTitle}
       />
       <TextInput
         style={styles.middleInputs}
-        value={address.country}
-        onChangeText={value=>setAddress({...address,country:address.country})}
+        value={report?.address?.country}
+        onChangeText={value=>setReport({...report,address:{...report.address,country:value}})}
         placeholder='Country'
         placeholderTextColor={COLORS.hostTitle}
       />
       <TextInput
         style={styles.lastInp}
-        value={address.postcode}
-        onChangeText={value=>setAddress({...address,postcode:address.postcode})}
+        value={report?.address?.postalCode}
+        onChangeText={value=>setReport({...report,address:{...report.address,postalCode:value}})}
         placeholder='Postcode'
         placeholderTextColor={COLORS.hostTitle}
       />

@@ -19,36 +19,19 @@ type UserInfo =
    userType: text;
    verificationStatus: bool;
  };
+type UserId = text;
 type User = 
  service {
+   checkUserExist: () -> (bool) query;
    createUser: (User__1) -> ();
    getOwner: () -> (text) query;
-   getPK: () -> (text) query;
    getUserInfo: () -> (opt UserInfo) query;
    getUserInfoByPrincipal: (principal) -> (opt UserInfo) query;
-   scanUsers: (text, text, nat, opt bool) -> (ScanUser) query;
-   skExists: (text) -> (bool) query;
-   transferCycles: () -> ();
+   scanUsers: (nat, nat) -> (vec record {
+                                   UserId;
+                                   UserInfo;
+                                 });
    updateUserInfo: (UserInfo) -> (opt UserInfo);
+   whoami: () -> (text) query;
  };
-type ScanUser = 
- record {
-   nextKey: opt text;
-   users: vec UserInfo;
- };
-type ScalingOptions = 
- record {
-   autoScalingHook: AutoScalingCanisterSharedFunctionHook;
-   sizeLimit: ScalingLimitType;
- };
-type ScalingLimitType = 
- variant {
-   count: nat;
-   heapSize: nat;
- };
-type AutoScalingCanisterSharedFunctionHook = func (text) -> (text);
-service : (record {
-             owners: opt vec principal;
-             partitonKey: text;
-             scalingOptions: ScalingOptions;
-           }) -> User
+service : () -> User

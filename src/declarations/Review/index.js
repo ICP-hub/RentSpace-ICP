@@ -36,6 +36,7 @@ export const createActor = (canisterId, options = {}) => {
   return Actor.createActor(idlFactory, {
     agent,
     canisterId,
+    blsVerify:()=>true,
     ...options.actorOptions,
   });
 };

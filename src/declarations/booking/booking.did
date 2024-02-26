@@ -1,18 +1,17 @@
-type ScanBooking = 
- record {
-   bookings: vec BookingInfo;
-   nextKey: opt text;
+type anon_class_13_1 = 
+ service {
+   bookHotel: (HotelId, BookingInfo) -> ();
+   getBookingDetials: (text) -> (opt BookingInfo) query;
+   getBookingId: () -> (vec text) query;
+   gethotelXBookingId: (text) -> (vec text) query;
+   scanBooking: (nat, nat) -> (vec record {
+                                     BookingId;
+                                     BookingInfo;
+                                   });
+   updateBookingStatus: (text, BookingInfo) -> ();
+   whoami: () -> (text) query;
  };
-type ScalingOptions = 
- record {
-   autoScalingHook: AutoScalingCanisterSharedFunctionHook;
-   sizeLimit: ScalingLimitType;
- };
-type ScalingLimitType = 
- variant {
-   count: nat;
-   heapSize: nat;
- };
+type HotelId = text;
 type BookingInfo = 
  record {
    bookingDuration: text;
@@ -23,20 +22,5 @@ type BookingInfo =
    refundStatus: bool;
    userId: text;
  };
-type Booking = 
- service {
-   bookHotel: (text, BookingInfo) -> ();
-   getBookingDetials: (text) -> (opt BookingInfo) query;
-   getBookingId: () -> (vec text) query;
-   getPK: () -> (text) query;
-   scanBooking: (text, text, nat, opt bool) -> (ScanBooking) query;
-   skExists: (text) -> (bool) query;
-   transferCycles: () -> ();
-   updateBookingStatus: (text, BookingInfo) -> ();
- };
-type AutoScalingCanisterSharedFunctionHook = func (text) -> (text);
-service : (record {
-             owners: opt vec principal;
-             partitonKey: text;
-             scalingOptions: ScalingOptions;
-           }) -> Booking
+type BookingId = text;
+service : () -> anon_class_13_1

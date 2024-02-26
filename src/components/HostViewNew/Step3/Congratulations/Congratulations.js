@@ -17,8 +17,8 @@ const Congratulations = ({setHostModal,pos}) => {
   const {actors}=useSelector(state=>state.actorReducer)
   const {authData}=useSelector(state=>state.authDataReducer)
   const dispatch=useDispatch()
-  // const baseUrl="https://rentspace.kaifoundry.com"
-  const baseUrl="http://localhost:5000"
+  const baseUrl="https://rentspace.kaifoundry.com"
+  // const baseUrl="http://localhost:5000"
   const {files}=useSelector(state=>state.filesReducer)
   
   const ApiLogin=async()=>{
@@ -98,13 +98,13 @@ const Congratulations = ({setHostModal,pos}) => {
     setLoading(true)
   await actors.hotelActor?.createHotel({...listing,hotelLocation:"Ludhiana"}).then(async(res)=>{
     // setLoading(false)
-    await actors.hotelActor?.getHotelId().then(async(res)=>{
+    // await actors.hotelActor?.getHotelId().then(async(res)=>{
       console.log(res)
-      dispatch(setHotels(res))
+      // dispatch(setHotels(res))
       
       ApiHotelFilters()
       ApiHotelCreate()
-    })
+    // })
 
   }).catch((err)=>{
     setLoading(false)

@@ -58,6 +58,7 @@ const BookHotelPage = ({navigation,queryHotels}) => {
   }
   async function getHotelDetails(){
     setHotelsList([])
+    const newArr=[]
     for(let i=0;i<hotels?.length;i++){
       await actors.hotelActor?.getHotel(hotels[i]).then((res)=>{
         setHotelsList(hotelsList=>[...hotelsList,{...res[0],id:hotels[i]}])
@@ -71,13 +72,16 @@ const BookHotelPage = ({navigation,queryHotels}) => {
   }
   async function getQueryHotelDetails(){
     setHotelsList([])
+    const newArr=[]
     for(let i=0;i<queryHotels?.length;i++){
       // console.log(queryHotels[i].id)
       if(!(queryHotels[i].length<40)){
         console.log("el",queryHotels[i])
         await actors.hotelActor?.getHotel(queryHotels[i]).then((res)=>{
           console.log("resp : ",res)
-          setHotelsList(hotelsList=>[...hotelsList,{...res[0],id:queryHotels[i]}])
+          newArr.push({...res[0],id:queryHotels[i]})
+          // setHotelsList(hotelsList=>[...hotelsList,{...res[0],id:queryHotels[i]}])
+          setHotelsList(newArr)
           console.log({...res[0],id:queryHotels[i]})
         }).catch((err)=>console.log(err))
       

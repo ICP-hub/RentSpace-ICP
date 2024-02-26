@@ -22,6 +22,7 @@ import { hotel } from '../../../../../declarations/hotel'
 import UserDetailDemo from '../Modals/UserDetailDemo'
 import Report from '../Report/Report'
 import Feedback from '../Feedback/Feedback'
+import MainChat from '../SupportChat/MainChat'
 
 
 
@@ -34,6 +35,7 @@ const MainProfile = ({navigation}) => {
   const [showDetails,setShowDetails]=useState(false)
   const [reportPage,setReportPage]=useState(false)
   const [feedbackPage,setFeedbackPage]=useState(false)
+  const [supportChatPage,setSupportChatPage]=useState(false)
 
   const logout=()=>{
     dispatch(setActor({
@@ -165,6 +167,11 @@ const makeHost=async()=>{
       text:"Report",
       icon:<Icon6 name='warning' color={COLORS.black} size={20}/>,
       onClick:()=>setReportPage(true)
+    },
+    {
+      text:"Support Chat",
+      icon:<Icon6 name="chatbubble-ellipses-outline" color={COLORS.black} size={20}/>,
+      onClick:()=>setSupportChatPage(true)
     }
   ]
   const legalList=[
@@ -220,6 +227,9 @@ const makeHost=async()=>{
         </Modal>
         <Modal visible={feedbackPage} animationType='slide'>
           <Feedback setFeedbackPage={setFeedbackPage}/>
+        </Modal>
+        <Modal visible={supportChatPage} animationType='slide'>
+          <MainChat setSupportChatPage={setSupportChatPage}/>
         </Modal>
     </View>
   )

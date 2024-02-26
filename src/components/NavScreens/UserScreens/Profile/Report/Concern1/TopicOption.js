@@ -2,11 +2,12 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { COLORS, SIZES } from '../../../../../../constants/themes'
 
-const TopicOption = ({item,setTopic,topic}) => {
+const TopicOption = ({item,setTopic,topic,setReport,report}) => {
   return (
     <View style={styles.option}>
       <TouchableOpacity style={styles.radio} onPress={()=>{
         setTopic(item?.tag)
+        setReport({...report,reason:item?.text})
       }}>
             <View style={(topic==item?.tag)?styles.redioSelect:{}}/>
       </TouchableOpacity>

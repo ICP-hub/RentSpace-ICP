@@ -8,6 +8,19 @@ import Concern2 from './Concern2.js/Concern2'
 
 const Report = ({setReportPage}) => {
   const [concernForm,setConcernForm]=useState(0)
+  const [report,setReport]=useState({
+    reason:"Noise and party",
+    hostMessage:"",
+    adminMessage:"",
+    address:{
+      region:"",
+      streetAddress:"",
+      building:"",
+      city:"",
+      country:"",
+      postalCode:""
+    }
+  })
   return (
     <ScrollView contentContainerStyle={styles.page}>
       <View style={styles.topNav}>
@@ -58,10 +71,10 @@ const Report = ({setReportPage}) => {
         </Text>
       </TouchableOpacity>
       <Modal animationType='slide' visible={concernForm==1}>
-        <Concern1 setConcernForm={setConcernForm}/>
+        <Concern1 setConcernForm={setConcernForm} setReport={setReport} report={report}/>
       </Modal>
       <Modal animationType='slide' visible={concernForm==2}>
-        <Concern2 setConcernForm={setConcernForm} setReportPage={setReportPage}/>
+        <Concern2 setConcernForm={setConcernForm} setReportPage={setReportPage} setReport={setReport} report={report}/>
       </Modal>
     </ScrollView>
   )

@@ -4,15 +4,12 @@ import { COLORS,SIZES } from '../../../../../../constants/themes'
 import Icon from 'react-native-vector-icons/Entypo'
 import BottomBtn from '../BottomBtn'
 import AddressFileds from './AddressFileds'
+import { useSelector } from 'react-redux'
 
-const Concern2 = ({setConcernForm,setReportPage}) => {
+const Concern2 = ({setConcernForm,setReportPage,setReport,report}) => {
     const [userDetails,setUserDetails]=useState({
         name:"",
         email:""
-    })
-    const [messages,setMessages]=useState({
-        messageForHost:"",
-        messageForAdmin:""
     })
     const [address,setAddress]=useState({
         region:"",
@@ -22,15 +19,32 @@ const Concern2 = ({setConcernForm,setReportPage}) => {
         country:"",
         postcode:""
     })
+    const {actors}=useSelector(state=>state.actorReducer)
     const [loading,setLoading]=useState(false)
     const submitReport=async()=>{
         setLoading(true)
-        setTimeout(()=>{
-            setLoading(false)
-            alert('Your issue ticket have been raised!')
-            setConcernForm(0)
-            setReportPage(false)
-        },3000)
+        console.log(actors?.supportActor)
+        await actors?.supportActor?.raiseNewTicket(
+          report?.reason,
+          report?.hostMessage,
+          report?.adminMessage,
+          report?.address
+        ).then((res)=>{
+          console.log("res raising ticket : ",res)
+          setLoading(false)
+          alert('Your issue ticket have been raised!')
+          setConcernForm(0)
+          setReportPage(false)
+        }).catch((err)=>{
+          console.log("err raising ticket : ",err)
+        })
+        // setTimeout(()=>{
+        //     setLoading(false)
+        //     // alert('Your issue ticket have been raised!')
+        //     // setConcernForm(0)
+        //     // setReportPage(false)
+        //     console.log(report)
+        // },1000)
     }
   return (
     <View style={styles.modal}>
@@ -48,7 +62,7 @@ const Concern2 = ({setConcernForm,setReportPage}) => {
         <Text style={styles.sectionHeading}>
             What’s the address?
         </Text>
-        <AddressFileds setAddress={setAddress} address={address}/>
+        <AddressFileds setAddress={setAddress} address={address} setReport={setReport} report={report}/>
         <Text style={styles.sectionHeading}>
             Let the Host of the listing know about the issue
         </Text>
@@ -57,8 +71,8 @@ const Concern2 = ({setConcernForm,setReportPage}) => {
         </Text>
         <TextInput 
             style={styles.bigInput}
-            value={messages.messageForHost}
-            onChangeText={value=>setMessages({...messages,messageForHost:value})}
+            value={report.hostMessage}
+            onChangeText={value=>setReport({...report,hostMessage:value})}
             placeholder='How can Host improve?'
             placeholderTextColor={COLORS.textLightGrey}
             multiline
@@ -73,8 +87,8 @@ const Concern2 = ({setConcernForm,setReportPage}) => {
         </Text>
         <TextInput 
             style={styles.bigInput}
-            value={messages.messageForAdmin}
-            onChangeText={value=>setMessages({...messages,messageForAdmin:value})}
+            value={report.adminMessage}
+            onChangeText={value=>setReport({...report,adminMessage:value})}
             placeholder='How can RentSpace help?'
             placeholderTextColor={COLORS.textLightGrey}
             multiline

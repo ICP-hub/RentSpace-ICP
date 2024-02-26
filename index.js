@@ -37,7 +37,8 @@ import { createActor as createUserActor } from './src/declarations/User';
 import { createActor as createHotelActor } from './src/declarations/hotel';
 import { createActor as createBookingActor } from './src/declarations/booking';
 import { createActor as createReviewActor } from './src/declarations/Review';
-import { createActor as createCommentActor } from './src/declarations/Comment';
+import {createActor as createCommentActor} from './src/declarations/comment';
+import { createActor as createSupportActor } from './src/declarations/supportChat';
 import store from './src/redux/store';
 import { setActor } from './src/redux/actor/actions';
 import { setPrinciple } from './src/redux/principle/actions';
@@ -380,9 +381,9 @@ const RootComponent: React.FC = () => {
       store.dispatch(
         setAuthData(signObj)
       )
-      const baseUrl="http://localhost:5000"
+      // const baseUrl="http://localhost:5000"
       alert('implementing chat register')
-      // const baseUrl="https://rentspace.kaifoundry.com"
+      const baseUrl="https://rentspace.kaifoundry.com"
       await axios.post(`${baseUrl}/api/v1/register/user`,{},{
         headers:{
           "x-private":signObj.privateKey,
@@ -401,9 +402,6 @@ const RootComponent: React.FC = () => {
       })
     })
     alert('craeting actor')
-    actor = createActor(ids.backendCan, {
-      agent,
-    });
     let actorUser=createUserActor(ids.userCan,{agent})
     let actorHotel=createHotelActor(ids.hotelCan,{agent})
     let actorBooking=createBookingActor(ids.bookingCan,{agent})
@@ -414,20 +412,21 @@ const RootComponent: React.FC = () => {
     })
     let actorReview=createReviewActor(ids.reviewCan,{agent})
     let actorComment=createCommentActor(ids.commentCan,{agent})
+    let actorSupport=createSupportActor(ids.supportCan,{agent})
     // console.log("actor review : ",actorReview)
     store.dispatch(setActor({
-      backendActor:actor,
       userActor:actorUser,
       hotelActor:actorHotel,
       bookingActor:actorBooking,
       tokenActor:actorToken,
       reviewActor:actorReview,
-      commentActor:actorComment
+      commentActor:actorComment,
+      supportActor:actorSupport
     }))
     
     // console.log("actor : ",actor)
     alert('calling whoami')
-    let whoami = await actor.whoami();
+    let whoami = await actorUser.whoami();
     store.dispatch(setPrinciple(whoami))
     console.log("user",whoami)
     console.log("ids : ",ids)

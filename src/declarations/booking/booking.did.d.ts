@@ -1,23 +1,7 @@
 import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 
-export type AutoScalingCanisterSharedFunctionHook = ActorMethod<
-  [string],
-  string
->;
-export interface Booking {
-  'bookHotel' : ActorMethod<[string, BookingInfo], undefined>,
-  'getBookingDetials' : ActorMethod<[string], [] | [BookingInfo]>,
-  'getBookingId' : ActorMethod<[], Array<string>>,
-  'getPK' : ActorMethod<[], string>,
-  'scanBooking' : ActorMethod<
-    [string, string, bigint, [] | [boolean]],
-    ScanBooking
-  >,
-  'skExists' : ActorMethod<[string], boolean>,
-  'transferCycles' : ActorMethod<[], undefined>,
-  'updateBookingStatus' : ActorMethod<[string, BookingInfo], undefined>,
-}
+export type BookingId = string;
 export interface BookingInfo {
   'paymentStatus' : boolean,
   'refundStatus' : boolean,
@@ -27,14 +11,17 @@ export interface BookingInfo {
   'paymentId' : string,
   'cancelStatus' : boolean,
 }
-export type ScalingLimitType = { 'heapSize' : bigint } |
-  { 'count' : bigint };
-export interface ScalingOptions {
-  'autoScalingHook' : AutoScalingCanisterSharedFunctionHook,
-  'sizeLimit' : ScalingLimitType,
+export type HotelId = string;
+export interface anon_class_13_1 {
+  'bookHotel' : ActorMethod<[HotelId, BookingInfo], undefined>,
+  'getBookingDetials' : ActorMethod<[string], [] | [BookingInfo]>,
+  'getBookingId' : ActorMethod<[], Array<string>>,
+  'gethotelXBookingId' : ActorMethod<[string], Array<string>>,
+  'scanBooking' : ActorMethod<
+    [bigint, bigint],
+    Array<[BookingId, BookingInfo]>
+  >,
+  'updateBookingStatus' : ActorMethod<[string, BookingInfo], undefined>,
+  'whoami' : ActorMethod<[], string>,
 }
-export interface ScanBooking {
-  'bookings' : Array<BookingInfo>,
-  'nextKey' : [] | [string],
-}
-export interface _SERVICE extends Booking {}
+export interface _SERVICE extends anon_class_13_1 {}

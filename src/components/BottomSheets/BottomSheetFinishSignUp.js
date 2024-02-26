@@ -39,8 +39,9 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
       userEmail:email,
     }
     // await actors.userActor?.createUser(fname,lname,DOB,email,"user").then(async(res)=>{
-    let whoami=await actors?.backendActor?.whoami().catch((err)=>{console.log(err)})
+    let whoami=await actors?.userActor?.whoami().catch((err)=>{console.log(err)})
     console.log("principal signup page : ",whoami)
+    console.log(actors?.userActor)
     await actors.userActor?.createUser(userObj).then(async(res)=>{
       console.log(res)
       setLoading(false)

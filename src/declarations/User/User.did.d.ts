@@ -1,31 +1,17 @@
 import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 
-export type AutoScalingCanisterSharedFunctionHook = ActorMethod<
-  [string],
-  string
->;
-export type ScalingLimitType = { 'heapSize' : bigint } |
-  { 'count' : bigint };
-export interface ScalingOptions {
-  'autoScalingHook' : AutoScalingCanisterSharedFunctionHook,
-  'sizeLimit' : ScalingLimitType,
-}
-export interface ScanUser {
-  'nextKey' : [] | [string],
-  'users' : Array<UserInfo>,
-}
 export interface User {
+  'checkUserExist' : ActorMethod<[], boolean>,
   'createUser' : ActorMethod<[User__1], undefined>,
   'getOwner' : ActorMethod<[], string>,
-  'getPK' : ActorMethod<[], string>,
   'getUserInfo' : ActorMethod<[], [] | [UserInfo]>,
   'getUserInfoByPrincipal' : ActorMethod<[Principal], [] | [UserInfo]>,
-  'scanUsers' : ActorMethod<[string, string, bigint, [] | [boolean]], ScanUser>,
-  'skExists' : ActorMethod<[string], boolean>,
-  'transferCycles' : ActorMethod<[], undefined>,
+  'scanUsers' : ActorMethod<[bigint, bigint], Array<[UserId, UserInfo]>>,
   'updateUserInfo' : ActorMethod<[UserInfo], [] | [UserInfo]>,
+  'whoami' : ActorMethod<[], string>,
 }
+export type UserId = string;
 export interface UserInfo {
   'dob' : string,
   'userType' : string,

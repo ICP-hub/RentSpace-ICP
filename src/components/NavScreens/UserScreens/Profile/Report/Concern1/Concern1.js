@@ -34,7 +34,7 @@ const linkOptions=[
         text:"No, I only know the address"
     }
 ]
-const Concern1 = ({setConcernForm}) => {
+const Concern1 = ({setConcernForm,setReport,report}) => {
     const [topic,setTopic]=useState(complaintTopics[0].tag)
     const [linkOp,setLinkOp]=useState(false)
   return (
@@ -55,7 +55,7 @@ const Concern1 = ({setConcernForm}) => {
         </Text>
         {
             complaintTopics.map((item,index)=>(
-                <TopicOption item={item} key={index} setTopic={setTopic} topic={topic}/>
+                <TopicOption item={item} key={index} setTopic={setTopic} topic={topic} setReport={setReport} report={report}/>
             ))
         }
 
@@ -64,7 +64,7 @@ const Concern1 = ({setConcernForm}) => {
         </Text>
         {
             linkOptions.map((item,index)=>(
-                <LinkOption item={item} setLinkOp={setLinkOp} linkOp={linkOp}/>
+                <LinkOption key={index} item={item} setLinkOp={setLinkOp} linkOp={linkOp}/>
             ))
         }
       </ScrollView>

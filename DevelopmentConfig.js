@@ -6,11 +6,11 @@ export const host=(production)?"https://icp-api.io":"http://127.0.0.1:4943"
 export const ids={
     userCan:(production)?
         // "tassb-3qaaa-aaaan-qloxq-cai":
-        "5fiim-aiaaa-aaaan-qlqsq-cai":
+        "wenzb-uyaaa-aaaan-qlwsa-cai":
         "by6od-j4aaa-aaaaa-qaadq-cai",
         
     hotelCan:(production)?
-        "r5p4j-iyaaa-aaaan-qloya-cai":
+        "wkpuj-piaaa-aaaan-qlwta-cai":
         // "5mldq-waaaa-aaaan-qlqta-cai":
         "avqkn-guaaa-aaaaa-qaaea-cai",
         
@@ -19,17 +19,42 @@ export const ids={
         "5cjoy-nqaaa-aaaan-qlqsa-cai":
         "be2us-64aaa-aaaaa-qaabq-cai",
     reviewCan:(production)?
-        "rtnrb-tiaaa-aaaan-qloza-cai":
+        "wdm7v-zaaaa-aaaan-qlwsq-cai":
         "a4tbr-q4aaa-aaaaa-qaafq-cai",
     bookingCan:(production)?
-        "r2o25-faaaa-aaaan-qloyq-cai":
+        "xhbqh-aaaaa-aaaan-qlwuq-cai":
         "asrmz-lmaaa-aaaaa-qaaeq-cai",
     tokenCan:(production)?
         "ryjl3-tyaaa-aaaaa-aaaba-cai"
         :"bw4dl-smaaa-aaaaa-qaacq-cai",
     commentCan:(production)?
-        "d4pxt-taaaa-aaaan-qls5a-cai"
+        "wnos5-cqaaa-aaaan-qlwtq-cai"
         :
         "",
+    supportCan:(production)?
+        "xaawt-nyaaa-aaaan-qlwua-cai"
+        :
+        ""
 }
 
+// {
+//     "Review": {
+//       "ic": "wdm7v-zaaaa-aaaan-qlwsq-cai"
+//     },
+//     "User": {
+//       "ic": "wenzb-uyaaa-aaaan-qlwsa-cai"
+//     },
+//     "backend": {
+//       "ic": "5cjoy-nqaaa-aaaan-qlqsa-cai"
+//     },
+//     "comment": {
+//       "ic": "wnos5-cqaaa-aaaan-qlwtq-cai"
+//     },
+//     "hotel": {
+//       "ic": "wkpuj-piaaa-aaaan-qlwta-cai"
+//     },
+//     "supportChat": {
+//       "ic": "xaawt-nyaaa-aaaan-qlwua-cai"
+//     }
+//   }
+// https://a4gq6-oaaaa-aaaab-qaa4q-cai.raw.icp0.io/?id=xhbqh-aaaaa-aaaan-qlwuq-cai--> bookingcan

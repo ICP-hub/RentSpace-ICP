@@ -10,21 +10,24 @@ import { BottomSheetModalProvider,BottomSheetModal } from '@gorhom/bottom-sheet'
 import Comments from './Comments/Comments'
 import { useSelector } from 'react-redux'
 import { Principal } from '@dfinity/principal'
+import axios from 'axios'
 
 const months=[
     "January","Febraury","March","April","May","June","July","August","September","October","November","December"
 ]
 
 const ReelCard = ({item}) => {
-
+    const [likeDisabled,setLikeDisabled]=useState(false)
     const {user}=useSelector(state=>state.userReducer)
-    const [liked,setLiked]=useState(false)
+    const {principle}=useSelector(state=>state.principleReducer)
+    const [liked,setLiked]=useState(item?.likedBy.includes(principle)==true)
     const btmSheetComments=useRef(null)
     const {actors}=useSelector(state=>state.actorReducer)
     const [reelComments,setReelComments]=useState([])
+    const baseURL="https://rentspace.kaifoundry.com"
     const openComments=()=>{
-    btmSheetComments.current.present()
-  }
+        btmSheetComments.current.present()
+    }
 
   const getComments=async()=>{
     console.log(actors?.commentActor)
@@ -100,6 +103,20 @@ const ReelCard = ({item}) => {
     })
   }
 
+  const updateLike=async()=>{
+    setLiked(!liked)
+    setLikeDisabled(true)
+    await axios.patch(`${baseURL}/api/v1/updateLikesOnHotel`,{user:principle,hotelId:item?.hotelId}).then((res)=>{
+        console.log("updated like : ",res)
+        console.log(item?.likedBy.includes(principle))
+        setLikeDisabled(false)
+    }).catch((err)=>{
+        setLikeDisabled(false)
+        console.log(err)
+    })
+    
+  }
+
   useEffect(()=>{
     // getComments()
     console.log("running useEffect reels")
@@ -118,7 +135,7 @@ const ReelCard = ({item}) => {
           />
           {/* <Image source={images.reelBG} style={styles.bg}/>  */}
           <View style={styles.iconCont}>
-              <TouchableOpacity style={styles.icon} onPress={() => setLiked(!liked)} > 
+              <TouchableOpacity style={styles.icon} disabled={likeDisabled} onPress={updateLike} > 
                   {
                       liked ?
                           <Icon name='heart' color={'red'} size={25} />
