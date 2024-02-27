@@ -1,4 +1,19 @@
 module {
+    public type Year = Text;
+    public type AnnualData = {
+        jan : Nat;
+        feb : Nat;
+        march : Nat;
+        april : Nat;
+        may : Nat;
+        june : Nat;
+        july : Nat;
+        aug : Nat;
+        sep : Nat;
+        oct : Nat;
+        nov : Nat;
+        dec : Nat;
+    };
     public type AdminId = Text;
     public type UserId = Text;
     public type User = {

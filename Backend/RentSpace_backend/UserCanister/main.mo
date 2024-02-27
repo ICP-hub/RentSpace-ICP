@@ -22,7 +22,7 @@ shared ({caller = owner}) actor class User() {
     // HashMap to store user data
     let userDataMap = HashMap.HashMap<Types.UserId, Types.UserInfo>(0, Text.equal, Text.hash);
     stable var admin : [Types.AdminId] = [];
-
+    let annualRegisterFrequencyMap = HashMap.HashMap<Types.Year, Types.AnnualData>(0, Text.equal, Text.hash);
     // Function to validate user creation data
     func createUserValidation(userData : Types.User) {
         // Checking if the user data is valid
@@ -54,6 +54,8 @@ shared ({caller = owner}) actor class User() {
 
         // Validating the user creation data
         createUserValidation(userData);
+
+        Utils.updateAnnualStatus(annualRegisterFrequencyMap);
 
         // Creating a new user info object
         let date = Utils.getDate();
@@ -98,6 +100,12 @@ shared ({caller = owner}) actor class User() {
         };
     };
 
+    public shared query ({caller}) func getAnnualRegisterByYear(year : Text) : async ?Types.AnnualData {
+        if (Utils.getOwnerFromArray(caller, admin) == false) {
+            Debug.trap("Not Authorased");
+        };
+        annualRegisterFrequencyMap.get(year);
+    };
     // Function to update user info
     public shared ({caller = user}) func updateUserInfo(userData : Types.UserInfo) : async ?Types.UserInfo {
         // Getting the user's identity

@@ -3,16 +3,76 @@ import Hash "mo:base/Hash";
 import Bool "mo:base/Bool";
 import Time "mo:base/Time";
 import Text "mo:base/Text";
-import HashMap "mo:base/HashMap";
-import uuid "mo:uuid/UUID";
-import DateTime "mo:datetime/DateTime";
-import Source "mo:uuid/async/SourceV4";
 import List "mo:base/List";
 import Iter "mo:base/Iter";
 import Array "mo:base/Array";
 import Principal "mo:base/Principal";
+import HashMap "mo:base/HashMap";
+import {now} "mo:base/Time";
+import Month "month";
+
+import uuid "mo:uuid/UUID";
+import DateTime "mo:datetime/DateTime";
+import Source "mo:uuid/async/SourceV4";
+import Types "./bookingCanister/Types";
 
 module {
+    public func updateAnnualStatus(hashMap : HashMap.HashMap<Types.Year, Types.AnnualData>) {
+
+        let date = DateTime.DateTime(now()).toText();
+        var counter = 0;
+        var year = "";
+        var month = "";
+        for (i in Text.toIter(date)) {
+            if (counter <= 3) {
+                year := year # Char.toText(i);
+            };
+            if (counter >= 5 and counter <= 6) {
+                month := month # Char.toText(i);
+            };
+            counter += 1;
+        };
+        switch (hashMap.get(year)) {
+            case (null) {
+                let intialAnnualData = {
+                    jan = 0;
+                    feb = 0;
+                    march = 0;
+                    april = 0;
+                    may = 0;
+                    june = 0;
+                    july = 0;
+                    aug = 0;
+                    sep = 0;
+                    oct = 0;
+                    nov = 0;
+                    dec = 0;
+                };
+                let monthData = Month.updateMonthData(month, intialAnnualData);
+                hashMap.put(year, monthData);
+            };
+            case (?result) {
+                let updatedMonthData = Month.updateMonthData(month, result);
+                hashMap.put(year, updatedMonthData);
+            };
+        };
+    };
+    public func putIdInList<K, V>(key : K, value : V, treeMap : HashMap.HashMap<K, List.List<V>>) : V {
+
+        switch (treeMap.get(key)) {
+            case (?result) {
+                let data = List.push<V>(value, result);
+                treeMap.put(key, data);
+                return value;
+            };
+            case null {
+                var bookingIdList = List.nil<V>();
+                bookingIdList := List.push(value, bookingIdList);
+                treeMap.put(key, bookingIdList);
+                return value;
+            };
+        };
+    };
     public func getOwnerFromArray<K>(caller : Principal, admin : [Text]) : Bool {
         switch (Array.find<Text>(admin, func(x) : Bool {x == Principal.toText(caller)})) {
             case (null) {false};

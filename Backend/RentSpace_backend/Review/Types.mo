@@ -1,5 +1,5 @@
 module {
-    public type AdminId =Text;
+    public type AdminId = Text;
     public type ReviewId = Text;
     public type UserId = Text;
     public type HotelId = Text;

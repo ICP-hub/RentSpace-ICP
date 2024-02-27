@@ -5,7 +5,8 @@ import Debug "mo:base/Debug";
 import HashMap "mo:base/HashMap";
 import Hash "mo:base/Hash";
 import Iter "mo:base/Iter";
-import Util "mo:xtended-numbers/Util";
+import Char "mo:base/Char";
+import datetime "mo:datetime/DateTime";
 
 import Types "Types";
 import Utils "../utils";
@@ -19,6 +20,7 @@ shared ({caller = owner}) actor class () = this {
     private var bookingDataMap = HashMap.HashMap<Types.BookingId, Types.BookingInfo>(0, Text.equal, Text.hash);
     private var userXBookingIdMap = HashMap.HashMap<Types.UserId, List.List<Types.BookingId>>(0, Text.equal, Text.hash);
     private var hotelXBookingIdMap = HashMap.HashMap<Types.HotelId, List.List<Types.BookingId>>(0, Text.equal, Text.hash);
+    private var bookingFrequencyMap = HashMap.HashMap<Types.Year, Types.AnnualData>(0, Text.equal, Text.hash);
 
     stable var admin : [Types.AdminId] = [];
 
@@ -27,37 +29,22 @@ shared ({caller = owner}) actor class () = this {
             Debug.trap("Error! Text overflow");
         };
     };
-    func putBookingIdInList<K, V>(key : K, value : V, treeMap : HashMap.HashMap<K, List.List<V>>) : V {
 
-        switch (treeMap.get(key)) {
-            case (?result) {
-                let data = List.push<V>(value, result);
-                treeMap.put(key, data);
-                return value;
-            };
-            case null {
-                var bookingIdList = List.nil<V>();
-                bookingIdList := List.push(value, bookingIdList);
-                treeMap.put(key, bookingIdList);
-                return value;
-            };
-        };
-    };
     func createBookingId(userIdentity : Text, hotelId : Text) : async Text {
         let uuid = await Utils.getUuid();
         let date = Utils.getDate();
         let bookingId = hotelId # "#" # date # "#" #uuid;
-        ignore putBookingIdInList<Types.UserId, Types.BookingId>(userIdentity, bookingId, userXBookingIdMap);
-        putBookingIdInList<Types.HotelId, Types.BookingId>(hotelId, bookingId, hotelXBookingIdMap);
+        ignore Utils.putIdInList<Types.UserId, Types.BookingId>(userIdentity, bookingId, userXBookingIdMap);
+        Utils.putIdInList<Types.HotelId, Types.BookingId>(hotelId, bookingId, hotelXBookingIdMap);
     };
 
     public shared ({caller = user}) func bookHotel(hotelId : Types.HotelId, bookingInfo : Types.BookingInfo) : async () {
         let userIdentity = Principal.toText(user);
         if (Principal.isAnonymous(user) == true) {
             Debug.trap("Error! You are already a user");
-
         };
         validate(bookingInfo);
+        Utils.updateAnnualStatus(bookingFrequencyMap);
         let bookingDate = Utils.getDate();
         let bookingId = await createBookingId(userIdentity, hotelId);
         let bookingData : Types.BookingInfo = {
@@ -71,12 +58,20 @@ shared ({caller = owner}) actor class () = this {
         };
         bookingDataMap.put(bookingId, bookingData);
     };
+
     public shared query ({caller = user}) func getBookingId() : async [Text] {
         assert (Principal.isAnonymous(user) == false);
         switch (userXBookingIdMap.get(Principal.toText(user))) {
             case null {[]};
             case (?result) {List.toArray<Text>(result)};
         };
+    };
+
+    public shared  query({caller}) func getBookingFrequencyInYear(year : Text) : async ?Types.AnnualData {
+        if (Utils.getOwnerFromArray(caller, admin) == false) {
+            Debug.trap("Not Authorased");
+        };
+        bookingFrequencyMap.get(year);
     };
     public shared query ({caller = user}) func gethotelXBookingId(hotelId : Text) : async [Text] {
         assert (Principal.isAnonymous(user) == false);
@@ -133,6 +128,7 @@ shared ({caller = owner}) actor class () = this {
             Debug.trap("No Access to Add Owner");
         };
     };
+
     system func preupgrade() {
         bookingData := Iter.toArray(bookingDataMap.entries());
         userXBookingId := Iter.toArray(userXBookingIdMap.entries());
