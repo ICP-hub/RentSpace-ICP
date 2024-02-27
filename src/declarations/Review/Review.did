@@ -1,19 +1,3 @@
-type ScanReview = 
- record {
-   nextKey: opt text;
-   review: vec Review__1;
- };
-type ScalingOptions = 
- record {
-   autoScalingCanisterId: text;
-   limit: nat;
-   limitType: ScalingLimitType;
- };
-type ScalingLimitType = 
- variant {
-   count;
-   heapSize;
- };
 type Review__1 = 
  record {
    bookingId: text;
@@ -22,21 +6,21 @@ type Review__1 =
    rating: float64;
    title: text;
  };
+type ReviewId = text;
 type Review = 
  service {
-   createReview: (text, Review__1) -> ();
-   getHotelId: () -> (vec text) query;
-   getOwner: () -> (text) query;
-   getPk: () -> (text) query;
-   getReviewIdsFromHotelId: (text) -> (vec text) query;
+   addOwner: (AdminId) -> (text);
+   createReview: (text, Review__1) -> () oneway;
+   getHotelId: () -> (vec ReviewId) query;
+   getReviewIdsFromHotelId: (HotelId) -> (vec ReviewId) query;
    getReviewInfo: (text) -> (opt Review__1) query;
-   scanUsers: (text, text, nat, opt bool) -> (ScanReview) query;
-   skExists: (text) -> (bool) query;
-   transferCycles: () -> ();
+   scanReview: (nat, nat) -> (vec record {
+                                    ReviewId;
+                                    Review__1;
+                                  }) query;
    updateReviewInfo: (text, Review__1) -> (opt Review__1);
+   whoami: () -> (text) query;
  };
-service : (record {
-             owners: opt vec principal;
-             partitionKey: text;
-             scalingOptions: ScalingOptions;
-           }) -> Review
+type HotelId = text;
+type AdminId = text;
+service : () -> Review

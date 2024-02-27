@@ -1,17 +1,6 @@
 export const idlFactory = ({ IDL }) => {
-  const AutoScalingCanisterSharedFunctionHook = IDL.Func(
-      [IDL.Text],
-      [IDL.Text],
-      [],
-    );
-  const ScalingLimitType = IDL.Variant({
-    'heapSize' : IDL.Nat,
-    'count' : IDL.Nat,
-  });
-  const ScalingOptions = IDL.Record({
-    'autoScalingHook' : AutoScalingCanisterSharedFunctionHook,
-    'sizeLimit' : ScalingLimitType,
-  });
+  const AdminId = IDL.Text;
+  const HotelId = IDL.Text;
   const BookingInfo = IDL.Record({
     'paymentStatus' : IDL.Bool,
     'refundStatus' : IDL.Bool,
@@ -21,49 +10,44 @@ export const idlFactory = ({ IDL }) => {
     'paymentId' : IDL.Text,
     'cancelStatus' : IDL.Bool,
   });
-  const ScanBooking = IDL.Record({
-    'bookings' : IDL.Vec(BookingInfo),
-    'nextKey' : IDL.Opt(IDL.Text),
+  const AnnualData = IDL.Record({
+    'aug' : IDL.Nat,
+    'dec' : IDL.Nat,
+    'feb' : IDL.Nat,
+    'jan' : IDL.Nat,
+    'may' : IDL.Nat,
+    'nov' : IDL.Nat,
+    'oct' : IDL.Nat,
+    'sep' : IDL.Nat,
+    'march' : IDL.Nat,
+    'april' : IDL.Nat,
+    'july' : IDL.Nat,
+    'june' : IDL.Nat,
   });
-  const Booking = IDL.Service({
-    'bookHotel' : IDL.Func([IDL.Text, BookingInfo], [], []),
+  const BookingId = IDL.Text;
+  const anon_class_14_1 = IDL.Service({
+    'addOwner' : IDL.Func([AdminId], [IDL.Text], []),
+    'bookHotel' : IDL.Func([HotelId, BookingInfo], [], []),
     'getBookingDetials' : IDL.Func(
         [IDL.Text],
         [IDL.Opt(BookingInfo)],
         ['query'],
       ),
-    'getBookingId' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
-    'getPK' : IDL.Func([], [IDL.Text], ['query']),
-    'scanBooking' : IDL.Func(
-        [IDL.Text, IDL.Text, IDL.Nat, IDL.Opt(IDL.Bool)],
-        [ScanBooking],
+    'getBookingFrequencyInYear' : IDL.Func(
+        [IDL.Text],
+        [IDL.Opt(AnnualData)],
         ['query'],
       ),
-    'skExists' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
-    'transferCycles' : IDL.Func([], [], []),
+    'getBookingId' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
+    'gethotelXBookingId' : IDL.Func([IDL.Text], [IDL.Vec(IDL.Text)], ['query']),
+    'scanBooking' : IDL.Func(
+        [IDL.Nat, IDL.Nat],
+        [IDL.Vec(IDL.Tuple(BookingId, BookingInfo))],
+        ['query'],
+      ),
     'updateBookingStatus' : IDL.Func([IDL.Text, BookingInfo], [], []),
+    'whoami' : IDL.Func([], [IDL.Text], ['query']),
   });
-  return Booking;
+  return anon_class_14_1;
 };
-export const init = ({ IDL }) => {
-  const AutoScalingCanisterSharedFunctionHook = IDL.Func(
-      [IDL.Text],
-      [IDL.Text],
-      [],
-    );
-  const ScalingLimitType = IDL.Variant({
-    'heapSize' : IDL.Nat,
-    'count' : IDL.Nat,
-  });
-  const ScalingOptions = IDL.Record({
-    'autoScalingHook' : AutoScalingCanisterSharedFunctionHook,
-    'sizeLimit' : ScalingLimitType,
-  });
-  return [
-    IDL.Record({
-      'owners' : IDL.Opt(IDL.Vec(IDL.Principal)),
-      'partitonKey' : IDL.Text,
-      'scalingOptions' : ScalingOptions,
-    }),
-  ];
-};
+export const init = ({ IDL }) => { return []; };

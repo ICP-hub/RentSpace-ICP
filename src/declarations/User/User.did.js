@@ -1,22 +1,24 @@
 export const idlFactory = ({ IDL }) => {
-  const AutoScalingCanisterSharedFunctionHook = IDL.Func(
-      [IDL.Text],
-      [IDL.Text],
-      [],
-    );
-  const ScalingLimitType = IDL.Variant({
-    'heapSize' : IDL.Nat,
-    'count' : IDL.Nat,
-  });
-  const ScalingOptions = IDL.Record({
-    'autoScalingHook' : AutoScalingCanisterSharedFunctionHook,
-    'sizeLimit' : ScalingLimitType,
-  });
+  const AdminId = IDL.Text;
   const User__1 = IDL.Record({
     'dob' : IDL.Text,
     'userEmail' : IDL.Text,
     'lastName' : IDL.Text,
     'firstName' : IDL.Text,
+  });
+  const AnnualData = IDL.Record({
+    'aug' : IDL.Nat,
+    'dec' : IDL.Nat,
+    'feb' : IDL.Nat,
+    'jan' : IDL.Nat,
+    'may' : IDL.Nat,
+    'nov' : IDL.Nat,
+    'oct' : IDL.Nat,
+    'sep' : IDL.Nat,
+    'march' : IDL.Nat,
+    'april' : IDL.Nat,
+    'july' : IDL.Nat,
+    'june' : IDL.Nat,
   });
   const UserInfo = IDL.Record({
     'dob' : IDL.Text,
@@ -31,14 +33,17 @@ export const idlFactory = ({ IDL }) => {
     'verificationStatus' : IDL.Bool,
     'firstName' : IDL.Text,
   });
-  const ScanUser = IDL.Record({
-    'nextKey' : IDL.Opt(IDL.Text),
-    'users' : IDL.Vec(UserInfo),
-  });
+  const UserId = IDL.Text;
   const User = IDL.Service({
+    'addOwner' : IDL.Func([AdminId], [IDL.Text], []),
+    'checkUserExist' : IDL.Func([], [IDL.Bool], ['query']),
     'createUser' : IDL.Func([User__1], [], []),
+    'getAnnualRegisterByYear' : IDL.Func(
+        [IDL.Text],
+        [IDL.Opt(AnnualData)],
+        ['query'],
+      ),
     'getOwner' : IDL.Func([], [IDL.Text], ['query']),
-    'getPK' : IDL.Func([], [IDL.Text], ['query']),
     'getUserInfo' : IDL.Func([], [IDL.Opt(UserInfo)], ['query']),
     'getUserInfoByPrincipal' : IDL.Func(
         [IDL.Principal],
@@ -46,35 +51,13 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'scanUsers' : IDL.Func(
-        [IDL.Text, IDL.Text, IDL.Nat, IDL.Opt(IDL.Bool)],
-        [ScanUser],
+        [IDL.Nat, IDL.Nat],
+        [IDL.Vec(IDL.Tuple(UserId, UserInfo))],
         ['query'],
       ),
-    'skExists' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
-    'transferCycles' : IDL.Func([], [], []),
     'updateUserInfo' : IDL.Func([UserInfo], [IDL.Opt(UserInfo)], []),
+    'whoami' : IDL.Func([], [IDL.Text], ['query']),
   });
   return User;
 };
-export const init = ({ IDL }) => {
-  const AutoScalingCanisterSharedFunctionHook = IDL.Func(
-      [IDL.Text],
-      [IDL.Text],
-      [],
-    );
-  const ScalingLimitType = IDL.Variant({
-    'heapSize' : IDL.Nat,
-    'count' : IDL.Nat,
-  });
-  const ScalingOptions = IDL.Record({
-    'autoScalingHook' : AutoScalingCanisterSharedFunctionHook,
-    'sizeLimit' : ScalingLimitType,
-  });
-  return [
-    IDL.Record({
-      'owners' : IDL.Opt(IDL.Vec(IDL.Principal)),
-      'partitonKey' : IDL.Text,
-      'scalingOptions' : ScalingOptions,
-    }),
-  ];
-};
+export const init = ({ IDL }) => { return []; };

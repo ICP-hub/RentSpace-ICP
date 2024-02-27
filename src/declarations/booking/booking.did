@@ -1,18 +1,19 @@
-type ScanBooking = 
- record {
-   bookings: vec BookingInfo;
-   nextKey: opt text;
+type anon_class_14_1 = 
+ service {
+   addOwner: (AdminId) -> (text);
+   bookHotel: (HotelId, BookingInfo) -> ();
+   getBookingDetials: (text) -> (opt BookingInfo) query;
+   getBookingFrequencyInYear: (text) -> (opt AnnualData) query;
+   getBookingId: () -> (vec text) query;
+   gethotelXBookingId: (text) -> (vec text) query;
+   scanBooking: (nat, nat) -> (vec record {
+                                     BookingId;
+                                     BookingInfo;
+                                   }) query;
+   updateBookingStatus: (text, BookingInfo) -> ();
+   whoami: () -> (text) query;
  };
-type ScalingOptions = 
- record {
-   autoScalingHook: AutoScalingCanisterSharedFunctionHook;
-   sizeLimit: ScalingLimitType;
- };
-type ScalingLimitType = 
- variant {
-   count: nat;
-   heapSize: nat;
- };
+type HotelId = text;
 type BookingInfo = 
  record {
    bookingDuration: text;
@@ -23,20 +24,21 @@ type BookingInfo =
    refundStatus: bool;
    userId: text;
  };
-type Booking = 
- service {
-   bookHotel: (text, BookingInfo) -> ();
-   getBookingDetials: (text) -> (opt BookingInfo) query;
-   getBookingId: () -> (vec text) query;
-   getPK: () -> (text) query;
-   scanBooking: (text, text, nat, opt bool) -> (ScanBooking) query;
-   skExists: (text) -> (bool) query;
-   transferCycles: () -> ();
-   updateBookingStatus: (text, BookingInfo) -> ();
+type BookingId = text;
+type AnnualData = 
+ record {
+   april: nat;
+   aug: nat;
+   dec: nat;
+   feb: nat;
+   jan: nat;
+   july: nat;
+   june: nat;
+   march: nat;
+   may: nat;
+   nov: nat;
+   oct: nat;
+   sep: nat;
  };
-type AutoScalingCanisterSharedFunctionHook = func (text) -> (text);
-service : (record {
-             owners: opt vec principal;
-             partitonKey: text;
-             scalingOptions: ScalingOptions;
-           }) -> Booking
+type AdminId = text;
+service : () -> anon_class_14_1
