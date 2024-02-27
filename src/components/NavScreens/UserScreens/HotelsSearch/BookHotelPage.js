@@ -98,7 +98,7 @@ const BookHotelPage = ({navigation,queryHotels}) => {
     console.log(queryHotels)
     getQueryHotelDetails()
     getReservations()
-    getHotelDetails()
+    // getHotelDetails()
     // console.log("authData : ",authData)
 
   }

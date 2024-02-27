@@ -30,7 +30,7 @@ const UpdateProfile = ({setEditProfile}) => {
         setUpdatedUser({
           ...updatedUser,
           userType:user?.userType,
-          hostStatus:(user?.userType=='host')?true:false,
+          hostStatus:user?.hostStatus,
           verificationStatus:false,
           agreementStatus:user?.agreementStatus
         })
@@ -39,36 +39,16 @@ const UpdateProfile = ({setEditProfile}) => {
         await actors.userActor?.updateUserInfo(updatedUser)
         .then(async(res)=>{
           console.log("3")
-            console.warn("update res : ",res[0])
+            console.log("update res : ",res[0])
             alert('processing')
             alert(`Your profile is updated ${updatedUser?.firstName} !`)
             await actors.userActor?.getUserInfo()
             .then(async(res)=>{
-              let whoami = await actors.backendActor.whoami();
-              console.warn(whoami)
                 dispatch(setUser(res[0]))
-                console.warn("response user",res[0])
+                console.log("response user",res[0])
                 setEditProfile(false)
             })
         })
-        // dispatch(updatingUser(updatedUser))
-        // setEditProfile(false)
-        // let us = await(await actors.userActor.getUserInfo());
-        // alert(us[0].firstName);
-
-        // let updatedData=await userActor.updateUserInfo(updatedUser);
-        //   console.log("3")
-        //     console.log("update res : ",updatedData[0])
-        //     alert('processing')
-        //     alert(`Your profile is updated ${updatedUser?.firstName} !`)
-        //     let user = await actors.userActor?.getUserInfo();
-        //       let whoami = await actors.backendActor.whoami();
-        //       console.log(whoami)
-        //         dispatch(setUser(user[0]))
-        //         console.log("response user",user[0])
-        //         setEditProfile(false)
-        
-        // console.log("request user",updatedUser)
     }
     const chooseUserImg=async()=>{
       const result=await launchImageLibrary({mediaType:'image',includeBase64:true},

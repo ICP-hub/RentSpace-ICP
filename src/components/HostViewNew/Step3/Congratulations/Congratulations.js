@@ -23,11 +23,6 @@ const Congratulations = ({setHostModal,pos}) => {
   
   const ApiLogin=async()=>{
     console.log("files",files)
-    // console.log(`authData : ${authData}\n principal : ${authData.principal}\n publicKey : ${authData.publicKey}`)
-    // console.log({
-    //     principal:authData.principal,
-    //     publicKey:authData.publicKey
-    //  })
      await axios.post(`${baseUrl}/api/v1/login/user`,{},{headers:{
       "x-private":authData.privateKey,
       "x-public":authData.publicKey,
