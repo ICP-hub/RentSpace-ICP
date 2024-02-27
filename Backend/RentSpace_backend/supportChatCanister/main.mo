@@ -226,6 +226,9 @@ shared ({caller = owner}) actor class () {
             #err(code, message);
         };
     };
+    public shared query({caller}) func isAdmin():async Bool{
+        Utils.getOwnerFromArray(caller, admin);
+    };
 
     public shared ({caller = user}) func removeResolvedTicketRaised(ticketId : Text, userId : Text) : async Result {
         assert (Principal.isAnonymous(user));
