@@ -26,7 +26,7 @@ shared ({caller = owner}) actor class () {
         };
     };
 
-    public shared ({caller}) func createHotel(hotelData : Types.HotelInfo) : async () {
+    public shared ({caller}) func createHotel(hotelData : Types.HotelInfo) : async Types.HotelId {
         if (Principal.isAnonymous(caller) == true or Utils.checkKeyExist<Types.HotelId, Types.HotelInfo>(Principal.toText(caller), hotelDataMap) == true) {
             Debug.trap("No Access");
         };
@@ -48,6 +48,7 @@ shared ({caller = owner}) actor class () {
             createdAt = getTime;
         };
         hotelDataMap.put(hotelId, hotelInfo);
+        hotelId;
     };
     public shared query ({caller = user}) func getHotel(hotelId : Types.HotelId) : async ?Types.HotelInfo {
         hotelDataMap.get(hotelId);
