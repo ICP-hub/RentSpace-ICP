@@ -80,6 +80,7 @@ yarn-error.log
 
 # generated files
 src/declarations
+Admin/frontend/src/declarations
 
 # frontend code
 node_modules/
@@ -89,3 +90,4 @@ dist/
 .env
 
 .mops
+
