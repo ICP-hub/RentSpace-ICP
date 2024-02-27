@@ -1,0 +1,68 @@
+type anon_class_13_1 = 
+ service {
+   addOwner: (AdminId) -> (text);
+   createIssue: (text) -> (Result);
+   getAllUnResolvedIssue: () -> (vec UserIdentity) query;
+   getAllUserIssue: () -> (vec Issue) query;
+   getResolvedIssue: () -> (vec Issue) query;
+   getTicket: () -> (vec record {
+                           TicketId;
+                           Ticket;
+                         }) query;
+   getUserTicketsByAdmin: (text) -> (vec record {
+                                           TicketId;
+                                           Ticket;
+                                         }) query;
+   isAdmin: () -> (bool) query;
+   raiseNewTicket: (text, text, text, Address) -> (Result);
+   removeResolvedTicketRaised: (text, text) -> (Result);
+   resolveTicketRaised: (text, text) -> (Result);
+   resolveUserIssue: (UserIdentity, text) -> ();
+   whoami: () -> (text) query;
+ };
+type UserIdentity = text;
+type TicketId = text;
+type Ticket = 
+ record {
+   address: Address;
+   createdAt: text;
+   customerId: text;
+   messageToAdmin: text;
+   messageToHost: text;
+   reason: text;
+   resolved: bool;
+ };
+type Result = 
+ variant {
+   err: record {
+          ErrorCode;
+          text;
+        };
+   ok: text;
+ };
+type Issue = 
+ record {
+   message: text;
+   reply: opt text;
+ };
+type ErrorCode = 
+ variant {
+   call_error: record {err_code: nat32;};
+   canister_error;
+   canister_reject;
+   destination_invalid;
+   future: nat32;
+   system_fatal;
+   system_transient;
+ };
+type AdminId = text;
+type Address = 
+ record {
+   building: text;
+   city: text;
+   country: text;
+   postalCode: text;
+   region: text;
+   streetAddress: text;
+ };
+service : () -> anon_class_13_1
