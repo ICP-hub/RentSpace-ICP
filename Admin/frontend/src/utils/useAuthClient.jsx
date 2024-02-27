@@ -23,7 +23,7 @@ export const useAuthClient = () => {
         console.log(principal)
 
         setAuthClient(client);
-        setIsAuthenticated(isAuthenticated);
+        // setIsAuthenticated(isAuthenticated);
         setIdentity(identity);
         setPrincipal(principal);
 
@@ -39,7 +39,12 @@ export const useAuthClient = () => {
                 supportActor:supportActor
             })
             await supportActor.isAdmin().then((res)=>{
-                console.log(res)
+                if(res == true){
+                    setIsAuthenticated(true);
+                }
+                else{
+                    alert("You are not an admin" + principal);
+                }
             })
         }
 
