@@ -18,17 +18,22 @@ const DashBoard = () => {
   const { actors } = useAuth();
 
   async function updateAnnualData() {
+    let { bookingActor, hotelActor, userActor } = actors;
     let year = new Date().getFullYear();
     console.log(year + " type of year: " + typeof (year));
-    setBookingData(await actors.bookingActor.getBookingFrequencyInYear(year.toLocaleString()));
+    let bookingFrequencyData = await bookingActor.getBookingFrequencyInYear(year.toLocaleString());
     console.log(" BookingData: " + bookingData);
-    setHotelOnBoardData(await actors.hotelActor.getHotelFrequencyByYear(year.toLocaleString()));
-
+    setBookingData(bookingFrequencyData);
+    let hotelOnBoardData = await hotelActor.getAnnualRegisterByYear(year.toLocaleString());
+    setHotelOnBoardData(hotelOnBoardData);
+    console.log(" HotelData: " + hotelOnBoard);
+    let userRegisterFrequency = await userActor.getAnnualRegisterByYear(year.toLocaleString())
+    setUserOnBoardData(userRegisterFrequency);
+    console.log("Annual Register : " + userOnBoardData);
   };
-
   console.log(actors);
   useEffect(() => {
-    getBookingFrequencyInYear();
+    updateAnnualData();
   }, []);
   return (
     <div className='page'>
