@@ -1,0 +1,48 @@
+type anon_class_12_1 = 
+ service {
+   addOwner: (AdminId) -> (text);
+   createComment: (text, text, text) -> (Result);
+   getComments: (text) -> (vec record {
+                                 CommentId;
+                                 Comment;
+                               }) query;
+   getSingleComments: (text, text) -> (Comment) query;
+   scanComment: (nat, nat) ->
+    (vec record {
+           text;
+           vec record {
+                 CommentId;
+                 Comment;
+               };
+         }) query;
+   whoami: () -> (text) query;
+ };
+type Result = 
+ variant {
+   err: record {
+          ErrorCode;
+          text;
+        };
+   ok: text;
+ };
+type ErrorCode = 
+ variant {
+   call_error: record {err_code: nat32;};
+   canister_error;
+   canister_reject;
+   destination_invalid;
+   future: nat32;
+   system_fatal;
+   system_transient;
+ };
+type CommentId = text;
+type Comment = 
+ record {
+   comment: text;
+   createdAt: text;
+   hotelId: text;
+   parentCommentId: text;
+   userId: text;
+ };
+type AdminId = text;
+service : () -> anon_class_12_1

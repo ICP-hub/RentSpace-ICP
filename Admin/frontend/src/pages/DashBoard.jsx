@@ -21,15 +21,10 @@ const DashBoard = () => {
     let { bookingActor, hotelActor, userActor } = actors;
     let year = new Date().getFullYear();
     console.log(year + " type of year: " + typeof (year));
-    let bookingFrequencyData = await bookingActor.getBookingFrequencyInYear(year.toLocaleString());
-    console.log(" BookingData: " + bookingData);
-    setBookingData(bookingFrequencyData);
-    let hotelOnBoardData = await hotelActor.getAnnualRegisterByYear(year.toLocaleString());
-    setHotelOnBoardData(hotelOnBoardData);
-    console.log(" HotelData: " + hotelOnBoard);
-    let userRegisterFrequency = await userActor.getAnnualRegisterByYear(year.toLocaleString())
-    setUserOnBoardData(userRegisterFrequency);
-    console.log("Annual Register : " + userOnBoardData);
+    await bookingActor.getBookingFrequencyInYear(year.toString()).then((res) => { setBookingData(res[0]) });
+    await hotelActor.getHotelFrequencyByYear(year.toString()).then((res) => { setHotelOnBoardData(res[0]) });
+    await userActor.getAnnualRegisterByYear(year.toString()).then((res) => { setUserOnBoardData(res[0]) });
+
   };
   console.log(actors);
   useEffect(() => {
@@ -45,7 +40,7 @@ const DashBoard = () => {
             <InfoCards label={"Users"} count={45} />
             <InfoCards label={"Hotels"} count={345} />
           </div>
-          <BookingChart />
+          <BookingChart bookingData={bookingData} />
         </div>
         {
           chat ?

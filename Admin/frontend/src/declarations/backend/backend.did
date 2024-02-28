@@ -1,0 +1,22 @@
+type Database = 
+ service {
+   autoScaleBookingCanister: (text) -> (text);
+   autoScaleHotelCanister: (text) -> (text);
+   autoScaleReviewCanister: (text) -> (text);
+   autoScaleUserCanister: (text) -> (text);
+   createNewCanister: (text, Canister) -> (opt text);
+   deleteCanister: (text) -> ();
+   getCanistersByPK: (text) -> (vec text) query;
+   getOwner: () -> (text) query;
+   getPKs: () -> (vec text) query;
+   upgradeCanisterByPK: (text, blob) -> (text);
+   whoami: () -> (text) query;
+ };
+type Canister = 
+ variant {
+   booking;
+   hotel;
+   review;
+   user;
+ };
+service : () -> Database

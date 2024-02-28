@@ -1,5 +1,6 @@
 import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
+import type { IDL } from '@dfinity/candid';
 
 export type AdminId = string;
 export interface AnnualData {
@@ -49,3 +50,5 @@ export interface User__1 {
   'firstName' : string,
 }
 export interface _SERVICE extends User {}
+export declare const idlFactory: IDL.InterfaceFactory;
+export declare const init: ({ IDL }: { IDL: IDL }) => IDL.Type[];
