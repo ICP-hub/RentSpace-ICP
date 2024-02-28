@@ -65,10 +65,10 @@ export const useAuthClient = () => {
                     resolve(clientInfo(authClient));
                 } else {
                     await authClient.login({
-                        // identityProvider: process.env.DFX_NETWORK === "ic"
-                        //     ? "https://identity.ic0.app/"
-                        //     : `http://rdmx6-jaaaa-aaaaa-aaadq-cai.localhost:4943`,
-                        identityProvider:"https://identity.ic0.app/",
+                        identityProvider: process.env.DFX_NETWORK === "ic"
+                            ? "https://identity.ic0.app/"
+                            : `http://rdmx6-jaaaa-aaaaa-aaadq-cai.localhost:4943`,
+                        // identityProvider:"https://identity.ic0.app/",
                         onError: (error) => reject((error)),
                         onSuccess: () => resolve(clientInfo(authClient)),
                     });
