@@ -13,12 +13,12 @@ const AddReview = ({item,setAddReview}) => {
     rating : 0,
     title : "",
     des : "",
-    createdAt : ""
+    createdAt : "to be set"
   })
   const addNewReview=async()=>{
     setLoading(true)
     console.log("reviewObj : ",review)
-    console.log("reviewActors : ",await actors.reviewActor.getPk())
+    // console.log("reviewActors : ",await actors.reviewActor.getPk())
     await actors.reviewActor.createReview(item?.bookingId,review).then((res)=>{
       console.log("review creation response : ",res)
       setLoading(false)

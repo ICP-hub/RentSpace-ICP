@@ -80,31 +80,32 @@ const Congratulations = ({setHostModal,pos}) => {
         
         console.log("hotel creation api response videos : ",res.data)
         // console.log("hotels images : ",res.data.hotels[res.data.hotels.length-1].imagesUrls)
+        // await actors?.hotelActor?.getHotelId().t
         
       }).catch((err)=>{
         setLoading(false)
         console.log("hotel creation api err : ",err)
         alert(err)
-        setHostModal(false)
+        // setHostModal(false)
       })
     }
   const createHotel=async()=>{
     console.log('create hotel : ',listing)
     setLoading(true)
-  await actors.hotelActor?.createHotel({...listing,hotelLocation:"Ludhiana"}).then(async(res)=>{
+  // await actors.hotelActor?.createHotel({...listing,hotelLocation:"Ludhiana"}).then(async(res)=>{
     // setLoading(false)
     // await actors.hotelActor?.getHotelId().then(async(res)=>{
-      console.log(res)
+      // console.log(res)
       // dispatch(setHotels(res))
       
       ApiHotelFilters()
       ApiHotelCreate()
     // })
 
-  }).catch((err)=>{
-    setLoading(false)
-    alert(err)
-    console.log(err)})
+  // }).catch((err)=>{
+  //   setLoading(false)
+  //   alert(err)
+  //   console.log(err)})
   }
   
   return (

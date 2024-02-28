@@ -27,7 +27,7 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
         console.log(item?.id)
         let Revs=[]
         await actors?.reviewActor.getReviewIdsFromHotelId(item?.id).then(async(res)=>{
-            console.log("reviewActors : ",await actors.reviewActor.getPk())
+            // console.log("reviewActors : ",await actors.reviewActor.getPk())
 
             console.log("review ids: ",res)
             setHotelReviews([])

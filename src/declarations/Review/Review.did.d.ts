@@ -1,8 +1,10 @@
 import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 
+export type AdminId = string;
 export type HotelId = string;
 export interface Review {
+  'addOwner' : ActorMethod<[AdminId], string>,
   'createReview' : ActorMethod<[string, Review__1], undefined>,
   'getHotelId' : ActorMethod<[], Array<ReviewId>>,
   'getReviewIdsFromHotelId' : ActorMethod<[HotelId], Array<ReviewId>>,

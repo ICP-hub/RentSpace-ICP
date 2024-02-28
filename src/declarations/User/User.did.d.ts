@@ -1,9 +1,26 @@
 import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 
+export type AdminId = string;
+export interface AnnualData {
+  'aug' : bigint,
+  'dec' : bigint,
+  'feb' : bigint,
+  'jan' : bigint,
+  'may' : bigint,
+  'nov' : bigint,
+  'oct' : bigint,
+  'sep' : bigint,
+  'march' : bigint,
+  'april' : bigint,
+  'july' : bigint,
+  'june' : bigint,
+}
 export interface User {
+  'addOwner' : ActorMethod<[AdminId], string>,
   'checkUserExist' : ActorMethod<[], boolean>,
   'createUser' : ActorMethod<[User__1], undefined>,
+  'getAnnualRegisterByYear' : ActorMethod<[string], [] | [AnnualData]>,
   'getOwner' : ActorMethod<[], string>,
   'getUserInfo' : ActorMethod<[], [] | [UserInfo]>,
   'getUserInfoByPrincipal' : ActorMethod<[Principal], [] | [UserInfo]>,

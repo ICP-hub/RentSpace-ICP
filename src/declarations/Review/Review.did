@@ -9,6 +9,7 @@ type Review__1 =
 type ReviewId = text;
 type Review = 
  service {
+   addOwner: (AdminId) -> (text);
    createReview: (text, Review__1) -> () oneway;
    getHotelId: () -> (vec ReviewId) query;
    getReviewIdsFromHotelId: (HotelId) -> (vec ReviewId) query;
@@ -16,9 +17,10 @@ type Review =
    scanReview: (nat, nat) -> (vec record {
                                     ReviewId;
                                     Review__1;
-                                  });
+                                  }) query;
    updateReviewInfo: (text, Review__1) -> (opt Review__1);
    whoami: () -> (text) query;
  };
 type HotelId = text;
+type AdminId = text;
 service : () -> Review

@@ -1,11 +1,15 @@
-type anon_class_15_1 = 
+type anon_class_16_1 = 
  service {
-   createHotel: (HotelInfo) -> ();
+   addOwner: (text) -> (text);
+   createHotel: (HotelInfo) -> (HotelId);
+   deleteHotel: (HotelId) -> (text);
    getHotel: (HotelId) -> (opt HotelInfo) query;
+   getHotelFrequencyByYear: (text) -> (opt AnnualData) query;
+   getHotelId: () -> (vec HotelId) query;
    scanHotel: (nat, nat) -> (vec record {
                                    HotelId;
                                    HotelInfo;
-                                 });
+                                 }) query;
    updateHotel: (HotelId, HotelInfo) -> (opt HotelInfo);
    whoami: () -> (text) query;
  };
@@ -19,4 +23,19 @@ type HotelInfo =
    hotelTitle: text;
  };
 type HotelId = text;
-service : () -> anon_class_15_1
+type AnnualData = 
+ record {
+   april: nat;
+   aug: nat;
+   dec: nat;
+   feb: nat;
+   jan: nat;
+   july: nat;
+   june: nat;
+   march: nat;
+   may: nat;
+   nov: nat;
+   oct: nat;
+   sep: nat;
+ };
+service : () -> anon_class_16_1

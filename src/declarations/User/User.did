@@ -22,16 +22,34 @@ type UserInfo =
 type UserId = text;
 type User = 
  service {
+   addOwner: (AdminId) -> (text);
    checkUserExist: () -> (bool) query;
    createUser: (User__1) -> ();
+   getAnnualRegisterByYear: (text) -> (opt AnnualData) query;
    getOwner: () -> (text) query;
    getUserInfo: () -> (opt UserInfo) query;
    getUserInfoByPrincipal: (principal) -> (opt UserInfo) query;
    scanUsers: (nat, nat) -> (vec record {
                                    UserId;
                                    UserInfo;
-                                 });
+                                 }) query;
    updateUserInfo: (UserInfo) -> (opt UserInfo);
    whoami: () -> (text) query;
  };
+type AnnualData = 
+ record {
+   april: nat;
+   aug: nat;
+   dec: nat;
+   feb: nat;
+   jan: nat;
+   july: nat;
+   june: nat;
+   march: nat;
+   may: nat;
+   nov: nat;
+   oct: nat;
+   sep: nat;
+ };
+type AdminId = text;
 service : () -> User

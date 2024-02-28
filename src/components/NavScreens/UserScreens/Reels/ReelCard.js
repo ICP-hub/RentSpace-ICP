@@ -20,7 +20,7 @@ const ReelCard = ({item}) => {
     const [likeDisabled,setLikeDisabled]=useState(false)
     const {user}=useSelector(state=>state.userReducer)
     const {principle}=useSelector(state=>state.principleReducer)
-    const [liked,setLiked]=useState(item?.likedBy.includes(principle)==true)
+    const [liked,setLiked]=useState(item?.likedBy.includes(principle))
     const btmSheetComments=useRef(null)
     const {actors}=useSelector(state=>state.actorReducer)
     const [reelComments,setReelComments]=useState([])
@@ -118,7 +118,7 @@ const ReelCard = ({item}) => {
   }
 
   useEffect(()=>{
-    // getComments()
+    getComments()
     console.log("running useEffect reels")
   },[])
 
@@ -144,7 +144,10 @@ const ReelCard = ({item}) => {
                   }
 
               </TouchableOpacity>
-              <TouchableOpacity style={styles.icon} onPress={()=>getComments()}>
+              <TouchableOpacity style={styles.icon} onPress={()=>{
+                getComments()
+                console.log("liked by ",item?.likedBy.includes(principle))
+                }}>
                   <Icon name='plus' color={'white'} size={25} />
               </TouchableOpacity>
               <TouchableOpacity style={styles.icon} onPress={openComments}>

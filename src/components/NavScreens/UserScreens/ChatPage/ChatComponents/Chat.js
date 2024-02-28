@@ -58,7 +58,7 @@ const Chat = ({item,setOpenChat}) => {
       "x-private-token":token
     }}).then((res)=>{
       console.log("chat res particular : ",res.data.messages)
-      setMessages(res.data.messages.reverse())
+      setMessages(res.data.messages)
     }).catch((err)=>{
       console.log(err)
     })

@@ -1,4 +1,5 @@
 export const idlFactory = ({ IDL }) => {
+  const AdminId = IDL.Text;
   const Review__1 = IDL.Record({
     'des' : IDL.Text,
     'title' : IDL.Text,
@@ -9,6 +10,7 @@ export const idlFactory = ({ IDL }) => {
   const ReviewId = IDL.Text;
   const HotelId = IDL.Text;
   const Review = IDL.Service({
+    'addOwner' : IDL.Func([AdminId], [IDL.Text], []),
     'createReview' : IDL.Func([IDL.Text, Review__1], [], ['oneway']),
     'getHotelId' : IDL.Func([], [IDL.Vec(ReviewId)], ['query']),
     'getReviewIdsFromHotelId' : IDL.Func(
@@ -20,7 +22,7 @@ export const idlFactory = ({ IDL }) => {
     'scanReview' : IDL.Func(
         [IDL.Nat, IDL.Nat],
         [IDL.Vec(IDL.Tuple(ReviewId, Review__1))],
-        [],
+        ['query'],
       ),
     'updateReviewInfo' : IDL.Func(
         [IDL.Text, Review__1],
