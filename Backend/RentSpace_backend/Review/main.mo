@@ -60,7 +60,7 @@ shared ({caller = owner}) actor class Review() {
         };
     };
     func validate(reviewData : Types.Review) {
-        if (Utils.validText(reviewData.bookingId, 170) == false or reviewData.rating > 5 or Utils.validText(reviewData.title, 70) == false or Utils.validText(reviewData.createdAt, 20) == false or Utils.validText(reviewData.des, 1000)) {
+        if (Utils.validText(reviewData.bookingId, 170) == false or reviewData.rating > 5 or Utils.validText(reviewData.title, 70) == false or Utils.validText(reviewData.createdAt, 20) == false or Utils.validText(reviewData.des, 1000) == false) {
             Debug.trap("Error! Text overflow");
         };
     };
