@@ -1,0 +1,93 @@
+
+*{
+    margin:0;
+    padding: 0;
+}
+
+#bottomCircle {
+  border-radius: 370px;
+  opacity: 0.6;
+  background: radial-gradient(
+    107.52% 107.52% at 50% 50%,
+    #8d3494 0%,
+    #4b0fac 100%
+  );
+  filter: blur(42.5px);
+  width: 370px;
+  height: 370px;
+  flex-shrink: 0;
+  position: absolute;
+  bottom: -32%;
+  left: -42%;
+}
+#upperCircle {
+  width: 370px;
+  height: 370px;
+  flex-shrink: 0;
+  border-radius: 370px;
+  opacity: 0.6;
+  background: radial-gradient(
+    107.52% 107.52% at 50% 50%,
+    #8d3494 0%,
+    #4b0fac 100%
+  );
+  filter: blur(42.5px);
+  position: absolute;
+  top: -32%;
+  right: -42%;
+} 
+
+/* Center the main content */
+h1{
+    font-weight: 600;
+    color: white;
+    margin-bottom: 90px;
+    width: 100%;
+    text-align: center;
+}
+.cont{
+    background: #11002c;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+.main-login-app {
+  text-align: center;
+  max-height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  width: 100vw;
+}
+
+button {
+  background: radial-gradient(
+    107.52% 107.52% at 50% 50%,
+    #8d3494 0%,
+    #4b0fac 100%
+  );
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Add spacing between buttons */
+form + form {
+  margin-top: 10px;
+}
+
+/* Style the logo */
+#logo {
+  max-width: 60%;
+  height: auto;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}

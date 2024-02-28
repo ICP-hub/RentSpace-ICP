@@ -2,9 +2,21 @@ import React, { useState } from 'react'
 import {useNavigate} from 'react-router-dom'
 import './nav.css'
 import Icon from 'react-web-vector-icons'
+import { useAuth } from '../../../utils/useAuthClient'
 
 const Navbar = () => {
     const navg=useNavigate()
+    const {logout}=useAuth()
+    const Logout=async()=>{
+        // localStorage.clear()
+        // location.reload()
+        await logout().then((res)=>{
+            console.log(res)
+            location.reload()
+        }).catch((err)=>{
+            console.log(err)
+        })
+    }
   return (
     <div className='navbar'>
         <div className='logo'>
@@ -37,7 +49,7 @@ const Navbar = () => {
                 Support Chat
             </li>
         </ul>
-        <button className='logoutBtn'>Logout</button>
+        <button className='logoutBtn' onClick={Logout}>Logout</button>
     </div>
   )
 }
