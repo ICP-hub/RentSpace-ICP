@@ -1,5 +1,5 @@
 //Decides if canister ids used are of production or development
-const production=true
+const production=false
 
 export const host=(production)?"https://icp-api.io":"http://127.0.0.1:4943"
 
@@ -7,12 +7,12 @@ export const ids={
     userCan:(production)?
         // "tassb-3qaaa-aaaan-qloxq-cai":
         "wenzb-uyaaa-aaaan-qlwsa-cai":
-        "by6od-j4aaa-aaaaa-qaadq-cai",
+        "cgpjn-omaaa-aaaaa-qaakq-cai",
         
     hotelCan:(production)?
         "wkpuj-piaaa-aaaan-qlwta-cai":
         // "5mldq-waaaa-aaaan-qlqta-cai":
-        "avqkn-guaaa-aaaaa-qaaea-cai",
+        "ajuq4-ruaaa-aaaaa-qaaga-cai",
         
     backendCan:(production)?
         // "thtuv-wiaaa-aaaan-qloxa-cai":
@@ -20,19 +20,19 @@ export const ids={
         "be2us-64aaa-aaaaa-qaabq-cai",
     reviewCan:(production)?
         "wdm7v-zaaaa-aaaan-qlwsq-cai":
-        "a4tbr-q4aaa-aaaaa-qaafq-cai",
+        "cuj6u-c4aaa-aaaaa-qaajq-cai",
     bookingCan:(production)?
         "xhbqh-aaaaa-aaaan-qlwuq-cai":
-        "asrmz-lmaaa-aaaaa-qaaeq-cai",
+        "cinef-v4aaa-aaaaa-qaalq-cai",
     tokenCan:(production)?
         "ryjl3-tyaaa-aaaaa-aaaba-cai"
         :"bw4dl-smaaa-aaaaa-qaacq-cai",
     commentCan:(production)?
         "wnos5-cqaaa-aaaan-qlwtq-cai"
         :
-        "",
+        "dfdal-2uaaa-aaaaa-qaama-cai",
     supportCan:(production)?
         "xaawt-nyaaa-aaaan-qlwua-cai"
         :
-        ""
+        "dccg7-xmaaa-aaaaa-qaamq-cai"
 }
