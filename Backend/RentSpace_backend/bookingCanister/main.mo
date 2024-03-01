@@ -67,7 +67,7 @@ shared ({caller = owner}) actor class () = this {
         };
     };
 
-    public shared  query({caller}) func getBookingFrequencyInYear(year : Text) : async ?Types.AnnualData {
+    public shared query ({caller}) func getBookingFrequencyInYear(year : Text) : async ?Types.AnnualData {
         if (Utils.getOwnerFromArray(caller, admin) == false) {
             Debug.trap("Not Authorased");
         };
@@ -104,11 +104,19 @@ shared ({caller = owner}) actor class () = this {
         };
         bookingDataMap.put(bookingId, bookingData);
     };
+
+    public shared query func getNoOfPages(chunkSize : Nat) : async Nat {
+        let data = Utils.paginate<Types.BookingId, Types.BookingInfo>(Iter.toArray(bookingDataMap.entries()), chunkSize);
+        data.size();
+    };
     public shared query ({caller}) func scanBooking(pageNo : Nat, chunkSize : Nat) : async [(Types.BookingId, Types.BookingInfo)] {
         if (Utils.getOwnerFromArray(caller, admin) == false) {
             Debug.trap("Not Authorased");
         };
         let allData = Utils.paginate<Types.BookingId, Types.BookingInfo>(Iter.toArray(bookingDataMap.entries()), chunkSize);
+        if (allData.size() <= pageNo) {
+            Debug.trap("No page Exist");
+        };
         allData[pageNo];
     };
     public shared query ({caller}) func whoami() : async Text {

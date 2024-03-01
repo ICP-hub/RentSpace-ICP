@@ -149,11 +149,19 @@ shared ({caller = owner}) actor class User() {
         Utils.checkKeyExist<Types.UserId, Types.UserInfo>(userIdentity, userDataMap);
     };
 
+    public shared query func getNoOfPages(chunkSize : Nat) : async Nat {
+        let data = Utils.paginate<Types.UserId, Types.UserInfo>(Iter.toArray(userDataMap.entries()), chunkSize);
+        data.size();
+    };
+
     public shared query ({caller}) func scanUsers(pageNo : Nat, chunkSize : Nat) : async [(Types.UserId, Types.UserInfo)] {
         if (Utils.getOwnerFromArray(caller, admin) == false) {
             Debug.trap("Not Authorased");
         };
         let allData = Utils.paginate<Types.UserId, Types.UserInfo>(Iter.toArray(userDataMap.entries()), chunkSize);
+        if (allData.size() <= pageNo) {
+            Debug.trap("No page Exist");
+        };
         allData[pageNo];
     };
     public shared query ({caller}) func whoami() : async Text {

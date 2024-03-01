@@ -123,11 +123,19 @@ shared ({caller = owner}) actor class Review() {
     public shared query ({caller}) func whoami() : async Text {
         Principal.toText(caller);
     };
+    public shared query func getNoOfPages(chunkSize : Nat) : async Nat {
+        let data = Utils.paginate<Types.ReviewId, Types.Review>(Iter.toArray(reviewDataMap.entries()), chunkSize);
+        data.size();
+    };
     public shared query ({caller}) func scanReview(pageNo : Nat, chunkSize : Nat) : async [(Types.ReviewId, Types.Review)] {
         if (Utils.getOwnerFromArray(caller, admin) == false) {
             Debug.trap("Not Authorased");
         };
+
         let allData = Utils.paginate<Types.ReviewId, Types.Review>(Iter.toArray(reviewDataMap.entries()), chunkSize);
+        if (allData.size() <= pageNo) {
+            Debug.trap("No page Exist");
+        };
         allData[pageNo];
     };
     public shared ({caller}) func addOwner(ownerIds : Types.AdminId) : async Text {

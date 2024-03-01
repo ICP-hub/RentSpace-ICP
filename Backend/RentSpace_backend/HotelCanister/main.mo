@@ -96,12 +96,18 @@ shared ({caller = owner}) actor class () {
         hotelDataMap.delete(hotelId);
         "Suceessfully Deleted the hotel";
     };
-
+    public shared query func getNoOfPages(chunkSize : Nat) : async Nat {
+        let data = Utils.paginate<Types.HotelId, Types.HotelInfo>(Iter.toArray(hotelDataMap.entries()), chunkSize);
+        data.size();
+    };
     public shared query ({caller}) func scanHotel(pageNo : Nat, chunkSize : Nat) : async [(Types.HotelId, Types.HotelInfo)] {
         if (Utils.getOwnerFromArray(caller, admin) == false) {
             Debug.trap("No Access");
         };
         let allData = Utils.paginate<Types.HotelId, Types.HotelInfo>(Iter.toArray(hotelDataMap.entries()), chunkSize);
+        if (allData.size() <= pageNo) {
+            Debug.trap("No page Exist");
+        };
         allData[pageNo];
     };
 

@@ -226,7 +226,7 @@ shared ({caller = owner}) actor class () {
             #err(code, message);
         };
     };
-    public shared query({caller}) func isAdmin():async Bool{
+    public shared query ({caller}) func isAdmin() : async Bool {
         Utils.getOwnerFromArray(caller, admin);
     };
 
@@ -262,6 +262,20 @@ shared ({caller = owner}) actor class () {
             let message = Error.message(e);
             #err(code, message);
         };
+    };
+    public shared query func getNoOfPages(chunkSize : Nat) : async Nat {
+        let data = Utils.paginate<Text, [(TicketId, Ticket)]>(Iter.toArray(ticketMap.entries()), chunkSize);
+        data.size();
+    };
+    public shared query ({caller}) func scanBooking(pageNo : Nat, chunkSize : Nat) : async [(Text, [(TicketId, Ticket)])] {
+        if (Utils.getOwnerFromArray(caller, admin) == false) {
+            Debug.trap("Not Authorased");
+        };
+        let allData = Utils.paginate<Text, [(TicketId, Ticket)]>(Iter.toArray(ticketMap.entries()), chunkSize);
+        if (allData.size() <= pageNo) {
+            Debug.trap("No page Exist");
+        };
+        allData[pageNo];
     };
 
     public shared ({caller}) func addOwner(ownerIds : AdminId) : async Text {
