@@ -20,6 +20,7 @@ const Congratulations = ({setHostModal,pos}) => {
   const baseUrl="https://rentspace.kaifoundry.com"
   // const baseUrl="http://localhost:5000"
   const {files}=useSelector(state=>state.filesReducer)
+  const {user}=useSelector(state=>state.userReducer)
   
   const ApiLogin=async()=>{
     console.log("files",files)
@@ -46,7 +47,7 @@ const Congratulations = ({setHostModal,pos}) => {
         hotelTitle:listing?.hotelTitle,
         hotelDes:listing?.hotelDes,
         hotelPrice:listing?.hotelPrice,
-        hotelLocation:"Ludhiana",
+        hotelLocation:listing?.hotelLocation.split('#')[2],
         longitude:parseFloat(listing?.hotelLocation.split('#')[0]),
         latitude:parseFloat(listing?.hotelLocation.split('#')[1])
       }
@@ -79,8 +80,13 @@ const Congratulations = ({setHostModal,pos}) => {
         setHostModal(false)
         
         console.log("hotel creation api response videos : ",res.data)
-        // console.log("hotels images : ",res.data.hotels[res.data.hotels.length-1].imagesUrls)
-        // await actors?.hotelActor?.getHotelId().t
+        
+        await actors.hotelActor?.getHotelId().then(async(res)=>{
+          console.log(res)
+          dispatch(setHotels(res))
+        }).catch((err)=>{
+          console.log(err)
+        })
         
       }).catch((err)=>{
         setLoading(false)
@@ -92,32 +98,20 @@ const Congratulations = ({setHostModal,pos}) => {
   const createHotel=async()=>{
     console.log('create hotel : ',listing)
     setLoading(true)
-  // await actors.hotelActor?.createHotel({...listing,hotelLocation:"Ludhiana"}).then(async(res)=>{
-    // setLoading(false)
-    // await actors.hotelActor?.getHotelId().then(async(res)=>{
-      // console.log(res)
-      // dispatch(setHotels(res))
-      
       ApiHotelFilters()
       ApiHotelCreate()
-    // })
-
-  // }).catch((err)=>{
-  //   setLoading(false)
-  //   alert(err)
-  //   console.log(err)})
   }
   
   return (
     <View style={styles.view}>
       <Image source={images.congrats} style={styles.img}/>  
-      <Text style={styles.title}>Congratulations, Lucy</Text>
+      <Text style={styles.title}>Congratulations, {user?.firstName}</Text>
       <Text style={styles.text}>
         From one Host to another - welcome aboard.
         Thank you for sharing your home and helping to create incredible experiences for our guests.    
       </Text>
       <Text style={styles.subtitle}>
-      Brian Chesky, CEO
+      Rentspace Team
       </Text>
       <View style={styles.btnView}>
         <TouchableOpacity style={styles.btn} onPress={createHotel}>

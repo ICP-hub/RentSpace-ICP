@@ -1,5 +1,6 @@
 import { idlFactory } from "../../../../../../../Backend/RentSpace_backend/wallet/legder.did";
 import { Actor, HttpAgent } from "@dfinity/agent";
+import { host, ids } from "../../../../../../../DevelopmentConfig";
 
 export const createTokenActor = (canisterId) => {
   let identity = window.identity;
@@ -14,7 +15,7 @@ export const createTokenActor = (canisterId) => {
     },
   },
   blsVerify: () => true,
-  host: 'http://127.0.0.1:4943', });
+  host: host, });
   let tokenActor = Actor.createActor(idlFactory, {
     agent,
     blsVerify:()=>true,

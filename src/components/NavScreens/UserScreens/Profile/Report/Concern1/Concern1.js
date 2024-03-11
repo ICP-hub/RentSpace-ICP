@@ -1,10 +1,11 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { COLORS,SIZES } from '../../../../../../constants/themes'
 import Icon from 'react-native-vector-icons/Entypo'
 import TopicOption from './TopicOption'
 import LinkOption from './LinkOption'
 import BottomBtn from '../BottomBtn'
+import HotelAddress from './HotelAddress'
 
 const complaintTopics=[
     {

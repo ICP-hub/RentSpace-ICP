@@ -5,6 +5,7 @@ type anon_class_14_1 =
    getBookingDetials: (text) -> (opt BookingInfo) query;
    getBookingFrequencyInYear: (text) -> (opt AnnualData) query;
    getBookingId: () -> (vec text) query;
+   getNoOfPages: (nat) -> (nat) query;
    gethotelXBookingId: (text) -> (vec text) query;
    scanBooking: (nat, nat) -> (vec record {
                                      BookingId;

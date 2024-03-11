@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,TextInput, TouchableOpacity, Image ,ScrollView,Modal} from 'react-native'
+import { StyleSheet, Text, View,TextInput, TouchableOpacity, Image ,ScrollView,Modal, ActivityIndicator} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { images } from '../../../../../constants'
 import { SIZES,COLORS } from '../../../../../constants/themes'
@@ -17,37 +17,42 @@ const UpdateProfile = ({setEditProfile}) => {
     const {user}=useSelector(state=>state.userReducer)
     const {actors}=useSelector(state=>state.actorReducer)
     const dispatch=useDispatch()
-
-
-
+    const [loading,setLoading]=useState(false)
     const [updatedUser,setUpdatedUser]=useState(user)
     const [showCalendar, setShowCalendar] = useState(false);
     const [selected, setSelected] = useState('');
     const [userImg,setUserImg]=useState(images.profile2)
 
     const update=async()=>{
-        console.log("1",actors.userActor)
+        setLoading(true)
+        console.log("1",newBase64)
         setUpdatedUser({
           ...updatedUser,
           userType:user?.userType,
           hostStatus:user?.hostStatus,
           verificationStatus:false,
-          agreementStatus:user?.agreementStatus
+          agreementStatus:user?.agreementStatus,
         })
-        console.log("2")
+        console.log("2",updatedUser)
         
         await actors.userActor?.updateUserInfo(updatedUser)
         .then(async(res)=>{
           console.log("3")
             console.log("update res : ",res[0])
-            alert('processing')
             alert(`Your profile is updated ${updatedUser?.firstName} !`)
             await actors.userActor?.getUserInfo()
             .then(async(res)=>{
+                setLoading(false)
                 dispatch(setUser(res[0]))
                 console.log("response user",res[0])
                 setEditProfile(false)
+            }).catch((err)=>{
+              console.log(err)
+              setLoading(false)
             })
+        }).catch((err)=>{
+          setLoading(false)
+          console.log(err)
         })
     }
     const chooseUserImg=async()=>{
@@ -55,9 +60,15 @@ const UpdateProfile = ({setEditProfile}) => {
       (res)=>{
         //console.log(res)
         setUserImg(res.assets[0])
+        console.log(res.assets[0].base64)
       })
       .catch((err)=>{console.log(err)})
       console.log(result)
+      setUpdatedUser({
+        ...updatedUser,
+        userProfile:result.assets[0].base64
+      })
+      console.log(result.assets[0].base64)
     }
 
   return (
@@ -163,6 +174,7 @@ const UpdateProfile = ({setEditProfile}) => {
           />
         </View>
       </Modal>
+      <ActivityIndicator animating={loading} size={40} style={styles.loader}/>
     </ScrollView>
   )
 }
@@ -264,4 +276,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderBlockColor: COLORS.inputBorder,
       },
+      loader:{
+        position:'absolute',
+        top:'45%',
+        left:'45%'
+      }
 })

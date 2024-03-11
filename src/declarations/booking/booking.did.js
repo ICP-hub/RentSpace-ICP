@@ -39,6 +39,7 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'getBookingId' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
+    'getNoOfPages' : IDL.Func([IDL.Nat], [IDL.Nat], ['query']),
     'gethotelXBookingId' : IDL.Func([IDL.Text], [IDL.Vec(IDL.Text)], ['query']),
     'scanBooking' : IDL.Func(
         [IDL.Nat, IDL.Nat],

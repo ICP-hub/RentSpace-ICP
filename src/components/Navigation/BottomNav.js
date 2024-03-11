@@ -1,5 +1,5 @@
-import { View, Text,StyleSheet, TouchableOpacity,Image } from 'react-native'
-import React from 'react'
+import { View, Text,StyleSheet, TouchableOpacity,Image, Keyboard } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { COLORS ,SIZES} from '../../constants/themes'
 import {images} from '../../constants'
 import Icon from 'react-native-vector-icons/AntDesign'
@@ -13,12 +13,22 @@ const BottomNav = ({navigation}) => {
     const message="You need to login first, go to profile page!"
 
     const {principle}=useSelector(state=>state.principleReducer)
+
+    const [bottom,setBottom]=useState(true)
+    useEffect(()=>{
+        Keyboard.addListener('keyboardDidShow',()=>{
+            setBottom(false)
+        })
+        Keyboard.addListener('keyboardDidHide',()=>{
+            setBottom(true)
+        })
+    })
   
     if(principle==''){
         return (
     
     
-            <View style={styles.viewNav}>
+            <View style={(bottom==true)?[styles.viewNav,{bottom:0}]:[styles.viewNav,{bottom:-100}]}>
                 {/* <Icon name="home" size={20} color={COLORS.inputBorder}/> */}
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{alert(message)}}>
                 <Icon name="filter" size={25} color={COLORS.inputBorder}/>

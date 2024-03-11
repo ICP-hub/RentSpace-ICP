@@ -62,6 +62,7 @@ const getHotelList=async()=>{
 
 useEffect(()=>{
   getHotelList()
+  console.log(user)
 },[])
 
 const makeHost=async()=>{

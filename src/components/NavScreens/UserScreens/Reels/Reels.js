@@ -46,7 +46,7 @@ const Reels = ({navigation}) => {
       <BottomSheetModalProvider>
         <View style={styles.view}>
           {/* <HeaderSearch/> */}
-          <ReelObject openComments={openComments} reels={reels}/>
+          <ReelObject fetchReels={fetchReels} openComments={openComments} reels={reels}/>
           <BottomNav navigation={navigation}/>
           <BottomSheetModal 
             ref={btmSheetComments}

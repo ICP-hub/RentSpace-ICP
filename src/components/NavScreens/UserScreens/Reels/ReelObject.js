@@ -14,7 +14,22 @@ import ReelCard from './ReelCard'
 
 
 
-const ReelObject = ({openComments,reels}) => {
+const ReelObject = ({fetchReels,openComments,reels}) => {
+  const [refreshing,setRefreshing]=useState(false)
+  const [reelIndex,setReelIndex]=useState(null)
+
+  const refresh=()=>{
+    setRefreshing(true)
+    fetchReels()
+    setTimeout(()=>{
+      setRefreshing(false)
+    },2000)
+  }
+
+  const itemChanged=async(index)=>{
+    // console.log(index.index)
+    setReelIndex(index.index)
+  }
 
     const sampleReels=[
         "https://storage.googleapis.com/rentspace/City%20Of%20Gold%20_%20Nirvair%20Pannu%20(Full%20Video)%20Deep%20Royce%20_%20Juke%20Dock.mp4-85c96ba9-0c41-4357-a7e5-afcbbbb45497.mp4",
@@ -27,9 +42,13 @@ const ReelObject = ({openComments,reels}) => {
         style={{flex:1}}
         data={reels}
         renderItem={(item)=>(
-            <ReelCard item={item.item} openComments={openComments}/>
+            <ReelCard reelIndex={reelIndex} item={item.item} openComments={openComments}/>
         )}
         vertical={true}
+        refreshing={refreshing}
+        onRefresh={refresh}
+        onChangeIndex={itemChanged}
+        keyExtractor={(item)=>item.hotelId}
         />                 
   )
 }

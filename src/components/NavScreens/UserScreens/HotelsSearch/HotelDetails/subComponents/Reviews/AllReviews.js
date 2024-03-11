@@ -19,15 +19,21 @@ const AllReviews = ({setShowReviews,reviews}) => {
     <TouchableOpacity style={styles.backIcon} onPress={()=>setShowReviews(false)}>
         <Icon name="angle-left" size={30} color={COLORS.textLightGrey}/> 
     </TouchableOpacity>
-    <Text style={styles.title}>Reviews</Text>    
-    <ScrollView contentContainerStyle={styles.list}>
-      {/* {
+    <Text style={styles.title}>Reviews</Text>
+    {
+      reviews!=undefined?
+      <ScrollView contentContainerStyle={styles.list}>
+      {
         reviews.map((review,index)=>(
             <ReviewCard item={review} key={index}/>
         ))
-      } */}
-      <ReviewCard item={itemSample}/>
+      }
+      {/* <ReviewCard item={itemSample}/> */}
     </ScrollView>
+      :
+      <Text style={styles.empty}>No Reviews to show yet</Text>
+    }    
+   
     </View>
   )
 }
@@ -49,7 +55,7 @@ const styles = StyleSheet.create({
         color:COLORS.black,
         fontSize:SIZES.medium,
         position:'absolute',
-        top:'2%'
+        top:'8%'
     },
     backIcon:{
         display:'flex',
@@ -62,5 +68,14 @@ const styles = StyleSheet.create({
     list:{
         width:'90%',
         paddingLeft:20
+    },
+    empty:{
+      width:'100%',
+      fontSize:SIZES.preMedium,
+      color:'red',
+      fontWeight:'300',
+      // backgroundColor:COLORS.black,
+      textAlign:'center',
+      marginVertical:40
     }
 })

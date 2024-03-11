@@ -1,5 +1,6 @@
 import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
+import type { IDL } from '@dfinity/candid';
 
 export type AdminId = string;
 export type HotelId = string;
@@ -7,6 +8,7 @@ export interface Review {
   'addOwner' : ActorMethod<[AdminId], string>,
   'createReview' : ActorMethod<[string, Review__1], undefined>,
   'getHotelId' : ActorMethod<[], Array<ReviewId>>,
+  'getNoOfPages' : ActorMethod<[bigint], bigint>,
   'getReviewIdsFromHotelId' : ActorMethod<[HotelId], Array<ReviewId>>,
   'getReviewInfo' : ActorMethod<[string], [] | [Review__1]>,
   'scanReview' : ActorMethod<[bigint, bigint], Array<[ReviewId, Review__1]>>,
@@ -22,3 +24,5 @@ export interface Review__1 {
   'rating' : number,
 }
 export interface _SERVICE extends Review {}
+export declare const idlFactory: IDL.InterfaceFactory;
+export declare const init: ({ IDL }: { IDL: IDL }) => IDL.Type[];

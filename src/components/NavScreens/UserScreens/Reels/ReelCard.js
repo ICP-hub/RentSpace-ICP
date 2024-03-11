@@ -16,7 +16,7 @@ const months=[
     "January","Febraury","March","April","May","June","July","August","September","October","November","December"
 ]
 
-const ReelCard = ({item}) => {
+const ReelCard = ({item,reelIndex}) => {
     const [likeDisabled,setLikeDisabled]=useState(false)
     const {user}=useSelector(state=>state.userReducer)
     const {principle}=useSelector(state=>state.principleReducer)
@@ -30,6 +30,8 @@ const ReelCard = ({item}) => {
     }
 
   const getComments=async()=>{
+    setLiked(item?.likedBy.includes(principle))
+    console.log("usliked : ",item?.likedBy.includes(principle),item?.likedBy)
     console.log(actors?.commentActor)
     // console.log(item.hotelId)
     const comments=[]
@@ -107,7 +109,7 @@ const ReelCard = ({item}) => {
     setLiked(!liked)
     setLikeDisabled(true)
     await axios.patch(`${baseURL}/api/v1/updateLikesOnHotel`,{user:principle,hotelId:item?.hotelId}).then((res)=>{
-        console.log("updated like : ",res)
+        console.log("updated like : ",res.data)
         console.log(item?.likedBy.includes(principle))
         setLikeDisabled(false)
     }).catch((err)=>{
@@ -120,7 +122,7 @@ const ReelCard = ({item}) => {
   useEffect(()=>{
     getComments()
     console.log("running useEffect reels")
-  },[])
+  },[reelIndex])
 
   return (
 
@@ -133,9 +135,8 @@ const ReelCard = ({item}) => {
               style={styles.bg}
               repeat={true}
           />
-          {/* <Image source={images.reelBG} style={styles.bg}/>  */}
           <View style={styles.iconCont}>
-              <TouchableOpacity style={styles.icon} disabled={likeDisabled} onPress={updateLike} > 
+              <TouchableOpacity style={styles.icon} disabled={likeDisabled||(user?.firstName==undefined)} onPress={updateLike} > 
                   {
                       liked ?
                           <Icon name='heart' color={'red'} size={25} />
@@ -144,16 +145,16 @@ const ReelCard = ({item}) => {
                   }
 
               </TouchableOpacity>
-              <TouchableOpacity style={styles.icon} onPress={()=>{
+              <TouchableOpacity disabled={user?.firstName==undefined} style={styles.icon} onPress={()=>{
                 getComments()
                 console.log("liked by ",item?.likedBy.includes(principle))
                 }}>
                   <Icon name='plus' color={'white'} size={25} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.icon} onPress={openComments}>
+              <TouchableOpacity style={styles.icon} onPress={openComments} disabled={user?.firstName==undefined}>
                   <Icon2 name='chatbubble-ellipses-outline' color={'white'} size={25} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.bigIcon}>
+              <TouchableOpacity style={styles.bigIcon} disabled={user?.firstName==undefined}>
                   <Icon3 name='film' color={'white'} size={22} />
               </TouchableOpacity>
           </View>
@@ -173,7 +174,7 @@ const ReelCard = ({item}) => {
                 ref={btmSheetComments}
                 index={0}
                 snapPoints={["95%"]}>
-                <Comments item={item} comments={reelComments} getComments={getComments}/>
+                <Comments id={item?.hotelId} comments={reelComments} getComments={getComments}/>
             </BottomSheetModal>
         </View>
   )

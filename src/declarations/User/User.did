@@ -26,6 +26,7 @@ type User =
    checkUserExist: () -> (bool) query;
    createUser: (User__1) -> ();
    getAnnualRegisterByYear: (text) -> (opt AnnualData) query;
+   getNoOfPages: (nat) -> (nat) query;
    getOwner: () -> (text) query;
    getUserInfo: () -> (opt UserInfo) query;
    getUserInfoByPrincipal: (principal) -> (opt UserInfo) query;

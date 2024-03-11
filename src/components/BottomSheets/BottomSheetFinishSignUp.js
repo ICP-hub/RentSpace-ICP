@@ -11,7 +11,7 @@ import {Calendar} from 'react-native-calendars';
 import {User} from '../../declarations/User/index.js';
 import { useSelector,useDispatch } from 'react-redux';
 import { setUser } from '../../redux/users/actions';
-// const signUp=require('./signup')
+import DatePicker from 'react-native-date-picker';
 
 const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
   const [fname, setFname] = useState('');
@@ -19,18 +19,14 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
   const [email, setEmail] = useState('');
   const [DOB, setDOB] = useState('Birthday(dd/mm/yyyy)');
   const [showCalendar, setShowCalendar] = useState(false);
-  const [selected, setSelected] = useState('');
   const [loading,setLoading]=useState(false)
+  const [date,setDate]=useState(new Date())
 
   const {user} =useSelector(state=>state.userReducer)
   const {actors}=useSelector(state=>state.actorReducer)
   const dispatch=useDispatch()
-  // const SIGNUP=()=>{
-  //   signUp.signUp(fname,lname,DOB,email,actors,setLoading,openComm,closeModal,dispatch)
-  // }
-  
+
   async function signUp(){
-    console.log(actors?.userActor.createUser)
     setLoading(true)
     const userObj={
       firstName:fname,
@@ -38,7 +34,9 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
       dob:DOB,
       userEmail:email,
     }
-    // await actors.userActor?.createUser(fname,lname,DOB,email,"user").then(async(res)=>{
+    console.log(userObj)
+    console.log(date)
+
     let whoami=await actors?.userActor?.whoami().catch((err)=>{console.log(err)})
     console.log("principal signup page : ",whoami)
     console.log(actors?.userActor)
@@ -54,11 +52,10 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
         console.log(user)
       }).catch((err)=>{console.log("get user info catch : ",err)})
     }).catch((err)=>{
-      // alert(err)
+     
       console.log("err create user : ",err)
       setLoading(false)
     })
-    //alert(email)
   }
  
 
@@ -136,25 +133,21 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
       <TouchableOpacity style={styles.submitBtn} onPress={()=>{signUp()}}>
         <Text style={styles.submitText}>Accept and continue</Text>
       </TouchableOpacity>
-      <Modal visible={showCalendar} animationType="fade" transparent>
-        <View>
-          <Calendar
-            onDayPress={day => {
-              setSelected(day.dateString);
-              setDOB(`${day.day}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`);
-              setShowCalendar(false);
-            }}
-            style={styles.calendar}
-            markedDates={{
-              [selected]: {
-                selected: true,
-                disableTouchEvent: true,
-                selectedDotColor: COLORS.inputBorder,
-              },
-            }}
-          />
-        </View>
-      </Modal>
+      <DatePicker
+        modal
+        mode='date'
+        open={showCalendar}
+        date={date}
+        onConfirm={(date) => {
+          setShowCalendar(false)
+          setDate(date)
+          setDOB(`${(date.getDate()<10)?"0"+date.getDate():date.getDate()}/${(date.getMonth()+1<10)?"0"+(date.getMonth()+1):date.getMonth()+1}/${date.getFullYear()}`);
+        }}
+        onCancel={() => {
+          setShowCalendar(false)
+        }}
+        maximumDate={new Date()}
+      />
     </View>
   );
 };

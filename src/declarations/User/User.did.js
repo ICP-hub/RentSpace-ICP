@@ -43,6 +43,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(AnnualData)],
         ['query'],
       ),
+    'getNoOfPages' : IDL.Func([IDL.Nat], [IDL.Nat], ['query']),
     'getOwner' : IDL.Func([], [IDL.Text], ['query']),
     'getUserInfo' : IDL.Func([], [IDL.Opt(UserInfo)], ['query']),
     'getUserInfoByPrincipal' : IDL.Func(

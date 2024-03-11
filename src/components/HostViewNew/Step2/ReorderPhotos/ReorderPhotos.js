@@ -1,12 +1,20 @@
 import { StyleSheet, Text, View,ScrollView, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
 import SaveBtn from '../../Reusables/SaveBtn'
 import BottomBtn from '../../Reusables/BottomBtn'
 import Icon from 'react-native-vector-icons/Entypo'
 import { images } from '../../../../constants'
+import { useSelector } from 'react-redux'
 
 const ReorderPhotos = ({setHostModal,pos}) => {
+
+    const {files}=useSelector(state=>state.filesReducer)
+
+    useEffect(()=>{
+        console.log(files[1].base64)
+    })
+
   return (
     <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal}/>
@@ -26,16 +34,32 @@ const ReorderPhotos = ({setHostModal,pos}) => {
         </View>
       <ScrollView contentContainerStyle={styles.subView}>
         <View style={styles.bigImgCont}>
-            <Image source={images.hotelImg1} style={styles.bigImg}/>
+            <Image source={{uri:files[1].uri}} style={styles.bigImg}/>
         </View>
        
         <View style={styles.imgCont}>
-            <Image source={images.hotelImg2} style={styles.smallImg}/>
-            <Image source={images.hotelImg3} style={styles.smallImg}/>
+            {
+                files.length>2?
+                <Image source={{uri:files[1].uri}} style={styles.smallImg}/>
+                :<></>
+            }
+            {
+                files.length>3?
+                <Image source={{uri:files[1].uri}} style={styles.smallImg}/>
+                :<></>
+            }
         </View>
         <View style={styles.imgCont}>
-            <Image source={images.hotelImg4} style={styles.smallImg}/>
-            <Image source={images.hotelImg5} style={styles.smallImg}/>
+        {
+                files.length>4?
+                <Image source={{uri:files[1].uri}} style={styles.smallImg}/>
+                :<></>
+            }
+            {
+                files.length>5?
+                <Image source={{uri:files[1].uri}} style={styles.smallImg}/>
+                :<></>
+            }
         </View>
         <View style={styles.iconCont}>
             <TouchableOpacity style={styles.plusIcon}>

@@ -28,8 +28,8 @@ const Reviews = ({reviews}) => {
         }
         {
             (reviews?.length==0)?
-            // <Text style={styles.empty}>No Reviews to show yet</Text>
-            <ReviewCard item={itemSample}/>
+            <Text style={styles.empty}>No Reviews to show yet</Text>
+            // <ReviewCard item={itemSample}/>
             :
             <FlatList contentContainerStyle={styles.list} data={reviews} renderItem={(item)=>(
             <ReviewCard item={item?.item}/>

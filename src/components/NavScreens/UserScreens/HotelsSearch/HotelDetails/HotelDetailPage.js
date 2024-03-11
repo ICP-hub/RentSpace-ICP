@@ -9,7 +9,6 @@ import HotelFacilityCard from './cards/HotelFacilityCard'
 import ReserveBtn from './cards/ReserveBtn'
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import Reviews from './subComponents/Reviews/Reviews'
-import BookingForm from './BookingForm/BookingForm'
 import { useSelector } from 'react-redux'
 import BookingFormComp from './BookingForm/BookingFormComp'
 import FirstForm from './BookingForm/FirstForm'
@@ -87,9 +86,6 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
       <BottomSheetModal ref={btmBtn} index={0} snapPoints={['12']} style={{elevation:10,backgroundColor:'white'}}>
         <ReserveBtn item={item} onClick={()=>setBookingForm(true)}/>
       </BottomSheetModal>
-      <Modal animationType='slide' visible={showBookHotel}>
-        <BookingForm item={item} setOpen={setOpen} setShowBookHotel={setShowBookHotel} /> 
-      </Modal> 
       <Modal animationType='slide' visible={bookingForm} transparent>
         {/* <BookingFormComp setBookingForm={setBookingForm}/> */}
         <FirstForm setBookingForm={setBookingForm} item={item} setOpen={setOpen}/>

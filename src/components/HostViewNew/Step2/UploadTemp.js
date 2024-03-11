@@ -5,7 +5,7 @@ import { COLORS,SIZES } from '../../../constants/themes'
 const UploadTemp = ({setHostModal,pos}) => {
 
     useEffect(()=>{
-        setTimeout(()=>{setHostModal(pos+1)},3000)
+        setTimeout(()=>{setHostModal(pos+1)},500)
     },[])
     
   return (

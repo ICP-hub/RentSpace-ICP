@@ -1,26 +1,28 @@
-type Review__1 = 
- record {
-   bookingId: text;
-   createdAt: text;
-   des: text;
-   rating: float64;
-   title: text;
- };
-type ReviewId = text;
-type Review = 
- service {
-   addOwner: (AdminId) -> (text);
-   createReview: (text, Review__1) -> () oneway;
-   getHotelId: () -> (vec ReviewId) query;
-   getReviewIdsFromHotelId: (HotelId) -> (vec ReviewId) query;
-   getReviewInfo: (text) -> (opt Review__1) query;
-   scanReview: (nat, nat) -> (vec record {
-                                    ReviewId;
-                                    Review__1;
-                                  }) query;
-   updateReviewInfo: (text, Review__1) -> (opt Review__1);
-   whoami: () -> (text) query;
- };
-type HotelId = text;
-type AdminId = text;
-service : () -> Review
+import type { Principal } from '@dfinity/principal';
+import type { ActorMethod } from '@dfinity/agent';
+import type { IDL } from '@dfinity/candid';
+
+export type AdminId = string;
+export type HotelId = string;
+export interface Review {
+  'addOwner' : ActorMethod<[AdminId], string>,
+  'createReview' : ActorMethod<[string, Review__1], undefined>,
+  'getHotelId' : ActorMethod<[], Array<ReviewId>>,
+  'getNoOfPages' : ActorMethod<[bigint], bigint>,
+  'getReviewIdsFromHotelId' : ActorMethod<[HotelId], Array<ReviewId>>,
+  'getReviewInfo' : ActorMethod<[string], [] | [Review__1]>,
+  'scanReview' : ActorMethod<[bigint, bigint], Array<[ReviewId, Review__1]>>,
+  'updateReviewInfo' : ActorMethod<[string, Review__1], [] | [Review__1]>,
+  'whoami' : ActorMethod<[], string>,
+}
+export type ReviewId = string;
+export interface Review__1 {
+  'des' : string,
+  'title' : string,
+  'bookingId' : string,
+  'createdAt' : string,
+  'rating' : number,
+}
+export interface _SERVICE extends Review {}
+export declare const idlFactory: IDL.InterfaceFactory;
+export declare const init: ({ IDL }: { IDL: IDL }) => IDL.Type[];

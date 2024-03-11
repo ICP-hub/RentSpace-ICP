@@ -24,8 +24,9 @@ const BookHotelPage = ({navigation,queryHotels}) => {
   const sampleName='DreamLiner Hotel'
   const sampleDes='2972 Westheimer Rd. Santa Ana, Illinois 85486 '
   const [bookingList,setBookingList]=useState([])
+  const [refreshing,setRefreshing]=useState(false)
   async function getReservations(){
-    // setShowReservations(true)
+
     setBookingList([])
     await actors?.bookingActor.getBookingId().then((res)=>{
       console.log("getid resp : ",res)
@@ -71,45 +72,36 @@ const BookHotelPage = ({navigation,queryHotels}) => {
     
   }
   async function getQueryHotelDetails(){
-    setHotelsList([])
     const newArr=[]
+    setRefreshing(true)
     for(let i=0;i<queryHotels?.length;i++){
-      // console.log(queryHotels[i].id)
-      if(!(queryHotels[i].length<40)){
         console.log("el",queryHotels[i])
         await actors.hotelActor?.getHotel(queryHotels[i]).then((res)=>{
           console.log("resp : ",res)
           newArr.push({...res[0],id:queryHotels[i]})
-          // setHotelsList(hotelsList=>[...hotelsList,{...res[0],id:queryHotels[i]}])
-          setHotelsList(newArr)
           console.log({...res[0],id:queryHotels[i]})
-        }).catch((err)=>console.log(err))
-      
+          setRefreshing(false)
+          setHotelsList([...newArr])
+        }).catch((err)=>{
+          console.log(err)
+          setRefreshing(false)
+        })  
     }
-    
-    }
-    // try{
-    //   dispatch(setHotelList(hotelsList))
-    // }catch(err){console.log(err)}
-    
   }
-  const reloadData=()=>{
-    // getHotelDetails()
+  const refresh=()=>{
+
     console.log(queryHotels)
     getQueryHotelDetails()
     getReservations()
-    // getHotelDetails()
-    // console.log("authData : ",authData)
 
   }
   useEffect(()=>{
-    // console.log(queryHotels)
+
     if(firstRender.current){
       console.log(firstRender.current)
       firstRender.current=false
     }else{
       getQueryHotelDetails()
-      // getHotelDetails()
       getReservations()
     }
    
@@ -120,7 +112,7 @@ const BookHotelPage = ({navigation,queryHotels}) => {
       <>
       <View style={styles.btnCont}>
 
-      <TouchableOpacity style={[styles.btn]} onPress={reloadData}>
+      <TouchableOpacity style={[styles.btn]} onPress={refresh}>
           <Icon2 name="reload-circle-sharp" size={20} color={COLORS.black}/>
           <Text style={styles.btnText}>Reload Data</Text>
         </TouchableOpacity>
@@ -129,9 +121,15 @@ const BookHotelPage = ({navigation,queryHotels}) => {
           <Text style={styles.btnText}>Show my bookings</Text>
         </TouchableOpacity>
       </View>
-      <FlatList data={hotelsList} style={{marginBottom:70,backgroundColor:'white'}}  renderItem={(item)=>(
+      <FlatList 
+        data={hotelsList} 
+        style={{marginBottom:70,backgroundColor:'white'}}  
+        renderItem={(item)=>(
         <HotelCard item={item.item} navigation={navigation} />
-      )}/>
+        )}
+        refreshing={refreshing}
+        onRefresh={refresh}
+      />
       <Modal animationType='slide' visible={showReservation}>
         <ShowBookings bookingList={bookingList} setShowReservations={setShowReservations}/>
       </Modal>
@@ -260,7 +258,7 @@ const styles = StyleSheet.create({
       width:'90%',
       height:200,
       fontSize:SIZES.preMedium,
-      color:'red',
+      color:COLORS.textLightGrey,
       fontWeight:'300',
       backgroundColor:COLORS.lighterGrey,
       borderRadius:20,

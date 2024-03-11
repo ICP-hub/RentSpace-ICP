@@ -4,11 +4,11 @@ import { COLORS,SIZES } from '../../../../../../../constants/themes'
 import Option from './Option'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
-const PaymentMethods = () => {
+const PaymentMethods = ({setMethod,method}) => {
   const methods=[
     {
-      label:'gPay',
-      icon:<Icon name='google-pay' color={COLORS.textLightGrey} size={30}/>
+      label:'ckEth',
+      icon:<Icon name='ethereum' color={COLORS.textLightGrey} size={30}/>
     },
     {
       label:'applePay',
@@ -19,8 +19,8 @@ const PaymentMethods = () => {
       icon:<Text style={{color:COLORS.textLightGrey,fontWeight:'bold',fontSize:SIZES.largeMed}}>ICP</Text>
     },
     {
-      label:'paypal',
-      icon:<Icon name='paypal' color={COLORS.textLightGrey} size={26}/>
+      label:'gPay',
+      icon:<Icon name='google-pay' color={COLORS.textLightGrey} size={26}/>
     },
     {
       label:'ckBTC',
@@ -31,7 +31,7 @@ const PaymentMethods = () => {
       icon:<Icon name='credit-card' color={COLORS.textLightGrey} size={25}/>
     }
   ]
-  const [method,setMethod]=useState(methods[0]?.label)
+  // const [method,setMethod]=useState(methods[0]?.label)
   
   return (
     <View style={styles.sec}>

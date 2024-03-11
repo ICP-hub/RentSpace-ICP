@@ -44,10 +44,10 @@ const HotelLocation = ({setHostModal,pos}) => {
       <Image source={images.map2} style={styles.map}/>
       <BottomBtn setHostModal={setHostModal} pos={pos} step={1} nextFunc={checkEmpty}/>
       <Modal transparent animationType='slide' visible={showLocationPicker}>
-        <PickLocation setShowLocationPicker={setShowLocationPicker} coords={coords} setCoords={setCoords} setLocation={setLocation} location={location}/>
+        <PickLocation setShowAddressForm={setShowAddressForm} setShowLocationPicker={setShowLocationPicker} coords={coords} setCoords={setCoords} setLocation={setLocation} location={location}/>
       </Modal>
-      <Modal  animationType='slide' visible={showAddressForm}>
-        <FillAdress/>
+      <Modal transparent animationType='slide' visible={showAddressForm}>
+        <FillAdress self={setShowAddressForm} setLocation={setLocation} location={location}/>
       </Modal>
     </View>
   )

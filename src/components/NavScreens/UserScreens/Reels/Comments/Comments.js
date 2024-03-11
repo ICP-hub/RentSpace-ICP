@@ -58,7 +58,7 @@ const sampleComments=[
     }
 ]
 
-const Comments = ({item,comments,getComments}) => {
+const Comments = ({id,comments,getComments}) => {
     const comRef=useRef()
     const [comment,setComment]=useState("")
     const [parent,setParent]=useState("")
@@ -66,26 +66,12 @@ const Comments = ({item,comments,getComments}) => {
     const {actors}=useSelector(state=>state.actorReducer)
     const [loading,setLoading]=useState(false)
 
-    // const addComment=()=>{
-    //     const months=[
-    //         "January","Febraury","March","April","May","June","July","August","September","October","November","December"
-    //     ]
-    //     const date=(months[new Date().getMonth()])+" "+(new Date().getFullYear())
-    //     const name=user?.firstName+" "+user?.lastName
-    //     const obj={
-    //         name:name,
-    //         date:date,
-    //         text:comment
-    //     }
-    //     sampleComments.unshift(obj)
-    //     setComment('')
-    // }
     const createComment=async()=>{
         setComment('')
         setLoading(true)
         Keyboard.dismiss()
         console.log(`adding new comment ${comment} \n with parent : ${parent}`)
-        await actors?.commentActor?.createComment(item?.hotelId,parent,comment)
+        await actors?.commentActor?.createComment(id,parent,comment)
         .then((res)=>{
           console.log(res)
           getComments()
@@ -116,7 +102,9 @@ const Comments = ({item,comments,getComments}) => {
         data={comments}
         renderItem={(item)=>(
             <CommentCard item={item.item} setParent={setParent} comRef={comRef}/>
-        )} />    
+        )} 
+        keyExtractor={(item,index)=>index.toString()}
+        />    
       <View style={styles.typeCont}>
         <Image source={images.profileSample} style={styles.img}/>
         <TextInput 

@@ -301,16 +301,16 @@ const RootComponent: React.FC = () => {
     })
   };
   const handleDeepLink = async event => {
-    alert('inside handle deeplink')
+    // alert('inside handle deeplink')
     try{
 
-      alert('inside handle deeplink try')
+      // alert('inside handle deeplink try')
     let actor=backend
     const deepLink = event.url;
     const urlObject = new URL(deepLink);
     const delegation = urlObject.searchParams.get('delegation');
     	console.log("del signature",delegation)
-    alert('Getting delegation')
+    // alert('Getting delegation')
     const chain = DelegationChain.fromJSON(
       JSON.parse(decodeURIComponent(delegation)),
     );
@@ -335,7 +335,7 @@ const RootComponent: React.FC = () => {
     await agent.fetchRootKey()
     //New Login through api
 
-    alert('ágent created')
+    // alert('ágent created')
 
     let pubKey = toHex(await crypto.subtle.exportKey("raw",middleIdentity._inner._keyPair.publicKey));
     let priKey = toHex(await crypto.subtle.exportKey("pkcs8",middleIdentity._inner._keyPair.privateKey));
@@ -345,7 +345,7 @@ const RootComponent: React.FC = () => {
     //New Login through api end
     console.log(`new private : ${priKey}\n new public : ${pubKey}`)
 
-    alert('Retrieved keypair')
+    // alert('Retrieved keypair')
 
     let signObj;
     async function getSignObject(){
@@ -375,14 +375,14 @@ const RootComponent: React.FC = () => {
       // }).catch((err)=>{console.log(err)})
       
     }
-    alert('try registering user')
+    // alert('try registering user')
     await getSignObject().then(async()=>{
       console.log("getting sign obj : ",signObj)
       store.dispatch(
         setAuthData(signObj)
       )
       // const baseUrl="http://localhost:5000"
-      alert('implementing chat register')
+      // alert('implementing chat register')
       const baseUrl="https://rentspace.kaifoundry.com"
       await axios.post(`${baseUrl}/api/v1/register/user`,{},{
         headers:{
@@ -401,7 +401,7 @@ const RootComponent: React.FC = () => {
         }
       })
     })
-    alert('craeting actor')
+    // alert('craeting actor')
     let actorUser=createUserActor(ids.userCan,{agent})
     let actorHotel=createHotelActor(ids.hotelCan,{agent})
     let actorBooking=createBookingActor(ids.bookingCan,{agent})
@@ -425,7 +425,7 @@ const RootComponent: React.FC = () => {
     }))
     
     // console.log("actor : ",actor)
-    alert('calling whoami')
+    // alert('calling whoami')
     let whoami = await actorUser.whoami();
     store.dispatch(setPrinciple(whoami))
     console.log("user",whoami)

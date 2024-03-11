@@ -4,8 +4,8 @@ import { COLORS,SIZES } from '../../../../../../constants/themes'
 import Icon from 'react-native-vector-icons/Entypo'
 import { Calendar } from 'react-native-calendars'
 import { useSelector } from 'react-redux'
-import PaymentScreen from './PaymentScreen'
 import BookingFormComp from './BookingFormComp'
+import CheckAnim from './CheckAnim'
 
 const FirstForm = ({setBookingForm,item,setOpen}) => {
     const [selected,setSelected]=useState('')
@@ -15,6 +15,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
     const {principle}=useSelector(state=>state.principleReducer)
     const [loading,setLoading]=useState(false)
     const [paymentScreen,setPaymentScreen]=useState(false)
+    const [bookingAnimation,showBookingAnimation]=useState(false)
     const [booking,setBooking]=useState({
         userId:principle,
         date:'',
@@ -34,8 +35,13 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
             setLoading(false)
             // alert("Your booking is confirmed!")
             notify()
-            setOpen(false)
-            setBookingForm(false)
+            // setOpen(false)
+            showBookingAnimation(true)
+            setTimeout(()=>{
+              setBookingForm(false)
+              setOpen(false)
+            },3000)
+            
           }).catch((err)=>{
             console.log(booking,item?.id)
             console.log(err)
@@ -50,7 +56,10 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
   return (
     <View style={styles.page}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={()=>setBookingForm(false)}>
+        <TouchableOpacity onPress={()=>{
+          setBookingForm(false)
+
+        }}>
             <Icon name='cross' size={20} color={COLORS.textLightGrey}/>
         </TouchableOpacity>
         <TouchableOpacity onPress={()=>setDate('')}>
@@ -108,6 +117,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
                 selectedDotColor: COLORS.hostTitle,
               },
             }}
+            minDate={`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`}
           />
       <View style={styles.bottomCont}>
         <Text style={styles.btmPriceText}>${item?.hotelPrice}/night</Text>
@@ -130,8 +140,11 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
             loading={loading}
             book={book}
             setLoading={setLoading}
+            showBookingAnimation={showBookingAnimation}
+            bookingAnimation={bookingAnimation}
         />
       </Modal>
+      
     </View>
   )
 }

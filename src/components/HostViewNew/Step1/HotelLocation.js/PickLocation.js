@@ -7,7 +7,7 @@ import MapView, { Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import Icon3 from 'react-native-vector-icons/FontAwesome6'
 
-const PickLocation = ({setShowLocationPicker,coords,setCoords,setLocation,location}) => {
+const PickLocation = ({setShowAddressForm,setShowLocationPicker,coords,setCoords,setLocation,location}) => {
     const [searchText,setSearchText]=useState("")
     const pickCurrentLocation=()=>{
         Geolocation.getCurrentPosition((loc)=>{
@@ -76,7 +76,10 @@ const PickLocation = ({setShowLocationPicker,coords,setCoords,setLocation,locati
           </Marker>
           </MapView>
       </View>
-      <TouchableOpacity style={styles.btn} onPress={()=>setShowLocationPicker(false)}>
+      <TouchableOpacity style={styles.btn} onPress={()=>{
+          setShowLocationPicker(false)
+          setShowAddressForm(true)
+        }}>
         <Text style={styles.btnText}>Looks Good</Text>
       </TouchableOpacity>
     </View>
