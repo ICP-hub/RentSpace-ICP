@@ -4,7 +4,7 @@ import { COLORS,SIZES } from '../../../../../../../constants/themes'
 import Option from './Option'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
-const PaymentMethods = ({setMethod,method}) => {
+const PaymentMethods = ({setMethod,method,connect}) => {
   const methods=[
     {
       label:'ckEth',
@@ -23,13 +23,17 @@ const PaymentMethods = ({setMethod,method}) => {
       icon:<Icon name='google-pay' color={COLORS.textLightGrey} size={26}/>
     },
     {
+      label:'SOL',
+      icon:<Text style={{color:COLORS.textLightGrey,fontWeight:'bold',fontSize:SIZES.largeMed}}>SOL</Text>
+    },
+    {
       label:'ckBTC',
       icon:<Icon name='btc' color={COLORS.textLightGrey} size={25}/>
     },
     {
       label:'creditCard',
       icon:<Icon name='credit-card' color={COLORS.textLightGrey} size={25}/>
-    }
+    },
   ]
   // const [method,setMethod]=useState(methods[0]?.label)
   
@@ -39,7 +43,7 @@ const PaymentMethods = ({setMethod,method}) => {
       <View style={styles.methodCont}>
         {
           methods.map((item,index)=>(
-            <Option item={item} key={index} setMethod={setMethod} method={method}/>
+            <Option item={item} key={index} setMethod={setMethod} method={method} connect={connect}/>
           ))
         }
       </View>

@@ -16,8 +16,13 @@ const BottomBtn = ({setHostModal,pos,step,back,nextFunc}) => {
     })
     const execNext=()=>{
         let res=nextFunc()
+        console.log(res)
         if(res){
-            setHostModal(pos+1)
+            if(pos==9){
+                setHostModal(pos+2)
+            }else{
+                setHostModal(pos+1)
+            }
         }
         
     }
@@ -30,7 +35,8 @@ const BottomBtn = ({setHostModal,pos,step,back,nextFunc}) => {
             <TouchableOpacity onPress={()=>{
                 if(pos==4){
                     setHostModal(0)
-                }else{
+                }
+                else{
                 back?setHostModal(pos-back):
                 setHostModal(pos-1)
                 }

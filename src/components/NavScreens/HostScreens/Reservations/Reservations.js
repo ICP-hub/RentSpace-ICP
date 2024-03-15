@@ -1,33 +1,50 @@
 import { FlatList, StyleSheet, Text, View,TouchableOpacity, Modal } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
 import Header from './Header'
 import BottomNavHost from '../../../Navigation/BottomNavHost'
 import Sorting from './Sorting/Sorting'
+import { useSelector } from 'react-redux'
+
+const reservationTypes=[
+  {
+    title:"Checking out",
+    count:0
+  },
+  {
+    title:"Currently hosting",
+    count:0
+  },
+  {
+    title:"Arriving soon",
+    count:0
+  }
+]
 
 const Reservations = ({setShowReservations}) => {
 
-    const data=[
-        {
-          title:"Checking out",
-          count:0
-        },
-        {
-          title:"Currently hosting",
-          count:0
-        },
-        {
-          title:"Arriving soon",
-          count:0
-        }
-      ]
-      const [reservationType,setReservationType]=useState(data[0].title)
+      const [reservationType,setReservationType]=useState(reservationTypes[0].title)
       const [sorting,setSorting]=useState(false)
+      const [reservations,setReservations]=useState([])
+      const {hotels}=useSelector(state=>state.hotelsReducer)
+      const {actors}=useSelector(state=>state.actorReducer)
+
+      const getAllReservation=async()=>{
+        console.log("something",hotels)
+          hotels.map((h)=>{
+            // console.log(h)
+          })
+      }
+
+      useEffect(()=>{
+        getAllReservation()
+      },[reservationType])
+
   return (
     <View style={styles.view}>
         <Header setShowReservations={setShowReservations} setSorting={setSorting}/>
       <Text style={styles.title}>Reservations</Text>
-      <FlatList style={styles.reservationTitleList} data={data} renderItem={(item)=>{
+      <FlatList style={styles.reservationTitleList} data={reservationTypes} renderItem={(item)=>{
         return(
             <TouchableOpacity 
               onPress={()=>setReservationType(item.item.title)}

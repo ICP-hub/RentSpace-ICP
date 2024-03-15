@@ -1,6 +1,6 @@
-import { idlFactory } from "../../../../../../../Backend/RentSpace_backend/wallet/legder.did";
+import { idlFactory } from "../../../../../../../../Backend/RentSpace_backend/wallet/legder.did";
 import { Actor, HttpAgent } from "@dfinity/agent";
-import { host, ids } from "../../../../../../../DevelopmentConfig";
+import { host, ids } from "../../../../../../../../DevelopmentConfig";
 
 export const createTokenActor = (canisterId) => {
   let identity = window.identity;

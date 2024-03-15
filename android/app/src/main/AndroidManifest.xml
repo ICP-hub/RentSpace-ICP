@@ -33,6 +33,8 @@
           <category android:name="android.intent.category.DEFAULT" />
           <category android:name="android.intent.category.BROWSABLE" />
           <data android:scheme="rentspace" android:host="auth" />
+          <data android:scheme="rentspace" android:host="onConnect" />
+          <data android:scheme="rentspace" android:host="onSignAndSendTransaction" />
         </intent-filter>
       </activity>
       <meta-data

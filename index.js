@@ -45,7 +45,7 @@ import { setPrinciple } from './src/redux/principle/actions';
 import { setUser } from './src/redux/users/actions';
 import ChatContainer from './src/components/NavScreens/UserScreens/ChatPage/ChatContainer/ChatContainer';
 import { idlFactory } from './Backend/RentSpace_backend/wallet/legder.did';
-import { createTokenActor } from './src/components/NavScreens/UserScreens/HotelsSearch/HotelDetails/BookingForm/utils';
+import { createTokenActor } from './src/components/NavScreens/UserScreens/HotelsSearch/HotelDetails/BookingForm/utils/utils';
 import { setAuthData } from './src/redux/authData/actions';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -309,6 +309,10 @@ const RootComponent: React.FC = () => {
     const deepLink = event.url;
     const urlObject = new URL(deepLink);
     const delegation = urlObject.searchParams.get('delegation');
+    if(delegation==null){
+      console.log("no delegation")
+      return
+    }
     	console.log("del signature",delegation)
     // alert('Getting delegation')
     const chain = DelegationChain.fromJSON(

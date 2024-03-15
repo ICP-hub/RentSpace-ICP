@@ -7,7 +7,10 @@ import NextStepsCard from './NextStepsCard'
 import Icon from 'react-native-vector-icons/Octicons'
 import { images } from '../../../../constants'
 import ListingCard from './ListingCard'
+import { useSelector } from 'react-redux'
 const ReviewListing = ({setHostModal,pos}) => {
+
+    const {listing} = useSelector(state=>state.listingReducer)
 
     const todos=[
         {
@@ -33,7 +36,7 @@ const ReviewListing = ({setHostModal,pos}) => {
       <Text style={styles.text}>Our comprehensive verification system checks details such as name, address.</Text>
       <View style={styles.imgCont}>
         <Image source={images.hotelImg2} style={styles.sideImg}/>
-        <ListingCard/>
+        <ListingCard listing={listing}/>
         <Image source={images.hotelImg3} style={styles.sideImg}/>
       </View>
       <Text style={styles.subtitle}>What's next?</Text>

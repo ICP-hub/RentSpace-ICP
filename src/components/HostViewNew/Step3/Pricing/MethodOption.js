@@ -1,17 +1,28 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { COLORS } from '../../../../../../../constants/themes'
+import { COLORS } from '../../../../constants/themes'
 
-const Option = ({item,setMethod,method,connect}) => {
+const MethodOption = ({item,setMethod,method}) => {
+
+    const putItem=()=>{
+        console.log(method)
+        if(method.includes(item?.label)){
+          let arr=[]
+          method.map((am)=>{
+            if(am!=item?.label){
+              arr.push(am)
+            }
+          })
+          setMethod(arr)
+        }else{
+          setMethod([...method,item?.label])
+        }
+      }
+
   return (
     <TouchableOpacity 
-        style={(method==item?.label)?styles.selectedCard:styles.card} 
-        onPress={()=>{
-          setMethod(item?.label)
-          if(item?.label=="SOL"){
-            connect()
-          }
-        }}
+        style={(method.includes(item?.label))?styles.selectedCard:styles.card} 
+        onPress={putItem}
     >
       {
         item?.icon
@@ -20,7 +31,7 @@ const Option = ({item,setMethod,method,connect}) => {
   )
 }
 
-export default Option
+export default MethodOption
 
 const styles = StyleSheet.create({
     card:{
@@ -40,12 +51,13 @@ const styles = StyleSheet.create({
         backgroundColor:'white',
         height:50,
         borderColor:COLORS.hostTitle,
-        borderWidth:1.2,
+        // borderWidth:1.2,
         elevation:2,
         borderRadius:8,
         display:'flex',
         flexDirection:'column',
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
+        borderWidth:1,
     }
 })

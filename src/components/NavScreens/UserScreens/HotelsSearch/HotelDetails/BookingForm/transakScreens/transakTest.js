@@ -2,9 +2,9 @@
 //     TransakWebView, Environments, Events, TransakConfig, EventTypes, Order,
 //   } from '@transak/react-native-sdk';
 import TransakWebView from '@transak/react-native-sdk'
-  import { transak_key,transak_secret_phrase,environment } from '../../../../../../../transakConfig';
-import { createTokenActor } from './utils';
-import { ids } from '../../../../../../../DevelopmentConfig';
+  import { transak_key,transak_secret_phrase,environment } from '../../../../../../../../transakConfig';
+import { createTokenActor } from '../utils/utils';
+import { ids } from '../../../../../../../../DevelopmentConfig';
 
   const continueICPTransaction=async(amount,transfer,sendPrincipal,selfModal)=>{
     selfModal(false)

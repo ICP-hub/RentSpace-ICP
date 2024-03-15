@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,TouchableOpacity, ScrollView, ActivityIndicator, Modal, Alert, Dimensions } from 'react-native'
+import { StyleSheet, Text, View,TouchableOpacity, ScrollView, ActivityIndicator, Modal, Alert, Dimensions,Linking } from 'react-native'
 import React, { useState,useEffect, useRef } from 'react'
 import Icon from 'react-native-vector-icons/Entypo'
 import { COLORS,SIZES } from '../../../../../../constants/themes'
@@ -9,34 +9,59 @@ import PriceDetails from './PriceDetails/PriceDetails'
 import PaymentMethods from './PaymentMethods/PaymentMethods'
 import RequiredPhone from './RequiredPhone/RequiredPhone'
 import { useDispatch, useSelector } from 'react-redux'
-import { createTokenActor, formatTokenMetaData } from './utils'
+import { createTokenActor, formatTokenMetaData } from './utils/utils'
 import {Principal} from "@dfinity/principal"
 import PushNotification from 'react-native-push-notification'
-import { TransakWebViewIntegration } from './transakTest'
+import { TransakWebViewIntegration } from './transakScreens/transakTest'
 import WebView from 'react-native-webview'
 import { global_transak_key, transak_key,transak_secret_phrase } from '../../../../../../../transakConfig'
 import { AccountIdentifier } from '@dfinity/ledger-icp'
-import BalanceScreen from './BalanceScreen'
+import BalanceScreen from './cryptoScreens/BalanceScreen'
 import CheckAnim from './CheckAnim'
+import { Connection, Transaction, SystemInstruction, LAMPORTS_PER_SOL, clusterApiUrl, PublicKey, SystemProgram, TransactionInstruction } from "@solana/web3.js";
+import { Buffer } from "buffer";
+global.Buffer = global.Buffer || Buffer;
+import nacl from "tweetnacl";
+import bs58 from "bs58";
+import { decryptPayload } from './utils/decryptPayload'
+import { encryptPayload } from './utils/encryptPayload'
+
+const onConnectRedirectLink ="rentspace://onConnect";
+const connection = new Connection(clusterApiUrl("devnet"));
+const onSignAndSendTransactionRedirectLink="rentspace://onSignAndSendTransaction"
 
 const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,setLoading,showBookingAnimation,bookingAnimation}) => {
-  const {user}=useSelector(state=>state.userReducer)
-  const [fullPayment,setFullPayment]=useState(true)
-  const {actors}=useSelector(state=>state.actorReducer)
-  const {principle}=useSelector(state=>state.principleReducer)
-  const [userId,setUserId]=useState("sample")
+
+const {user}=useSelector(state=>state.userReducer)
+const [fullPayment,setFullPayment]=useState(true)
+const {actors}=useSelector(state=>state.actorReducer)
+const {principle}=useSelector(state=>state.principleReducer)
+const [userId,setUserId]=useState("sample")
 const [metaData,setMetaData] = useState(null);
 const [Balance,setBalance]=useState(0)
 const [tokenActor,setTokenActor]=useState(null)
 const [paymentMethod,setPaymentMethod]=useState('ICP')
 const [paymentType,setPaymentType]=useState('cypto')
-const [fiatPaymentStart,setFiatPaymentStart]=useState(false)
 const [balanceScreen,setBalanceScreen]=useState(false)
+const [total,setTotal]=useState(
+  ((item?.hotelPrice*booking.bookingDuration)*0.15)+((item?.hotelPrice*booking.bookingDuration)*0.10)+(item?.hotelPrice*booking.bookingDuration)
+)
+
+//Transak integration essential states
+
 const [wallet,setWallet]=useState("")
 const skipable=useRef(true)
-  const [total,setTotal]=useState(
-    ((item?.hotelPrice*booking.bookingDuration)*0.15)+((item?.hotelPrice*booking.bookingDuration)*0.10)+(item?.hotelPrice*booking.bookingDuration)
-  )
+const [fiatPaymentStart,setFiatPaymentStart]=useState(false)
+
+//SOL phantom integration essential states
+
+const [dappKeyPair] = useState(nacl.box.keyPair());
+const [phantomWalletPublicKey, setPhantomWalletPublicKey] = useState(null);
+const [sharedSecret, setSharedSecret] = useState(null);
+const [session, setSession] = useState("");
+const [deepLink, setDeepLink] = useState("");
+
+
   const transfer=async (sendAmount,sendPrincipal,tokenActor) =>{
     setLoading(true)
     console.log("metaData[decimals]",metaData)
@@ -83,24 +108,24 @@ const skipable=useRef(true)
       alert(`Insufficient balance in ${metaData?.["icrc1:symbol"]} ${await getBalance()}`)
       setBalanceScreen(false)
 
-    //   setBooking({...booking,paymentStatus:true,paymentId:'test'})
-    //   const newObj={
-    //     ...booking,
-    //     paymentId:'test',
-    //     paymentStatus:true
-    //   }
-    //   console.log(newObj)
+      // setBooking({...booking,paymentStatus:true,paymentId:'test'})
+      // const newObj={
+      //   ...booking,
+      //   paymentId:'test',
+      //   paymentStatus:true
+      // }
+      // console.log(newObj)
 
-    //   function notifyBookingConfirm(){
-    //     PushNotification.localNotification({
-    //       title:"Booking Successful!",
-    //       message:`${user?.firstName}, your booking for ${item?.hotelTitle} is successful!`,
-    //       channelId:"1"
-    //     })
-    //   }
+      // function notifyBookingConfirm(){
+      //   PushNotification.localNotification({
+      //     title:"Booking Successful!",
+      //     message:`${user?.firstName}, your booking for ${item?.hotelTitle} is successful!`,
+      //     channelId:"1"
+      //   })
+      // }
       
-    //     book(newObj,notifyBookingConfirm)
-    //     setBalanceScreen(false)
+      //   book(newObj,notifyBookingConfirm)
+      //   setBalanceScreen(false)
     }
     };
   async function settingToken(){
@@ -144,6 +169,172 @@ const skipable=useRef(true)
   const launchTransac=()=>{
     setFiatPaymentStart(true)
   }
+
+   // Initiate a new connection to Phantom
+   const connect = async () => {
+    setLoading(true)
+    const params = new URLSearchParams({
+      cluster: "devnet",
+      app_url: "https://rentspace.kaifoundry.com",
+      dapp_encryption_public_key: bs58.encode(dappKeyPair.publicKey),
+      redirect_link: onConnectRedirectLink,
+    });
+    console.log(params.toString())
+    const url = `https://phantom.app/ul/v1/connect?${params.toString()}`
+    console.log(url)
+	  Linking.openURL(url);
+    // Linking.addEventListener('url', handleDeepLink);
+   };
+
+   // Initiate a disconnect from Phantom
+   const disconnect = async () => {};
+
+
+// When a "url" event occurs, track the url
+const handleDeepLink = async event => {
+  console.log(event.url)
+  setDeepLink(event.url);
+};
+
+const sendNewTransaction=async()=>{
+  setLoading(true)
+    if (!phantomWalletPublicKey){
+      alert('Please connect to phantom wallet first!')
+      return;
+    };
+    const transaction=new Transaction()
+    transaction.recentBlockhash=(await connection.getLatestBlockhash()).blockhash
+    transaction.feePayer=phantomWalletPublicKey
+    transaction.instructions=[
+      SystemProgram.transfer({
+        fromPubkey:phantomWalletPublicKey,
+        toPubkey:new PublicKey("CUT6rrZag3dpAYPZksQ7LvqcHrxatcdqxjCnTvxXdHo8"),
+        lamports:0.25*LAMPORTS_PER_SOL
+      })
+    ]
+    console.log(transaction)
+    // transaction.instructions=new TransactionInstruction({
+      
+    // })
+    const seriealizedTransaction=transaction.serialize({
+      requireAllSignatures:false
+    })
+    console.log(seriealizedTransaction)
+    const payload={
+      session,
+      transaction:bs58.encode(seriealizedTransaction)
+    }
+    const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecret);
+    const params = new URLSearchParams({
+      dapp_encryption_public_key: bs58.encode(dappKeyPair.publicKey),
+      nonce: bs58.encode(nonce),
+      redirect_link: onSignAndSendTransactionRedirectLink,
+      payload: bs58.encode(encryptedPayload),
+    });
+    console.log(params)
+    const url = `https://phantom.app/ul/v1/signAndSendTransaction?${params.toString()}`
+    Linking.openURL(url);
+  
+}
+
+
+useEffect(() => {
+  const initializeDeeplinks = async () => {
+    const initialUrl = await Linking.getInitialURL();
+    console.log(initialUrl,"ini")
+    if (initialUrl) {
+      setDeepLink(initialUrl);
+    }else{
+      setDeepLink(onConnectRedirectLink)
+    }
+  };
+  initializeDeeplinks();
+  const listener = Linking.addEventListener("url", handleDeepLink);
+  return () => {
+    listener.remove();
+  };
+}, []);
+
+useEffect(() => {
+  try{
+    if (deepLink==undefined || !deepLink) return;
+    if (paymentMethod!='SOL') return;
+
+    const url = new URL(deepLink);
+
+    let data=url.searchParams.get('data');
+    let phantom_encryption_public_key=url.searchParams.get('phantom_encryption_public_key')
+    let nonce=url.searchParams.get('nonce')
+    let allParams={
+      data:data,
+      phantom_encryption_public_key:phantom_encryption_public_key,
+      nonce:nonce
+    }
+    console.log(allParams)
+
+    if (url.searchParams.get("errorCode")) {
+      const error = url.searchParams.get("errorCode")
+      console.log("error: ", error);
+      setLoading(false)
+      if(error==4001){
+        alert("Payment request rejected!")
+      }
+      return;
+    }
+
+    if (url.toString().includes("onConnect?")) {
+      setLoading(false)
+      console.log("we received a connect response from Phantom: ", allParams);
+      const sharedSecretDapp = nacl.box.before(
+        bs58.decode(allParams.phantom_encryption_public_key),
+        dappKeyPair.secretKey
+      );
+      const connectData=decryptPayload(
+        allParams.data,
+        allParams.nonce,
+        sharedSecretDapp
+      )
+      setPhantomWalletPublicKey(new PublicKey(connectData?.public_key))
+      setSession(connectData?.session)
+      setSharedSecret(sharedSecretDapp)
+      console.log(`connected to ${connectData.public_key.toString()}`);
+    }
+    else if(url.toString().includes("onSignAndSendTransaction")){
+      // setLoading(false)
+      const signAndSendTransactionData = decryptPayload(
+        allParams.data,
+        allParams.nonce,
+        sharedSecret
+      );
+      console.log("transaction submitted: ", signAndSendTransactionData);
+       setBooking({...booking,paymentStatus:true,paymentId:'test'})
+      const newObj={
+        ...booking,
+        paymentId:'test',
+        paymentStatus:true
+      }
+      console.log(newObj)
+
+      function notifyBookingConfirm(){
+        PushNotification.localNotification({
+          title:"Booking Successful!",
+          message:`${user?.firstName}, your booking for ${item?.hotelTitle} is successful!`,
+          channelId:"1"
+        })
+      }
+      
+        book(newObj,notifyBookingConfirm)
+    }else{
+      console.log("not connect but no error as well!")
+    }
+  }catch(err){
+    console.log(err?.code," err code")
+  }
+  
+}, [deepLink]);
+
+
+
   useEffect(()=>{
     // getBalance()
     getOwner()
@@ -158,6 +349,10 @@ const skipable=useRef(true)
       console.log(paymentMethod)
       settingToken()
       setPaymentType('crypto')
+    }
+    else if(paymentMethod=="SOL"){
+      alert("SOL selected!")
+      setPaymentType('phantom')
     }
     else{
       alert("For this option, if you are a first time trensak user, you may need to complete your KYC!")
@@ -180,14 +375,19 @@ const skipable=useRef(true)
         <View style={styles.line}/>
         <PriceDetails basePrice={item?.hotelPrice} nights={booking?.bookingDuration} fullPayment={fullPayment} checkIn={booking?.date}/>
         <View style={styles.line}/>
-        <PaymentMethods method={paymentMethod} setMethod={setPaymentMethod}/>
+        <PaymentMethods method={paymentMethod} setMethod={setPaymentMethod} connect={connect}/>
         <View style={styles.line}/>
         <RequiredPhone/>
         <View style={styles.line}/>
         <TouchableOpacity style={styles.btn} onPress={()=>{
           if(paymentType=='fiat'){
             launchTransac()
-          }else{
+          }else if(paymentType=="phantom"){
+            // console.log(connection)
+            // connect()
+            sendNewTransaction()
+          }
+          else{
             getBalance()
             setBalanceScreen(true)
           }

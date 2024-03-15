@@ -40,24 +40,24 @@ const ReorderPhotos = ({setHostModal,pos}) => {
         <View style={styles.imgCont}>
             {
                 files.length>2?
-                <Image source={{uri:files[1].uri}} style={styles.smallImg}/>
+                <Image source={{uri:files[2].uri}} style={styles.smallImg}/>
                 :<></>
             }
             {
                 files.length>3?
-                <Image source={{uri:files[1].uri}} style={styles.smallImg}/>
+                <Image source={{uri:files[3].uri}} style={styles.smallImg}/>
                 :<></>
             }
         </View>
         <View style={styles.imgCont}>
         {
                 files.length>4?
-                <Image source={{uri:files[1].uri}} style={styles.smallImg}/>
+                <Image source={{uri:files[4].uri}} style={styles.smallImg}/>
                 :<></>
             }
             {
                 files.length>5?
-                <Image source={{uri:files[1].uri}} style={styles.smallImg}/>
+                <Image source={{uri:files[5].uri}} style={styles.smallImg}/>
                 :<></>
             }
         </View>

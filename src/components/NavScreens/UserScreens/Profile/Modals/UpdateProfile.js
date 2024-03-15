@@ -25,13 +25,15 @@ const UpdateProfile = ({setEditProfile}) => {
 
     const update=async()=>{
         setLoading(true)
-        console.log("1",newBase64)
+        // console.log("1",newBase64)
         setUpdatedUser({
           ...updatedUser,
           userType:user?.userType,
           hostStatus:user?.hostStatus,
           verificationStatus:false,
           agreementStatus:user?.agreementStatus,
+          userGovId:"233134",
+          userProfile:"img"
         })
         console.log("2",updatedUser)
         
@@ -129,16 +131,16 @@ const UpdateProfile = ({setEditProfile}) => {
         style={styles.inputs} 
         placeholder='Govt Id No.' 
         placeholderTextColor={COLORS.inputBorder}
-        value={updatedUser?.userGovId}
+        value={"233134"}
         onChangeText={value=>{setUpdatedUser({...updatedUser,userGovId:value})}}
         />
-      <TextInput 
+      {/* <TextInput 
         style={styles.inputs} 
         placeholder='Profile image' 
         placeholderTextColor={COLORS.inputBorder}
         value={updatedUser?.userProfile}
         onChangeText={value=>{setUpdatedUser({...updatedUser,userProfile:value})}}
-    />
+    /> */}
     <View style={styles.labelCont}>
         <Icon3 name='birthday-cake' size={15} color={'black'} style={{marginRight:6}}/>
         <Text style={styles.simpleText}>BirthDay</Text>

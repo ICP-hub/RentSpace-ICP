@@ -4,20 +4,20 @@ import { images } from '../../../../constants'
 import { COLORS, SIZES } from '../../../../constants/themes'
 import Icon from 'react-native-vector-icons/AntDesign'
 
-const ListingCard = () => {
+const ListingCard = ({listing}) => {
   return (
     <View style={styles.card}>
       <Image source={images.hotelImg1} style={styles.img}/>
       <View style={styles.textCont}>
         <View style={styles.textSubCont}>
-            <Text style={styles.boldText}>Listing name</Text>
+            <Text style={styles.boldText}>{listing?.hotelTitle}</Text>
             <Text style={styles.normalText}>
                 <Text style={styles.normalTextCrossed}>
-                    $1098
+                    ${parseInt(listing?.hotelPrice)+2}
                 </Text>
                 {" "}
                 <Text style={styles.boldText}>
-                    $798
+                    ${listing?.hotelPrice}
                 </Text>
                 /night
             </Text>

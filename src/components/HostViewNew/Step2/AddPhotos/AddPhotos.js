@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Alert, StyleSheet, Text, View } from 'react-native'
 import React,{useState} from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
 import SaveBtn from '../../Reusables/SaveBtn'
@@ -20,12 +20,12 @@ const AddPhotos = ({setHostModal,pos}) => {
   const checkEmpty=()=>{
     console.log(video,hotelImgs)
     if(hotelImgs==null){
-      alert("Please add atleast one image")
+      Alert.alert("No image selected","Please add atleast one image")
       console.log("no images")
       return false
     }
     else if(video==null){
-      alert("Please add a Video")
+      Alert.alert("No video selected","Please add a Video")
       console.log("no video")
       return false
     }
@@ -53,7 +53,7 @@ const AddPhotos = ({setHostModal,pos}) => {
           setVideo({...res.assets[0],base64:resp})
         }}).catch((err)=>{{
           console.log(err)
-          alert('Unsupported format!')
+          Alert.alert('Unsupported format!',"The file format you are selected is not a correct video format")
         }})
         
       }
@@ -72,7 +72,7 @@ const AddPhotos = ({setHostModal,pos}) => {
       </Text>
       <PhotoBtn text={"Add photos"} icon={<Icon name='plus' size={25} color={COLORS.textLightGrey}/>} onClick={chooseUserImg}/>
       <PhotoBtn text={"Add a video"} icon={<Icon name='plus' size={25} color={COLORS.textLightGrey}/>} onClick={chooseVideo}/>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={2} nextFunc={checkEmpty}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={2} back={2} nextFunc={checkEmpty}/>
     </View>
   )
 }

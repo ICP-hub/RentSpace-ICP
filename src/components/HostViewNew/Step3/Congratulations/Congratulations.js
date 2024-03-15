@@ -111,7 +111,7 @@ const Congratulations = ({setHostModal,pos}) => {
         Thank you for sharing your home and helping to create incredible experiences for our guests.    
       </Text>
       <Text style={styles.subtitle}>
-      Rentspace Team
+      Thank You...
       </Text>
       <View style={styles.btnView}>
         <TouchableOpacity style={styles.btn} onPress={createHotel}>

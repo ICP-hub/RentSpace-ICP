@@ -1,4 +1,4 @@
-import { FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
 import BottomNavHost from '../../../Navigation/BottomNavHost'
@@ -11,31 +11,54 @@ import HostWelcomeManager from '../../../HostViewNew/HostWelcomeManager'
 import Step1Manager from '../../../HostViewNew/Step1Manager'
 import Step2Manager from '../../../HostViewNew/Step2Manager'
 import Step3Manager from '../../../HostViewNew/Step3Manager'
+import ReservationCard from '../Reservations/ReservationCard'
 
+const reservationTypes=[
+  {
+    title:"Checking out",
+    count:0
+  },
+  {
+    title:"Currently hosting",
+    count:0
+  },
+  {
+    title:"Arriving soon",
+    count:0
+  }
+]
 
 const HostHome = ({navigation}) => {
-  const data=[
-    {
-      title:"Checking out",
-      count:0
-    },
-    {
-      title:"Currently hosting",
-      count:0
-    },
-    {
-      title:"Arriving soon",
-      count:0
-    }
-  ]
+
   const [idprocess,setIdprocess]=useState(0)
-  const [reservationType,setReservationType]=useState(data[0].title)
+  const [reservationType,setReservationType]=useState(reservationTypes[0].title)
   const [showReservation,setShowReservations]=useState(false)
   const [showDrawer,setShowDrawer]=useState(false)
   const [hostModal,setHostModal]=useState(0)
   const {user}=useSelector(state=>state.userReducer)
   const {actors}=useSelector(state=>state.actorReducer)
   const {hotels}=useSelector(state=>state.hotelsReducer)
+  const [reservationList,setReservationList]=useState([])
+
+  const getAllReservations=async()=>{
+    let bookingList=[]
+    hotels.map(async(h)=>{
+      await actors?.bookingActor?.gethotelXBookingId(h).then((res)=>{
+        // console.log(res)
+        res.map(async(r)=>{
+          await actors?.bookingActor?.getBookingDetials(r).then((bookingRes)=>{
+            console.log(bookingRes[0])
+            bookingList.push(bookingRes[0])
+            setReservationList([...bookingList])
+          }).catch((err)=>{
+            console.log(err)
+          })
+        })
+      }).catch((err)=>{
+        console.log(err)
+      })
+    })
+  }
 
   useEffect(()=>{
     if(hotels?.length==0){
@@ -43,12 +66,17 @@ const HostHome = ({navigation}) => {
     }
   },[])
 
+  useEffect(()=>{
+    // getAllReservations()
+    console.log("fetching comments")
+  },[reservationType])
+
   return (
     <View style={styles.view}>
       <Text style={styles.title}>Welcome, {user.firstName}!</Text>
       <IdentityCard setIdprocess={setIdprocess}/>
       <Text style={styles.subHeading}>Your reservations</Text>
-      <FlatList style={styles.reservationTitleList} data={data} renderItem={(item)=>{
+      <FlatList style={styles.reservationTitleList} data={reservationTypes} renderItem={(item)=>{
         return(
             <TouchableOpacity 
               onPress={()=>setReservationType(item.item.title)}
@@ -61,14 +89,25 @@ const HostHome = ({navigation}) => {
       }}
       horizontal={true}
       />
-      <View style={styles.reservationsCont}>
-        <Text style={styles.simpleText}>Sorry!</Text>
-        <Text style={styles.simpleText}>
-You don’t have any guest checking out today or tomorrow
-        </Text>
+      {
+        reservationList.length==0?
+        <View style={styles.reservationsCont}>
+          <Text style={styles.simpleText}>Sorry!</Text>
+          <Text style={styles.simpleText}>
+              You don’t have any guest checking out today or tomorrow
+          </Text>
       </View>
+        :
+        <FlatList data={reservationList} renderItem={(item)=>(
+          <ReservationCard item={item.item}/>
+        )}
+        keyExtractor={(item,index)=>index}
+        // horizontal={true}
+        />
+      }
+      
       <TouchableOpacity style={{marginLeft:'5%'}} onPress={()=>setShowReservations(true)}>
-        <Text style={styles.link}>All resevations (0)</Text>
+        <Text style={styles.link}>All resevations ({reservationList.length})</Text>
       </TouchableOpacity>
       <BottomNavHost navigation={navigation} showDrawer={showDrawer} setShowDrawer={setShowDrawer}/>
       {/*Modals */}
@@ -192,5 +231,6 @@ const styles = StyleSheet.create({
       marginVertical:3,
       fontWeight:'500',
       marginTop:15
-  }
+  },
+
 })
