@@ -5,6 +5,7 @@ import Header from './Header'
 import BottomNavHost from '../../../Navigation/BottomNavHost'
 import Sorting from './Sorting/Sorting'
 import { useSelector } from 'react-redux'
+import ReservationCard from './ReservationCard'
 
 const reservationTypes=[
   {
@@ -21,7 +22,7 @@ const reservationTypes=[
   }
 ]
 
-const Reservations = ({setShowReservations}) => {
+const Reservations = ({setShowReservations,reservationList}) => {
 
       const [reservationType,setReservationType]=useState(reservationTypes[0].title)
       const [sorting,setSorting]=useState(false)
@@ -57,12 +58,23 @@ const Reservations = ({setShowReservations}) => {
       }}
       horizontal={true}
       />
-      <View style={styles.reservationsCont}>
+      {
+        reservationList.length==0?
+        <View style={styles.reservationsCont}>
         <Text style={styles.simpleText}>Sorry!</Text>
         <Text style={styles.simpleText}>
             You don’t have any guest checking out today or tomorrow
         </Text>
       </View>
+        :
+        <FlatList style={styles.reservationCardList} data={reservationList} renderItem={(item)=>(
+          <ReservationCard item={item.item}/>
+        )}
+        keyExtractor={(item,index)=>index}
+        
+        />
+      }
+      
       <BottomNavHost/>
       <Modal animationType='slide' visible={sorting}>
         <Sorting setSorting={setSorting}/>
@@ -149,4 +161,11 @@ const styles = StyleSheet.create({
         marginBottom:10,
         fontWeight:'400',
       },
+      reservationCardList:{
+        // width:'100%',
+        paddingVertical:40,
+        // paddingHorizontal:20,
+        width:'90%',
+        marginLeft:'5%'
+      }
 })

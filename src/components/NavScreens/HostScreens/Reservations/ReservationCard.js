@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
 
@@ -16,12 +16,18 @@ const ReservationCard = ({item}) => {
   return (
     <View style={styles.card}>
       <View style={styles.textCont}>
-        <Text style={styles.title}>CheckIn Date</Text>
-        <Text style={styles.normalText}>{parseDate(item?.date)}</Text>
-        <Text style={styles.title}>CheckIn</Text>
-        <Text style={styles.normalText}>{item?.bookingDuration}</Text>
-        <Text style={styles.title}>Customer Name</Text>
-        <Text style={styles.normalText}>username</Text>
+        <View style={styles.textRow}>
+          <Text style={styles.title}>CheckIn Date</Text>
+          <Text style={styles.normalText}>{parseDate(item?.date)}</Text>
+        </View>
+        <View style={styles.textRow}>
+          <Text style={styles.title}>Duration</Text>
+          <Text style={styles.normalText}>{item?.bookingDuration} days</Text>
+          </View>
+        <View style={styles.textRow}>
+          <Text style={styles.title}>Customer Name</Text>
+          <Text style={styles.normalText}>username</Text>
+        </View>
       </View>
     </View>
   )
@@ -36,12 +42,14 @@ const styles = StyleSheet.create({
         justifyContent:'flex-start',
         alignItems:'center',
         backgroundColor:COLORS.royalPurple,
-        width:'90%',
+        width:Dimensions.get("window").width*0.8,
         // marginLeft:'5%',
         paddingVertical:20,
         borderRadius:12,
         marginBottom:20,
-        elevation:10
+        elevation:10,
+        maxHeight:140,
+        marginRight:20
     },
     textCont:{
         width:'85%',
@@ -49,6 +57,14 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'flex-start',
         marginBottom:10
+      },
+      textRow:{
+        display:'flex',
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center',
+        width:'100%',
+        marginVertical:5
       },
       title:{
         fontSize:SIZES.preMedium,
@@ -59,6 +75,6 @@ const styles = StyleSheet.create({
       normalText:{
         fontSize:SIZES.small,
         color:'white',
-        fontWeight:'300'
+        fontWeight:'600'
       },
 })

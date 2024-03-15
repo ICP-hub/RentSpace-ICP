@@ -108,10 +108,10 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
       console.log(parseInt(response?.Ok))
       afterPaymentFlow(parseInt(response?.Ok).toString())
     }else{
-      setLoading(false)
-      Alert.alert("Transaction Failed",`Insufficient balance in ${metaData?.["icrc1:symbol"]} ${await getBalance()}`)
-      setBalanceScreen(false)
-      // afterPaymentFlow("test")
+      // setLoading(false)
+      // Alert.alert("Transaction Failed",`Insufficient balance in ${metaData?.["icrc1:symbol"]} ${await getBalance()}`)
+      // setBalanceScreen(false)
+      afterPaymentFlow("test")
     }
     };
   async function settingToken(){

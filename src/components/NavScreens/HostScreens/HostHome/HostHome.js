@@ -67,7 +67,7 @@ const HostHome = ({navigation}) => {
   },[])
 
   useEffect(()=>{
-    // getAllReservations()
+    getAllReservations()
     console.log("fetching comments")
   },[reservationType])
 
@@ -98,11 +98,11 @@ const HostHome = ({navigation}) => {
           </Text>
       </View>
         :
-        <FlatList data={reservationList} renderItem={(item)=>(
+        <FlatList style={styles.reservationCardList} data={reservationList} renderItem={(item)=>(
           <ReservationCard item={item.item}/>
         )}
         keyExtractor={(item,index)=>index}
-        // horizontal={true}
+        horizontal={true}
         />
       }
       
@@ -115,7 +115,7 @@ const HostHome = ({navigation}) => {
         <ChatDrawer navigation={navigation} showDrawer={showDrawer} setShowDrawer={setShowDrawer}/>
       </Modal>
       <Modal animationType='slide' visible={showReservation}>
-        <Reservations setShowReservations={setShowReservations}/>
+        <Reservations setShowReservations={setShowReservations} reservationList={reservationList}/>
       </Modal>
       <Modal animationType='slide' visible={(idprocess>0)?true:false}>
         <IDProcessManager idprocess={idprocess} setIdprocess={setIdprocess}/>
@@ -232,5 +232,10 @@ const styles = StyleSheet.create({
       fontWeight:'500',
       marginTop:15
   },
-
+  reservationCardList:{
+    // width:'100%',
+    paddingVertical:10,
+    paddingHorizontal:20,
+    maxHeight:160
+  }
 })
