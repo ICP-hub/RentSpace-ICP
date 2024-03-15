@@ -9,7 +9,7 @@ const BalanceScreen = ({self,paymentMethod,walletID,balance,receiver,total,trans
       <View style={styles.alert}>
         <Text style={styles.title}>
           {
-            (balance<total)?
+            (balance>total)?
             "Confirm Transaction"
             :
             "Insufficient Balance"
@@ -38,7 +38,7 @@ const BalanceScreen = ({self,paymentMethod,walletID,balance,receiver,total,trans
           </View>
         </View>
         {
-          balance<total?
+          balance>total?
           <TouchableOpacity style={styles.btn} onPress={()=>{
             transfer(total/100000000,userId,tokenActor)
           }}>

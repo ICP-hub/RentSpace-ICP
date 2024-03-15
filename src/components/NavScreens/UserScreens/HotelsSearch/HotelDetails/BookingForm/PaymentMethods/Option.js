@@ -9,7 +9,8 @@ const Option = ({item,setMethod,method,connect}) => {
         onPress={()=>{
           setMethod(item?.label)
           if(item?.label=="SOL"){
-            connect()
+            // connect()
+            
           }
         }}
     >
