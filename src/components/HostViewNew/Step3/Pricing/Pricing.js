@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,TextInput, Alert, ScrollView, Dimensions } from 'react-native'
+import { StyleSheet, Text, View,TextInput, Alert, ScrollView, Dimensions, Modal } from 'react-native'
 import React, { useState } from 'react'
 import { SIZES,COLORS } from '../../../../constants/themes'
 import SaveBtn from '../../Reusables/SaveBtn'
@@ -8,6 +8,9 @@ import Icon2 from 'react-native-vector-icons/SimpleLineIcons'
 import { useDispatch, useSelector } from 'react-redux'
 import { setListing } from '../../../../redux/NewListing/actions'
 import MethodOption from './MethodOption'
+import GetWalletId from './GetWalletId'
+
+
 
 const methods=[
     {
@@ -33,6 +36,10 @@ const methods=[
     {
       label:'creditCard',
       icon:<Icon name='credit-card' color={COLORS.textLightGrey} size={25}/>
+    },
+    {
+      label:'SOL',
+      icon:<Text style={{color:COLORS.textLightGrey,fontWeight:'bold',fontSize:SIZES.largeMed}}>SOL</Text>
     }
   ]
 
@@ -41,6 +48,18 @@ const Pricing = ({setHostModal,pos}) => {
     const {listing}=useSelector(state=>state.listingReducer)
     const dispatch=useDispatch()
     const [paymentMethods,setPaymentMethods]=useState([])
+    const [walletIDModal,setWalletIDModal]=useState(false)
+    const [phantomAccID,setPhantomAccID]=useState("")
+
+    const chechSol=()=>{
+        if(paymentMethods.includes('SOL')){
+         console.log("sol is selected")
+         setWalletIDModal(true)
+         return false
+        }else{
+            return checkEmpty()
+        }
+    }
 
     const checkEmpty=()=>{
         if(price==0){
@@ -108,7 +127,12 @@ const Pricing = ({setHostModal,pos}) => {
             </View>
       </ScrollView>
       
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={3} nextFunc={checkEmpty} />
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={3} nextFunc={chechSol} />
+      <Modal transparent visible={walletIDModal} onRequestClose={()=>{
+        setWalletIDModal(false)
+      }}>
+        <GetWalletId phantomAccID={phantomAccID} setPhantomAccID={setPhantomAccID}/>
+      </Modal>
     </View>
   )
 }

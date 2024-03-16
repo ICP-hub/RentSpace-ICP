@@ -30,16 +30,9 @@ const Reservations = ({setShowReservations,reservationList}) => {
       const {hotels}=useSelector(state=>state.hotelsReducer)
       const {actors}=useSelector(state=>state.actorReducer)
 
-      const getAllReservation=async()=>{
-        console.log("something",hotels)
-          hotels.map((h)=>{
-            // console.log(h)
-          })
-      }
-
-      useEffect(()=>{
-        getAllReservation()
-      },[reservationType])
+      // useEffect(()=>{
+      //   // getAllReservation()
+      // },[reservationType])
 
   return (
     <View style={styles.view}>
@@ -67,7 +60,7 @@ const Reservations = ({setShowReservations,reservationList}) => {
         </Text>
       </View>
         :
-        <FlatList style={styles.reservationCardList} data={reservationList} renderItem={(item)=>(
+        <FlatList contentContainerStyle={{paddingBottom:100}} style={styles.reservationCardList} data={[...reservationList,...reservationList]} renderItem={(item)=>(
           <ReservationCard item={item.item}/>
         )}
         keyExtractor={(item,index)=>index}
@@ -103,8 +96,8 @@ const styles = StyleSheet.create({
         marginTop:25
     },
     reservationTitleList:{
-        maxHeight:52,
-        marginLeft:'4%'
+        height:52,
+        marginLeft:'4%',
       },
       reservationType:{
         display:'row',
@@ -162,10 +155,9 @@ const styles = StyleSheet.create({
         fontWeight:'400',
       },
       reservationCardList:{
-        // width:'100%',
-        paddingVertical:40,
-        // paddingHorizontal:20,
+        paddingTop:20,
         width:'90%',
-        marginLeft:'5%'
+        marginLeft:'5%',
+        marginTop:10,
       }
 })

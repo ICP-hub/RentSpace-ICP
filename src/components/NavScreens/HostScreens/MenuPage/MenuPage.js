@@ -42,7 +42,7 @@ const MenuPage = ({navigation}) => {
         {
             title:'Create a new listing',
             icon:<Icon5 name='home-plus-outline' size={25} color={COLORS.textLightGrey}/>,
-            onClick:()=>{}
+            onClick:()=>{navigation.navigate('hostListing')}
         }
     ]
     const accountItems=[
