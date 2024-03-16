@@ -1,6 +1,6 @@
-dfx start --clean --background
-dfx deploy backend
-hotelCanister=$(dfx canister call backend createNewHotelCanister hotelCanister | grep -oP '(?<=\")(.*?)(?=\")')
-dfx canister call $hotelCanister createHotel '(record {hotelTitle= "venture";hotelDes="Huge rooms";hotelImage="fvfvfvv";hotelPrice="$2000";hotelLocation="Lucknow"})'
-dfx canister call $hotelCanister createHotel '(record {hotelTitle= "ventage";hotelDes="Huge rooms";hotelImage="fvffvfvv";hotelPrice="$2000";hotelLocation="Lahore"})'
-dfx canister call $hotelCanister createHotel '(record {hotelTitle= "venusvvffvbfvvfvfvfvfdvffvfff";hotelDes="Huge rooms";hotelImage="vfv";hotelPrice="$2998";hotelLocation="Ludhiana"})'
+dfx deploy User --network ic
+dfx deploy hotel --network ic
+dfx deploy Review --network ic
+dfx deploy booking --network ic
+dfx deploy comment --network ic
+dfx deploy supportChat --network ic

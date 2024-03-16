@@ -1,5 +1,20 @@
 {
-  "backend": {
-    "ic": "5cjoy-nqaaa-aaaan-qlqsa-cai"
+  "Review": {
+    "ic": "wdm7v-zaaaa-aaaan-qlwsq-cai"
+  },
+  "User": {
+    "ic": "wenzb-uyaaa-aaaan-qlwsa-cai"
+  },
+  "booking": {
+    "ic": "xhbqh-aaaaa-aaaan-qlwuq-cai"
+  },
+  "comment": {
+    "ic": "wnos5-cqaaa-aaaan-qlwtq-cai"
+  },
+  "hotel": {
+    "ic": "wkpuj-piaaa-aaaan-qlwta-cai"
+  },
+  "supportChat": {
+    "ic": "xaawt-nyaaa-aaaan-qlwua-cai"
   }
 }

@@ -17,6 +17,8 @@ export const idlFactory = ({ IDL }) => {
     'getReviewIdsFromHotelId' : IDL.Func(
         [HotelId],
         [IDL.Vec(ReviewId)],
+        [HotelId],
+        [IDL.Vec(ReviewId)],
         ['query'],
       ),
     'getReviewInfo' : IDL.Func([IDL.Text], [IDL.Opt(Review__1)], ['query']),
@@ -34,4 +36,5 @@ export const idlFactory = ({ IDL }) => {
   });
   return Review;
 };
+export const init = ({ IDL }) => { return []; };
 export const init = ({ IDL }) => { return []; };

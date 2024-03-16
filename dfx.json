@@ -1,31 +1,31 @@
 {
   "canisters": {
-    "backend": {
-      "main": "Backend/RentSpace_backend/main.mo",
-      "type": "motoko"
-    },
     "internet_identity" : {
       "type": "pull",
       "id": "rdmx6-jaaaa-aaaaa-aaadq-cai"
     },
     "User": {
-      "main": "Backend/RentSpace_backend/UserCanister.mo",
+      "main": "Backend/RentSpace_backend/UserCanister/main.mo",
       "type": "motoko"
     },
     "Review": {
-      "main": "Backend/RentSpace_backend/Review/ReviewCanister.mo",
-      "type": "motoko"
-    },
-    "ReviewMain": {
       "main": "Backend/RentSpace_backend/Review/main.mo",
       "type": "motoko"
     },
     "hotel": {
-      "main": "Backend/RentSpace_backend/HotelCanister.mo",
+      "main": "Backend/RentSpace_backend/HotelCanister/main.mo",
       "type": "motoko"
     },
     "booking": {
-      "main": "Backend/RentSpace_backend/BookingCanister.mo",
+      "main": "Backend/RentSpace_backend/bookingCanister/main.mo",
+      "type": "motoko"
+    },
+    "comment": {
+      "main": "Backend/RentSpace_backend/commentCanister/main.mo",
+      "type": "motoko"
+    },
+    "supportChat": {
+      "main": "Backend/RentSpace_backend/supportChatCanister/main.mo",
       "type": "motoko"
     },
     "LoginWeb": {
