@@ -60,7 +60,7 @@ const linking = {
 };
 
 PushNotification.configure({
-  // (optional) Called when Token is generated (iOS and Android) 
+  // (optional) Called when Token is generated (iOS and Android)
   onRegister: function (token) {
     console.log("TOKEN:", token);
   },
