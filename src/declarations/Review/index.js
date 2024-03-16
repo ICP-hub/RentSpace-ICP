@@ -2,7 +2,6 @@ import { Actor, HttpAgent } from "@dfinity/agent";
 
 // Imports and re-exports candid interface
 import { idlFactory } from "./Review.did.js";
-import { host, ids } from "../../../DevelopmentConfig.js";
 export { idlFactory } from "./Review.did.js";
 
 /* CANISTER_ID is replaced by webpack based on node environment
@@ -11,7 +10,8 @@ export { idlFactory } from "./Review.did.js";
  * beginning in dfx 0.15.0
  */
 export const canisterId =
-  ids.reviewCan
+  process.env.CANISTER_ID_REVIEW ||
+  process.env.REVIEW_CANISTER_ID;
 
 export const createActor = (canisterId, options = {}) => {
   const agent = options.agent || new HttpAgent({ ...options.agentOptions });
@@ -41,19 +41,4 @@ export const createActor = (canisterId, options = {}) => {
   });
 };
 
-export const Review = createActor(canisterId, {
-  agentOptions: {
-     fetchOptions: {
-        reactNative: {
-         __nativeResponseType: 'base64',
-        },
-     },
-     callOptions: {
-     reactNative: {
-        textStreaming: true,
-     },
-  },
-     blsVerify: () => true,
-     host: host,
-  },
-});
+export const Review = canisterId ? createActor(canisterId) : undefined;
