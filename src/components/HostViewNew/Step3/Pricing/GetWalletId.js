@@ -5,17 +5,40 @@ import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 
 const connection = new Connection(clusterApiUrl("devnet"));
 
-const GetWalletId = ({phantomAccID,setPhantomAccID}) => {
+const GetWalletId = ({phantomAccID,setPhantomAccID,setPhantomAccIDValidated,setWalletIDModal}) => {
     const [loading,setLoading]=useState(false)
     const [respText,setRespText]=useState("Make sure to put a valid account ID for accepting payments")
     const [formatValid,setFormatValid]=useState(false)
-    const validateFormat=()=>{
+    const validateID=async()=>{
+      setRespText("Validating your account")
+      setLoading(true)
+      setFormatValid(true)
         try{
             const p=new PublicKey(phantomAccID)
-            return true
+            await connection.getAccountInfo(p).then((res)=>{
+              console.log(res)
+              if(res!=null){
+                setRespText("Account verified!")
+                setLoading(false)
+                setPhantomAccIDValidated(true)
+                setWalletIDModal(false)
+                Alert.alert("Verified !","We have verified your phantom account ID")
+              }else{
+                setRespText("Account do not exists")
+                setLoading(false)
+                setFormatValid(false)
+              }
+              
+            }).catch((err)=>{
+              setLoading(false)
+              setRespText("Something went wrong while fetching data of account")
+              setFormatValid(false)
+            })
         }catch(err){
             console.log(err)
             setRespText("Format of account ID is not valid")
+            setLoading(false)
+            setFormatValid(false)
         }
     }
   return (
@@ -38,8 +61,8 @@ const GetWalletId = ({phantomAccID,setPhantomAccID}) => {
                     setPhantomAccID(value);
                 }}
             />
-            <Text style={[styles.requirement,{color:(formatValid?COLORS.lightGreen:"red")}]}></Text>
-            <TouchableOpacity style={styles.btn}>
+            <Text style={[styles.requirement,{color:(formatValid?COLORS.black:"red")}]}>{respText}</Text>
+            <TouchableOpacity style={styles.btn} onPress={validateID}>
                 <Text style={styles.btnText}>Submit</Text>
             </TouchableOpacity>
             <ActivityIndicator style={styles.loader} size={40} animating={loading}/>
@@ -133,6 +156,8 @@ const styles = StyleSheet.create({
         opacity:0.6,
         fontSize:SIZES.small,
         marginBottom:10,
-        fontWeight:'600'
+        fontWeight:'600',
+        width:'80%',
+        textAlign:'center'
       }
 })

@@ -50,9 +50,10 @@ const Pricing = ({setHostModal,pos}) => {
     const [paymentMethods,setPaymentMethods]=useState([])
     const [walletIDModal,setWalletIDModal]=useState(false)
     const [phantomAccID,setPhantomAccID]=useState("")
+    const [phantomAccIDValidated,setPhantomAccIDValidated]=useState(false)
 
     const chechSol=()=>{
-        if(paymentMethods.includes('SOL')){
+        if(paymentMethods.includes('SOL') && !(phantomAccIDValidated)){
          console.log("sol is selected")
          setWalletIDModal(true)
          return false
@@ -131,7 +132,12 @@ const Pricing = ({setHostModal,pos}) => {
       <Modal transparent visible={walletIDModal} onRequestClose={()=>{
         setWalletIDModal(false)
       }}>
-        <GetWalletId phantomAccID={phantomAccID} setPhantomAccID={setPhantomAccID}/>
+        <GetWalletId 
+            phantomAccID={phantomAccID} 
+            setPhantomAccID={setPhantomAccID} 
+            setPhantomAccIDValidated={setPhantomAccIDValidated} 
+            setWalletIDModal={setWalletIDModal}
+        />
       </Modal>
     </View>
   )
