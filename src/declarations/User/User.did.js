@@ -6,7 +6,6 @@ export const idlFactory = ({ IDL }) => {
     'lastName' : IDL.Text,
     'firstName' : IDL.Text,
   });
-
   const AnnualData = IDL.Record({
     'aug' : IDL.Nat,
     'dec' : IDL.Nat,
@@ -35,7 +34,6 @@ export const idlFactory = ({ IDL }) => {
     'firstName' : IDL.Text,
   });
   const UserId = IDL.Text;
-
   const User = IDL.Service({
     'addOwner' : IDL.Func([AdminId], [IDL.Text], []),
     'checkUserExist' : IDL.Func([], [IDL.Bool], ['query']),

@@ -79,7 +79,7 @@ yarn-error.log
 .dfx/
 
 # generated files
-src/declarations
+# src/declarations
 # Admin/frontend/src/declarations
 
 # frontend code
