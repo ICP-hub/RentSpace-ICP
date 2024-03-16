@@ -38,7 +38,7 @@
 } 
 
 /* Center the main content */
-h1{
+.login-h1{
     font-weight: 600;
     color: white;
     margin-bottom: 90px;

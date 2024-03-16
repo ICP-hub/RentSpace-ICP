@@ -25,6 +25,10 @@
     height: 2em;
     border-radius: 1em;
     background-color: var(--bg-light-grey);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 .report-detail-heading{
     width: 86%;
@@ -85,6 +89,10 @@
     width: 84%;
     border: 1.5px solid var(--btn-bg-main-1);
     margin: 1vh 0;
+}
+.resolve-icon-indicator{
+    width: 80%;
+    height: 80%;
 }
 
 @media only screen and (max-width: 750px) and (min-width: 350px) {

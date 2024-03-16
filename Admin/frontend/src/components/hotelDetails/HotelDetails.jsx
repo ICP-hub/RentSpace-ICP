@@ -30,14 +30,15 @@ const features=[
     }
 ]
 
-const HotelDetails = () => {
+const HotelDetails = ({hotel}) => {
   return (
     <div className='hotel-detail-main'>
-        <HotelHeader/>
+        <HotelHeader hotel={hotel}/>
         <div className='hotel-detail-desc-cont'>
             <h3 className='hotel-desc-heading'>Description</h3>
             <p className='hotel-desc-text'>
-                A sleepover in Villa surrounded by agricultural land, where you get to enjoy Wakeup calls from birds, Lotus breaks the surface of the water and blooms untouched by the mud with sunshine. Water in the pool is blue as the sky and clean as a crystal. Sit out the perfect spot to lounge, read, or chat with a cup of tea or other favorite beverage by your side in the garden. Also, Host your own party!!!!
+                {hotel?.hotelData?.hotelDes}
+                {/* A sleepover in Villa surrounded by agricultural land, where you get to enjoy Wakeup calls from birds, Lotus breaks the surface of the water and blooms untouched by the mud with sunshine. Water in the pool is blue as the sky and clean as a crystal. Sit out the perfect spot to lounge, read, or chat with a cup of tea or other favorite beverage by your side in the garden. Also, Host your own party!!!! */}
             </p>
         </div>
         <div className="hotel-feature-card-cont">

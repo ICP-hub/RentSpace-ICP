@@ -1,12 +1,12 @@
 import React from 'react'
 
-const HotelIListItem = ({hotel,setShowDetail}) => {
+const HotelIListItem = ({hotel,setShowDetail,index}) => {
   return (
     <div className='hotel-list-item'>
-        <p className='hotel-list-item-text'>{hotel?.name}</p>
-        <p className='hotel-list-item-text'>{hotel?.host}</p>
-        <p className='hotel-list-item-wide'>{hotel?.country}</p>
-        <button className='hotel-list-item-btn' onClick={()=>setShowDetail(true)}>Detail</button>
+        <p className='hotel-list-item-text'>{hotel?.hotelData?.hotelTitle}</p>
+        <p className='hotel-list-item-text'>{hotel?.userData?.firstName}</p>
+        <p className='hotel-list-item-wide'>{hotel?.hotelData?.hotelLocation}</p>
+        <button className='hotel-list-item-btn' onClick={()=>setShowDetail(index)}>Detail</button>
     </div>
   )
 }

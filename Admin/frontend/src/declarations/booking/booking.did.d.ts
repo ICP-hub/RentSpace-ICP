@@ -34,6 +34,7 @@ export interface anon_class_14_1 {
   'getBookingDetials' : ActorMethod<[string], [] | [BookingInfo]>,
   'getBookingFrequencyInYear' : ActorMethod<[string], [] | [AnnualData]>,
   'getBookingId' : ActorMethod<[], Array<string>>,
+  'getNoOfPages' : ActorMethod<[bigint], bigint>,
   'gethotelXBookingId' : ActorMethod<[string], Array<string>>,
   'scanBooking' : ActorMethod<
     [bigint, bigint],

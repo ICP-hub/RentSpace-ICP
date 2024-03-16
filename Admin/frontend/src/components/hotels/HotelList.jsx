@@ -14,7 +14,7 @@ const HotelList = ({hotelsList,setShowDetail}) => {
         <div className='hotel-list-cont'>
             {
                 hotelsList.map((hotel,index)=>(
-                    <HotelIListItem hotel={hotel} key={index} setShowDetail={setShowDetail}/>
+                    <HotelIListItem hotel={hotel} index={index} key={index} setShowDetail={setShowDetail}/>
                 ))
             }
         </div>

@@ -4,9 +4,8 @@ import Barchart from '../../../charts/Barchart'
 
 const dataComplete=require('../../../charts/data.json')
 
-const HotelChart = () => {
+const HotelChart = ({year,setYear,count,data}) => {
     
-    const [year,setYear]=useState(2024)
   return (
     <div className='hotel-chart-sec'>
         <div className='hotel-chart-header'>
@@ -14,7 +13,7 @@ const HotelChart = () => {
                 <h4 className='hotel-chart-count-label'>
                     Total Hotels Registered
                 </h4>
-                <h3 className='hotel-chart-count'>45</h3>
+                <h3 className='hotel-chart-count'>{count}</h3>
             </div>
             <div className="hotel-chart-timeline">
                 <h4 className='hotel-chart-year'>Year - {year}</h4>
@@ -28,7 +27,7 @@ const HotelChart = () => {
             </div>
         </div>
         <div className='hotel-chart'>
-            <Barchart label={"Hotels Registered"} data={dataComplete[0]?.hotels}/>
+            <Barchart label={"Hotels Registered"} data={data}/>
         </div>
     </div>
   )

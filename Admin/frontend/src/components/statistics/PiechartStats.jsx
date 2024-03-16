@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import Piechart from '../../charts/Piechart'
 
-const PiechartStats = ({label,data}) => {
-
-    const [year,setYear]=useState(2024)
+const PiechartStats = ({year,setYear,label,data,count}) => {
 
   return (
     <div className='stats-pie-chart-sec'>

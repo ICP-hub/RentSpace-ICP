@@ -22,6 +22,7 @@ export interface User {
   'checkUserExist' : ActorMethod<[], boolean>,
   'createUser' : ActorMethod<[User__1], undefined>,
   'getAnnualRegisterByYear' : ActorMethod<[string], [] | [AnnualData]>,
+  'getNoOfPages' : ActorMethod<[bigint], bigint>,
   'getOwner' : ActorMethod<[], string>,
   'getUserInfo' : ActorMethod<[], [] | [UserInfo]>,
   'getUserInfoByPrincipal' : ActorMethod<[Principal], [] | [UserInfo]>,

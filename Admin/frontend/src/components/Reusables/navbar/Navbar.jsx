@@ -48,6 +48,11 @@ const Navbar = () => {
               }}>
                 Support Chat
             </li>
+            <li className='link' onClick={()=>{
+                navg('/admin')  
+            }}>
+                Admin Management
+            </li>
         </ul>
         <button className='logoutBtn' onClick={Logout}>Logout</button>
     </div>

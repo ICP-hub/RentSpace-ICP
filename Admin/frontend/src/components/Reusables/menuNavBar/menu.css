@@ -29,6 +29,15 @@
     opacity:1;
     list-style-type: disc;
 }
+.menu-logoutBtn{
+    background: var(--base-gradient);
+    color: white;
+    font-size: 0.58em;
+    font-weight: 600;
+    padding: 0.8em 0;
+    width: 85%;
+    border-radius: 12px;
+}
 
 @media only screen and (max-width: 1000px) {
     .menu-container{

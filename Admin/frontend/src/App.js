@@ -10,10 +10,11 @@ import './App.css'
 import Login from "./pages/Login";
 import {useAuth} from './utils/useAuthClient'
 import { AuthProvider } from "./utils/useAuthClient";
+import Admins from "./pages/Admins";
 
 const App = () => {
   const [loggedIn,setLoggedIn]=useState(localStorage.getItem("loggedIn")||false)
-  // const {isAuthenticated}=useAuth()
+  // const {isAuthenticated}=useAuth(
   return (
     <AuthProvider setLoggedIn={setLoggedIn}>
     <div className="app">
@@ -28,6 +29,7 @@ const App = () => {
             <Route path="/reports" element={<Reports />} />
             <Route path="/supportChat" element={<SupportChat />} />
             <Route path="/hotels" element={<Hotels />} />
+            <Route path="/admin" element={<Admins/>}/>
         </Routes>
         </Router>
         {/* :

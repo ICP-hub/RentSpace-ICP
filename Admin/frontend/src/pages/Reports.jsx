@@ -6,8 +6,42 @@ import '../components/reports/reports.css'
 import ReportList from '../components/reports/ReportList';
 import ReportDetail from '../components/reports/reportDetail/ReportDetail';
 import Navbar from '../components/Reusables/menuNavBar/Navbar';
+import { useAuth } from '../utils/useAuthClient';
+import { Principal } from '@dfinity/principal';
 
 const Reports = () => {
+
+  const [reportList,setReportList]=useState([])
+  const {actors}=useAuth()
+
+  const getAllReports=async()=>{
+    let newArr=[]
+    await actors?.supportActor?.scanBooking(0,10).then((res)=>{
+      console.log("report : ",res[0][1])
+      res[0][1].map(async(r)=>{
+        let userId=r[0].split("#")[0]
+        await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(userId)).then((userRes)=>{
+          console.log(userRes[0])
+          let reportEl={
+            userId:userId,
+            reportId:r[0],
+            userData:userRes[0],
+            reportData:r[1]
+          }
+          if(!r[1]?.resolved){
+            newArr.push(reportEl)
+            setReportList([...newArr])            
+            console.log(reportEl)
+          }
+
+        }).catch((err)=>{
+          console.log("err fetching user data : ",err)
+        })
+      })
+    }).catch((err)=>{
+      console.log("err fetching reports : ",err)
+    })
+  }
 
   
   const reports=[
@@ -21,8 +55,9 @@ const Reports = () => {
   const [reportDetail,showReportDetail]=useState({})
 
   useEffect(()=>{
-    console.log(reportDetail?.name,reportDetail?.name!=undefined)
-  },[reportDetail])
+    // console.log(reportDetail?.name,reportDetail?.name!=undefined)
+    getAllReports()
+  },[])
 
   const nav=useNavigate()
   return (
@@ -30,7 +65,7 @@ const Reports = () => {
       <Navbar nav={nav}/>
       <Header title={'Reports'}/>
       {
-        (reports?.length==0)?
+        (reportList?.length==0)?
         <div className="no-reports-cont">
         <div className="no-reports-icon-cont">
           <FaQuestion className='no-reports-icon'/>
@@ -42,10 +77,10 @@ const Reports = () => {
       </div>
       :
       <div className="reports-main">
-        <ReportList reports={reports} showReportDetail={showReportDetail} reportDetail={reportDetail}/>
+        <ReportList reports={reportList} showReportDetail={showReportDetail} reportDetail={reportDetail}/>
         {
             
-            reportDetail?.name!=undefined?
+            reportDetail?.userData?.firstName!=undefined?
             <ReportDetail report={reportDetail}/>
             :
             <></>

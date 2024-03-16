@@ -41,6 +41,7 @@ export const idlFactory = ({ IDL }) => {
     'createIssue' : IDL.Func([IDL.Text], [Result], []),
     'getAllUnResolvedIssue' : IDL.Func([], [IDL.Vec(UserIdentity)], ['query']),
     'getAllUserIssue' : IDL.Func([], [IDL.Vec(Issue)], ['query']),
+    'getNoOfPages' : IDL.Func([IDL.Nat], [IDL.Nat], ['query']),
     'getResolvedIssue' : IDL.Func([], [IDL.Vec(Issue)], ['query']),
     'getTicket' : IDL.Func(
         [],
@@ -61,6 +62,11 @@ export const idlFactory = ({ IDL }) => {
     'removeResolvedTicketRaised' : IDL.Func([IDL.Text, IDL.Text], [Result], []),
     'resolveTicketRaised' : IDL.Func([IDL.Text, IDL.Text], [Result], []),
     'resolveUserIssue' : IDL.Func([UserIdentity, IDL.Text], [], []),
+    'scanBooking' : IDL.Func(
+        [IDL.Nat, IDL.Nat],
+        [IDL.Vec(IDL.Tuple(IDL.Text, IDL.Vec(IDL.Tuple(TicketId, Ticket))))],
+        ['query'],
+      ),
     'whoami' : IDL.Func([], [IDL.Text], ['query']),
   });
   return anon_class_13_1;

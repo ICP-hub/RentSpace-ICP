@@ -37,6 +37,7 @@ export interface anon_class_13_1 {
   'createIssue' : ActorMethod<[string], Result>,
   'getAllUnResolvedIssue' : ActorMethod<[], Array<UserIdentity>>,
   'getAllUserIssue' : ActorMethod<[], Array<Issue>>,
+  'getNoOfPages' : ActorMethod<[bigint], bigint>,
   'getResolvedIssue' : ActorMethod<[], Array<Issue>>,
   'getTicket' : ActorMethod<[], Array<[TicketId, Ticket]>>,
   'getUserTicketsByAdmin' : ActorMethod<[string], Array<[TicketId, Ticket]>>,
@@ -45,6 +46,10 @@ export interface anon_class_13_1 {
   'removeResolvedTicketRaised' : ActorMethod<[string, string], Result>,
   'resolveTicketRaised' : ActorMethod<[string, string], Result>,
   'resolveUserIssue' : ActorMethod<[UserIdentity, string], undefined>,
+  'scanBooking' : ActorMethod<
+    [bigint, bigint],
+    Array<[string, Array<[TicketId, Ticket]>]>
+  >,
   'whoami' : ActorMethod<[], string>,
 }
 export interface _SERVICE extends anon_class_13_1 {}

@@ -9,8 +9,8 @@ const ReportList = ({reports,showReportDetail,reportDetail}) => {
       </p>
       <div className="report-card-cont">
         {
-          reports.map((report)=>(
-            <ReportListCard report={report} showReportDetail={showReportDetail} reportDetail={reportDetail}/>
+          reports.map((report,index)=>(
+            <ReportListCard key={index} report={report} showReportDetail={showReportDetail} reportDetail={reportDetail}/>
           ))
         }
       </div>

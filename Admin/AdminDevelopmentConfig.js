@@ -7,12 +7,12 @@ export const ids={
     userCan:(production)?
         // "tassb-3qaaa-aaaan-qloxq-cai":
         "wenzb-uyaaa-aaaan-qlwsa-cai":
-        "cgpjn-omaaa-aaaaa-qaakq-cai",
+        "a4tbr-q4aaa-aaaaa-qaafq-cai",
         
     hotelCan:(production)?
         "wkpuj-piaaa-aaaan-qlwta-cai":
         // "5mldq-waaaa-aaaan-qlqta-cai":
-        "ajuq4-ruaaa-aaaaa-qaaga-cai",
+        "ahw5u-keaaa-aaaaa-qaaha-cai",
         
     backendCan:(production)?
         // "thtuv-wiaaa-aaaan-qloxa-cai":
@@ -23,7 +23,7 @@ export const ids={
         "cuj6u-c4aaa-aaaaa-qaajq-cai",
     bookingCan:(production)?
         "xhbqh-aaaaa-aaaan-qlwuq-cai":
-        "cinef-v4aaa-aaaaa-qaalq-cai",
+        "ajuq4-ruaaa-aaaaa-qaaga-cai",
     tokenCan:(production)?
         "ryjl3-tyaaa-aaaaa-aaaba-cai"
         :"bw4dl-smaaa-aaaaa-qaacq-cai",
@@ -34,5 +34,5 @@ export const ids={
     supportCan:(production)?
         "xaawt-nyaaa-aaaan-qlwua-cai"
         :
-        "dccg7-xmaaa-aaaaa-qaamq-cai"
+        "aax3a-h4aaa-aaaaa-qaahq-cai"
 }

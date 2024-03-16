@@ -4,6 +4,7 @@ type anon_class_13_1 =
    createIssue: (text) -> (Result);
    getAllUnResolvedIssue: () -> (vec UserIdentity) query;
    getAllUserIssue: () -> (vec Issue) query;
+   getNoOfPages: (nat) -> (nat) query;
    getResolvedIssue: () -> (vec Issue) query;
    getTicket: () -> (vec record {
                            TicketId;
@@ -18,6 +19,14 @@ type anon_class_13_1 =
    removeResolvedTicketRaised: (text, text) -> (Result);
    resolveTicketRaised: (text, text) -> (Result);
    resolveUserIssue: (UserIdentity, text) -> ();
+   scanBooking: (nat, nat) ->
+    (vec record {
+           text;
+           vec record {
+                 TicketId;
+                 Ticket;
+               };
+         }) query;
    whoami: () -> (text) query;
  };
 type UserIdentity = text;

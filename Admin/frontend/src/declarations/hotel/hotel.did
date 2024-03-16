@@ -6,6 +6,7 @@ type anon_class_16_1 =
    getHotel: (HotelId) -> (opt HotelInfo) query;
    getHotelFrequencyByYear: (text) -> (opt AnnualData) query;
    getHotelId: () -> (vec HotelId) query;
+   getNoOfPages: (nat) -> (nat) query;
    scanHotel: (nat, nat) -> (vec record {
                                    HotelId;
                                    HotelInfo;

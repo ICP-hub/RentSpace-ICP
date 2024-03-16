@@ -8,27 +8,10 @@ import { booking } from '../../../declarations/booking'
 
 const dataComplete = require('../../../charts/data.json')
 
-function createArray(bookingData) {
-    let arr = [];
-    arr.push(Number(bookingData.dec));
-    arr.push(Number(bookingData.nov));
-    arr.push(Number(bookingData.oct));
-    arr.push(Number(bookingData.sep));
-    arr.push(Number(bookingData.aug));
-    arr.push(Number(bookingData.july));
-    arr.push(Number(bookingData.june));
-    arr.push(Number(bookingData.may));
-    arr.push(Number(bookingData.april));
-    arr.push(Number(bookingData.march));
-    arr.push(Number(bookingData.feb));
-    arr.push(Number(bookingData.jan));
-    return arr;
-}
-const BookingChart = ({ bookingData }) => {
 
-    const [year, setYear] = useState(2024)
-    console.log(bookingData);
-    // console.log(createArray(bookingData));
+const BookingChart = ({ bookingData,bookingCount,year,setYear }) => {
+
+
     return (
         <div className='booking-chart-sec'>
             <div className='booking-chart-header'>
@@ -36,7 +19,7 @@ const BookingChart = ({ bookingData }) => {
                     <h4 className='booking-chart-count-label'>
                         Total Bookings
                     </h4>
-                    <h3 className='booking-chart-count'>1135</h3>
+                    <h3 className='booking-chart-count'>{bookingCount}</h3>
                 </div>
                 <div className="booking-chart-timeline">
                     <h4 className='booking-chart-year'>Year - {year}</h4>
@@ -50,7 +33,7 @@ const BookingChart = ({ bookingData }) => {
                 </div>
             </div>
             <div className='booking-chart'>
-                <Barchart label={"Bookings"} data={createArray(bookingData)} />
+                <Barchart label={"Bookings"} data={bookingData} />
             </div>
         </div>
     )

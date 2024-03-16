@@ -7,8 +7,8 @@ const ReportListCard = ({report,showReportDetail,reportDetail}) => {
         onClick={()=>showReportDetail(report)}
     >
       <div className="report-profile-circle"/>
-      <p className={reportDetail?.name==report.name?"report-list-card-sender-selected":"report-list-card-sender"}>
-        {report.name}&nbsp;
+      <p className={reportDetail?.reportId==report.reportId?"report-list-card-sender-selected":"report-list-card-sender"}>
+        {report?.userData?.firstName}&nbsp;
         <p className='report-list-card-text'>reports a problem..</p>
       </p>
     </div>
