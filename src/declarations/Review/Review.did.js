@@ -37,4 +37,3 @@ export const idlFactory = ({ IDL }) => {
   return Review;
 };
 export const init = ({ IDL }) => { return []; };
-export const init = ({ IDL }) => { return []; };

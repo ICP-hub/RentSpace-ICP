@@ -1,26 +1,12 @@
 export const idlFactory = ({ IDL }) => {
   const AdminId = IDL.Text;
-  const AdminId = IDL.Text;
   const User__1 = IDL.Record({
     'dob' : IDL.Text,
     'userEmail' : IDL.Text,
     'lastName' : IDL.Text,
     'firstName' : IDL.Text,
   });
-  const AnnualData = IDL.Record({
-    'aug' : IDL.Nat,
-    'dec' : IDL.Nat,
-    'feb' : IDL.Nat,
-    'jan' : IDL.Nat,
-    'may' : IDL.Nat,
-    'nov' : IDL.Nat,
-    'oct' : IDL.Nat,
-    'sep' : IDL.Nat,
-    'march' : IDL.Nat,
-    'april' : IDL.Nat,
-    'july' : IDL.Nat,
-    'june' : IDL.Nat,
-  });
+
   const AnnualData = IDL.Record({
     'aug' : IDL.Nat,
     'dec' : IDL.Nat,
@@ -49,7 +35,7 @@ export const idlFactory = ({ IDL }) => {
     'firstName' : IDL.Text,
   });
   const UserId = IDL.Text;
-  const UserId = IDL.Text;
+
   const User = IDL.Service({
     'addOwner' : IDL.Func([AdminId], [IDL.Text], []),
     'checkUserExist' : IDL.Func([], [IDL.Bool], ['query']),
@@ -82,5 +68,4 @@ export const idlFactory = ({ IDL }) => {
   });
   return User;
 };
-export const init = ({ IDL }) => { return []; };
 export const init = ({ IDL }) => { return []; };
