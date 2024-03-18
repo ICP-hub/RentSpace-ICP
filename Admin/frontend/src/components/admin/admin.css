@@ -26,17 +26,12 @@
 .ins-list{
     width: 80%;
     padding-left: 1em;
-    font-size: 0.75em;
-    font-weight: 600;
 }
 .ins-list-item{
-    width: 60%;
-    border-width: 1px;
-    border-radius: 2em;
-    height: 3em;
-    padding-left: 1em;
-    font-size: 0.58em;
-    font-weight: 600;
+    width: 100%;
+    font-size: 0.6em;
+    font-weight: 300;
+    margin: 0.5vh 0;
 }
 .add-admin-cont{
     display: flex;
@@ -103,3 +98,48 @@
        background-position: 0%  50%, 50%  50%,100% 100%;
     }
  }
+
+ @media only screen and (max-width: 1000px) and (min-width: 730px) {
+    .add-instruction-cont{
+        align-self: center;
+    }
+    .add-admin-cont{
+        align-items: center;
+    }
+    .dots{
+        width: 90px;
+        height: 40px;
+        background-size: calc(100%/3) 18px;
+        left: 45%;
+        top:40%
+    }
+  }
+
+
+  @media only screen and (max-width: 730px) {
+    .add-instruction-cont{
+        align-self: center;
+        width: 90%;
+    }
+    .add-admin-cont{
+        align-items: center;
+    }
+    .add-admin{
+        width: 90%;
+        flex-direction: column;
+    }
+    .admin-inp{
+        width: 95%;
+        margin-bottom: 2vh;
+    }
+    .add-admin-btn{
+        width: 40%;
+    }
+    .dots{
+        width: 56px;
+        height: 26px;
+        background-size: calc(100%/3) 13px;
+        left: 45%;
+        top:40%
+    }
+  }
