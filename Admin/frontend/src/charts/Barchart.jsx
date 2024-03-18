@@ -23,7 +23,7 @@ const Barchart = ({label,data}) => {
                         gradient.addColorStop(1, "#8E0FF0");
                         return gradient;
                       },
-                    borderRadius:new Array(12).fill(50)
+                    borderRadius:new Array(12).fill(50) 
                 }]
                 
             }}
