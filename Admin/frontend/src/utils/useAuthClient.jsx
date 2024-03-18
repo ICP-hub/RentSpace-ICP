@@ -43,7 +43,7 @@ export const useAuthClient = () => {
                     setIsAuthenticated(true);
                 }
                 else{
-                    alert("You are not an admin" + principal);
+                    alert("You are not an admin -->" + principal);
                 }
             })
         }
