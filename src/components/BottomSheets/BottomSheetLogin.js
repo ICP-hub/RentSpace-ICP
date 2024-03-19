@@ -61,7 +61,7 @@ const getnew=async()=>{
       <Text style={styles.heading}>LOGIN / SIGN UP</Text>
       <FlatList style={styles.btnList} data={loginMethods} renderItem={({item})=>(
         <TouchableOpacity style={styles.loginBtn} onPress={()=>{
-          handleLogin()
+          handleLogin(item?.title)
           setLoader(true)
         }}>
           <Image source={item.logo} style={styles.logo}/>

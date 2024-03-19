@@ -45,13 +45,14 @@ import { setPrinciple } from './src/redux/principle/actions';
 import { setUser } from './src/redux/users/actions';
 import ChatContainer from './src/components/NavScreens/UserScreens/ChatPage/ChatContainer/ChatContainer';
 import { idlFactory } from './Backend/RentSpace_backend/wallet/legder.did';
+import { idlFactory as userIDL } from './src/declarations/User';
 import { createTokenActor } from './src/components/NavScreens/UserScreens/HotelsSearch/HotelDetails/BookingForm/utils/utils';
 import { setAuthData } from './src/redux/authData/actions';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {host, ids} from './DevelopmentConfig'
 import MainProfile from './src/components/NavScreens/UserScreens/Profile/MainProfile/MainProfile';
-
+import { check, plug } from './plugConfig';
 
 const Stack = createNativeStackNavigator();
 
@@ -234,7 +235,18 @@ const RootComponent: React.FC = () => {
 
   let resp;
 
-  const handleLogin = async () => {
+  const handleLogin = async (method) => {
+
+    if(method=="Plug") {
+      check()
+      alert("You chose plug!")
+      console.log("plug : ",plug)
+      
+      const plugPBkey=await plug?.getPrincipal().then((res)=>{
+        console.log(res)
+      })
+      return;
+    };
     
     const newDel=await getFromAsyncStore("delegation")
     const newPri=await getFromAsyncStore("prikey")
