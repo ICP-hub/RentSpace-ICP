@@ -25,7 +25,10 @@ const BookHotelPage = ({navigation,queryHotels}) => {
   const sampleDes='2972 Westheimer Rd. Santa Ana, Illinois 85486 '
   const [bookingList,setBookingList]=useState([])
   const [refreshing,setRefreshing]=useState(false)
-  async function getReservations(){
+
+
+
+  async function getReservations(setRefreshing){
 
     setBookingList([])
     await actors?.bookingActor.getBookingId().then((res)=>{
@@ -33,22 +36,32 @@ const BookHotelPage = ({navigation,queryHotels}) => {
       
       console.log("all bookings1: ",res[0])
       res.map(async(r)=>{
+        setRefreshing(true)
         console.log("booking-->",r)
         let hotelId=r.split("#")[0]+"#"+r.split("#")[1]
         console.log(hotelId)
         await actors?.bookingActor.getBookingDetials(r).then(async(resp)=>{
           let hotel=null
+         
           await actors?.hotelActor.getHotel(hotelId).then((hRes)=>{
+            setRefreshing(false)
             hotel={...hRes[0],hotelId:hotelId}
-          }).catch((err)=>{console.log(err)})
+          }).catch((err)=>{
+            console.log(err)
+            setRefreshing(false)
+          })
           console.log("booking details : ",resp)
           console.log({...resp[0],hotel:hotel,bookingId:r})
           setBookingList(b=>[...b,{...resp[0],hotel:hotel,bookingId:r}])
-        }).catch((err)=>console.log(err))
+        }).catch((err)=>{
+          console.log(err)
+          setRefreshing(false)
+        })
       })
     }).catch((err)=>{
       console.log("getid err :",err)
       // alert(err)
+      setRefreshing(false)
     })
     console.log("bookingList",bookingList)
   }
@@ -98,7 +111,7 @@ const BookHotelPage = ({navigation,queryHotels}) => {
 
     console.log(queryHotels)
     getQueryHotelDetails()
-    getReservations()
+    // getReservations()
 
   }
   useEffect(()=>{
@@ -108,7 +121,7 @@ const BookHotelPage = ({navigation,queryHotels}) => {
       firstRender.current=false
     }else{
       getQueryHotelDetails()
-      getReservations()
+      // getReservations()
     }
    
   },[queryHotels,principle])
@@ -137,7 +150,7 @@ const BookHotelPage = ({navigation,queryHotels}) => {
         onRefresh={refresh}
       />
       <Modal animationType='slide' visible={showReservation}>
-        <ShowBookings bookingList={bookingList} setShowReservations={setShowReservations}/>
+        <ShowBookings getReservations={getReservations} bookingList={bookingList} setShowReservations={setShowReservations}/>
       </Modal>
       </>
     )
