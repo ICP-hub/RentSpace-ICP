@@ -41,7 +41,6 @@ const Main = ({navigation}) => {
   
 
   const baseQueryUrl=`https://rentspace.kaifoundry.com/api/v1/hotel/filters?`
-  const [maxQueryPrice,setMaxQueryPrice]=useState(800)
 
   const route=useRoute()
   const dispatch=useDispatch()
@@ -57,6 +56,7 @@ const Main = ({navigation}) => {
   const [hotelCreateForm, setHotelCreateForm] = useState(false);
   const [showFilters,setShowFilters]=useState(false)
   const [queryHotels,setQueryHotels]=useState([])
+  const [query,setQuery]=useState(`maxPrice=${800}&pageSize=${15}&amenities=${[]}&propertyType=${"Hotel"}`)
 
   useEffect(() => {
     
@@ -93,8 +93,9 @@ const Main = ({navigation}) => {
   })
 
   useEffect(()=>{
+    console.log("filter query'")
     filterQuery()
-  },[maxQueryPrice])
+  },[query])
 
   //Refs for managing bottomsheets
   // const btmSheetLoginRef = useRef(null);
@@ -117,7 +118,7 @@ const Main = ({navigation}) => {
     let arr=[]
     setQueryHotels([])
     console.log("filter query func")
-    await axios.get(`${baseQueryUrl}maxPrice=${maxQueryPrice}&pageSize=${50}`).then((res)=>{
+    await axios.get(`${baseQueryUrl}${query}`).then((res)=>{
       res?.data?.hotels.map((r)=>{
         console.log("filters hotel element : ",r.hotelId)
         setQueryHotels(h=>[...h,r.hotelId])
@@ -177,7 +178,7 @@ const Main = ({navigation}) => {
           <HotelCreationForm setHotelCreateForm={setHotelCreateForm} />
         </Modal>
         <Modal visible={showFilters} animationType='slide' transparent>
-          <Filters setShowFilters={setShowFilters} setMaxQueryPrice={setMaxQueryPrice}/>
+          <Filters setQuery={setQuery} setShowFilters={setShowFilters} />
         </Modal>
 
         {/* navigation Bar */}

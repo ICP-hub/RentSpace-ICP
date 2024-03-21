@@ -32,7 +32,7 @@ const propertyTypesList=[
     {name:'Palace',icon:<Icon name='fort-awesome' size={24} color={COLORS.black} />},
 ]
 
-const Filters = ({setShowFilters,setMaxQueryPrice}) => {
+const Filters = ({setShowFilters,setQuery}) => {
     const [maxPrice,setMaxPrice]=useState(800)
     const [propertyType,setPropertyType]=useState(propertyTypesList[0].name)
     const [amenities,setAmenities]=useState([])
@@ -60,7 +60,7 @@ const Filters = ({setShowFilters,setMaxQueryPrice}) => {
             <Text style={styles.link}>Clear all</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btn} onPress={()=>{
-            setMaxQueryPrice(maxPrice)
+            setQuery(`maxPrice=${maxPrice}&pageSize=${15}&amenities=${amenities}&propertyType=${propertyType}`)
             setShowFilters(false)
             }}>
             <Text style={styles.btnText}>Show places</Text>

@@ -108,10 +108,10 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
       console.log(parseInt(response?.Ok))
       afterPaymentFlow(parseInt(response?.Ok).toString())
     }else{
-      // setLoading(false)
-      // Alert.alert("Transaction Failed",`Insufficient balance in ${metaData?.["icrc1:symbol"]} ${await getBalance()}`)
-      // setBalanceScreen(false)
-      afterPaymentFlow("test")
+      setLoading(false)
+      Alert.alert("Transaction Failed",`Insufficient balance in ${metaData?.["icrc1:symbol"]} ${await getBalance()}`)
+      setBalanceScreen(false)
+      // afterPaymentFlow("test")
     }
     };
   async function settingToken(){
@@ -178,6 +178,8 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
       setDeepLink(event.url);
   }
   const sendNewTransaction=async()=>{
+    const hostAccID="F8MVciLX7XFv2ZtBsCgQNSstMLwC4r7EXtcurB73o1Hz"
+    // const hostAccID="CUT6rrZag3dpAYPZksQ7LvqcHrxatcdqxjCnTvxXdHo8"
     setLoading(true)
       if (!phantomWalletPublicKey){
         Alert.alert("Connection Required",'Please connect to phantom wallet first!')
@@ -189,7 +191,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
       transaction.instructions=[
         SystemProgram.transfer({
           fromPubkey:phantomWalletPublicKey,
-          toPubkey:new PublicKey("CUT6rrZag3dpAYPZksQ7LvqcHrxatcdqxjCnTvxXdHo8"),
+          toPubkey:new PublicKey(hostAccID),
           lamports:0.25*LAMPORTS_PER_SOL
         })
       ]
@@ -230,6 +232,9 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
     if(error==4001){
       Alert.alert("Transaction failed","You rejected the payment request!")
     }
+    // if(error==-32503){
+    //   Alert.alert("Transaction failed","Insufficient balance in the account you are trying to pay with!")
+    // }
   }
   const handleConnection=(allParams)=>{
     setLoading(false)

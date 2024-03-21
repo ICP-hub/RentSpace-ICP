@@ -74,6 +74,12 @@ const BookHotelPage = ({navigation,queryHotels}) => {
   async function getQueryHotelDetails(){
     const newArr=[]
     setRefreshing(true)
+    if(queryHotels.length==0){
+      setRefreshing(false)
+      setHotelsList([])
+      // Alert.alert("No Properties found","No properties found for these filte combinations!")
+      return 
+    }
     for(let i=0;i<queryHotels?.length;i++){
         console.log("el",queryHotels[i])
         await actors.hotelActor?.getHotel(queryHotels[i]).then((res)=>{
