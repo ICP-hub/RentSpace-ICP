@@ -14,7 +14,7 @@ const HotelCard = ({item,navigation}) => {
             <Icon2 name="page-next" size={30} color='white' />
         </TouchableOpacity>
         
-        <Image source={images.hotel} style={styles.img}/>
+        <Image source={{uri:item?.details?.imagesUrls[0].url}} style={styles.img}/>
         <View style={styles.dataCont}>
             <Text style={styles.title}>{(item?.hotelTitle)?item?.hotelTitle:"Sample Hotel"}</Text>
             <Text style={styles.simpleText}>{item?.hotelDes??"sample Description"}</Text>

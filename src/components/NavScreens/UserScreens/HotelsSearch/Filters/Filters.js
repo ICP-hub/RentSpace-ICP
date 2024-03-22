@@ -60,7 +60,7 @@ const Filters = ({setShowFilters,setQuery}) => {
             <Text style={styles.link}>Clear all</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btn} onPress={()=>{
-            setQuery(`maxPrice=${maxPrice}&pageSize=${15}&amenities=${amenities}&propertyType=${propertyType}`)
+            setQuery(`maxPrice=${maxPrice}&pageSize=${25}&amenities=${amenities}&propertyType=${propertyType}`)
             setShowFilters(false)
             }}>
             <Text style={styles.btnText}>Show places</Text>

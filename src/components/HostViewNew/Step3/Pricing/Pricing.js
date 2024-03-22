@@ -71,7 +71,7 @@ const Pricing = ({setHostModal,pos}) => {
             Alert.alert('No payment method selected',"Add atleast one payment method through which you are willing to accept payments")
         }
         else{
-            dispatch(setListing({...listing,hotelPrice:price.toString()}))
+            dispatch(setListing({...listing,hotelPrice:price.toString(),phantomWalletID:phantomAccID,paymentMethods:paymentMethods}))
             return true
         }
     }

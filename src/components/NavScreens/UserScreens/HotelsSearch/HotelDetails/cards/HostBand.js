@@ -3,13 +3,13 @@ import React from 'react'
 import { COLORS, SIZES } from '../../../../../../constants/themes'
 import { images } from '../../../../../../constants'
 
-const HostBand = () => {
+const HostBand = ({hostData}) => {
   return (
     <View style={styles.band}>
       <View style={styles.subCont}>
         <Image source={images.profileSample} style={styles.img}/>
         <View style={styles.TextCont}>
-            <Text style={styles.Title}>Entire villa hosted by Ryan!</Text>
+            <Text style={styles.Title}>Entire place hosted by {hostData?.firstName}!</Text>
             <Text style={styles.simpleText}>8 guests · 2 bedrooms · 3 beds · 2 bathrooms</Text>
         </View>
       </View>
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
       display:'flex',
       flexDirection:'column',
       height:52,
-      width:'60%',
+      width:'70%',
       justifyContent:'space-between'
     },
     Title:{

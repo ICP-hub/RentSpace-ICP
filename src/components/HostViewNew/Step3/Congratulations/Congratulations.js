@@ -51,7 +51,9 @@ const Congratulations = ({setHostModal,pos}) => {
         longitude:parseFloat(listing?.hotelLocation.split('#')[0]),
         latitude:parseFloat(listing?.hotelLocation.split('#')[1]),
         amenities:listing?.amenities,
-        propertyType:listing?.propertyType
+        propertyType:listing?.propertyType,
+        phantomWalletID:listing?.phantomWalletID,
+        paymentMethods:listing?.paymentMethods
       }
       
       const formData = new FormData();

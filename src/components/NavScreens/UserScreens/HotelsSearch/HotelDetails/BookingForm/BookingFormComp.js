@@ -178,7 +178,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
       setDeepLink(event.url);
   }
   const sendNewTransaction=async()=>{
-    const hostAccID="F8MVciLX7XFv2ZtBsCgQNSstMLwC4r7EXtcurB73o1Hz"
+    // const hostAccID="F8MVciLX7XFv2ZtBsCgQNSstMLwC4r7EXtcurB73o1Hz"
     // const hostAccID="CUT6rrZag3dpAYPZksQ7LvqcHrxatcdqxjCnTvxXdHo8"
     setLoading(true)
       if (!phantomWalletPublicKey){
@@ -191,7 +191,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
       transaction.instructions=[
         SystemProgram.transfer({
           fromPubkey:phantomWalletPublicKey,
-          toPubkey:new PublicKey(hostAccID),
+          toPubkey:new PublicKey(item?.details?.phantomWalletID),
           lamports:0.25*LAMPORTS_PER_SOL
         })
       ]
@@ -348,7 +348,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
         <View style={styles.line}/>
         <PriceDetails basePrice={item?.hotelPrice} nights={booking?.bookingDuration} fullPayment={fullPayment} checkIn={booking?.date}/>
         <View style={styles.line}/>
-        <PaymentMethods method={paymentMethod} setMethod={setPaymentMethod} connect={connect}/>
+        <PaymentMethods method={paymentMethod} setMethod={setPaymentMethod} connect={connect} item={item}/>
         <View style={styles.line}/>
         <RequiredPhone/>
         <View style={styles.line}/>
@@ -431,7 +431,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
       }}>
         <PhantomPayment 
           loading={loading} 
-          accountId={"CUT6rrZag3dpAYPZksQ7LvqcHrxatcdqxjCnTvxXdHo8"}
+          accountId={item?.details?.phantomWalletID}
           sendNewTransaction={sendNewTransaction}
           connect={connect}
           total={(fullPayment)?total:total/2} 

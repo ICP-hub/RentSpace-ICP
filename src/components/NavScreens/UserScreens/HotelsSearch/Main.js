@@ -115,14 +115,9 @@ const Main = ({navigation}) => {
   }
 
   const filterQuery=async()=>{
-    let arr=[]
-    setQueryHotels([])
     console.log("filter query func")
     await axios.get(`${baseQueryUrl}${query}`).then((res)=>{
-      res?.data?.hotels.map((r)=>{
-        console.log("filters hotel element : ",r.hotelId)
-        setQueryHotels(h=>[...h,r.hotelId])
-      })
+      setQueryHotels([...res?.data?.hotels])
     })
   }
 

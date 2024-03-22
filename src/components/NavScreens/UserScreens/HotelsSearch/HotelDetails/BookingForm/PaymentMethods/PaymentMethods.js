@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { COLORS,SIZES } from '../../../../../../../constants/themes'
 import Option from './Option'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
-const PaymentMethods = ({setMethod,method,connect}) => {
+const PaymentMethods = ({setMethod,method,connect,item}) => {
   const methods=[
     {
       label:'ckEth',
@@ -36,14 +36,19 @@ const PaymentMethods = ({setMethod,method,connect}) => {
     },
   ]
   // const [method,setMethod]=useState(methods[0]?.label)
+  useEffect(()=>{
+    console.log(item?.details?.paymentMethods.includes("ICP"))
+  },[])
   
   return (
     <View style={styles.sec}>
       <Text style={styles.heading}>Pay with</Text>
       <View style={styles.methodCont}>
         {
-          methods.map((item,index)=>(
-            <Option item={item} key={index} setMethod={setMethod} method={method} connect={connect}/>
+          methods.map((m,index)=>(
+            (item?.details?.paymentMethods.includes(m?.label))?
+            <Option item={m} key={index} setMethod={setMethod} method={method} connect={connect}/>
+            :<></>
           ))
         }
       </View>
