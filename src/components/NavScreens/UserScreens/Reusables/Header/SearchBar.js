@@ -3,12 +3,21 @@ import React from 'react'
 import Icon from 'react-native-vector-icons/AntDesign'
 import { COLORS,SIZES } from '../../../../../constants/themes'
 
-const SearchBar = ({filterAction}) => {
+const SearchBar = ({filterAction,searchText,setSearchText,setQuery}) => {
   return (
     <View style={styles.searchBarCont}>
       <View style={styles.searchBar}>
         <Icon name="search1" size={22} color={'white'}/>
-        <TextInput style={styles.input} placeholder='Where are you going?' placeholderTextColor={'white'} />
+        <TextInput 
+          value={searchText} 
+          style={styles.input} 
+          placeholder='Search Places' 
+          placeholderTextColor={'white'} 
+          onChangeText={value=>{
+            setSearchText(value.toString())
+            setQuery(`pageSize=${25}&name=${value.toString()}`)
+          }}
+        />
       </View>
       <TouchableOpacity style={styles.filterCont} onPress={filterAction}>
         <Icon name="filter" size={25} color={'white'}/>

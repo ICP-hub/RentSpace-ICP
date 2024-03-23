@@ -57,6 +57,7 @@ const Main = ({navigation}) => {
   const [showFilters,setShowFilters]=useState(false)
   const [queryHotels,setQueryHotels]=useState([])
   const [query,setQuery]=useState(`maxPrice=${800}&pageSize=${15}&amenities=${[]}&propertyType=${"Hotel"}`)
+  const [searchText,setSearchText]=useState("")
 
   useEffect(() => {
     
@@ -182,7 +183,7 @@ const Main = ({navigation}) => {
         />
 
         {/* searchBar Top */}
-        <HeaderSearch filterAction={openFilters}/>
+        <HeaderSearch filterAction={openFilters} setQuery={setQuery} setSearchText={setSearchText} searchText={searchText}/>
 
         {/* <UserDetailDemo user={user}/> */}
         <BookHotelPage navigation={navigation} queryHotels={queryHotels}

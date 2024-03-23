@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Image, Touchable,TouchableOpacity,FlatList, Modal, Alert } from 'react-native'
+import { StyleSheet, Text, View,Image, Touchable,TouchableOpacity,FlatList, Modal, Alert, Keyboard } from 'react-native'
 import React, { useEffect, useState,useRef } from 'react'
 import { images } from '../../../../constants'
 import { COLORS, SIZES } from '../../../../constants/themes'
@@ -25,7 +25,7 @@ const BookHotelPage = ({navigation,queryHotels}) => {
   const sampleDes='2972 Westheimer Rd. Santa Ana, Illinois 85486 '
   const [bookingList,setBookingList]=useState([])
   const [refreshing,setRefreshing]=useState(false)
-
+  const [bottom,setBottom]=useState(70)
 
 
   async function getReservations(setRefreshing){
@@ -94,6 +94,15 @@ const BookHotelPage = ({navigation,queryHotels}) => {
     console.log(queryHotels)
     getQueryHotelDetails()
   }
+
+    useEffect(()=>{
+        Keyboard.addListener('keyboardDidShow',()=>{
+            setBottom(0)
+        })
+        Keyboard.addListener('keyboardDidHide',()=>{
+            setBottom(70)
+        })
+    })
   useEffect(()=>{
 
     if(firstRender.current){
@@ -121,7 +130,7 @@ const BookHotelPage = ({navigation,queryHotels}) => {
       </View>
       <FlatList 
         data={hotelsList} 
-        style={{marginBottom:70,backgroundColor:'white'}}  
+        style={{marginBottom:bottom,backgroundColor:'white'}}  
         renderItem={(item)=>(
         <HotelCard item={item.item} navigation={navigation} />
         )}
@@ -147,44 +156,18 @@ const BookHotelPage = ({navigation,queryHotels}) => {
 export default BookHotelPage
 
 const styles = StyleSheet.create({
-    lenderCont:{
-        display:'flex',
-        flexDirection:'row',
-        width:'80%',
-        justifyContent:'flex-start',
-        alignItems:'center',
-        paddingHorizontal:20,
-        marginBottom:10,
-        backgroundColor:COLORS.lightPurple,
-        paddingVertical:10,
-        borderRadius:20,
-        borderColor:'black',
-        borderLeftWidth:5,
-        borderBottomWidth:5
-    },
-    lenderImg:{
-        width:50,
-        height:50,
-        borderRadius:25,
-        marginRight:30,
-        marginLeft:20
-    },
-    lenderName:{
-        fontSize:SIZES.preMedium,
-        color:'white'
-    },
     hotelPage:{
         display:'flex',
         flexDirection:'column',
         alignItems:'center',
         width:'98%',
         backgroundColor:COLORS.lightBorderPurple,
-        paddingVertical:20,
+        paddingTop:20,
         borderRadius:50,
         borderWidth:2,
         borderColor:COLORS.darkPurple,
         marginLeft:4,
-        marginBottom:20
+        // marginBottom:20
     },
     title:{
         fontSize:SIZES.preMedium,
