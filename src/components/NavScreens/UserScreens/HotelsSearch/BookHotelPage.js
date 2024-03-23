@@ -60,7 +60,6 @@ const BookHotelPage = ({navigation,queryHotels}) => {
       })
     }).catch((err)=>{
       console.log("getid err :",err)
-      // alert(err)
       setRefreshing(false)
     })
     console.log("bookingList",bookingList)

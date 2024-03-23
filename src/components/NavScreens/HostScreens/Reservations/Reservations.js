@@ -26,13 +26,43 @@ const Reservations = ({setShowReservations,reservationList}) => {
 
       const [reservationType,setReservationType]=useState(reservationTypes[0].title)
       const [sorting,setSorting]=useState(false)
-      const [reservations,setReservations]=useState([])
-      const {hotels}=useSelector(state=>state.hotelsReducer)
+      const [reservations,setReservations]=useState([...reservationList])
       const {actors}=useSelector(state=>state.actorReducer)
 
-      // useEffect(()=>{
-      //   // getAllReservation()
-      // },[reservationType])
+      const sortCreatedAt=(asc)=>{
+        const tempArr=[...reservations]
+        if(asc){
+          tempArr.sort((a,b)=>{
+            const date1=new Date(a?.bookingData?.date)
+            const date2=new Date(b?.bookingData?.date)
+            return date1.getTime()-date2.getTime()
+          })
+        }else{
+          tempArr.sort((a,b)=>{
+            const date1=new Date(a?.bookingData?.date)
+            const date2=new Date(b?.bookingData?.date)
+            return date2.getTime()-date1.getTime()
+          })
+        }
+        return tempArr
+      }
+      const sortCheckIn=(asc)=>{
+        const tempArr=[...reservations]
+        if(asc){
+          tempArr.sort((a,b)=>{
+            const date1=new Date(a?.bookingData?.date)
+            const date2=new Date(b?.bookingData?.date)
+            return date1.getTime()-date2.getTime()
+          })
+        }else{
+          tempArr.sort((a,b)=>{
+            const date1=new Date(a?.bookingData?.date)
+            const date2=new Date(b?.bookingData?.date)
+            return date2.getTime()-date1.getTime()
+          })
+        }
+        return tempArr
+      }
 
   return (
     <View style={styles.view}>
@@ -60,7 +90,7 @@ const Reservations = ({setShowReservations,reservationList}) => {
         </Text>
       </View>
         :
-        <FlatList contentContainerStyle={{paddingBottom:100}} style={styles.reservationCardList} data={[...reservationList,...reservationList]} renderItem={(item)=>(
+        <FlatList contentContainerStyle={{paddingBottom:100}} style={styles.reservationCardList} data={[...reservations]} renderItem={(item)=>(
           <ReservationCard item={item.item}/>
         )}
         keyExtractor={(item,index)=>index}
@@ -70,7 +100,7 @@ const Reservations = ({setShowReservations,reservationList}) => {
       
       <BottomNavHost/>
       <Modal animationType='slide' visible={sorting}>
-        <Sorting setSorting={setSorting}/>
+        <Sorting setSorting={setSorting} setReservations={setReservations} sortCheckIn={sortCheckIn} sortCreatedAt={sortCreatedAt}/>
       </Modal>
     </View>
   )

@@ -28,7 +28,7 @@ const BottomNav = ({navigation}) => {
         return (
     
     
-            <View style={(bottom==true)?[styles.viewNav,{bottom:0}]:[styles.viewNav,{bottom:-100}]}>
+            <View style={[styles.viewNav,{bottom:0}]}>
                 {/* <Icon name="home" size={20} color={COLORS.inputBorder}/> */}
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{alert(message)}}>
                 <Icon name="filter" size={25} color={COLORS.inputBorder}/>

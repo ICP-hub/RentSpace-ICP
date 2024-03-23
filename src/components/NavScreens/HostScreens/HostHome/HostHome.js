@@ -12,6 +12,7 @@ import Step1Manager from '../../../HostViewNew/Step1Manager'
 import Step2Manager from '../../../HostViewNew/Step2Manager'
 import Step3Manager from '../../../HostViewNew/Step3Manager'
 import ReservationCard from '../Reservations/ReservationCard'
+import { Principal } from '@dfinity/principal'
 
 const reservationTypes=[
   {
@@ -46,10 +47,19 @@ const HostHome = ({navigation}) => {
       await actors?.bookingActor?.gethotelXBookingId(h).then((res)=>{
         // console.log(res)
         res.map(async(r)=>{
-          await actors?.bookingActor?.getBookingDetials(r).then((bookingRes)=>{
-            console.log(bookingRes[0])
-            bookingList.push(bookingRes[0])
-            setReservationList([...bookingList])
+          await actors?.bookingActor?.getBookingDetials(r).then(async(bookingRes)=>{
+            await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(r.split("#")[0])).then((userRes)=>{
+              bookingList.push({
+                bookingData:bookingRes[0],
+                bookingId:r,
+                customerId:r.split("#")[0],
+                customerData:userRes[0]
+              })
+              setReservationList([...bookingList])
+            }).catch((err)=>{
+              console.log(err)
+            })
+            
           }).catch((err)=>{
             console.log(err)
           })

@@ -18,15 +18,15 @@ const ReservationCard = ({item}) => {
       <View style={styles.textCont}>
         <View style={styles.textRow}>
           <Text style={styles.title}>CheckIn Date</Text>
-          <Text style={styles.normalText}>{parseDate(item?.date)}</Text>
+          <Text style={styles.normalText}>{parseDate(item?.bookingData?.date)}</Text>
         </View>
         <View style={styles.textRow}>
           <Text style={styles.title}>Duration</Text>
-          <Text style={styles.normalText}>{item?.bookingDuration} days</Text>
+          <Text style={styles.normalText}>{item?.bookingData?.bookingDuration} days</Text>
           </View>
         <View style={styles.textRow}>
           <Text style={styles.title}>Customer Name</Text>
-          <Text style={styles.normalText}>username</Text>
+          <Text style={styles.normalText}>{item?.customerData?.firstName}</Text>
         </View>
       </View>
     </View>

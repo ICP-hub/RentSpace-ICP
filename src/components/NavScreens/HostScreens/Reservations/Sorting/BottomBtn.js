@@ -2,10 +2,10 @@ import { StyleSheet, Text, View ,TouchableOpacity} from 'react-native'
 import React from 'react'
 import { COLORS,SIZES } from '../../../../../constants/themes'
 
-const BottomBtn = ({setSorting}) => {
+const BottomBtn = ({setSorting,onClick}) => {
   return (
     <View style={styles.btnView}>
-        <TouchableOpacity style={styles.btn} onPress={()=>setSorting(false)}>
+        <TouchableOpacity style={styles.btn} onPress={onClick}>
             <Text style={styles.btnText}>Apply</Text>
         </TouchableOpacity>
       </View>
