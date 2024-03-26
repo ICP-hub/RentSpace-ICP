@@ -1,4 +1,4 @@
-import { Dimensions, FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Dimensions, FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
 import BottomNavHost from '../../../Navigation/BottomNavHost'
@@ -14,25 +14,14 @@ import Step3Manager from '../../../HostViewNew/Step3Manager'
 import ReservationCard from '../Reservations/ReservationCard'
 import { Principal } from '@dfinity/principal'
 
-const reservationTypes=[
-  {
-    title:"Checking out",
-    count:0
-  },
-  {
-    title:"Currently hosting",
-    count:0
-  },
-  {
-    title:"Arriving soon",
-    count:0
-  }
-]
 
 const HostHome = ({navigation}) => {
 
+ 
+  
+
   const [idprocess,setIdprocess]=useState(0)
-  const [reservationType,setReservationType]=useState(reservationTypes[0].title)
+  const [reservationType,setReservationType]=useState("Checked out")
   const [showReservation,setShowReservations]=useState(false)
   const [showDrawer,setShowDrawer]=useState(false)
   const [hostModal,setHostModal]=useState(0)
@@ -40,32 +29,82 @@ const HostHome = ({navigation}) => {
   const {actors}=useSelector(state=>state.actorReducer)
   const {hotels}=useSelector(state=>state.hotelsReducer)
   const [reservationList,setReservationList]=useState([])
+  const [outCount,setOutCount]=useState(0)
+  const [arrCount,setArrCount]=useState(0)
+  const [hostingCount,setHostingCount]=useState(0)
+  const [refreshing,setRefreshing]=useState(false)
+  const reservationTypes=[
+    {
+      title:"Checked out",
+      count:outCount,
+    },
+    {
+      title:"Currently hosting",
+      count:hostingCount,
+    },
+    {
+      title:"Arriving soon",
+      count:arrCount,
+    }
+  ]
+
+  const getFilteredArray=(type,arr)=>{
+    return arr.filter(item=>item.status==type)
+  }
+
+  const getStatus=(bookingRes)=>{
+    let checkInDate=new Date(bookingRes[0].date)
+    let checkOutDate=new Date(checkInDate.getDate()+2)
+    let currentDate=new Date()
+    let status=null
+    if(currentDate<checkOutDate && currentDate>=checkInDate){
+      status="Currently hosting"
+      setHostingCount(prev=>prev+1)
+    }else if(currentDate<checkInDate){
+      status="Arriving soon"
+      setArrCount(prev=>prev+1)
+    }else{
+      status="Checked out"
+      setOutCount(prev=>prev+1)
+    }
+    return status
+  }
 
   const getAllReservations=async()=>{
+    setArrCount(0)
+    setHostingCount(0)
+    setOutCount(0)
     let bookingList=[]
+    setRefreshing(true)
     hotels.map(async(h)=>{
       await actors?.bookingActor?.gethotelXBookingId(h).then((res)=>{
         // console.log(res)
         res.map(async(r)=>{
+          setRefreshing(true)
           await actors?.bookingActor?.getBookingDetials(r).then(async(bookingRes)=>{
             await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(r.split("#")[0])).then((userRes)=>{
               bookingList.push({
                 bookingData:bookingRes[0],
                 bookingId:r,
                 customerId:r.split("#")[0],
-                customerData:userRes[0]
+                customerData:userRes[0],
+                status:getStatus(bookingRes)
               })
               setReservationList([...bookingList])
+              setRefreshing(false)
             }).catch((err)=>{
               console.log(err)
+              setRefreshing(false)
             })
             
           }).catch((err)=>{
             console.log(err)
+            setRefreshing(false)
           })
         })
       }).catch((err)=>{
         console.log(err)
+        setRefreshing(false)
       })
     })
   }
@@ -78,15 +117,17 @@ const HostHome = ({navigation}) => {
 
   useEffect(()=>{
     getAllReservations()
-    console.log("fetching comments")
-  },[reservationType])
+    console.log("fetching reservations!")
+  },[])
 
   return (
     <View style={styles.view}>
       <Text style={styles.title}>Welcome, {user.firstName}!</Text>
       <IdentityCard setIdprocess={setIdprocess}/>
       <Text style={styles.subHeading}>Your reservations</Text>
-      <FlatList style={styles.reservationTitleList} data={reservationTypes} renderItem={(item)=>{
+      <FlatList 
+        style={styles.reservationTitleList} 
+        data={reservationTypes} renderItem={(item)=>{
         return(
             <TouchableOpacity 
               onPress={()=>setReservationType(item.item.title)}
@@ -100,7 +141,14 @@ const HostHome = ({navigation}) => {
       horizontal={true}
       />
       {
-        reservationList.length==0?
+        ((reservationList.length==0)
+          ||
+          !(
+            (reservationType=="Checked out" && reservationTypes[0].count>0)||
+            (reservationType=="Currently hosting" && reservationTypes[1].count>0)||
+            (reservationType=="Arriving soon" && reservationTypes[2].count>0)
+          )
+        )?
         <View style={styles.reservationsCont}>
           <Text style={styles.simpleText}>Sorry!</Text>
           <Text style={styles.simpleText}>
@@ -108,9 +156,17 @@ const HostHome = ({navigation}) => {
           </Text>
       </View>
         :
-        <FlatList style={styles.reservationCardList} data={reservationList} renderItem={(item)=>(
-          <ReservationCard item={item.item}/>
-        )}
+        <FlatList
+          style={styles.reservationCardList} 
+          data={getFilteredArray(reservationType,reservationList)} 
+          renderItem={(item)=>{
+          if(item.item?.status==reservationType){
+            return(
+              <ReservationCard item={item.item}/>
+            )
+          }
+          
+        }}
         keyExtractor={(item,index)=>index}
         horizontal={true}
         />
@@ -124,8 +180,14 @@ const HostHome = ({navigation}) => {
       <Modal animationType='fade' visible={showDrawer} transparent>
         <ChatDrawer navigation={navigation} showDrawer={showDrawer} setShowDrawer={setShowDrawer}/>
       </Modal>
-      <Modal animationType='slide' visible={showReservation}>
-        <Reservations setShowReservations={setShowReservations} reservationList={reservationList}/>
+      <Modal animationType='slide' visible={showReservation} onRequestClose={()=>setShowReservations(false)}>
+        <Reservations 
+          setShowReservations={setShowReservations} 
+          reservationList={reservationList}
+          reservationTypes={reservationTypes}
+          getAllReservations={getAllReservations}
+          getFilteredArray={getFilteredArray}
+        />
       </Modal>
       <Modal animationType='slide' visible={(idprocess>0)?true:false}>
         <IDProcessManager idprocess={idprocess} setIdprocess={setIdprocess}/>
@@ -146,6 +208,7 @@ const HostHome = ({navigation}) => {
       <Modal animationType='slide' visible={(hostModal>16 && hostModal<=23)?true:false}>
         <Step3Manager hostModal={hostModal} setHostModal={setHostModal}/>
       </Modal>
+      <ActivityIndicator animating={refreshing} style={styles.loader} size={40}/>
     </View>
   )
 }
@@ -247,5 +310,10 @@ const styles = StyleSheet.create({
     paddingVertical:10,
     paddingHorizontal:20,
     maxHeight:160
+  },
+  loader:{
+    position:'absolute',
+    top:'60%',
+    left:'45%'
   }
 })

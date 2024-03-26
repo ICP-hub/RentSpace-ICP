@@ -7,27 +7,28 @@ import Sorting from './Sorting/Sorting'
 import { useSelector } from 'react-redux'
 import ReservationCard from './ReservationCard'
 
-const reservationTypes=[
-  {
-    title:"Checking out",
-    count:0
-  },
-  {
-    title:"Currently hosting",
-    count:0
-  },
-  {
-    title:"Arriving soon",
-    count:0
-  }
-]
+// const reservationTypes=[
+//   {
+//     title:"Checking out",
+//     count:0
+//   },
+//   {
+//     title:"Currently hosting",
+//     count:0
+//   },
+//   {
+//     title:"Arriving soon",
+//     count:0
+//   }
+// ]
 
-const Reservations = ({setShowReservations,reservationList}) => {
+const Reservations = ({setShowReservations,reservationList,reservationTypes,getAllReservations,getFilteredArray}) => {
 
       const [reservationType,setReservationType]=useState(reservationTypes[0].title)
       const [sorting,setSorting]=useState(false)
       const [reservations,setReservations]=useState([...reservationList])
       const {actors}=useSelector(state=>state.actorReducer)
+      const [refreshing,setRefreshing]=useState(false)
 
       const sortCreatedAt=(asc)=>{
         const tempArr=[...reservations]
@@ -82,7 +83,14 @@ const Reservations = ({setShowReservations,reservationList}) => {
       horizontal={true}
       />
       {
-        reservationList.length==0?
+        ((reservationList.length==0)
+          ||
+          !(
+            (reservationType=="Checked out" && reservationTypes[0].count>0)||
+            (reservationType=="Currently hosting" && reservationTypes[1].count>0)||
+            (reservationType=="Arriving soon" && reservationTypes[2].count>0)
+          )
+        )?
         <View style={styles.reservationsCont}>
         <Text style={styles.simpleText}>Sorry!</Text>
         <Text style={styles.simpleText}>
@@ -90,11 +98,20 @@ const Reservations = ({setShowReservations,reservationList}) => {
         </Text>
       </View>
         :
-        <FlatList contentContainerStyle={{paddingBottom:100}} style={styles.reservationCardList} data={[...reservations]} renderItem={(item)=>(
-          <ReservationCard item={item.item}/>
-        )}
+        <FlatList 
+          contentContainerStyle={{paddingBottom:100}} 
+          style={styles.reservationCardList} 
+          data={getFilteredArray(reservationType,reservationList)} 
+          refreshing={refreshing}
+          onRefresh={getAllReservations}
+          renderItem={(item)=>{
+            if(item.item?.status==reservationType){
+              return(
+                <ReservationCard item={item.item}/>
+              )
+            }
+          }}
         keyExtractor={(item,index)=>index}
-        
         />
       }
       
