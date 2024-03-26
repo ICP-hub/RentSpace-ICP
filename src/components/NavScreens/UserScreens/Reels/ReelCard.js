@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,TouchableOpacity,Dimensions } from 'react-native'
+import { StyleSheet, Text, View,TouchableOpacity,Dimensions, ActivityIndicator } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
 import Icon from'react-native-vector-icons/AntDesign'
@@ -24,42 +24,46 @@ const ReelCard = ({item,reelIndex}) => {
     const btmSheetComments=useRef(null)
     const {actors}=useSelector(state=>state.actorReducer)
     const [reelComments,setReelComments]=useState([])
+    const [loading,setLoading]=useState(false)
     const baseURL="https://rentspace.kaifoundry.com"
     const openComments=()=>{
         btmSheetComments.current.present()
     }
+    const sortCreatedAt=(arr)=>{
+        const tempArr=arr
+        tempArr.sort((a,b)=>{
+            const date1=new Date(a[1].createdAt)
+            const date2=new Date(b[1].createdAt)
+            return date1.getTime()-date2.getTime()
+          })
+        return tempArr
+      }
 
   const getComments=async()=>{
-    setLiked(item?.likedBy.includes(principle))
-    console.log("usliked : ",item?.likedBy.includes(principle),item?.likedBy)
-    console.log(actors?.commentActor)
-    // console.log(item.hotelId)
+    setLoading(true)
+    
     const comments=[]
     await actors?.commentActor?.getComments(item?.hotelId).then((res)=>{
-        console.log("comment resp : ",res)
         let newRes=[]
         res.map((r)=>{
             if(r[1].parentCommentId==""){
                 newRes.push(r)
             }
         })
-        console.log('newRes',newRes.length)
         res.map((r)=>{
             if(newRes.indexOf(r)==-1){
-                // console.log(newRes.indexOf(r[1].id))
                 newRes.push(r)
             }
         })
         let rootCount=0
         let replyCount=0
-        console.log('newRes',newRes.length)
+        newRes=sortCreatedAt(newRes)
+        console.log("nes",newRes)
         newRes.map(async(r)=>{
-            
+            setLoading(true)
             await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(r[1].userId)).then((userRes)=>{
-                console.log(userRes)
                 const date=new Date(r[1].createdAt)
                 const dateString=`${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
-                console.log(dateString)
                 const newComment={
                     id:r[0],
                     user:`${userRes[0].firstName} ${userRes[0].lastName}`,
@@ -70,38 +74,42 @@ const ReelCard = ({item,reelIndex}) => {
                     parentCommentId:r[1].parentCommentId,
                     replies:[]
                 }
-                console.log(newComment)
                 if(newComment.parentCommentId==""){
                     comments.push(newComment)
                     rootCount+=1
-                    // console.log("comments:",comments)
+                    setLoading(false)
+                    setReelComments([...comments])
                 }else{
                     let index=-1
                     comments.map((comment)=>{
                         
                         if(comment.id==newComment.parentCommentId){
                             index=comments.indexOf(comment)
-                            console.log('found index',index)
                         }
                     })
                     if(index!=-1){
                         comments[index]={...comments[index],replies:[...comments[index].replies,newComment]}
-                        // comments[index].replies?.push(newComment)
-                        console.log(index,comments[index])
                         replyCount+=1
+                        setReelComments([...comments])
+                        setLoading(false)
                     }else{
                         comments.push(newComment)
+                        setReelComments([...comments])
+                        setLoading(false)
                     }
-                    // console.log("comments:",comments)
                 }
                 
-            }).catch((err)=>console.log(err))
+            }).catch((err)=>{
+                console.log(err)
+                setLoading(false)
+            })
             
         })
-        setReelComments(comments)
         console.log(comments.length,rootCount,replyCount)
+        return comments
     }).catch((err)=>{
         console.log("err fetching comments : ",err)
+        setLoading(false)
     })
   }
 
@@ -120,8 +128,7 @@ const ReelCard = ({item,reelIndex}) => {
   }
 
   useEffect(()=>{
-    getComments()
-    console.log("running useEffect reels")
+    setLiked(item?.likedBy.includes(principle))
   },[reelIndex])
 
   return (
@@ -174,8 +181,9 @@ const ReelCard = ({item,reelIndex}) => {
                 ref={btmSheetComments}
                 index={0}
                 snapPoints={["95%"]}>
-                <Comments id={item?.hotelId} comments={reelComments} getComments={getComments}/>
+                <Comments id={item?.hotelId} comments={reelComments} getComments={getComments} loading={loading} setLoading={setLoading}/>
             </BottomSheetModal>
+            <ActivityIndicator animating={loading} style={styles.loader} size={40}/>
         </View>
   )
 }
@@ -244,5 +252,11 @@ const styles = StyleSheet.create({
         width:'100%',
         height:'100%',
         // objectFit:'cover',
+    },
+    loader:{
+        position:'absolute',
+        top:'45%',
+        left:'45%',
+        zIndex:10
     }
 })
