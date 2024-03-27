@@ -26,6 +26,7 @@ import bs58 from "bs58";
 import { decryptPayload } from './utils/decryptPayload'
 import { encryptPayload } from './utils/encryptPayload'
 import PhantomPayment from './cryptoScreens/PhantomPayment'
+import axios from 'axios'
 
 const onConnectRedirectLink ="rentspace://onConnect";
 const connection = new Connection(clusterApiUrl("devnet"));
@@ -136,6 +137,11 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
     }).catch((err)=>{console.log(err)})
   }
   const getBalance=async()=>{
+    await axios.get("https://api.coinbase.com/v2/exchange-rates?currency=USD").then((res)=>{
+      console.log(res)
+    }).catch((err)=>{
+      console.log(err)
+    })
     let bal=await tokenActor.icrc1_balance_of({ owner: Principal.fromText(principle) , subaccount: [] })
     console.log("balance : ",parseInt(bal))
     setBalance(parseInt(bal))
