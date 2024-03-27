@@ -2,6 +2,7 @@ import Result "mo:base/Result";
 import Text "mo:base/Text";
 import Error "mo:base/Error";
 import HashMap "mo:base/HashMap";
+import Trie "mo:base/Trie";
 import Principal "mo:base/Principal";
 import Debug "mo:base/Debug";
 import List "mo:base/List";
@@ -20,9 +21,14 @@ shared ({caller = owner}) actor class () {
         createdAt : Text;
     };
     type Result = Result.Result<Text, (Error.ErrorCode, Text)>;
-    var hotelCommentMap = HashMap.HashMap<Text, [(CommentId, Comment)]>(0, Text.equal, Text.hash);
-    stable var entries : [(Text, [(CommentId, Comment)])] = [];
+    stable var hotelCanisterId = "wkpuj-piaaa-aaaan-qlwta-cai";
+
+    stable var hotelCommentMap = Trie.empty<Text, [(CommentId, Comment)]>();
     stable var admin : [AdminId] = [];
+
+    let hotelActor = actor (hotelCanisterId) : actor {
+        checkHotelExist : query (Text) -> async Bool;
+    };
 
     public shared ({caller}) func createComment(hotelId : Text, commentId : Text, userComment : Text) : async Result {
 
@@ -38,9 +44,14 @@ shared ({caller = owner}) actor class () {
         var sucessMessage = "";
         try {
             assert (Text.size(userComment) <= 500 and Principal.isAnonymous(caller) == false);
-            switch (hotelCommentMap.get(hotelId)) {
+            let hotelExistStatus = await hotelActor.checkHotelExist(hotelId);
+            if (hotelExistStatus == false) {
+                Debug.trap("No Hotel Exist !");
+            };
+            switch (Trie.get(hotelCommentMap, Utils.textKey hotelId, Text.equal)) {
                 case (null) {
-                    hotelCommentMap.put(hotelId, [(newCommentId, commentInfo)]);
+                    hotelCommentMap := Trie.put(hotelCommentMap, Utils.textKey hotelId, Text.equal, [(newCommentId, commentInfo)]).0;
+                    // hotelCommentMap.put(hotelId, [(newCommentId, commentInfo)]);
                     sucessMessage := "Create the first  comment on the Hotel";
                 };
                 case (?r) {
@@ -48,7 +59,8 @@ shared ({caller = owner}) actor class () {
                     switch (commentMap.get(newCommentId)) {
                         case (null) {
                             commentMap.put(newCommentId, commentInfo);
-                            hotelCommentMap.put(hotelId, Iter.toArray(commentMap.entries()));
+                            hotelCommentMap := Trie.put(hotelCommentMap, Utils.textKey hotelId, Text.equal, Iter.toArray(commentMap.entries())).0;
+                            // hotelCommentMap.put(hotelId, Iter.toArray(commentMap.entries()));
                             sucessMessage := "new Comment inserted in hotel";
                         };
                         case (?r) {
@@ -67,7 +79,7 @@ shared ({caller = owner}) actor class () {
 
     public shared query ({caller}) func getComments(hotelId : Text) : async [(CommentId, Comment)] {
         assert (Principal.isAnonymous(caller) == false);
-        switch (hotelCommentMap.get(hotelId)) {
+        switch (Trie.get(hotelCommentMap, Utils.textKey hotelId, Text.equal)) {
             case (null) {Debug.trap("no Comment found in this hotelId")};
             case (?value) {value};
         };
@@ -76,7 +88,7 @@ shared ({caller = owner}) actor class () {
     public shared query ({caller}) func getSingleComments(hotelId : Text, commentId : Text) : async Comment {
         assert (Principal.isAnonymous(caller) == false);
 
-        switch (hotelCommentMap.get(hotelId)) {
+        switch (Trie.get(hotelCommentMap, Utils.textKey hotelId, Text.equal)) {
             case (null) {
                 Debug.trap("no Comment found in this hotelId");
             };
@@ -94,6 +106,7 @@ shared ({caller = owner}) actor class () {
             };
         };
     };
+
     public shared query ({caller}) func whoami() : async Text {
         Principal.toText(caller);
     };
@@ -101,7 +114,8 @@ shared ({caller = owner}) actor class () {
         if (Utils.getOwnerFromArray(caller, admin) == false) {
             Debug.trap("Not Authorased");
         };
-        let allData = Utils.paginate<Text, [(CommentId, Comment)]>(Iter.toArray(hotelCommentMap.entries()), chunkSize);
+        let data : [(CommentId, [(CommentId, Comment)])] = Trie.toArray<CommentId, [(CommentId, Comment)], (CommentId, [(CommentId, Comment)])>(hotelCommentMap, func(k, v) = (k, v));
+        let allData = Utils.paginate<Text, [(CommentId, Comment)]>(data, chunkSize);
         allData[pageNo];
     };
 
@@ -118,14 +132,10 @@ shared ({caller = owner}) actor class () {
             Debug.trap("No Access to Add Owner");
         };
     };
-    //Pre and post upgrade
-
-    system func preupgrade() {
-        entries := Iter.toArray(hotelCommentMap.entries());
-    };
-
-    system func postupgrade() {
-        hotelCommentMap := HashMap.fromIter<Text, [(Text, Comment)]>(entries.vals(), 1, Text.equal, Text.hash);
-        entries := [];
+    public shared query ({caller}) func getAllAdmin() : async [AdminId] {
+        if (caller != owner) {
+            return ["No Access"];
+        };
+        return admin;
     };
 };

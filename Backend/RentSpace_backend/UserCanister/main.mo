@@ -1,17 +1,10 @@
 // Importing necessary modules
-import Array "mo:base/Array";
 import Debug "mo:base/Debug";
 import Principal "mo:base/Principal";
-import Int64 "mo:base/Int64";
-import Nat64 "mo:base/Nat64";
-import Text "mo:base/Text";
-import Prelude "mo:base/Prelude";
-import List "mo:base/List";
-import Error "mo:base/Error";
 
-import RBT "mo:base/RBTree";
-import HashMap "mo:base/HashMap";
-import Iter "mo:base/Iter";
+import Text "mo:base/Text";
+import List "mo:base/List";
+import Trie "mo:base/Trie";
 
 import Types "Types";
 import Utils "../utils";
@@ -20,9 +13,9 @@ import Utils "../utils";
 shared ({caller = owner}) actor class User() {
 
     // HashMap to store user data
-    let userDataMap = HashMap.HashMap<Types.UserId, Types.UserInfo>(0, Text.equal, Text.hash);
+    stable var userDataMap = Trie.empty<Types.UserId, Types.UserInfo>();
     stable var admin : [Types.AdminId] = [];
-    let annualRegisterFrequencyMap = HashMap.HashMap<Types.Year, Types.AnnualData>(0, Text.equal, Text.hash);
+    stable var annualRegisterFrequencyMap = Trie.empty<Types.Year, Types.AnnualData>();
     // Function to validate user creation data
     func createUserValidation(userData : Types.User) {
         // Checking if the user data is valid
@@ -47,7 +40,7 @@ shared ({caller = owner}) actor class User() {
         let userIdentity : Types.UserId = Principal.toText(user);
 
         // Checking if the user already exists or if the caller is anonymous
-        if (Utils.checkKeyExist<Types.UserId, Types.UserInfo>(userIdentity, userDataMap) == true or Principal.isAnonymous(user) == true) {
+        if (Utils.checkKeyExist<Types.UserInfo>(userIdentity, userDataMap) == true or Principal.isAnonymous(user) == true) {
             // Trapping an error if the user already exists or the caller is anonymous
             Debug.trap("Error! You are already a user");
         };
@@ -55,7 +48,7 @@ shared ({caller = owner}) actor class User() {
         // Validating the user creation data
         createUserValidation(userData);
 
-        Utils.updateAnnualStatus(annualRegisterFrequencyMap);
+        annualRegisterFrequencyMap := Utils.updateAnnualStatus(annualRegisterFrequencyMap);
 
         // Creating a new user info object
         let date = Utils.getDate();
@@ -74,7 +67,7 @@ shared ({caller = owner}) actor class User() {
         };
 
         // Adding the user info to the user data map
-        userDataMap.put(userIdentity, userInfo);
+        userDataMap := Trie.put(userDataMap, Utils.textKey userIdentity, Text.equal, userInfo).0;
     };
 
     // Function to get user info by principal
@@ -83,7 +76,7 @@ shared ({caller = owner}) actor class User() {
         let userIdentity = Principal.toText(user);
 
         // Returning the user info from the user data map
-        userDataMap.get(userIdentity);
+        Trie.get(userDataMap, Utils.textKey userIdentity, Text.equal);
     };
 
     // Function to get user info by caller
@@ -92,7 +85,7 @@ shared ({caller = owner}) actor class User() {
         let userIdentity = Principal.toText(user);
 
         // Retrieving the user info from the user data map
-        switch (userDataMap.get(userIdentity)) {
+        switch (Trie.get(userDataMap, Utils.textKey userIdentity, Text.equal)) {
             case null {null};
             case (?u) {
                 ?u;
@@ -104,7 +97,7 @@ shared ({caller = owner}) actor class User() {
         if (Utils.getOwnerFromArray(caller, admin) == false) {
             Debug.trap("Not Authorased");
         };
-        annualRegisterFrequencyMap.get(year);
+        Trie.get(annualRegisterFrequencyMap, Utils.textKey year, Text.equal);
     };
     // Function to update user info
     public shared ({caller = user}) func updateUserInfo(userData : Types.UserInfo) : async ?Types.UserInfo {
@@ -112,13 +105,13 @@ shared ({caller = owner}) actor class User() {
         let userIdentity = Principal.toText(user);
 
         // Checking if the user exists or if the caller is anonymous
-        if (Utils.checkKeyExist<Types.UserId, Types.UserInfo>(userIdentity, userDataMap) == false or Principal.isAnonymous(user) == true) {
+        if (Utils.checkKeyExist<Types.UserInfo>(userIdentity, userDataMap) == false or Principal.isAnonymous(user) == true) {
             // Trapping an error if the user doesn't exist or the caller is anonymous
             Debug.trap("No Access granted");
         };
 
         // Validating the user update data
-        createUserValidation(userData);
+        updateUserValidation(userData);
 
         // Creating a new user info object
         let date = Utils.getDate();
@@ -137,20 +130,21 @@ shared ({caller = owner}) actor class User() {
         };
 
         // Updating the user info in the user data map
-        userDataMap.replace(userIdentity, userInfo);
+        userDataMap := Trie.put(userDataMap, Utils.textKey userIdentity, Text.equal, userInfo).0;
+        ?userInfo;
     };
 
     // Function to check if a user exists
-    public shared query ({caller}) func checkUserExist() : async Bool {
+    public query func checkUserExist(userId : Text) : async Bool {
         // Getting the caller's identity
-        let userIdentity = Principal.toText(caller);
-
         // Checking if the user exists in the user data map
-        Utils.checkKeyExist<Types.UserId, Types.UserInfo>(userIdentity, userDataMap);
+        Utils.checkKeyExist<Types.UserInfo>(userId, userDataMap);
     };
 
     public shared query func getNoOfPages(chunkSize : Nat) : async Nat {
-        let data = Utils.paginate<Types.UserId, Types.UserInfo>(Iter.toArray(userDataMap.entries()), chunkSize);
+        let allData : [(Types.UserId, Types.UserInfo)] = Trie.toArray<Types.UserId, Types.UserInfo, (Types.UserId, Types.UserInfo)>(userDataMap, func(k, v) = (k, v));
+
+        let data = Utils.paginate<Types.UserId, Types.UserInfo>(allData, chunkSize);
         data.size();
     };
 
@@ -158,11 +152,13 @@ shared ({caller = owner}) actor class User() {
         if (Utils.getOwnerFromArray(caller, admin) == false) {
             Debug.trap("Not Authorased");
         };
-        let allData = Utils.paginate<Types.UserId, Types.UserInfo>(Iter.toArray(userDataMap.entries()), chunkSize);
-        if (allData.size() <= pageNo) {
+        let allData : [(Types.UserId, Types.UserInfo)] = Trie.toArray<Types.UserId, Types.UserInfo, (Types.UserId, Types.UserInfo)>(userDataMap, func(k, v) = (k, v));
+
+        let data = Utils.paginate<Types.UserId, Types.UserInfo>(allData, chunkSize);
+        if (data.size() <= pageNo) {
             Debug.trap("No page Exist");
         };
-        allData[pageNo];
+        data[pageNo];
     };
     public shared query ({caller}) func whoami() : async Text {
         Principal.toText(caller);
@@ -185,5 +181,11 @@ shared ({caller = owner}) actor class User() {
         } else {
             Debug.trap("No Access to Add Owner");
         };
+    };
+    public shared query ({caller}) func getAllAdmin() : async [Types.AdminId] {
+        if (caller != owner) {
+            return ["No Access"];
+        };
+        return admin;
     };
 };

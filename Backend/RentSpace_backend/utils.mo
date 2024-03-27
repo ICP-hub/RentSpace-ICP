@@ -1,5 +1,4 @@
 import Char "mo:base/Char";
-import Hash "mo:base/Hash";
 import Bool "mo:base/Bool";
 import Time "mo:base/Time";
 import Text "mo:base/Text";
@@ -7,8 +6,8 @@ import List "mo:base/List";
 import Iter "mo:base/Iter";
 import Array "mo:base/Array";
 import Principal "mo:base/Principal";
-import HashMap "mo:base/HashMap";
 import {now} "mo:base/Time";
+import Trie "mo:base/Trie";
 import Month "month";
 
 import uuid "mo:uuid/UUID";
@@ -17,7 +16,11 @@ import Source "mo:uuid/async/SourceV4";
 import Types "./bookingCanister/Types";
 
 module {
-    public func updateAnnualStatus(hashMap : HashMap.HashMap<Types.Year, Types.AnnualData>) {
+    type Key<K> = Trie.Key<K>;
+
+    public func textKey(t : Text) : Key<Text> {{hash = Text.hash t; key = t}};
+
+    public func updateAnnualStatus(trie : Trie.Trie<Types.Year, Types.AnnualData>) : Trie.Trie<Types.Year, Types.AnnualData> {
 
         let date = DateTime.DateTime(now()).toText();
         var counter = 0;
@@ -32,7 +35,7 @@ module {
             };
             counter += 1;
         };
-        switch (hashMap.get(year)) {
+        switch (Trie.get(trie, textKey year, Text.equal)) {
             case (null) {
                 let intialAnnualData = {
                     jan = 0;
@@ -49,27 +52,35 @@ module {
                     dec = 0;
                 };
                 let monthData = Month.updateMonthData(month, intialAnnualData);
-                hashMap.put(year, monthData);
+                return Trie.put(trie, textKey year, Text.equal, monthData).0;
             };
             case (?result) {
                 let updatedMonthData = Month.updateMonthData(month, result);
-                hashMap.put(year, updatedMonthData);
+                return Trie.put(trie, textKey year, Text.equal, updatedMonthData).0;
+
             };
         };
     };
-    public func putIdInList<K, V>(key : K, value : V, treeMap : HashMap.HashMap<K, List.List<V>>) : V {
+    public func putIdInList<V>(key : Text, value : V, treeMap : Trie.Trie<Text, List.List<V>>) : {
+        value : V;
+        updatedTrie : Trie.Trie<Text, List.List<V>>;
+    } {
 
-        switch (treeMap.get(key)) {
+        switch (Trie.get(treeMap, textKey key, Text.equal)) {
             case (?result) {
                 let data = List.push<V>(value, result);
-                treeMap.put(key, data);
-                return value;
+                // treeMap.put(key, data);
+                let updatedTrie = Trie.put(treeMap, textKey key, Text.equal, data).0;
+                return {value; updatedTrie};
+
             };
             case null {
                 var bookingIdList = List.nil<V>();
                 bookingIdList := List.push(value, bookingIdList);
-                treeMap.put(key, bookingIdList);
-                return value;
+                // treeMap.put(key, bookingIdList);
+                let updatedTrie = Trie.put(treeMap, textKey key, Text.equal, bookingIdList).0;
+
+                return {value; updatedTrie};
             };
         };
     };
@@ -105,8 +116,8 @@ module {
         };
         true;
     };
-    public func checkKeyExist<K, V>(key : K, map : HashMap.HashMap<K, V>) : Bool {
-        switch (map.get(key)) {
+    public func checkKeyExist<V>(key : Text, trie : Trie.Trie<Text, V>) : Bool {
+        switch (Trie.get(trie, textKey key, Text.equal)) {
             case (null) {false};
             case (?value) {true};
         };
@@ -122,6 +133,7 @@ module {
     public func getDate() : Text {
         let timeNow : DateTime.DateTime = DateTime.DateTime(Time.now());
         let date = DateTime.toText(timeNow);
+        return date;
     };
     public func checkEmail(email : Text) : Bool {
 
@@ -131,6 +143,7 @@ module {
         Text.contains(email, letter) and Text.contains(email, text);
 
     };
+
     public func checkDate(date : Text) : Bool {
         assert (Text.size(date) <= 10);
         let iterdate = Text.toIter(date);
