@@ -5,7 +5,7 @@ import Icon2 from 'react-native-vector-icons/MaterialIcons'
 import Icon3 from 'react-native-vector-icons/Entypo'
 import { COLORS, SIZES } from '../../../../../../constants/themes'
 
-const HotelFacilityCard = () => {
+const HotelFacilityCard = ({hostData}) => {
   return (
     <>
     <View style={styles.cont}>
@@ -18,7 +18,7 @@ const HotelFacilityCard = () => {
     <View style={styles.cont}>
       <Icon3 name='medal' size={35} color={'black'} style={styles.icon}/>
       <View style={styles.textCont}>
-        <Text style={styles.largeText}>Lucy is a Superhost</Text>
+        <Text style={styles.largeText}>{hostData?.firstName} is a Superhost</Text>
         <Text style={styles.simpleText}>Superhosts are experienced, highly rated Hosts.</Text>
       </View>
     </View>

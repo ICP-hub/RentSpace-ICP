@@ -14,13 +14,13 @@ const BottomNav = ({navigation}) => {
 
     const {principle}=useSelector(state=>state.principleReducer)
 
-    const [bottom,setBottom]=useState(true)
+    const [bottom,setBottom]=useState(0)
     useEffect(()=>{
         Keyboard.addListener('keyboardDidShow',()=>{
-            setBottom(false)
+            setBottom(-100)
         })
         Keyboard.addListener('keyboardDidHide',()=>{
-            setBottom(true)
+            setBottom(0)
         })
     })
   
@@ -28,7 +28,7 @@ const BottomNav = ({navigation}) => {
         return (
     
     
-            <View style={(bottom==true)?[styles.viewNav,{bottom:0}]:[styles.viewNav,{bottom:-100}]}>
+            <View style={[styles.viewNav,{bottom:0}]}>
                 {/* <Icon name="home" size={20} color={COLORS.inputBorder}/> */}
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{alert(message)}}>
                 <Icon name="filter" size={25} color={COLORS.inputBorder}/>
@@ -55,7 +55,7 @@ const BottomNav = ({navigation}) => {
         return (
     
     
-            <View style={styles.viewNav}>
+            <View style={[styles.viewNav,{bottom:bottom}]}>
                 {/* <Icon name="home" size={20} color={COLORS.inputBorder}/> */}
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('Launch')}}>
                 <Icon name="filter" size={25} color={COLORS.inputBorder}/>
@@ -103,7 +103,7 @@ const styles=StyleSheet.create({
         display:'flex',
         justifyContent:"space-around",
         position:"absolute",
-        bottom:0,
+        // bottom:0,
         paddingVertical:20,
         flexDirection:"row",
         borderTopRightRadius:20,

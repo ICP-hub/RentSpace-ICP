@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Image, Touchable,TouchableOpacity,FlatList, Modal, Alert } from 'react-native'
+import { StyleSheet, Text, View,Image, Touchable,TouchableOpacity,FlatList, Modal, Alert, Keyboard } from 'react-native'
 import React, { useEffect, useState,useRef } from 'react'
 import { images } from '../../../../constants'
 import { COLORS, SIZES } from '../../../../constants/themes'
@@ -25,7 +25,10 @@ const BookHotelPage = ({navigation,queryHotels}) => {
   const sampleDes='2972 Westheimer Rd. Santa Ana, Illinois 85486 '
   const [bookingList,setBookingList]=useState([])
   const [refreshing,setRefreshing]=useState(false)
-  async function getReservations(){
+  const [bottom,setBottom]=useState(70)
+
+
+  async function getReservations(setRefreshing){
 
     setBookingList([])
     await actors?.bookingActor.getBookingId().then((res)=>{
@@ -33,22 +36,31 @@ const BookHotelPage = ({navigation,queryHotels}) => {
       
       console.log("all bookings1: ",res[0])
       res.map(async(r)=>{
+        setRefreshing(true)
         console.log("booking-->",r)
         let hotelId=r.split("#")[0]+"#"+r.split("#")[1]
         console.log(hotelId)
         await actors?.bookingActor.getBookingDetials(r).then(async(resp)=>{
           let hotel=null
+         
           await actors?.hotelActor.getHotel(hotelId).then((hRes)=>{
+            setRefreshing(false)
             hotel={...hRes[0],hotelId:hotelId}
-          }).catch((err)=>{console.log(err)})
+          }).catch((err)=>{
+            console.log(err)
+            setRefreshing(false)
+          })
           console.log("booking details : ",resp)
           console.log({...resp[0],hotel:hotel,bookingId:r})
           setBookingList(b=>[...b,{...resp[0],hotel:hotel,bookingId:r}])
-        }).catch((err)=>console.log(err))
+        }).catch((err)=>{
+          console.log(err)
+          setRefreshing(false)
+        })
       })
     }).catch((err)=>{
       console.log("getid err :",err)
-      // alert(err)
+      setRefreshing(false)
     })
     console.log("bookingList",bookingList)
   }
@@ -57,29 +69,18 @@ const BookHotelPage = ({navigation,queryHotels}) => {
       console.log("final booking",bookingList)
       
   }
-  async function getHotelDetails(){
-    setHotelsList([])
-    const newArr=[]
-    for(let i=0;i<hotels?.length;i++){
-      await actors.hotelActor?.getHotel(hotels[i]).then((res)=>{
-        setHotelsList(hotelsList=>[...hotelsList,{...res[0],id:hotels[i]}])
-        console.log({...res[0],id:hotels[i]})
-      })
-    }
-    try{
-      dispatch(setHotelList(hotelsList))
-    }catch(err){console.log(err)}
-    
-  }
   async function getQueryHotelDetails(){
     const newArr=[]
     setRefreshing(true)
+    if(queryHotels.length==0){
+      setRefreshing(false)
+      setHotelsList([])
+      return 
+    }
     for(let i=0;i<queryHotels?.length;i++){
-        console.log("el",queryHotels[i])
-        await actors.hotelActor?.getHotel(queryHotels[i]).then((res)=>{
-          console.log("resp : ",res)
-          newArr.push({...res[0],id:queryHotels[i]})
-          console.log({...res[0],id:queryHotels[i]})
+        console.log("el",queryHotels[i].hotelId)
+        await actors.hotelActor?.getHotel(queryHotels[i].hotelId).then((res)=>{
+          newArr.push({...res[0],id:queryHotels[i].hotelId,details:queryHotels[i]})
           setRefreshing(false)
           setHotelsList([...newArr])
         }).catch((err)=>{
@@ -89,12 +90,18 @@ const BookHotelPage = ({navigation,queryHotels}) => {
     }
   }
   const refresh=()=>{
-
     console.log(queryHotels)
     getQueryHotelDetails()
-    getReservations()
-
   }
+
+    useEffect(()=>{
+        Keyboard.addListener('keyboardDidShow',()=>{
+            setBottom(0)
+        })
+        Keyboard.addListener('keyboardDidHide',()=>{
+            setBottom(70)
+        })
+    })
   useEffect(()=>{
 
     if(firstRender.current){
@@ -102,7 +109,6 @@ const BookHotelPage = ({navigation,queryHotels}) => {
       firstRender.current=false
     }else{
       getQueryHotelDetails()
-      getReservations()
     }
    
   },[queryHotels,principle])
@@ -123,7 +129,7 @@ const BookHotelPage = ({navigation,queryHotels}) => {
       </View>
       <FlatList 
         data={hotelsList} 
-        style={{marginBottom:70,backgroundColor:'white'}}  
+        style={{marginBottom:bottom,backgroundColor:'white'}}  
         renderItem={(item)=>(
         <HotelCard item={item.item} navigation={navigation} />
         )}
@@ -131,7 +137,7 @@ const BookHotelPage = ({navigation,queryHotels}) => {
         onRefresh={refresh}
       />
       <Modal animationType='slide' visible={showReservation}>
-        <ShowBookings bookingList={bookingList} setShowReservations={setShowReservations}/>
+        <ShowBookings getReservations={getReservations} bookingList={bookingList} setShowReservations={setShowReservations}/>
       </Modal>
       </>
     )
@@ -149,44 +155,18 @@ const BookHotelPage = ({navigation,queryHotels}) => {
 export default BookHotelPage
 
 const styles = StyleSheet.create({
-    lenderCont:{
-        display:'flex',
-        flexDirection:'row',
-        width:'80%',
-        justifyContent:'flex-start',
-        alignItems:'center',
-        paddingHorizontal:20,
-        marginBottom:10,
-        backgroundColor:COLORS.lightPurple,
-        paddingVertical:10,
-        borderRadius:20,
-        borderColor:'black',
-        borderLeftWidth:5,
-        borderBottomWidth:5
-    },
-    lenderImg:{
-        width:50,
-        height:50,
-        borderRadius:25,
-        marginRight:30,
-        marginLeft:20
-    },
-    lenderName:{
-        fontSize:SIZES.preMedium,
-        color:'white'
-    },
     hotelPage:{
         display:'flex',
         flexDirection:'column',
         alignItems:'center',
         width:'98%',
         backgroundColor:COLORS.lightBorderPurple,
-        paddingVertical:20,
+        paddingTop:20,
         borderRadius:50,
         borderWidth:2,
         borderColor:COLORS.darkPurple,
         marginLeft:4,
-        marginBottom:20
+        // marginBottom:20
     },
     title:{
         fontSize:SIZES.preMedium,

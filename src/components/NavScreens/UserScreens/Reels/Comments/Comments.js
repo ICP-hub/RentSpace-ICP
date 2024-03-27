@@ -58,13 +58,13 @@ const sampleComments=[
     }
 ]
 
-const Comments = ({id,comments,getComments}) => {
+const Comments = ({id,comments,getComments,loading,setLoading}) => {
     const comRef=useRef()
     const [comment,setComment]=useState("")
     const [parent,setParent]=useState("")
     const {user}=useSelector(state=>state.userReducer)
     const {actors}=useSelector(state=>state.actorReducer)
-    const [loading,setLoading]=useState(false)
+    const [refresh,setRefresh]=useState(false)
 
     const createComment=async()=>{
         setComment('')
@@ -75,7 +75,6 @@ const Comments = ({id,comments,getComments}) => {
         .then((res)=>{
           console.log(res)
           getComments()
-          setLoading(false)
         }).catch((err)=>{
           console.log(err)
           setLoading(false)
@@ -90,6 +89,7 @@ const Comments = ({id,comments,getComments}) => {
         // comRef.current.clearFocus()
         console.log("keyboard hiding")
       })
+      getComments()
   },[])
 
   return (

@@ -4,7 +4,7 @@ import BottomBtn from './BottomBtn'
 import Header from './Header'
 import Options from './Options'
 
-const Sorting = ({setSorting}) => {
+const Sorting = ({setSorting,sortCreatedAt,sortCheckIn,setReservations}) => {
 
     const options=[
         {
@@ -24,6 +24,31 @@ const Sorting = ({setSorting}) => {
             text:"Booking date from oldest to newest"
         }
     ]
+
+    const sort=()=>{
+        switch(option){
+            case("Cn2o"):
+                setReservations(sortCreatedAt(false))
+                console.log("Cn2o")
+                break
+            case("Co2n"):
+                setReservations(sortCreatedAt(true))
+                console.log("Co2n")
+                break
+            case("Bn2o"):
+                setReservations(sortCheckIn(false))
+                console.log("Bn2o")
+                break
+            case("Bo2n"):
+                setReservations(sortCreatedAt(true))
+                console.log("Bo2n")
+                break
+            default:
+                console.log("default")
+        }
+        setSorting(false)
+    }
+
     const [option,setOption]=useState(options[0].tag)
   return (
     <View style={styles.view}>
@@ -32,7 +57,7 @@ const Sorting = ({setSorting}) => {
       <Options setOption={setOption} option={option} item={options[1]}/>
       <Options setOption={setOption} option={option} item={options[2]}/>
       <Options setOption={setOption} option={option} item={options[3]}/>
-      <BottomBtn setSorting={setSorting}/>
+      <BottomBtn setSorting={setSorting} onClick={sort}/>
     </View>
   )
 }

@@ -1,15 +1,21 @@
 import { StyleSheet, Text, View,TouchableOpacity, ScrollView, FlatList } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { COLORS,SIZES } from '../../../../../../constants/themes'
 import { useSelector } from 'react-redux'
 import BookingCard from './BookingCard'
 import Icon2 from 'react-native-vector-icons/MaterialIcons'
 
-const ShowBookings = ({bookingList,setShowReservations}) => {
+const ShowBookings = ({bookingList,setShowReservations,getReservations}) => {
   const {authData}=useSelector(state=>state.authDataReducer)
+  const [refreshing,setRefreshing]=useState(false)
+  const loadData=()=>{
+    setRefreshing(true)
+    getReservations(setRefreshing)
+  }
   useEffect(()=>{
     console.log('authData',authData)
+    loadData()
   },[])
   return (
     <View style={styles.view}>
@@ -23,7 +29,13 @@ const ShowBookings = ({bookingList,setShowReservations}) => {
       </TouchableOpacity>
     </View>
     {/* <Text style={styles.title}>Your Bookings</Text> */}
-    <FlatList contentContainerStyle={styles.list} style={styles.Flist} data={bookingList} renderItem={(item)=>(
+    <FlatList 
+      refreshing={refreshing}
+      onRefresh={loadData}
+      contentContainerStyle={styles.list} 
+      style={styles.Flist} 
+      data={bookingList} 
+      renderItem={(item)=>(
       <BookingCard item={item.item}/>
     )}/>
     </View>

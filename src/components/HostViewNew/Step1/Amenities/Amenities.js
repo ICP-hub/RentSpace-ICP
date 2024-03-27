@@ -10,6 +10,8 @@ import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons'
 import Icon4 from 'react-native-vector-icons/Fontisto'
 import Icon5 from 'react-native-vector-icons/MaterialIcons'
 import AmenityCard from '../../../NavScreens/UserScreens/HotelsSearch/Filters/Amenities/AmenityCard'
+import { useDispatch, useSelector } from 'react-redux'
+import { setListing } from '../../../../redux/NewListing/actions'
 
 const amenitiesList=[
     {name:'wifi',icon:<Icon name='wifi' size={28} color={COLORS.black} />},
@@ -33,12 +35,15 @@ const propertyTypesList=[
 const Amenities = ({setHostModal,pos}) => {
     const [propertyType,setPropertyType]=useState(propertyTypesList[0].name)
     const [amenities,setAmenities]=useState([])
+    const {listing}=useSelector(state=>state.listingReducer)
+    const dispatch=useDispatch()
 
     const emptyCheck=()=>{
         if(amenities.length==0){
             Alert.alert("No aminities slected!","Select atleast one aminity")
             return false
         }else{
+            dispatch(setListing({...listing,amenities:amenities,propertyType:propertyType}))
             return true
         }
     }
