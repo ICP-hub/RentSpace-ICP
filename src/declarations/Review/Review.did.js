@@ -12,11 +12,10 @@ export const idlFactory = ({ IDL }) => {
   const Review = IDL.Service({
     'addOwner' : IDL.Func([AdminId], [IDL.Text], []),
     'createReview' : IDL.Func([IDL.Text, Review__1], [], ['oneway']),
+    'getAllAdmin' : IDL.Func([], [IDL.Vec(AdminId)], ['query']),
     'getHotelId' : IDL.Func([], [IDL.Vec(ReviewId)], ['query']),
     'getNoOfPages' : IDL.Func([IDL.Nat], [IDL.Nat], ['query']),
     'getReviewIdsFromHotelId' : IDL.Func(
-        [HotelId],
-        [IDL.Vec(ReviewId)],
         [HotelId],
         [IDL.Vec(ReviewId)],
         ['query'],

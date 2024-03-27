@@ -4,6 +4,8 @@ import { COLORS, SIZES } from '../../../../../../../constants/themes'
 
 const BalanceScreen = ({self,paymentMethod,walletID,balance,receiver,total,transfer,tokenActor,userId,loading}) => {
 
+  const getCurrentPrice=()=>{}
+
   return (
     <View style={styles.modal}>
       <View style={styles.alert}>

@@ -23,8 +23,9 @@ type UserId = text;
 type User = 
  service {
    addOwner: (AdminId) -> (text);
-   checkUserExist: () -> (bool) query;
+   checkUserExist: (text) -> (bool) query;
    createUser: (User__1) -> ();
+   getAllAdmin: () -> (vec AdminId) query;
    getAnnualRegisterByYear: (text) -> (opt AnnualData) query;
    getNoOfPages: (nat) -> (nat) query;
    getOwner: () -> (text) query;

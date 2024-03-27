@@ -19,8 +19,9 @@ export interface AnnualData {
 }
 export interface User {
   'addOwner' : ActorMethod<[AdminId], string>,
-  'checkUserExist' : ActorMethod<[], boolean>,
+  'checkUserExist' : ActorMethod<[string], boolean>,
   'createUser' : ActorMethod<[User__1], undefined>,
+  'getAllAdmin' : ActorMethod<[], Array<AdminId>>,
   'getAnnualRegisterByYear' : ActorMethod<[string], [] | [AnnualData]>,
   'getNoOfPages' : ActorMethod<[bigint], bigint>,
   'getOwner' : ActorMethod<[], string>,

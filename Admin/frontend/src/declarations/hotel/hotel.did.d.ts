@@ -2,6 +2,7 @@ import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 import type { IDL } from '@dfinity/candid';
 
+export type AdminId = string;
 export interface AnnualData {
   'aug' : bigint,
   'dec' : bigint,
@@ -25,10 +26,12 @@ export interface HotelInfo {
   'hotelTitle' : string,
   'hotelLocation' : string,
 }
-export interface anon_class_16_1 {
+export interface anon_class_9_1 {
   'addOwner' : ActorMethod<[string], string>,
+  'checkHotelExist' : ActorMethod<[string], boolean>,
   'createHotel' : ActorMethod<[HotelInfo], HotelId>,
   'deleteHotel' : ActorMethod<[HotelId], string>,
+  'getAllAdmin' : ActorMethod<[], Array<AdminId>>,
   'getHotel' : ActorMethod<[HotelId], [] | [HotelInfo]>,
   'getHotelFrequencyByYear' : ActorMethod<[string], [] | [AnnualData]>,
   'getHotelId' : ActorMethod<[], Array<HotelId>>,
@@ -37,6 +40,6 @@ export interface anon_class_16_1 {
   'updateHotel' : ActorMethod<[HotelId, HotelInfo], [] | [HotelInfo]>,
   'whoami' : ActorMethod<[], string>,
 }
-export interface _SERVICE extends anon_class_16_1 {}
+export interface _SERVICE extends anon_class_9_1 {}
 export declare const idlFactory: IDL.InterfaceFactory;
 export declare const init: ({ IDL }: { IDL: IDL }) => IDL.Type[];

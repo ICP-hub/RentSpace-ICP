@@ -7,6 +7,7 @@ export type HotelId = string;
 export interface Review {
   'addOwner' : ActorMethod<[AdminId], string>,
   'createReview' : ActorMethod<[string, Review__1], undefined>,
+  'getAllAdmin' : ActorMethod<[], Array<AdminId>>,
   'getHotelId' : ActorMethod<[], Array<ReviewId>>,
   'getNoOfPages' : ActorMethod<[bigint], bigint>,
   'getReviewIdsFromHotelId' : ActorMethod<[HotelId], Array<ReviewId>>,

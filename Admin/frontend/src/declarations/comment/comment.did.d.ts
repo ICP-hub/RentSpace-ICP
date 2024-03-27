@@ -20,9 +20,10 @@ export type ErrorCode = { 'canister_error' : null } |
   { 'system_fatal' : null };
 export type Result = { 'ok' : string } |
   { 'err' : [ErrorCode, string] };
-export interface anon_class_12_1 {
+export interface anon_class_13_1 {
   'addOwner' : ActorMethod<[AdminId], string>,
   'createComment' : ActorMethod<[string, string, string], Result>,
+  'getAllAdmin' : ActorMethod<[], Array<AdminId>>,
   'getComments' : ActorMethod<[string], Array<[CommentId, Comment]>>,
   'getSingleComments' : ActorMethod<[string, string], Comment>,
   'scanComment' : ActorMethod<
@@ -31,6 +32,6 @@ export interface anon_class_12_1 {
   >,
   'whoami' : ActorMethod<[], string>,
 }
-export interface _SERVICE extends anon_class_12_1 {}
+export interface _SERVICE extends anon_class_13_1 {}
 export declare const idlFactory: IDL.InterfaceFactory;
 export declare const init: ({ IDL }: { IDL: IDL }) => IDL.Type[];

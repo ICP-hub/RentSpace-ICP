@@ -36,9 +36,10 @@ export const idlFactory = ({ IDL }) => {
     'messageToHost' : IDL.Text,
     'reason' : IDL.Text,
   });
-  const anon_class_13_1 = IDL.Service({
+  const anon_class_12_1 = IDL.Service({
     'addOwner' : IDL.Func([AdminId], [IDL.Text], []),
     'createIssue' : IDL.Func([IDL.Text], [Result], []),
+    'getAllAdmin' : IDL.Func([], [IDL.Vec(AdminId)], ['query']),
     'getAllUnResolvedIssue' : IDL.Func([], [IDL.Vec(UserIdentity)], ['query']),
     'getAllUserIssue' : IDL.Func([], [IDL.Vec(Issue)], ['query']),
     'getNoOfPages' : IDL.Func([IDL.Nat], [IDL.Nat], ['query']),
@@ -69,6 +70,6 @@ export const idlFactory = ({ IDL }) => {
       ),
     'whoami' : IDL.Func([], [IDL.Text], ['query']),
   });
-  return anon_class_13_1;
+  return anon_class_12_1;
 };
 export const init = ({ IDL }) => { return []; };
