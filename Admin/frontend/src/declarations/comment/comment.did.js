@@ -21,9 +21,10 @@ export const idlFactory = ({ IDL }) => {
     'hotelId' : IDL.Text,
     'comment' : IDL.Text,
   });
-  const anon_class_12_1 = IDL.Service({
+  const anon_class_13_1 = IDL.Service({
     'addOwner' : IDL.Func([AdminId], [IDL.Text], []),
     'createComment' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [Result], []),
+    'getAllAdmin' : IDL.Func([], [IDL.Vec(AdminId)], ['query']),
     'getComments' : IDL.Func(
         [IDL.Text],
         [IDL.Vec(IDL.Tuple(CommentId, Comment))],
@@ -37,6 +38,6 @@ export const idlFactory = ({ IDL }) => {
       ),
     'whoami' : IDL.Func([], [IDL.Text], ['query']),
   });
-  return anon_class_12_1;
+  return anon_class_13_1;
 };
 export const init = ({ IDL }) => { return []; };

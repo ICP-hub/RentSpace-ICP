@@ -36,10 +36,9 @@ export const idlFactory = ({ IDL }) => {
   const UserId = IDL.Text;
   const User = IDL.Service({
     'addOwner' : IDL.Func([AdminId], [IDL.Text], []),
-    'checkUserExist' : IDL.Func([], [IDL.Bool], ['query']),
-    'addOwner' : IDL.Func([AdminId], [IDL.Text], []),
-    'checkUserExist' : IDL.Func([], [IDL.Bool], ['query']),
+    'checkUserExist' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
     'createUser' : IDL.Func([User__1], [], []),
+    'getAllAdmin' : IDL.Func([], [IDL.Vec(AdminId)], ['query']),
     'getAnnualRegisterByYear' : IDL.Func(
         [IDL.Text],
         [IDL.Opt(AnnualData)],
@@ -56,12 +55,9 @@ export const idlFactory = ({ IDL }) => {
     'scanUsers' : IDL.Func(
         [IDL.Nat, IDL.Nat],
         [IDL.Vec(IDL.Tuple(UserId, UserInfo))],
-        [IDL.Nat, IDL.Nat],
-        [IDL.Vec(IDL.Tuple(UserId, UserInfo))],
         ['query'],
       ),
     'updateUserInfo' : IDL.Func([UserInfo], [IDL.Opt(UserInfo)], []),
-    'whoami' : IDL.Func([], [IDL.Text], ['query']),
     'whoami' : IDL.Func([], [IDL.Text], ['query']),
   });
   return User;

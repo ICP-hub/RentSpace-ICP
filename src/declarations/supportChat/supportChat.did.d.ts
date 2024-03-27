@@ -32,9 +32,10 @@ export interface Ticket {
 }
 export type TicketId = string;
 export type UserIdentity = string;
-export interface anon_class_13_1 {
+export interface anon_class_12_1 {
   'addOwner' : ActorMethod<[AdminId], string>,
   'createIssue' : ActorMethod<[string], Result>,
+  'getAllAdmin' : ActorMethod<[], Array<AdminId>>,
   'getAllUnResolvedIssue' : ActorMethod<[], Array<UserIdentity>>,
   'getAllUserIssue' : ActorMethod<[], Array<Issue>>,
   'getNoOfPages' : ActorMethod<[bigint], bigint>,
@@ -52,6 +53,6 @@ export interface anon_class_13_1 {
   >,
   'whoami' : ActorMethod<[], string>,
 }
-export interface _SERVICE extends anon_class_13_1 {}
+export interface _SERVICE extends anon_class_12_1 {}
 export declare const idlFactory: IDL.InterfaceFactory;
 export declare const init: ({ IDL }: { IDL: IDL }) => IDL.Type[];

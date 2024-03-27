@@ -1,7 +1,8 @@
-type anon_class_13_1 = 
+type anon_class_12_1 = 
  service {
    addOwner: (AdminId) -> (text);
    createIssue: (text) -> (Result);
+   getAllAdmin: () -> (vec AdminId) query;
    getAllUnResolvedIssue: () -> (vec UserIdentity) query;
    getAllUserIssue: () -> (vec Issue) query;
    getNoOfPages: (nat) -> (nat) query;
@@ -74,4 +75,4 @@ type Address =
    region: text;
    streetAddress: text;
  };
-service : () -> anon_class_13_1
+service : () -> anon_class_12_1

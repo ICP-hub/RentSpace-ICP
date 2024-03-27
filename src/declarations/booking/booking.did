@@ -1,12 +1,20 @@
-type anon_class_14_1 = 
+type anon_class_13_1 = 
  service {
    addOwner: (AdminId) -> (text);
-   bookHotel: (HotelId, BookingInfo) -> ();
+   bookHotel: (HotelId, BookingInfo, variant {
+                                       ckbtc;
+                                       icp;
+                                     }, nat) -> (text);
+   getAllAdmin: () -> (vec AdminId) query;
    getBookingDetials: (text) -> (opt BookingInfo) query;
    getBookingFrequencyInYear: (text) -> (opt AnnualData) query;
    getBookingId: () -> (vec text) query;
    getNoOfPages: (nat) -> (nat) query;
    gethotelXBookingId: (text) -> (vec text) query;
+   icrc2_transferFrom: (variant {
+                          ckbtc;
+                          icp;
+                        }, principal, principal, nat) -> (Result_2);
    scanBooking: (nat, nat) -> (vec record {
                                      BookingId;
                                      BookingInfo;
@@ -14,13 +22,34 @@ type anon_class_14_1 =
    updateBookingStatus: (text, BookingInfo) -> ();
    whoami: () -> (text) query;
  };
-type HotelId = text;
+type TransferFromError = 
+ variant {
+   BadBurn: record {min_burn_amount: nat;};
+   BadFee: record {expected_fee: nat;};
+   CreatedInFuture: record {ledger_time: nat64;};
+   Duplicate: record {duplicate_of: nat;};
+   GenericError: record {
+                   error_code: nat;
+                   message: text;
+                 };
+   InsufficientAllowance: record {allowance: nat;};
+   InsufficientFunds: record {balance: nat;};
+   TemporarilyUnavailable;
+   TooOld;
+ };
+type Result_2 = 
+ variant {
+   Err: TransferFromError;
+   Ok: nat;
+ };
 type HotelId = text;
 type BookingInfo = 
  record {
    bookingDuration: text;
    cancelStatus: bool;
+   checkInDate: text;
    date: text;
+   hotelId: text;
    paymentId: text;
    paymentStatus: bool;
    refundStatus: bool;
@@ -41,23 +70,6 @@ type AnnualData =
    nov: nat;
    oct: nat;
    sep: nat;
-type BookingId = text;
-type AnnualData = 
- record {
-   april: nat;
-   aug: nat;
-   dec: nat;
-   feb: nat;
-   jan: nat;
-   july: nat;
-   june: nat;
-   march: nat;
-   may: nat;
-   nov: nat;
-   oct: nat;
-   sep: nat;
  };
 type AdminId = text;
-service : () -> anon_class_14_1
-type AdminId = text;
-service : () -> anon_class_14_1
+service : () -> anon_class_13_1
