@@ -14,10 +14,8 @@ const SupportChat = () => {
   const {actors}=useAuth()
 
   const getAllIssues=async()=>{
-    console.log("executing",actors?.supportActor)
     await actors?.supportActor?.getAllUnResolvedIssue().then((res)=>{
-      console.log("here")
-      console.log("support chat res : ",res[0])
+      console.log("support chat res : ",res)
     }).catch((err)=>{
       console.log("err fetching chats : ",err)
     })
