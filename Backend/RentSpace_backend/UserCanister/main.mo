@@ -28,7 +28,7 @@ shared ({caller = owner}) actor class User() {
     // Function to validate user update data
     func updateUserValidation(userData : Types.UserInfo) {
         // Checking if the user data is valid
-        if (Utils.validText(userData.firstName, 20) == false or Utils.validText(userData.lastName, 20) == false or Utils.checkDate(userData.dob) == false or Utils.checkEmail(userData.userEmail) == false or Utils.validText(userData.userProfile, 100) == false or Utils.validText(userData.userGovId, 1000)) {
+        if (Utils.validText(userData.firstName, 20) == false or Utils.validText(userData.lastName, 20) == false or Utils.checkDate(userData.dob) == false or Utils.checkEmail(userData.userEmail) == false or Utils.validText(userData.userProfile, 100) == false or Utils.validText(userData.userGovId, 1000) == false) {
             // Trapping an error if the data is invalid
             Debug.trap("Error! Text overflow");
         };
