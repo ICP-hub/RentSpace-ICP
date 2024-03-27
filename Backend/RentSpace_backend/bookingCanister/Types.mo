@@ -21,6 +21,8 @@ module {
     public type BookingInfo = {
         userId : Text;
         date : Text;
+        hotelId : Text;
+        checkInDate : Text;
         bookingDuration : Text;
         cancelStatus : Bool;
         refundStatus : Bool;

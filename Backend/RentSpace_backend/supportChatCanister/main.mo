@@ -6,14 +6,14 @@ import Principal "mo:base/Principal";
 import Debug "mo:base/Debug";
 import Iter "mo:base/Iter";
 import List "mo:base/List";
-import Array "mo:base/Array";
-
+import Trie "mo:base/Trie";
 import Utils "../utils";
 
 shared ({caller = owner}) actor class () {
     type AdminId = Text;
 
     type TicketId = Text;
+
     type Address = {
         region : Text;
         streetAddress : Text;
@@ -22,6 +22,7 @@ shared ({caller = owner}) actor class () {
         country : Text;
         postalCode : Text;
     };
+
     type Ticket = {
         messageToHost : Text;
         messageToAdmin : Text;
@@ -31,18 +32,20 @@ shared ({caller = owner}) actor class () {
         address : Address;
         createdAt : Text;
     };
+
     type UserIdentity = Text;
+
     type Issue = {
         message : Text;
         reply : ?Text;
     };
-    type Result = Result.Result<Text, (Error.ErrorCode, Text)>;
-    var unResolvedIssueMap = HashMap.HashMap<UserIdentity, List.List<Issue>>(0, Text.equal, Text.hash);
-    var resolvedIssueMap = HashMap.HashMap<UserIdentity, List.List<Issue>>(0, Text.equal, Text.hash);
-    stable var entries : [(UserIdentity, List.List<Issue>)] = [];
 
-    var ticketMap = HashMap.HashMap<Text, [(TicketId, Ticket)]>(0, Text.equal, Text.hash);
-    stable var ticketEntries : [(Text, [(TicketId, Ticket)])] = [];
+    type Result = Result.Result<Text, (Error.ErrorCode, Text)>;
+
+    stable var unResolvedIssueMap = Trie.empty<UserIdentity, List.List<Issue>>();
+    stable var resolvedIssueMap = Trie.empty<UserIdentity, List.List<Issue>>();
+    stable var ticketMap = Trie.empty<Text, [(TicketId, Ticket)]>();
+
     stable var admin : [AdminId] = [];
 
     public shared ({caller}) func createIssue(message : Text) : async Result {
@@ -54,13 +57,17 @@ shared ({caller = owner}) actor class () {
                 message;
                 reply = null;
             };
-            switch (unResolvedIssueMap.get(Principal.toText(caller))) {
+            let userIdentity = Principal.toText(caller);
+            switch (Trie.get(unResolvedIssueMap, Utils.textKey userIdentity, Text.equal)) {
                 case (null) {
-                    unResolvedIssueMap.put(Principal.toText(caller), List.push(issue, List.nil<Issue>()));
+                    unResolvedIssueMap := Trie.put(unResolvedIssueMap, Utils.textKey userIdentity, Text.equal, List.push(issue, List.nil<Issue>())).0;
+                    // unResolvedIssueMap.put(Principal.toText(caller), List.push(issue, List.nil<Issue>()));
                 };
                 case (?data) {
                     let temp = List.push(issue, data);
-                    unResolvedIssueMap.put(Principal.toText(caller), temp);
+                    unResolvedIssueMap := Trie.put(unResolvedIssueMap, Utils.textKey userIdentity, Text.equal, temp).0;
+
+                    // unResolvedIssueMap.put(Principal.toText(caller), temp);
                 };
             };
             #ok("Sucessfully Create the Issue");
@@ -72,13 +79,22 @@ shared ({caller = owner}) actor class () {
     };
 
     public shared query ({caller}) func getAllUserIssue() : async [Issue] {
-        switch (unResolvedIssueMap.get(Principal.toText(caller))) {
+        let userIdentity = Principal.toText(caller);
+        switch (
+            Trie.get(unResolvedIssueMap, Utils.textKey userIdentity, Text.equal)
+            // unResolvedIssueMap.get(Principalxt(caller))
+        ) {
             case (null) {[]};
             case (?value) {List.toArray(value)};
         };
     };
     public shared query ({caller}) func getResolvedIssue() : async [Issue] {
-        switch (resolvedIssueMap.get(Principal.toText(caller))) {
+        let userIdentity = Principal.toText(caller);
+
+        switch (
+            Trie.get(resolvedIssueMap, Utils.textKey userIdentity, Text.equal)
+            // resolvedIssueMap.get(Principal.toText(caller))
+        ) {
             case (null) {[]};
             case (?value) {
                 List.toArray(value);
@@ -90,30 +106,42 @@ shared ({caller = owner}) actor class () {
         Principal.toText(caller);
     };
 
-    public shared query ({caller}) func getAllUnResolvedIssue() : async [UserIdentity] {
-        Iter.toArray(unResolvedIssueMap.keys());
+    public query func getAllUnResolvedIssue() : async [UserIdentity] {
+        let allData : [UserIdentity] = Trie.toArray<UserIdentity, List.List<Issue>, UserIdentity>(unResolvedIssueMap, func(k, v) = k);
+        return allData;
     };
-    public shared ({caller}) func resolveUserIssue(userId : UserIdentity, reply : Text) : async () {
-        let resolvedIssue : Issue = switch (unResolvedIssueMap.get(userId)) {
+    public func resolveUserIssue(userId : UserIdentity, reply : Text) : async () {
+        let resolvedIssue : Issue = switch (
+            Trie.get(unResolvedIssueMap, Utils.textKey userId, Text.equal)
+            // unResolvedIssueMap.get(userId)
+        ) {
             case (null) {Debug.trap("Invalid UserId")};
             case (?result) {
                 let unResolvedIssues = List.toArray(result);
                 let {message} = unResolvedIssues[0];
 
                 let updatedUnResolvedIssue = List.drop<Issue>(result, 1);
-                unResolvedIssueMap.put(userId, updatedUnResolvedIssue);
+                unResolvedIssueMap := Trie.put(unResolvedIssueMap, Utils.textKey userId, Text.equal, updatedUnResolvedIssue).0;
+
+                // unResolvedIssueMap.put(userId, updatedUnResolvedIssue);
                 {
                     message;
                     reply = ?reply;
                 };
             };
         };
-        switch (resolvedIssueMap.get(userId)) {
+        switch (
+            Trie.get(resolvedIssueMap, Utils.textKey userId, Text.equal)
+            // resolvedIssueMap.get(userId)
+        ) {
             case (null) {
-                resolvedIssueMap.put(Principal.toText(caller), List.push(resolvedIssue, List.nil<Issue>()));
+                resolvedIssueMap := Trie.put(resolvedIssueMap, Utils.textKey userId, Text.equal, List.push(resolvedIssue, List.nil<Issue>())).0;
+
+                // resolvedIssueMap.put(Principal.toText(caller), List.push(resolvedIssue, List.nil<Issue>()));
             };
             case (?value) {
-                unResolvedIssueMap.put(Principal.toText(caller), List.push(resolvedIssue, value));
+                unResolvedIssueMap := Trie.put(unResolvedIssueMap, Utils.textKey userId, Text.equal, List.push(resolvedIssue, value)).0;
+                // unResolvedIssueMap.put(Principal.toText(caller), List.push(resolvedIssue, value));
             };
         };
     };
@@ -141,15 +169,20 @@ shared ({caller = owner}) actor class () {
         var resultMessage = "";
 
         try {
-            switch (ticketMap.get(userTextId)) {
+            switch (
+                Trie.get(ticketMap, Utils.textKey userTextId, Text.equal)
+                // ticketMap.get(userTextId)
+            ) {
                 case (null) {
-                    ticketMap.put(userTextId, [(ticketId, ticketInfo)]);
+                    ticketMap := Trie.put(ticketMap, Utils.textKey userTextId, Text.equal, [(ticketId, ticketInfo)]).0;
+                    // ticketMap.put(userTextId, [(ticketId, ticketInfo)]);
                     resultMessage := "Raising the first comment for the user";
                 };
                 case (?r) {
                     let ticketSubMap = HashMap.fromIter<Text, Ticket>(r.vals(), 1, Text.equal, Text.hash);
                     ticketSubMap.put(ticketId, ticketInfo);
-                    ticketMap.put(userTextId, Iter.toArray(ticketSubMap.entries()));
+                    ticketMap := Trie.put(ticketMap, Utils.textKey userTextId, Text.equal, Iter.toArray(ticketSubMap.entries())).0;
+                    // ticketMap.put(userTextId, Iter.toArray(ticketSubMap.entries()));
                     resultMessage := "Raised a new issue!";
                 };
             };
@@ -165,7 +198,10 @@ shared ({caller = owner}) actor class () {
     public shared query ({caller = user}) func getTicket() : async [(TicketId, Ticket)] {
         assert (Principal.isAnonymous(user) == false);
         let userTextId = Principal.toText(user);
-        switch (ticketMap.get(userTextId)) {
+        switch (
+            Trie.get(ticketMap, Utils.textKey userTextId, Text.equal)
+            // ticketMap.get(userTextId)
+        ) {
             case (null) {Debug.trap("no Issue found raised by this user")};
             case (?value) {value};
         };
@@ -175,7 +211,10 @@ shared ({caller = owner}) actor class () {
         if (Utils.getOwnerFromArray(user, admin) == false) {
             Debug.trap("Not Authorased");
         };
-        switch (ticketMap.get(userId)) {
+        switch (
+            Trie.get(ticketMap, Utils.textKey userId, Text.equal)
+            // ticketMap.get(userId)
+        ) {
             case (null) {Debug.trap("no Issue found raised by this user")};
             case (?value) {value};
         };
@@ -190,7 +229,10 @@ shared ({caller = owner}) actor class () {
 
             var resultMessage = "";
 
-            switch (ticketMap.get(userId)) {
+            switch (
+                Trie.get(ticketMap, Utils.textKey userId, Text.equal)
+                // ticketMap.get(userId)
+            ) {
                 case (null) {
                     Debug.trap("no Issue found raised by this user");
                 };
@@ -212,7 +254,7 @@ shared ({caller = owner}) actor class () {
                                 createdAt = previousTicket.createdAt;
                             };
                             let prevMap = ticketSubMap.replace(ticketId, newTicket);
-                            let prevMapTicket = ticketMap.replace(userId, Iter.toArray(ticketSubMap.entries()));
+                            ticketMap := Trie.put(ticketMap, Utils.textKey userId, Text.equal, Iter.toArray(ticketSubMap.entries())).0;
                             resultMessage := "Successfully resolved the ticket!";
                         };
                     };
@@ -236,7 +278,10 @@ shared ({caller = owner}) actor class () {
 
             var resultMessage = "";
 
-            switch (ticketMap.get(userId)) {
+            switch (
+                Trie.get(ticketMap, Utils.textKey userId, Text.equal)
+                // ticketMap.get(userId)
+            ) {
                 case (null) {
                     Debug.trap("no Issue found raised by this user");
                 };
@@ -247,9 +292,11 @@ shared ({caller = owner}) actor class () {
                             Debug.trap("No issue found with this id");
                         };
                         case (?value) {
-                            ticketMap.delete(userId);
+                            ticketMap := Trie.remove(ticketMap, Utils.textKey userId, Text.equal).0;
+                            // ticketMap.delete(userId);
                             ticketSubMap.delete(ticketId);
-                            ticketMap.put(userId, Iter.toArray(ticketSubMap.entries()));
+                            ticketMap := Trie.put(ticketMap, Utils.textKey userId, Text.equal, Iter.toArray(ticketSubMap.entries())).0;
+                            // ticketMap.put(userId, Iter.toArray(ticketSubMap.entries()));
                             resultMessage := "Successfully removed the issue!";
                         };
                     };
@@ -264,14 +311,18 @@ shared ({caller = owner}) actor class () {
         };
     };
     public shared query func getNoOfPages(chunkSize : Nat) : async Nat {
-        let data = Utils.paginate<Text, [(TicketId, Ticket)]>(Iter.toArray(ticketMap.entries()), chunkSize);
-        data.size();
+        let data : [(Text, [(TicketId, Ticket)])] = Trie.toArray<TicketId, [(TicketId, Ticket)], (TicketId, [(TicketId, Ticket)])>(ticketMap, func(k, v) = (k, v));
+
+        let allData = Utils.paginate<Text, [(TicketId, Ticket)]>(data, chunkSize);
+        allData.size();
     };
     public shared query ({caller}) func scanBooking(pageNo : Nat, chunkSize : Nat) : async [(Text, [(TicketId, Ticket)])] {
         if (Utils.getOwnerFromArray(caller, admin) == false) {
             Debug.trap("Not Authorased");
         };
-        let allData = Utils.paginate<Text, [(TicketId, Ticket)]>(Iter.toArray(ticketMap.entries()), chunkSize);
+        let data : [(Text, [(TicketId, Ticket)])] = Trie.toArray<TicketId, [(TicketId, Ticket)], (TicketId, [(TicketId, Ticket)])>(ticketMap, func(k, v) = (k, v));
+
+        let allData = Utils.paginate<Text, [(TicketId, Ticket)]>(data, chunkSize);
         if (allData.size() <= pageNo) {
             Debug.trap("No page Exist");
         };
@@ -291,16 +342,11 @@ shared ({caller = owner}) actor class () {
             Debug.trap("No Access to Add Owner");
         };
     };
-    system func preupgrade() {
-        entries := Iter.toArray(unResolvedIssueMap.entries());
-
-        ticketEntries := Iter.toArray(ticketMap.entries());
+    public shared query ({caller}) func getAllAdmin() : async [AdminId] {
+        if (caller != owner) {
+            return ["No Access"];
+        };
+        return admin;
     };
 
-    system func postupgrade() {
-        ticketMap := HashMap.fromIter<Text, [(Text, Ticket)]>(ticketEntries.vals(), 1, Text.equal, Text.hash);
-        ticketEntries := [];
-        unResolvedIssueMap := HashMap.fromIter<Text, List.List<Issue>>(entries.vals(), 1, Text.equal, Text.hash);
-        entries := [];
-    };
 };
