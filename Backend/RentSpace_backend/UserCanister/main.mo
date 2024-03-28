@@ -160,6 +160,7 @@ shared ({caller = owner}) actor class User() {
         };
         data[pageNo];
     };
+    
     public shared query ({caller}) func whoami() : async Text {
         Principal.toText(caller);
     };
