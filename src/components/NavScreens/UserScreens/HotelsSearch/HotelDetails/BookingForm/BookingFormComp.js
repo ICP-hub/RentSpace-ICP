@@ -48,6 +48,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
   const [total,setTotal]=useState(
     ((item?.hotelPrice*booking.bookingDuration)*0.15)+((item?.hotelPrice*booking.bookingDuration)*0.10)+(item?.hotelPrice*booking.bookingDuration)
   )
+  const [cryptoPrice,setCryptoPrice]=useState()
 
   //Transak integration essential states
 
@@ -136,12 +137,29 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
       setMetaData(formatTokenMetaData(res))
     }).catch((err)=>{console.log(err)})
   }
-  const getBalance=async()=>{
+  const getCryptoPrice=async(method)=>{
     await axios.get("https://api.coinbase.com/v2/exchange-rates?currency=USD").then((res)=>{
-      console.log(res)
+      console.log(res?.data?.data?.rates?.ICP,paymentMethod)
+      if(paymentMethod=="ICP"){
+        setCryptoPrice(res?.data?.data?.rates?.ICP)
+      }else if(paymentMethod=="ckBTC"){
+        setCryptoPrice(res?.data?.data?.rates?.BTC)
+        console.log("BTC ",res?.data?.data?.rates?.BTC)
+      }else if(paymentMethod=="ckEth"){
+        setCryptoPrice(res?.data?.data?.rates?.ETH)
+        console.log("ETH",res?.data?.data?.rates?.ETH)
+      }else if(paymentMethod=="SOL"){
+        setCryptoPrice(res?.data?.data?.rates?.SOL)
+        console.log("SOL",res?.data?.data?.rates?.SOL)
+      }else{
+        console.log("else")
+      }
     }).catch((err)=>{
       console.log(err)
     })
+  }
+  const getBalance=async()=>{
+    
     let bal=await tokenActor.icrc1_balance_of({ owner: Principal.fromText(principle) , subaccount: [] })
     console.log("balance : ",parseInt(bal))
     setBalance(parseInt(bal))
@@ -183,7 +201,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
       console.log(event.url)
       setDeepLink(event.url);
   }
-  const sendNewTransaction=async()=>{
+  const sendNewTransaction=async(total)=>{
     // const hostAccID="F8MVciLX7XFv2ZtBsCgQNSstMLwC4r7EXtcurB73o1Hz"
     // const hostAccID="CUT6rrZag3dpAYPZksQ7LvqcHrxatcdqxjCnTvxXdHo8"
     setLoading(true)
@@ -198,7 +216,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
         SystemProgram.transfer({
           fromPubkey:phantomWalletPublicKey,
           toPubkey:new PublicKey(item?.details?.phantomWalletID),
-          lamports:0.25*LAMPORTS_PER_SOL
+          lamports:total*LAMPORTS_PER_SOL
         })
       ]
       console.log(transaction)
@@ -325,10 +343,12 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
   useEffect(()=>{
     if(paymentMethod=="ICP" || paymentMethod=="ckBTC" || paymentMethod=="ckEth"){
       console.log(paymentMethod)
+      getCryptoPrice()
       settingToken()
       setPaymentType('crypto')
     }
     else if(paymentMethod=="SOL"){
+      getCryptoPrice()
       console.log("SOL selected!")
       setPaymentType('phantom')
     }
@@ -407,7 +427,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
             wallet,
             setFiatPaymentStart,
             paymentMethod,
-            skipable
+            skipable,
           )
         }
       </Modal>
@@ -425,6 +445,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
           userId={userId}
           tokenActor={tokenActor}
           loading={loading}
+          cryptoPrice={cryptoPrice}
         />
       </Modal>
       <Modal transparent animationType='fade' visible={bookingAnimation} onRequestClose={()=>{
@@ -442,6 +463,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
           connect={connect}
           total={(fullPayment)?total:total/2} 
           connected={phantomWalletPublicKey!=null}
+          cryptoPrice={cryptoPrice}
         />
       </Modal>
     </View>

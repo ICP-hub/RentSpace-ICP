@@ -2,9 +2,7 @@ import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import React, { useEffect } from 'react'
 import { COLORS, SIZES } from '../../../../../../../constants/themes'
 
-const BalanceScreen = ({self,paymentMethod,walletID,balance,receiver,total,transfer,tokenActor,userId,loading}) => {
-
-  const getCurrentPrice=()=>{}
+const BalanceScreen = ({self,paymentMethod,walletID,balance,receiver,total,transfer,tokenActor,userId,loading,cryptoPrice}) => {
 
   return (
     <View style={styles.modal}>
@@ -27,8 +25,8 @@ const BalanceScreen = ({self,paymentMethod,walletID,balance,receiver,total,trans
             <Text style={styles.dataText}>{walletID}</Text>
           </View>
           <View style={styles.dataContRow}>
-            <Text style={styles.dataHead}>To be Paid</Text>
-            <Text style={styles.dataText}>${total}</Text>
+            <Text style={styles.dataHead}>To be Paid (in {paymentMethod})</Text>
+            <Text style={styles.dataText}>{total*cryptoPrice}</Text>
           </View>
           <View style={styles.dataContRow}>
             <Text style={styles.dataHead}>Current Balance</Text>
@@ -42,7 +40,7 @@ const BalanceScreen = ({self,paymentMethod,walletID,balance,receiver,total,trans
         {
           balance>total?
           <TouchableOpacity style={styles.btn} onPress={()=>{
-            transfer(total/100000000,userId,tokenActor)
+            transfer(total*cryptoPrice,userId,tokenActor)
           }}>
             <Text style={styles.btnText}>Proceed</Text>
           </TouchableOpacity>

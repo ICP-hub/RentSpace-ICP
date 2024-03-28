@@ -3,11 +3,11 @@ import React from 'react'
 import { COLORS,SIZES } from '../../../../../../../constants/themes'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
 
-const PhantomPayment = ({loading,accountId,total,connect,sendNewTransaction,connected}) => {
+const PhantomPayment = ({loading,accountId,total,connect,sendNewTransaction,connected,cryptoPrice}) => {
 
     const payWithPhantom=()=>{
         if(connected){
-            sendNewTransaction()
+            sendNewTransaction(total*cryptoPrice)
         }else{
             Alert.alert("Connection Required","Please connect with phantom wallet first to continue the payment")
         }
@@ -40,7 +40,7 @@ const PhantomPayment = ({loading,accountId,total,connect,sendNewTransaction,conn
                 </View>
                 <View style={styles.dataContRow}>
                     <Text style={styles.dataHead}>Amount</Text>
-                    <Text style={styles.dataText}>{0.25} SOL</Text>
+                    <Text style={styles.dataText}>{total*cryptoPrice} SOL</Text>
                 </View>
                 <View style={styles.dataContRow}>
                     <Text style={styles.dataHead}>Receiver account</Text>
