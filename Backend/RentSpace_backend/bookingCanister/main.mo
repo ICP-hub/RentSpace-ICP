@@ -45,7 +45,7 @@ shared ({caller = owner}) actor class () = this {
         hotelIdData.value;
     };
 
-    public shared ({caller = user}) func bookHotel(hotelId : Types.HotelId, bookingInfo : Types.BookingInfo, paymentOption : {#icp; #ckbtc}, amount : Nat) : async Text {
+    public shared ({caller = user}) func bookHotel(hotelId : Types.HotelId, bookingInfo : Types.BookingInfo, paymentOption : {#icp; #ckbtc; #solana : Text}, amount : Nat) : async Text {
         let userIdentity = Principal.toText(user);
         if (Principal.isAnonymous(user) == true) {
             Debug.trap("Error! You are already a user");
@@ -60,11 +60,52 @@ shared ({caller = owner}) actor class () = this {
         let bookingId = await createBookingId(userIdentity, hotelId);
 
         let hotelOwnerId = Principal.fromText(getHotelOwnerIdFromHotelId(hotelId));
+        switch (paymentOption) {
+            case (#icp) {
+                let response : Icrc.Result_2 = await icrc2_transferFrom(icpLedger, user, hotelOwnerId, amount);
 
-        let response : Icrc.Result_2 = await icrc2_transferFrom(paymentOption, user, hotelOwnerId, amount);
+                switch (response) {
+                    case (#Ok(value)) {
+                        let bookingData : Types.BookingInfo = {
+                            userId = userIdentity;
+                            date = bookingDate;
+                            bookingDuration = bookingInfo.bookingDuration;
+                            checkInDate = bookingInfo.checkInDate;
+                            hotelId = hotelId;
+                            cancelStatus = false;
+                            refundStatus = false;
+                            paymentStatus = true;
+                            paymentId = Nat.toText(value);
+                        };
+                        bookingDataMap := Trie.put(bookingDataMap, Utils.textKey bookingId, Text.equal, bookingData).0;
+                        return " Sucessfully booked hotel";
+                    };
+                    case (#Err(error)) {return "Not found!"};
+                };
+            };
+            case (#ckbtc) {
+                let response : Icrc.Result_2 = await icrc2_transferFrom(ckbtcLedger, user, hotelOwnerId, amount);
 
-        switch (response) {
-            case (#Ok(value)) {
+                switch (response) {
+                    case (#Ok(value)) {
+                        let bookingData : Types.BookingInfo = {
+                            userId = userIdentity;
+                            date = bookingDate;
+                            bookingDuration = bookingInfo.bookingDuration;
+                            checkInDate = bookingInfo.checkInDate;
+                            hotelId = hotelId;
+                            cancelStatus = false;
+                            refundStatus = false;
+                            paymentStatus = true;
+                            paymentId = Nat.toText(value);
+                        };
+                        bookingDataMap := Trie.put(bookingDataMap, Utils.textKey bookingId, Text.equal, bookingData).0;
+                        return " Sucessfully booked hotel";
+                    };
+                    case (#Err(error)) {return "Not found!"};
+                };
+            };
+            case (#solana(value)) {
                 let bookingData : Types.BookingInfo = {
                     userId = userIdentity;
                     date = bookingDate;
@@ -74,14 +115,12 @@ shared ({caller = owner}) actor class () = this {
                     cancelStatus = false;
                     refundStatus = false;
                     paymentStatus = true;
-                    paymentId = Nat.toText(value);
+                    paymentId = value;
                 };
                 bookingDataMap := Trie.put(bookingDataMap, Utils.textKey bookingId, Text.equal, bookingData).0;
                 return " Sucessfully booked hotel";
             };
-            case (#Err(error)) {return "Not found!"};
         };
-
     };
 
     public shared query ({caller = user}) func getBookingId() : async [Text] {
@@ -176,33 +215,18 @@ shared ({caller = owner}) actor class () = this {
         return admin;
     };
 
-    public func icrc2_transferFrom(paymentOption : {#icp; #ckbtc}, transferfrom : Principal, transferto : Principal, amount : Nat) : async Icrc.Result_2 {
-        switch (paymentOption) {
-            case (#icp) {
-                let ledger = actor (icpLedger) : Icrc.Token;
-                await ledger.icrc2_transfer_from({
-                    spender_subaccount = null;
-                    from = {owner = transferfrom; subaccount = null};
-                    to = {owner = transferto; subaccount = null};
-                    amount;
-                    fee = null;
-                    memo = null;
-                    created_at_time = null;
-                });
-            };
-            case (#ckbtc) {
-                let ledger = actor (ckbtcLedger) : Icrc.Token;
-                await ledger.icrc2_transfer_from({
-                    spender_subaccount = null;
-                    from = {owner = transferfrom; subaccount = null};
-                    to = {owner = transferto; subaccount = null};
-                    amount;
-                    fee = null;
-                    memo = null;
-                    created_at_time = null;
-                });
-            };
-        };
+    func icrc2_transferFrom(ledgerId : Text, transferfrom : Principal, transferto : Principal, amount : Nat) : async Icrc.Result_2 {
+
+        let ledger = actor (ledgerId) : Icrc.Token;
+        await ledger.icrc2_transfer_from({
+            spender_subaccount = null;
+            from = {owner = transferfrom; subaccount = null};
+            to = {owner = transferto; subaccount = null};
+            amount;
+            fee = null;
+            memo = null;
+            created_at_time = null;
+        });
 
     };
 
