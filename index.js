@@ -322,7 +322,7 @@ const RootComponent: React.FC = () => {
       resp,
       chain,
     );
-    // console.log("middleID : ",middleIdentity)
+    console.log("identity : ",middleIdentity)
     const agent = new HttpAgent({identity: middleIdentity,fetchOptions: {
       reactNative: {
         __nativeResponseType: 'base64',
@@ -409,10 +409,20 @@ const RootComponent: React.FC = () => {
     let actorUser=createUserActor(ids.userCan,{agent})
     let actorHotel=createHotelActor(ids.hotelCan,{agent})
     let actorBooking=createBookingActor(ids.bookingCan,{agent})
-    let actorToken=Actor.createActor(idlFactory, {
+    let actorICPToken=Actor.createActor(idlFactory, {
       agent,
       blsVerify:()=>true,
-      canisterId:ids.tokenCan
+      canisterId:ids.ICPtokenCan
+    })
+    let actorCkBTCToken=Actor.createActor(idlFactory, {
+      agent,
+      blsVerify:()=>true,
+      canisterId:ids.ckBTCtokenCan
+    })
+    let actorCkETHToken=Actor.createActor(idlFactory, {
+      agent,
+      blsVerify:()=>true,
+      canisterId:ids.ckETHtokenCan
     })
     let actorReview=createReviewActor(ids.reviewCan,{agent})
     let actorComment=createCommentActor(ids.commentCan,{agent})
@@ -422,7 +432,9 @@ const RootComponent: React.FC = () => {
       userActor:actorUser,
       hotelActor:actorHotel,
       bookingActor:actorBooking,
-      tokenActor:actorToken,
+      icpTokenActor:actorICPToken,
+      ckbtcTokenActor:actorCkBTCToken,
+      ckETHtokenActor:actorCkETHToken,
       reviewActor:actorReview,
       commentActor:actorComment,
       supportActor:actorSupport

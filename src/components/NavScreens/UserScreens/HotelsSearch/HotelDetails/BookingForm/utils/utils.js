@@ -4,6 +4,7 @@ import { host, ids } from "../../../../../../../../DevelopmentConfig";
 
 export const createTokenActor = (canisterId) => {
   let identity = window.identity;
+  console.log("identity : ",identity)
   const agent = new HttpAgent({ identity,fetchOptions: {
     reactNative: {
       __nativeResponseType: 'base64',

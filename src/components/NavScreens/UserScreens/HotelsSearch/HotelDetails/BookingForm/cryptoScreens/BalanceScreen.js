@@ -38,7 +38,7 @@ const BalanceScreen = ({self,paymentMethod,walletID,balance,receiver,total,trans
           </View>
         </View>
         {
-          balance>total?
+          balance<total?
           <TouchableOpacity style={styles.btn} onPress={()=>{
             transfer(total*cryptoPrice,userId,tokenActor)
           }}>

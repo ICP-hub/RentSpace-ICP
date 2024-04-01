@@ -10,12 +10,12 @@ import PaymentMethods from './PaymentMethods/PaymentMethods'
 import RequiredPhone from './RequiredPhone/RequiredPhone'
 import { useDispatch, useSelector } from 'react-redux'
 import { createTokenActor, formatTokenMetaData } from './utils/utils'
-import {Principal} from "@dfinity/principal"
+// import {Principal} from "@dfinity/principal"
 import PushNotification from 'react-native-push-notification'
 import { TransakWebViewIntegration } from './transakScreens/transakTest'
 import WebView from 'react-native-webview'
 import { global_transak_key, transak_key,transak_secret_phrase } from '../../../../../../../transakConfig'
-import { AccountIdentifier } from '@dfinity/ledger-icp'
+import { AccountIdentifier, principalToAccountIdentifier } from '@dfinity/ledger-icp'
 import BalanceScreen from './cryptoScreens/BalanceScreen'
 import CheckAnim from './CheckAnim'
 import { Connection, Transaction, SystemInstruction, LAMPORTS_PER_SOL, clusterApiUrl, PublicKey, SystemProgram, TransactionInstruction } from "@solana/web3.js";
@@ -27,6 +27,10 @@ import { decryptPayload } from './utils/decryptPayload'
 import { encryptPayload } from './utils/encryptPayload'
 import PhantomPayment from './cryptoScreens/PhantomPayment'
 import axios from 'axios'
+import { ids } from '../../../../../../../DevelopmentConfig'
+import { Principal } from '@dfinity/principal'
+import { toHex } from '@dfinity/agent'
+import { fromHexString } from '@dfinity/candid'
 
 const onConnectRedirectLink ="rentspace://onConnect";
 const connection = new Connection(clusterApiUrl("devnet"));
@@ -86,6 +90,51 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
   }  
 
   //crypto payment functions except solana
+
+  const transferApprove=async(sendAmount,sendPrincipal,tokenActor)=>{
+    setLoading(true)
+    console.log("metaData[decimals]",metaData)
+    let amnt=parseInt(Number(sendAmount) * Math.pow(10, parseInt(metaData?.["icrc1:decimals"])))
+     
+    console.log("amount",amnt,principle,sendPrincipal)
+    
+    try{
+      console.log("canid is anonymous",Principal.fromText(ids.bookingCan))
+      console.log("canid principal", Principal.fromHex(principalToAccountIdentifier(Principal.fromText(ids.bookingCan))))
+    if((await getBalance())<=amnt){
+      let transaction = {
+        amount: amnt,
+        from_subaccount:[],
+        spender: {
+          owner: Principal.fromText(ids.bookingCan),
+          subaccount: [],
+        },
+        // spender:principalToAccountIdentifier(Principal.fromText(ids.bookingCan)),
+        fee: [metaData?.["icrc1:fee"]],
+        memo:[],
+        created_at_time:[],
+        expected_allowance:[],
+        expires_at:[]
+      };
+      console.log(tokenActor?.icrc2_approve)
+      await tokenActor?.icrc2_approve(transaction).then((res)=>{
+        if(res?.Err){
+          setLoading(false)
+           console.log(Object.keys(res?.Err)[0])
+           return
+        }
+        console.log(res)
+        setLoading(false)
+      }).catch((err)=>{
+        console.log(err)
+        setLoading(false)
+      })
+    }
+  }catch(err){
+      console.log(err)
+    }
+}
+
   const transfer=async (sendAmount,sendPrincipal,tokenActor) =>{
     setLoading(true)
     console.log("metaData[decimals]",metaData)
@@ -120,16 +169,18 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
     let canID=""
     if(paymentMethod=="ckBTC"){
       canID="mxzaz-hqaaa-aaaar-qaada-cai"
-      console.log("hello ck")
+      setTokenActor(actors?.ckbtcTokenActor)
     }
     else if(paymentMethod=="ckEth"){
       canID="ss2fx-dyaaa-aaaar-qacoq-cai"
+      setTokenActor(actors?.ckETHtokenActor)
     }
     else{
       canID="ryjl3-tyaaa-aaaaa-aaaba-cai"
+      setTokenActor(actors?.icpTokenActor)
     }
     const newActor=createTokenActor(canID)
-    setTokenActor(newActor);
+    // setTokenActor(newActor);
     console.log("token actor",tokenActor)
     await newActor.icrc1_metadata().then((res)=>{
       console.log("icrc1_metadata res : ",res)
@@ -441,7 +492,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
           walletID={wallet} 
           total={(fullPayment)?total:total/2} 
           receiver={item?.hotelTitle} 
-          transfer={transfer} 
+          transfer={transferApprove} 
           userId={userId}
           tokenActor={tokenActor}
           loading={loading}

@@ -24,9 +24,15 @@ export const ids={
     bookingCan:(production)?
         "xhbqh-aaaaa-aaaan-qlwuq-cai":
         "asrmz-lmaaa-aaaaa-qaaeq-cai",
-    tokenCan:(production)?
+    ICPtokenCan:(production)?
         "ryjl3-tyaaa-aaaaa-aaaba-cai"
         :"bw4dl-smaaa-aaaaa-qaacq-cai",
+    ckBTCtokenCan:(production)?
+        "mxzaz-hqaaa-aaaar-qaada-cai"
+        :"mxzaz-hqaaa-aaaar-qaada-cai",
+    ckETHtokenCan:(production)?
+        "ss2fx-dyaaa-aaaar-qacoq-cai"
+        :"ss2fx-dyaaa-aaaar-qacoq-cai",
     commentCan:(production)?
         "wnos5-cqaaa-aaaan-qlwtq-cai"
         :
