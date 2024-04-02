@@ -25,7 +25,7 @@ const BookHotelPage = ({navigation,queryHotels}) => {
   const sampleDes='2972 Westheimer Rd. Santa Ana, Illinois 85486 '
   const [bookingList,setBookingList]=useState([])
   const [refreshing,setRefreshing]=useState(false)
-  const [bottom,setBottom]=useState(70)
+  // const [bottom,setBottom]=useState(70)
 
 
   async function getReservations(setRefreshing){
@@ -94,14 +94,14 @@ const BookHotelPage = ({navigation,queryHotels}) => {
     getQueryHotelDetails()
   }
 
-    useEffect(()=>{
-        Keyboard.addListener('keyboardDidShow',()=>{
-            setBottom(0)
-        })
-        Keyboard.addListener('keyboardDidHide',()=>{
-            setBottom(70)
-        })
-    })
+    // useEffect(()=>{
+    //     Keyboard.addListener('keyboardDidShow',()=>{
+    //         setBottom(0)
+    //     })
+    //     Keyboard.addListener('keyboardDidHide',()=>{
+    //         setBottom(70)
+    //     })
+    // })
   useEffect(()=>{
 
     if(firstRender.current){
@@ -129,7 +129,7 @@ const BookHotelPage = ({navigation,queryHotels}) => {
       </View>
       <FlatList 
         data={hotelsList} 
-        style={{marginBottom:bottom,backgroundColor:'white'}}  
+        style={{marginBottom:70,backgroundColor:'white'}}  
         renderItem={(item)=>(
         <HotelCard item={item.item} navigation={navigation} />
         )}

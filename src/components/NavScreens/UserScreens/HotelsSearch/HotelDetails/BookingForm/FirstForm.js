@@ -142,6 +142,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
             setLoading={setLoading}
             showBookingAnimation={showBookingAnimation}
             bookingAnimation={bookingAnimation}
+            setOpen={setOpen}
         />
       </Modal>
       

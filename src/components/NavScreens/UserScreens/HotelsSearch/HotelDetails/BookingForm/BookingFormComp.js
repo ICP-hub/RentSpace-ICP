@@ -36,7 +36,7 @@ const onConnectRedirectLink ="rentspace://onConnect";
 const connection = new Connection(clusterApiUrl("devnet"));
 const onSignAndSendTransactionRedirectLink="rentspace://onSignAndSendTransaction"
 
-const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,setLoading,showBookingAnimation,bookingAnimation}) => {
+const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoading,showBookingAnimation,bookingAnimation,setOpen}) => {
 
   const {user}=useSelector(state=>state.userReducer)
   const [fullPayment,setFullPayment]=useState(true)
@@ -77,110 +77,121 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
       channelId:"1"
     })
   }
-  const afterPaymentFlow=async(paymentId)=>{
+
+  const book=async(obj,notify,amnt)=>{
+    let paymentOpt=null
+    if(paymentMethod=="ckEth"){
+      paymentOpt={cketh:null}
+    }else if(paymentMethod=="SOL"){
+      paymentOpt={solana:obj.paymentId}
+    }else if(paymentMethod=="ckBTC"){
+      paymentOpt={ckbtc:null}
+    }else{
+      paymentOpt={icp:null}
+    }
+    console.log(paymentOpt,paymentMethod)
+    await actors?.bookingActor?.bookHotel(item?.id,obj,paymentOpt,amnt).then((resp)=>{
+      console.log(resp)
+      notify()
+      setLoading(false)
+      showBookingAnimation(true)
+      setTimeout(()=>{
+      setBookingForm(false)
+      setOpen(false)
+    },2000)
+    }).catch((err)=>{
+      console.log(err)
+      setLoading(false)
+    })
+  }
+
+  const afterPaymentFlow=async(paymentId,amnt)=>{
     setBooking({...booking,paymentStatus:true,paymentId:paymentId})
     const newObj={
       ...booking,
       paymentId:paymentId,
-      paymentStatus:true
+      paymentStatus:true,
+      hotelId:item?.id,
     }
+    alert("in after payment")
     console.log(newObj)  
-    book(newObj,notifyBookingConfirm)
+    book(newObj,notifyBookingConfirm,amnt)
     setBalanceScreen(false)
   }  
-
   //crypto payment functions except solana
 
-  const transferApprove=async(sendAmount,sendPrincipal,tokenActor)=>{
-    setLoading(true)
-    console.log("metaData[decimals]",metaData)
-    let amnt=parseInt(Number(sendAmount) * Math.pow(10, parseInt(metaData?.["icrc1:decimals"])))
-     
-    console.log("amount",amnt,principle,sendPrincipal)
-    
-    try{
-      console.log("canid is anonymous",Principal.fromText(ids.bookingCan))
-      console.log("canid principal", Principal.fromHex(principalToAccountIdentifier(Principal.fromText(ids.bookingCan))))
-    if((await getBalance())<=amnt){
-      let transaction = {
-        amount: amnt,
-        from_subaccount:[],
-        spender: {
-          owner: Principal.fromText(ids.bookingCan),
-          subaccount: [],
-        },
-        // spender:principalToAccountIdentifier(Principal.fromText(ids.bookingCan)),
-        fee: [metaData?.["icrc1:fee"]],
-        memo:[],
-        created_at_time:[],
-        expected_allowance:[],
-        expires_at:[]
-      };
-      console.log(tokenActor?.icrc2_approve)
-      await tokenActor?.icrc2_approve(transaction).then((res)=>{
-        if(res?.Err){
+    const transferApprove=async(sendAmount,sendPrincipal,tokenActor)=>{
+      setLoading(true)
+      console.log("metaData[decimals]",metaData)
+      let amnt=parseInt(Number(sendAmount) * Math.pow(10, parseInt(metaData?.["icrc1:decimals"])))
+       
+      console.log("amount",amnt,principle,sendPrincipal)
+      
+      // try{
+        console.log("canid is anonymous",Principal.fromText(ids.bookingCan))
+        console.log("canid principal", Principal.fromHex(principalToAccountIdentifier(Principal.fromText(ids.bookingCan))))
+      if((await getBalance())>=amnt){
+        let transaction = {
+          amount: Number(amnt)+Number([metaData?.["icrc1:fee"]]),
+          from_subaccount:[],
+          spender: {
+            owner: Principal.fromText(ids.bookingCan),
+            subaccount: [],
+          },
+          fee: [metaData?.["icrc1:fee"]],
+          memo:[],
+          created_at_time:[],
+          expected_allowance:[],
+          expires_at:[]
+        };
+        console.log(tokenActor?.icrc2_approve)
+        await tokenActor?.icrc2_approve(transaction).then(async(res)=>{
+          if(res?.Err){
+            setLoading(false)
+            console.log(res)
+             return
+          }else{
+            console.log(res)
+            afterPaymentFlow(parseInt(res?.Ok).toString(),amnt)
+          }
+        }).catch((err)=>{
+          console.log(err)
           setLoading(false)
-           console.log(Object.keys(res?.Err)[0])
-           return
-        }
-        console.log(res)
+        })
+      }else{
         setLoading(false)
-      }).catch((err)=>{
-        console.log(err)
-        setLoading(false)
-      })
-    }
-  }catch(err){
-      console.log(err)
-    }
-}
+      }
+  }
 
-  const transfer=async (sendAmount,sendPrincipal,tokenActor) =>{
+  const transakPayment=async(sendAmount,sendPrincipal)=>{
     setLoading(true)
-    console.log("metaData[decimals]",metaData)
-    let amnt=parseInt(Number(sendAmount) * Math.pow(10, parseInt(metaData?.["icrc1:decimals"])))
-    
-    console.log("amount",amnt)
-    if((await getBalance())>=amnt){
-      let transaction = {
-        amount: amnt,
-        from_subaccount: [],
-        to: {
-          owner: Principal.fromText(sendPrincipal),
-          subaccount: [],
-        },
-        fee: [metaData?.["icrc1:fee"]],
-        memo: [],
-        created_at_time: [],
-      };
-      console.log("metadata inside transfer fee",metaData?.["icrc1:fee"])
+    let newActor=actors?.icpTokenActor
+    setTokenActor(actors?.icpTokenActor)
+    await newActor.icrc1_metadata().then((res)=>{
+      console.log("icrc1_metadata res : ",res)
+      
+      setMetaData(formatTokenMetaData(res))
+      transferApprove(sendAmount,sendPrincipal,newActor)
+    }).catch((err)=>{console.log(err)})
+  }
 
-      let response = await tokenActor.icrc1_transfer(transaction);
-      console.log(parseInt(response?.Ok))
-      afterPaymentFlow(parseInt(response?.Ok).toString())
-    }else{
-      setLoading(false)
-      Alert.alert("Transaction Failed",`Insufficient balance in ${metaData?.["icrc1:symbol"]} ${await getBalance()}`)
-      setBalanceScreen(false)
-      // afterPaymentFlow("test")
-    }
-    };
+
   async function settingToken(){
     let canID=""
+    let newActor;
     if(paymentMethod=="ckBTC"){
-      canID="mxzaz-hqaaa-aaaar-qaada-cai"
+      newActor(actors?.ckbtcTokenActor)
       setTokenActor(actors?.ckbtcTokenActor)
     }
     else if(paymentMethod=="ckEth"){
-      canID="ss2fx-dyaaa-aaaar-qacoq-cai"
+      newActor(actors?.ckETHtokenActor)
       setTokenActor(actors?.ckETHtokenActor)
     }
     else{
-      canID="ryjl3-tyaaa-aaaaa-aaaba-cai"
+      newActor(actors?.icpTokenActor)
       setTokenActor(actors?.icpTokenActor)
     }
-    const newActor=createTokenActor(canID)
-    // setTokenActor(newActor);
+    setTokenActor(newActor);
     console.log("token actor",tokenActor)
     await newActor.icrc1_metadata().then((res)=>{
       console.log("icrc1_metadata res : ",res)
@@ -336,7 +347,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
     );
     console.log("transaction submitted: ", signAndSendTransactionData);
     setPhantomModal(false)
-    afterPaymentFlow("Sol payment")
+    afterPaymentFlow("Sol payment",total)
   }
 
   useEffect(() => {
@@ -474,7 +485,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,book,se
             wallet,
             user?.userEmail,
             (fullPayment)?total:total/2,
-            transfer,
+            transakPayment,
             wallet,
             setFiatPaymentStart,
             paymentMethod,
