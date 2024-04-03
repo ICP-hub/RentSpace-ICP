@@ -35,6 +35,7 @@ import { fromHexString } from '@dfinity/candid'
 const onConnectRedirectLink ="rentspace://onConnect";
 const connection = new Connection(clusterApiUrl("devnet"));
 const onSignAndSendTransactionRedirectLink="rentspace://onSignAndSendTransaction"
+const SOLANA_DEVNET_USDC_PUBLIC_KEY="4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
 
 const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoading,showBookingAnimation,bookingAnimation,setOpen}) => {
 
@@ -83,7 +84,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
     if(paymentMethod=="ckEth"){
       paymentOpt={cketh:null}
     }else if(paymentMethod=="SOL"){
-      paymentOpt={solana:obj.paymentId}
+      paymentOpt={solana:"test"}
     }else if(paymentMethod=="ckBTC"){
       paymentOpt={ckbtc:null}
     }else{
@@ -180,15 +181,15 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
     let canID=""
     let newActor;
     if(paymentMethod=="ckBTC"){
-      newActor(actors?.ckbtcTokenActor)
+      newActor=(actors?.ckbtcTokenActor)
       setTokenActor(actors?.ckbtcTokenActor)
     }
     else if(paymentMethod=="ckEth"){
-      newActor(actors?.ckETHtokenActor)
+      newActor=(actors?.ckETHtokenActor)
       setTokenActor(actors?.ckETHtokenActor)
     }
     else{
-      newActor(actors?.icpTokenActor)
+      newActor=(actors?.icpTokenActor)
       setTokenActor(actors?.icpTokenActor)
     }
     setTokenActor(newActor);
@@ -211,8 +212,8 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
         setCryptoPrice(res?.data?.data?.rates?.ETH)
         console.log("ETH",res?.data?.data?.rates?.ETH)
       }else if(paymentMethod=="SOL"){
-        setCryptoPrice(res?.data?.data?.rates?.SOL)
-        console.log("SOL",res?.data?.data?.rates?.SOL)
+        setCryptoPrice(res?.data?.data?.rates?.USDC)
+        console.log("SOL",res?.data?.data?.rates?.USDC)
       }else{
         console.log("else")
       }
@@ -278,7 +279,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
         SystemProgram.transfer({
           fromPubkey:phantomWalletPublicKey,
           toPubkey:new PublicKey(item?.details?.phantomWalletID),
-          lamports:total*LAMPORTS_PER_SOL
+          lamports:0.1*LAMPORTS_PER_SOL
         })
       ]
       console.log(transaction)
@@ -382,6 +383,12 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
       }
     }catch(err){
       console.log(err?.code," err code")
+      setFiatPaymentStart(false)
+      if(err.code==4001){
+        Alert.alert("Transaction Rejected","You rejected the transaction")
+      }else if(err.code==32603){
+        Alert.alert("Transaction Rejected","The transaction is rejected, check if you have enough balance in your wallet!")
+      }
     }
     
   }, [deepLink]);

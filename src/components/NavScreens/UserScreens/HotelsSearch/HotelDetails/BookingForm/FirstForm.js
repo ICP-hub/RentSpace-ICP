@@ -18,7 +18,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
     const [bookingAnimation,showBookingAnimation]=useState(false)
     const [booking,setBooking]=useState({
         userId:principle,
-        date:'',
+        checkInDate:'',
         bookingDuration:"1",
         cancelStatus:false,
         refundStatus:false,
