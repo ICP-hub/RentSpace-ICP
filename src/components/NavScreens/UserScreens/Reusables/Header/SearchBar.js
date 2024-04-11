@@ -7,12 +7,12 @@ const SearchBar = ({filterAction,searchText,setSearchText,setQuery}) => {
   return (
     <View style={styles.searchBarCont}>
       <View style={styles.searchBar}>
-        <Icon name="search1" size={22} color={'white'}/>
+        <Icon name="search1" size={22} color={COLORS.black}/>
         <TextInput 
           value={searchText} 
           style={styles.input} 
           placeholder='Search Places' 
-          placeholderTextColor={'white'} 
+          placeholderTextColor={COLORS.black} 
           onChangeText={value=>{
             setSearchText(value.toString())
             setQuery(`pageSize=${25}&name=${value.toString()}`)
@@ -20,7 +20,7 @@ const SearchBar = ({filterAction,searchText,setSearchText,setQuery}) => {
         />
       </View>
       <TouchableOpacity style={styles.filterCont} onPress={filterAction}>
-        <Icon name="filter" size={25} color={'white'}/>
+        <Icon name="filter" size={25} color={COLORS.black}/>
       </TouchableOpacity>
     </View>
   )
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'row',
         width:'80%',
-        alignItems:'center'
+        alignItems:'center',
     },
     searchBar:{
         display:'flex',
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         height:55,
         justifyContent:'flex-start',
         padding:15,
-        backgroundColor:COLORS.lightPurple,
+        backgroundColor:COLORS.white,
         borderRadius:60,
         borderColor:'white',
         borderWidth:2,
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     input:{
         height:'60%',
         marginLeft:15,
-        color:'white',
+        color:COLORS.black,
         fontSize:SIZES.small,
         padding:0,
         
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     filterCont:{
         height:40,
         width:40,
-        backgroundColor:COLORS.lightPurple,
+        backgroundColor:COLORS.white,
         borderColor:'white',
         borderRadius:25,
         borderWidth:2,

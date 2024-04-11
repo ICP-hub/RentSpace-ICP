@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect,useState } from 'react'
 import MapView, { Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
+import { COLORS } from '../../../../constants/themes';
 
 const MapScreen = () => {
 
@@ -52,6 +53,7 @@ export default MapScreen
 const styles = StyleSheet.create({
     mapCont:{
       width:'100%',
-      height:540
+      height:540,
+      color:COLORS.mainGrey
     }
 })

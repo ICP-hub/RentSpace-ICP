@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         height:80,
         width:'100%',
-        backgroundColor:'white',
+        backgroundColor:COLORS.mainGrey,
     },
     textCont:{
         display:'flex',
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'flex-start',
         alignItems:'flex-end',
-        backgroundColor:'white',
+        backgroundColor:COLORS.mainGrey,
         marginBottom:5
     },
     boldText:{
@@ -67,14 +67,14 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         justifyContent:'center',
         alignItems:'center',
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.mainPurple,
         borderRadius:12,
         width:'37%',
         paddingVertical:16,
         marginRight:'6%'
     },
     btnText:{
-        color:'white',
+        color:COLORS.white,
         fontWeight:'bold',
         fontSize:SIZES.medium
     }

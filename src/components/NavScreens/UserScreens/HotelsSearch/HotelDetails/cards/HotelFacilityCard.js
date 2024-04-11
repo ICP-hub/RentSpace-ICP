@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     },
     simpleText:{
         fontSize:SIZES.xSmall,
-        color:COLORS.textLightGrey,
-        opacity:0.7
+        color:COLORS.black,
+        fontWeight:'300'
     },
 })

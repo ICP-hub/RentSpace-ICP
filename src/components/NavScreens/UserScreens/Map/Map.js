@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import BottomNav from '../../../Navigation/BottomNav'
 import HeaderSearch from '../Reusables/Header/HeaderSearch'
-import { SIZES } from '../../../../constants/themes'
+import { COLORS, SIZES } from '../../../../constants/themes'
 import MapScreen from './MapScreen'
 
 const Map = ({navigation}) => {
@@ -26,7 +26,8 @@ export default Map
 const styles = StyleSheet.create({
     view:{
         width:'100%',
-        height:'100%'
+        height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     simpleText:{
         color:'black',

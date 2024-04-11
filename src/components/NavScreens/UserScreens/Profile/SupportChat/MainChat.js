@@ -4,6 +4,7 @@ import ChatHeader from './ChatHeader'
 import Query from './Query'
 import TypingField from './TypingField'
 import { useSelector } from 'react-redux'
+import { COLORS } from '../../../../../constants/themes'
 
 const MainChat = ({setSupportChatPage}) => {
     const [message,setMessage]=useState("")
@@ -63,7 +64,8 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         width:'100%',
-        height:'100%'
+        height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     list:{
       paddingBottom:90,

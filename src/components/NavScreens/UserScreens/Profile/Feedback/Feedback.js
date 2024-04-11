@@ -25,7 +25,7 @@ const Feedback = ({setFeedbackPage}) => {
   return (
     <View style={styles.view}>
     <TouchableOpacity style={styles.backIcon} onPress={()=>{setFeedbackPage(false)}}>
-        <Icon name="angle-left" size={25} color={COLORS.textLightGrey}/> 
+        <Icon name="angle-left" size={25} color={COLORS.black}/> 
     </TouchableOpacity>
     {/* < */}
   <Text style={styles.title}>Feedback</Text>
@@ -63,7 +63,8 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         width:'100%',
-        height:'100%'
+        height:'100%',
+        backgroundColor:COLORS.mainGrey
       },
       title:{
         color:COLORS.black,
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
         paddingLeft:30,
       },
       inputs:{
-        borderColor: COLORS.hostTitle,
+        borderColor: COLORS.mainPurple,
         borderWidth: 1,
         borderRadius: 13,
         width: '100%',
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
       
       line:{
         width:'100%',
-        backgroundColor:COLORS.textLightGrey,
+        backgroundColor:COLORS.black,
         opacity:0.2,
         height:1,
         marginVertical:15
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
         height:150,
         width:'100%',
         borderWidth:1,
-        borderColor:COLORS.hostTitle,
+        borderColor:COLORS.mainPurple,
         borderRadius:20,
         color:COLORS.black,
         textAlignVertical:'top',
@@ -122,12 +123,12 @@ const styles = StyleSheet.create({
         paddingVertical:12,
         width:'100%',
         borderRadius:12,
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.mainPurple,
         marginVertical:25
       },
       btnText:{
         fontSize:SIZES.medium,
-        color:'white',
+        color:COLORS.white,
         fontWeight:'bold'
       },
       loader:{

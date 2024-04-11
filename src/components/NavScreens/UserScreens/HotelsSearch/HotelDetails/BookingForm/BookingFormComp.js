@@ -545,21 +545,22 @@ const styles = StyleSheet.create({
     page:{
         display:'flex',
         flexDirection:'column',
-        alignItems:'center'
+        alignItems:'center',
+        backgroundColor:COLORS.mainGrey
     },
     backIconCont:{
         position:'absolute',
         width:'100%',
-        backgroundColor:'white',
+        backgroundColor:COLORS.mainGrey,
         zIndex:10,
         paddingLeft:10,
         paddingVertical:5,
     },
     line:{
         width:'100%',
-        backgroundColor:COLORS.textLightGrey,
+        backgroundColor:COLORS.black,
         height:0.5,
-        opacity:0.5,
+        opacity:0.23,
         marginVertical:15
     },
     btn:{
@@ -567,7 +568,7 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'column',
         justifyContent:'center',
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.mainPurple,
         borderRadius:12,
         paddingVertical:15,
         alignItems:'center'
@@ -579,7 +580,7 @@ const styles = StyleSheet.create({
     },
     scrollView:{
       width:'100%',
-      backgroundColor:'white',
+      backgroundColor:COLORS.mainGrey,
       
     },
     scrollPart:{

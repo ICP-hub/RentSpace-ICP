@@ -78,20 +78,20 @@ const UpdateProfile = ({setEditProfile}) => {
     <View style={styles.bottomSheet}>
       <View style={styles.titleCont}>
         <Text style={styles.title}>Edit Profile</Text>
-        <Icon name='edit' size={25} color='black'/>
+        <Icon name='edit' size={25} color={COLORS.black}/>
       </View>
       <View style={styles.imageCont}>
         <TouchableOpacity onPress={()=>{
           chooseUserImg()
         }}>
-          <Icon name='pluscircle' size={20} color='blue' style={styles.iconPlus}/>
+          <Icon name='pluscircle' size={20} color={COLORS.mainPurple} style={styles.iconPlus}/>
           <Image source={userImg.uri==null?userImg:{uri:userImg.uri}} style={styles.img}/>
         </TouchableOpacity> 
         
         <Text style={styles.simpleText}>Edit Photo</Text>
       </View>
       <View style={styles.labelCont}>
-      <Icon3 name='user-edit' size={15} color={'black'} style={{marginRight:6}}/>
+      <Icon3 name='user-edit' size={15} color={COLORS.black} style={{marginRight:6}}/>
         <Text style={styles.simpleText}>First Name</Text>
       </View>
       <TextInput 
@@ -102,7 +102,7 @@ const UpdateProfile = ({setEditProfile}) => {
         onChangeText={value=>{setUpdatedUser({...updatedUser,firstName:value})}}
     />
       <View style={styles.labelCont}>
-      <Icon3 name='user-edit' size={15} color={'black'} style={{marginRight:6}}/>
+      <Icon3 name='user-edit' size={15} color={COLORS.black} style={{marginRight:6}}/>
         <Text style={styles.simpleText}>Last Name</Text>
       </View>
       <TextInput 
@@ -113,7 +113,7 @@ const UpdateProfile = ({setEditProfile}) => {
         onChangeText={value=>{setUpdatedUser({...updatedUser,lastName:value})}}
     />
       <View style={styles.labelCont}>
-      <Icon2 name='email' size={18} color={'black'} style={{marginRight:6}}/>
+      <Icon2 name='email' size={18} color={COLORS.black} style={{marginRight:6}}/>
         <Text style={styles.simpleText}>Email ID</Text>
       </View>
       <TextInput 
@@ -124,7 +124,7 @@ const UpdateProfile = ({setEditProfile}) => {
         onChangeText={value=>{setUpdatedUser({...updatedUser,userEmail:value})}}
         />
       <View style={styles.labelCont}>
-        <Icon name='idcard' size={18} color={'black'} style={{marginRight:6}}/>
+        <Icon name='idcard' size={18} color={COLORS.black} style={{marginRight:6}}/>
         <Text style={styles.simpleText}>Govt ID </Text>
       </View>
       <TextInput 
@@ -142,7 +142,7 @@ const UpdateProfile = ({setEditProfile}) => {
         onChangeText={value=>{setUpdatedUser({...updatedUser,userProfile:value})}}
     /> */}
     <View style={styles.labelCont}>
-        <Icon3 name='birthday-cake' size={15} color={'black'} style={{marginRight:6}}/>
+        <Icon3 name='birthday-cake' size={15} color={COLORS.black} style={{marginRight:6}}/>
         <Text style={styles.simpleText}>BirthDay</Text>
       </View>
         <TouchableOpacity style={styles.inputs} onPress={()=>{
@@ -190,7 +190,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         height: '100%',
-        paddingVertical:40
+        paddingVertical:40,
+        backgroundColor:COLORS.mainGrey
       },
       titleCont:{
         display:'flex',
@@ -243,10 +244,8 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         height: 50,
         padding: 15,
-        color: COLORS.textLightGrey,
+        color: COLORS.black,
         fontSize: SIZES.preMedium,
-        opacity: 0.5,
-        
       },
       submitBtn:{
         display: 'flex',
@@ -254,21 +253,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '80%',
-        backgroundColor: COLORS.inputBorder,
+        backgroundColor: COLORS.white,
         borderRadius: 10,
         height: 50,
         paddingHorizontal: 80,
         marginTop: 10,
       },
       submitText:{
-        color: 'white',
+        color: COLORS.black,
         fontWeight: 'bold',
         fontSize: SIZES.medium,
       },
       dateText:{
-        color: COLORS.textLightGrey,
+        color: COLORS.black,
         fontSize: SIZES.preMedium,
-        opacity: 0.5,
       },
       calendar: {
         marginHorizontal: 35,
@@ -276,7 +274,6 @@ const styles = StyleSheet.create({
         elevation: 2,
         marginTop: '60%',
         borderWidth: 1,
-        borderBlockColor: COLORS.inputBorder,
       },
       loader:{
         position:'absolute',

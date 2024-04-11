@@ -34,7 +34,8 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         backgroundColor:'white',
         width:'100%',
-        paddingVertical:10
+        paddingVertical:10,
+        backgroundColor:COLORS.mainGrey
     },
     btn:{
         position:'absolute',
@@ -52,8 +53,7 @@ const styles = StyleSheet.create({
     },
     status:{
       fontSize:SIZES.small,
-      color:COLORS.textLightGrey,
+      color:COLORS.black,
       fontWeight:'300',
-      opacity:0.6
     }
 })

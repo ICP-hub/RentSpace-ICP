@@ -65,7 +65,8 @@ export default Reels
 const styles = StyleSheet.create({
     view:{
         width:'100%',
-        height:'100%'
+        height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     simpleText:{
         color:'black',

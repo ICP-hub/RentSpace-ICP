@@ -39,19 +39,19 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         width:'100%',
-        backgroundColor:'white',
+        backgroundColor:COLORS.mainGrey,
         position:'absolute',
     },
     progressBar:{
         width:'85%',
         height:4,
         borderRadius:10,
-        backgroundColor:COLORS.hrLine,
+        backgroundColor:COLORS.mainLightGrey,
         display:'flex',
         flexDirection:'flex-start',
     },
     progress:{
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.mainPurple,
         height:'100%',
         borderRadius:10
     },
@@ -69,18 +69,18 @@ const styles = StyleSheet.create({
         alignItems:'center',
         width:'37%',
         paddingVertical:15,
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.mainPurple,
         borderRadius:10
     },
     btnText:{
         fontSize:SIZES.medium,
         fontWeight:'bold',
-        color:'white'
+        color:COLORS.white
     },
     link:{
         fontSize:SIZES.medium,
         fontWeight:'bold',
-        color:'black',
+        color:COLORS.black,
         textDecorationLine:'underline',
         marginLeft:10
     }

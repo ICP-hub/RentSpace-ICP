@@ -29,7 +29,7 @@ const PhantomPayment = ({loading,accountId,total,connect,sendNewTransaction,conn
                 
                 <View style={styles.dataContRow}>
                     <Text style={styles.dataHead}>Connection status</Text>
-                    <Text style={[styles.dataText,{color:(connected?COLORS.lightGreen:"red")}]}>
+                    <Text style={styles.dataText}>
                         {
                             connected?
                             "Connected"
@@ -51,7 +51,7 @@ const PhantomPayment = ({loading,accountId,total,connect,sendNewTransaction,conn
                 connected?
                 <></>
                 :
-                <TouchableOpacity style={[styles.btn2,{backgroundColor:(connected?COLORS.lightGreen:"red")}]} onPress={connect}>
+                <TouchableOpacity style={styles.btn2} onPress={connect}>
                     <Text style={styles.btnText}>
                         {
                             connected?
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
       },
       alert:{
         width:'90%',
-        backgroundColor:'white',
+        backgroundColor:COLORS.white,
         elevation:10,
         borderRadius:12,
         display:'flex',
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
         alignItems:'center'
       },
       title:{
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.large,
         marginVertical:10,
         fontWeight:'500',
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'column',
         justifyContent:'center',
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.mainPurple,
         borderRadius:12,
         paddingVertical:15,
         alignItems:'center',
@@ -120,10 +120,11 @@ const styles = StyleSheet.create({
         borderRadius:12,
         paddingVertical:15,
         alignItems:'center',
-        marginTop:15
+        marginTop:15,
+        backgroundColor:COLORS.mainPurple
       },
       btnText:{
-        color:'white',
+        color:COLORS.white,
         fontWeight:'bold',
         fontSize:SIZES.medium,
       },
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
         fontWeight:'600'
       },
       requirement:{
-        color:"red",
+        color:COLORS.black,
         opacity:0.6,
         fontSize:SIZES.small,
         marginBottom:10,

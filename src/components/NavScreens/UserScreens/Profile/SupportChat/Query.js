@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         paddingVertical:5,
         paddingHorizontal:10,
         borderRadius:10,
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.mainPurple,
         color:'white',
         maxWidth:'90%'
     },

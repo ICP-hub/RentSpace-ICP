@@ -146,9 +146,9 @@ const ReelCard = ({item,reelIndex}) => {
               <TouchableOpacity style={styles.icon} disabled={likeDisabled||(user?.firstName==undefined)} onPress={updateLike} > 
                   {
                       liked ?
-                          <Icon name='heart' color={'red'} size={25} />
+                          <Icon name='heart' color={COLORS.mainPurple} size={25} />
                           :
-                          <Icon name='hearto' color={'white'} size={25} />
+                          <Icon name='hearto' color={COLORS.white} size={25} />
                   }
 
               </TouchableOpacity>
@@ -156,13 +156,13 @@ const ReelCard = ({item,reelIndex}) => {
                 getComments()
                 console.log("liked by ",item?.likedBy.includes(principle))
                 }}>
-                  <Icon name='plus' color={'white'} size={25} />
+                  <Icon name='plus' color={COLORS.white} size={25} />
               </TouchableOpacity>
               <TouchableOpacity style={styles.icon} onPress={openComments} disabled={user?.firstName==undefined}>
-                  <Icon2 name='chatbubble-ellipses-outline' color={'white'} size={25} />
+                  <Icon2 name='chatbubble-ellipses-outline' color={COLORS.white} size={25} />
               </TouchableOpacity>
               <TouchableOpacity style={styles.bigIcon} disabled={user?.firstName==undefined}>
-                  <Icon3 name='film' color={'white'} size={22} />
+                  <Icon3 name='film' color={COLORS.white} size={22} />
               </TouchableOpacity>
           </View>
           <View style={styles.infoCont}>
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     reel:{
         width:Dimensions.get('window').width,
         height:Dimensions.get('window').height,
-        backgroundColor:COLORS.darkPurple
+        backgroundColor:COLORS.mainGrey
     },
     iconCont:{
         display:'flex',
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
         width:45,
         height:45,
         borderRadius:30,
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.mainPurple,
         marginVertical:15
     },
     bg:{

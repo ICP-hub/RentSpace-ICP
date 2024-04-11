@@ -50,7 +50,8 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         width:'100%',
-        height:'100%'
+        height:'100%',
+        backgroundColor:COLORS.mainGrey
       },
       header:{
         display:'flex',

@@ -47,15 +47,16 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         paddingBottom:50,
-        backgroundColor:'white',
+        backgroundColor:COLORS.mainGrey,
         opacity:1,
+        height:'100%'
     },
     title:{
         fontWeight:'bold',
         color:COLORS.black,
         fontSize:SIZES.medium,
         position:'absolute',
-        top:'8%'
+        top:10
     },
     backIcon:{
         display:'flex',
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
     empty:{
       width:'100%',
       fontSize:SIZES.preMedium,
-      color:'red',
+      color:COLORS.black,
       fontWeight:'300',
       // backgroundColor:COLORS.black,
       textAlign:'center',

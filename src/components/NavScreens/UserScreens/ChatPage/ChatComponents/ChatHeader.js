@@ -7,7 +7,7 @@ const ChatHeader = ({name,status,setOpenChat}) => {
   return (
     <View style={styles.header}>
       <TouchableOpacity style={styles.btn} onPress={()=>setOpenChat(false)}>
-        <Icon name='chevron-left' size={25} color={COLORS.textLightGrey}/>
+        <Icon name='chevron-left' size={25} color={COLORS.black}/>
       </TouchableOpacity>
       <View style={styles.textCont}>
         <Text style={styles.name}>{name}</Text>
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:'white',
+        backgroundColor:COLORS.mainGrey,
         width:'100%',
         paddingVertical:10
     },
@@ -51,8 +51,7 @@ const styles = StyleSheet.create({
     },
     status:{
       fontSize:SIZES.small,
-      color:COLORS.textLightGrey,
+      color:COLORS.black,
       fontWeight:'300',
-      opacity:0.6
     }
 })

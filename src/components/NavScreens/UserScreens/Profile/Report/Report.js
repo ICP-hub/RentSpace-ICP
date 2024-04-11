@@ -89,13 +89,12 @@ const styles = StyleSheet.create({
     alignItems:'flex-start',
     minHeight:'100%',
     width:'100%',
-    backgroundColor:'white',
+    backgroundColor:COLORS.mainGrey,
     paddingBottom:40,
-    marginTop:10
   },
   topNav:{
     width:'100%',
-    backgroundColor:'white',
+    backgroundColor:COLORS.mainGrey,
     padding:0,
     display:'flex',
     flexDirection:'column',
@@ -118,13 +117,12 @@ const styles = StyleSheet.create({
     marginVertical:10
   },
   normalText:{
-    color:COLORS.textLightGrey,
+    color:COLORS.black,
     fontSize:SIZES.medium-1,
     marginLeft:'7%',
     width:'85%',
     fontWeight:'400',
     marginVertical:10,
-    opacity:0.7
   },
   largeText:{
     color:COLORS.black,
@@ -143,10 +141,9 @@ const styles = StyleSheet.create({
     marginTop:15
   },
   smallText:{
-    color:COLORS.textLightGrey,
+    color:COLORS.black,
     fontSize:SIZES.preMedium-1,
     width:'80%',
-    opacity:0.7,
     fontWeight:'400'
   },
   card:{
@@ -168,14 +165,14 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
     borderRadius:12,
-    backgroundColor:COLORS.hostTitle,
+    backgroundColor:COLORS.mainPurple,
     paddingVertical:12,
     paddingHorizontal:15,
     marginLeft:'7.5%',
     marginVertical:10,
   },
   btnText:{
-    color:'white',
+    color:COLORS.white,
     fontSize:SIZES.medium,
     fontWeight:'bold',
 

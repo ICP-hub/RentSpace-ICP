@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { SIZES } from '../../../../../constants/themes'
+import { COLORS, SIZES } from '../../../../../constants/themes'
 
 const SectionHeading = ({text}) => {
   return (
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     text:{
         fontWeight:'600',
       fontSize:SIZES.xLarge+2,
-      color:'black',
+      color:COLORS.black,
       marginBottom:16
     }
 })

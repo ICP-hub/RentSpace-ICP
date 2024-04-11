@@ -176,10 +176,10 @@ const styles = StyleSheet.create({
         alignItems:'center',
         width:'100%',
         height:'100%',
-        backgroundColor:'white'
+        backgroundColor:COLORS.mainGrey
     },
     header:{
-      backgroundColor:COLORS.darkPurple,
+      backgroundColor:COLORS.white,
       borderBottomRightRadius:20,
       borderBottomLeftRadius:20,
       height:'37%',
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     },
     title:{
         fontSize:SIZES.medium,
-        color:'white',
+        color:COLORS.black,
         textAlign:'center',
         marginBottom:40,
         marginTop:18,
@@ -200,19 +200,19 @@ const styles = StyleSheet.create({
       height:110,
       width:110,
       borderRadius:75,
-      borderColor:'white',
+      borderColor:COLORS.black,
       borderWidth:2,
       marginBottom:10
     },
     headerName:{
       fontSize:SIZES.medium,
-        color:'white',
+        color:COLORS.black,
         textAlign:'center',
         marginBottom:8,
     },
     headerText:{
       fontSize:SIZES.preMedium,
-        color:'white',
+        color:COLORS.black,
         textAlign:'center',
         marginBottom:3,
         opacity:0.8
@@ -237,12 +237,12 @@ const styles = StyleSheet.create({
     },
     propertyText:{
       fontSize:SIZES.preMedium,
-      color:'black',
+      color:COLORS.black,
       fontWeight:'bold'
     },
     valueText:{
       fontSize:SIZES.preMedium,
-      color:'black',
+      color:COLORS.black,
       opacity:0.6
     },
     btnCont:{
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
       display:'flex',
       alignItems:'center',
       justifyContent:'center',
-      backgroundColor:COLORS.inputBorder,
+      backgroundColor:COLORS.white,
       height:60,
       width:'40%',
     },
@@ -268,14 +268,14 @@ const styles = StyleSheet.create({
       display:'flex',
       alignItems:'center',
       justifyContent:'center',
-      backgroundColor:COLORS.inputBorder,
+      backgroundColor:COLORS.mainGrey,
       height:60,
       width:'100%',
       marginTop:20
     },
     btnText:{
         fontSize:SIZES.medium,
-        color:'white',
+        color:COLORS.black,
         fontWeight:'bold'
     }
 })

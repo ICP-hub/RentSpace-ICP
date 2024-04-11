@@ -7,6 +7,7 @@ import { io } from 'socket.io-client'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 import PushNotification from 'react-native-push-notification'
+import { COLORS } from '../../../../../constants/themes'
 
 const Chat = ({item,setOpenChat}) => {
   const [messages,setMessages]=useState([])
@@ -118,7 +119,8 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         width:'100%',
-        height:'100%'
+        height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     list:{
       paddingBottom:90,

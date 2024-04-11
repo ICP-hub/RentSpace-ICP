@@ -26,49 +26,49 @@ const AddressFileds = ({setAddress,address,setReport,report}) => {
             placeholderStyle={styles.textDropdownPlaceHolder}
             selectedTextStyle={styles.textDropdown}
             itemTextStyle={styles.textDropdownPlaceHolder}
-            iconColor={COLORS.hostTitle}
+            iconColor={COLORS.black}
         />
       {/* <TextInput
         style={styles.firstInp}
         value={address.region}
         onChangeText={value=>setAddress({...address,region:address.region})}
         placeholder='Country/region'
-        placeholderTextColor={COLORS.hostTitle}
+        placeholderTextColor={COLORS.black}
       /> */}
       <TextInput
         style={styles.middleInputs}
         value={report?.address?.streetAddress}
         onChangeText={value=>setReport({...report,address:{...report.address,streetAddress:value}})}
         placeholder='Street address'
-        placeholderTextColor={COLORS.hostTitle}
+        placeholderTextColor={COLORS.black}
       />
       <TextInput
         style={styles.middleInputs}
         value={report?.address?.building}
         onChangeText={value=>setReport({...report,address:{...report.address,building:value}})}
         placeholder='Apt, suite, bldg (optinal)'
-        placeholderTextColor={COLORS.hostTitle}
+        placeholderTextColor={COLORS.black}
       />
       <TextInput
         style={styles.middleInputs}
         value={report?.address?.city}
         onChangeText={value=>setReport({...report,address:{...report.address,city:value}})}
         placeholder='City'
-        placeholderTextColor={COLORS.hostTitle}
+        placeholderTextColor={COLORS.black}
       />
       <TextInput
         style={styles.middleInputs}
         value={report?.address?.country}
         onChangeText={value=>setReport({...report,address:{...report.address,country:value}})}
         placeholder='Country'
-        placeholderTextColor={COLORS.hostTitle}
+        placeholderTextColor={COLORS.black}
       />
       <TextInput
         style={styles.lastInp}
         value={report?.address?.postalCode}
         onChangeText={value=>setReport({...report,address:{...report.address,postalCode:value}})}
         placeholder='Postcode'
-        placeholderTextColor={COLORS.hostTitle}
+        placeholderTextColor={COLORS.black}
       />
     </View>
   )
@@ -97,8 +97,7 @@ const styles = StyleSheet.create({
     lastInp:{
         width:'100%',
         borderWidth:0.8,
-        borderColor:COLORS.hostTitle,
-        opacity:0.8,
+        borderColor:COLORS.mainPurple,
         color:COLORS.black,
         paddingLeft:15,
         borderBottomLeftRadius:10,
@@ -110,8 +109,7 @@ const styles = StyleSheet.create({
         borderWidth:0.8,
         borderTopRightRadius:10,
         borderTopLeftRadius:10,
-        borderColor:COLORS.hostTitle,
-        opacity:0.8,
+        borderColor:COLORS.mainPurple,
         color:COLORS.black,
         paddingLeft:15,
         paddingVertical:10
@@ -121,8 +119,7 @@ const styles = StyleSheet.create({
         fontSize:SIZES.preMedium
     },
     textDropdownPlaceHolder:{
-        color:COLORS.hostTitle,
+        color:COLORS.black,
         fontSize:SIZES.preMedium,
-        opacity:0.8
     }
 })

@@ -22,7 +22,7 @@ export default HostBand
 const styles = StyleSheet.create({
     band:{
         width:'100%',
-        backgroundColor:COLORS.royalPurple,
+        backgroundColor:COLORS.mainPurple,
         height:95,
         display:'flex',
         alignItems:'center',
@@ -50,12 +50,12 @@ const styles = StyleSheet.create({
       justifyContent:'space-between'
     },
     Title:{
-      color:'white',
+      color:COLORS.white,
       fontSize:SIZES.preMedium,
       fontWeight:'bold'
     },
     simpleText:{
-      color:COLORS.textLightGrey,
+      color:COLORS.black,
       fontSize:SIZES.xSmall,
       width:'90%'
     }

@@ -160,18 +160,18 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         width:'98%',
-        backgroundColor:COLORS.lightBorderPurple,
+        backgroundColor:COLORS.mainPurple,
         paddingTop:20,
         borderRadius:50,
         borderWidth:2,
-        borderColor:COLORS.darkPurple,
+        borderColor:COLORS.mainPurple,
         marginLeft:4,
         // marginBottom:20
     },
     title:{
         fontSize:SIZES.preMedium,
         fontWeight:'bold',
-        color:'black'
+        color:COLORS.black
     },
     img:{
         width:'80%',
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     },
     desc:{
         fontSize:SIZES.small,
-        color:COLORS.textLightGrey,
+        color:COLORS.white,
         opacity:0.6,
         width:'80%'
     },
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:'white',
+        backgroundColor:COLORS.white,
         paddingVertical:5,
         paddingHorizontal:10,
         borderRadius:10
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
       justifyContent:'space-between',
       width:'100%',
       paddingHorizontal:'8%',
-      backgroundColor:'white',
+      backgroundColor:COLORS.mainGrey,
       paddingBottom:10
     },
     btn:{

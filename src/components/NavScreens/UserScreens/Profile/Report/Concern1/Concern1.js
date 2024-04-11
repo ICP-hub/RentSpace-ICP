@@ -79,7 +79,8 @@ export default Concern1
 const styles = StyleSheet.create({
     modal:{
         width:'100%',
-        height:'100%'
+        height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     page:{
         display:'flex',
@@ -87,13 +88,11 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         minHeight:'100%',
         width:'100%',
-        backgroundColor:'white',
         paddingBottom:150,
         marginTop:10
       },
       topNav:{
         width:'100%',
-        backgroundColor:'white',
         padding:0,
         display:'flex',
         flexDirection:'column',
@@ -117,7 +116,7 @@ const styles = StyleSheet.create({
         marginBottom:25
       },
       normalText:{
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontSize:SIZES.medium,
         marginLeft:'7%',
         width:'80%',

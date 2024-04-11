@@ -56,10 +56,10 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         minWidth:40,
-        borderBottomColor:'white',
+        borderBottomColor:COLORS.black,
     },
     titleName:{
-        color:'white',
+        color:COLORS.black,
         fontSize:SIZES.small,
         marginBottom:5
     },

@@ -206,8 +206,8 @@ const makeHost=async()=>{
           
             <Text style={styles.email}>{user?.userEmail}</Text>
           </View>
-          <RentSpaceCard/>
-          <ProfileSection heading={"Settings"} list={settingsList}/>
+          {/* <RentSpaceCard/> */}
+          <ProfileSection heading={""} list={settingsList}/>
           <Line/>
           <ProfileSection heading={"Hosting"} list={hostingList}/>
           <Line/>
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         width:'100%',
-        backgroundColor:'white',
+        backgroundColor:COLORS.mainGrey,
         minHeight:'100%'
     },
     header:{
@@ -272,7 +272,6 @@ const styles = StyleSheet.create({
       height:Dimensions.get('screen').width*0.72,
       width:Dimensions.get('screen').width*0.72,
       borderRadius:Dimensions.get('screen').width*0.5,
-      // backgroundColor:'white',
       elevation:5,
       shadowColor: '#202020',
       shadowOffset: {width: 0, height: 0},
@@ -303,7 +302,7 @@ const styles = StyleSheet.create({
     backIconCont:{
       position:'absolute',
       width:'100%',
-      backgroundColor:'white',
+      backgroundColor:COLORS.mainGrey,
       zIndex:10
     },
     linkText:{

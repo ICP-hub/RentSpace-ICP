@@ -8,11 +8,11 @@ const PaymentMethods = ({setMethod,method,connect,item}) => {
   const methods=[
     {
       label:'ckEth',
-      icon:<Icon name='ethereum' color={COLORS.textLightGrey} size={30}/>
+      icon:<Icon name='ethereum' color={COLORS.black} size={30}/>
     },
     {
       label:'applePay',
-      icon:<Icon name='apple-pay' color={COLORS.textLightGrey} size={30}/>
+      icon:<Icon name='apple-pay' color={COLORS.black} size={30}/>
     },
     {
       label:'ICP',
@@ -20,7 +20,7 @@ const PaymentMethods = ({setMethod,method,connect,item}) => {
     },
     {
       label:'gPay',
-      icon:<Icon name='google-pay' color={COLORS.textLightGrey} size={26}/>
+      icon:<Icon name='google-pay' color={COLORS.black} size={26}/>
     },
     {
       label:'SOL',
@@ -28,11 +28,11 @@ const PaymentMethods = ({setMethod,method,connect,item}) => {
     },
     {
       label:'ckBTC',
-      icon:<Icon name='btc' color={COLORS.textLightGrey} size={25}/>
+      icon:<Icon name='btc' color={COLORS.black} size={25}/>
     },
     {
       label:'creditCard',
-      icon:<Icon name='credit-card' color={COLORS.textLightGrey} size={25}/>
+      icon:<Icon name='credit-card' color={COLORS.black} size={25}/>
     },
   ]
   // const [method,setMethod]=useState(methods[0]?.label)

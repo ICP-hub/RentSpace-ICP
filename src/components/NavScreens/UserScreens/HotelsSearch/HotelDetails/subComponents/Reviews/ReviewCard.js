@@ -21,7 +21,7 @@ const ReviewCard = ({item}) => {
       <View style={styles.dateCont}>
         {
           ratingArr.map((r,index)=>(
-            <Icon key={index} name="star" size={16} color={COLORS.hostTitle}/>
+            <Icon key={index} name="star" size={16} color={COLORS.mainPurple}/>
           ))
         }
         
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     display:'flex',
     flexDirection:'column',
     alignItems:'center',
-    backgroundColor:COLORS.gold,
+    backgroundColor:COLORS.white,
     width:300,
     borderRadius:12,
     opacity:1,

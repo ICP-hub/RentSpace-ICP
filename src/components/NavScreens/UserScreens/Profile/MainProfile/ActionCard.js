@@ -12,7 +12,7 @@ const ActionCard = ({item}) => {
             }
             <Text style={styles.title}>{item?.text}</Text>
         </View>
-        <Icon name='chevron-small-right' size={28} color={COLORS.textLightGrey}/>
+        <Icon name='chevron-small-right' size={28} color={COLORS.black}/>
     </TouchableOpacity>
   )
 }

@@ -84,7 +84,7 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
         }}>
             <Text style={styles.btnText}>Chat with {host?.firstName}</Text>
         </TouchableOpacity>
-      <BottomSheetModal ref={btmBtn} index={0} snapPoints={['12']} style={{elevation:10,backgroundColor:'white'}}>
+      <BottomSheetModal ref={btmBtn} index={0} snapPoints={['12']} style={{elevation:10,backgroundColor:COLORS.mainGrey}}>
         <ReserveBtn item={item} onClick={()=>setBookingForm(true)}/>
       </BottomSheetModal>
       <Modal animationType='slide' visible={bookingForm} transparent>
@@ -107,7 +107,8 @@ const styles = StyleSheet.create({
         height:'100%',
         paddingBottom:100,
         height:'100%',
-        paddingBottom:100
+        paddingBottom:100,
+        backgroundColor:COLORS.mainGrey
     },
     backIcon:{
         display:'flex',
@@ -171,10 +172,11 @@ const styles = StyleSheet.create({
     },
     hrLine:{
         height:2,
-        borderBottomWidth:2,
-        borderBottomColor:COLORS.hrLine,
+        borderBottomWidth:0.5,
+        borderBottomColor:COLORS.black,
         width:"100%",
-        marginBottom:20
+        marginBottom:20,
+        opacity:0.4
     },
     btn:{
         width:'80%',
@@ -183,11 +185,11 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         paddingVertical:15,
-        backgroundColor:COLORS.hostTitle
+        backgroundColor:COLORS.mainPurple
     },
     btnText:{
         fontSize:SIZES.preMedium,
-        color:'white',
+        color:COLORS.white,
         fontWeight:'bold'
     }
 })

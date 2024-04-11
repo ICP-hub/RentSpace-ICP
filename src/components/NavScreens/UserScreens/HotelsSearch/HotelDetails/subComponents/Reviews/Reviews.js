@@ -20,7 +20,7 @@ const Reviews = ({reviews}) => {
   return (
     <View style={styles.reviewCont}>
         <View style={styles.headerCont}>
-            <Icon name="star" size={16} color={COLORS.hostTitle} />
+            <Icon name="star" size={16} color={COLORS.mainPurple} />
             <Text style={styles.reviewText}>4.92 • 432 reviews</Text>
         </View>
         {
@@ -56,7 +56,7 @@ export default Reviews
 
 const styles = StyleSheet.create({
     reviewCont:{
-        backgroundColor:'white',
+        backgroundColor:COLORS.mainGrey,
         display:'flex',
         flexDirection:'column',
         width:'100%',
@@ -82,16 +82,16 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         width:'80%',
-        backgroundColor:'white',
+        backgroundColor:COLORS.mainGrey,
         borderWidth:1.2,
-        borderColor:COLORS.hostTitle,
+        borderColor:COLORS.mainPurple,
         borderRadius:12,
         paddingVertical:10,
         zIndex:10
     },
     btnText:{
         fontSize:SIZES.large,
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontWeight:'600',
     },
     list:{
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     empty:{
         width:'100%',
         fontSize:SIZES.preMedium,
-        color:'red',
+        color:COLORS.black,
         fontWeight:'300',
         // backgroundColor:COLORS.black,
         textAlign:'center',

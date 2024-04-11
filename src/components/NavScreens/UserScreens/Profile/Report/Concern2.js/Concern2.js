@@ -105,14 +105,14 @@ const Concern2 = ({setConcernForm,setReportPage,setReport,report}) => {
             style={styles.input}
             value={userDetails.name}
             onChangeText={value=>setUserDetails({...userDetails,name:value})}
-            placeholderTextColor={COLORS.hostTitle}
+            placeholderTextColor={COLORS.black}
             placeholder='Full name'
         />
         <TextInput 
             style={styles.input}
             value={userDetails.email}
             onChangeText={value=>setUserDetails({...userDetails,email:value})}
-            placeholderTextColor={COLORS.hostTitle}
+            placeholderTextColor={COLORS.black}
             placeholder='email'
         />
       </ScrollView>
@@ -127,7 +127,8 @@ export default Concern2
 const styles = StyleSheet.create({
     modal:{
         height:'100%',
-        width:'100%'
+        width:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     page:{
         display:'flex',
@@ -135,13 +136,11 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         minHeight:'100%',
         width:'100%',
-        backgroundColor:'white',
         paddingBottom:150,
         marginTop:10
       },
       topNav:{
         width:'100%',
-        backgroundColor:'white',
         padding:0,
         display:'flex',
         flexDirection:'column',
@@ -166,7 +165,7 @@ const styles = StyleSheet.create({
         marginBottom:25
       },
       normalText:{
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontSize:SIZES.medium,
         marginLeft:'7%',
         width:'80%',
@@ -188,7 +187,7 @@ const styles = StyleSheet.create({
         width:'82%',
         borderWidth:0.8,
         borderRadius:10,
-        borderColor:COLORS.hostTitle,
+        borderColor:COLORS.mainPurple,
         marginBottom:10,
         opacity:0.8,
         color:COLORS.black,
@@ -199,9 +198,8 @@ const styles = StyleSheet.create({
         width:'85%',
         borderWidth:0.8,
         borderRadius:10,
-        borderColor:COLORS.hostTitle,
+        borderColor:COLORS.mainPurple,
         marginVertical:10,
-        opacity:0.8,
         color:COLORS.black,
         paddingLeft:15,
         paddingVertical:20,

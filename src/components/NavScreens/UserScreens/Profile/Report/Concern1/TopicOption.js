@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
         height:25,
         borderRadius:20,
         borderWidth:1,
-        borderColor:COLORS.hostTitle,
+        borderColor:COLORS.mainPurple,
         display:'flex',
         flexDirection:'column',
         justifyContent:'center',
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         width:15,
         height:15,
         borderRadius:25,
-        backgroundColor:COLORS.hostTitle
+        backgroundColor:COLORS.mainPurple
     },
     text:{
         fontWeight:SIZES.medium,
