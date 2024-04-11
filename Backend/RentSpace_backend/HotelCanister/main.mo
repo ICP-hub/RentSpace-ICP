@@ -13,6 +13,7 @@ shared ({caller = owner}) actor class () {
     stable var hotelRegisterFrequencyMap = Trie.empty<Types.Year, Types.AnnualData>();
     stable var admin : [Types.AdminId] = [];
 
+
     let userActor = actor (userCanisterId) : actor {
         checkUserExist : query (Text) -> async Bool;
     };

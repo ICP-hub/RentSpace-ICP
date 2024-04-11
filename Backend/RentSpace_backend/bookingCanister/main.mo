@@ -21,7 +21,7 @@ shared ({caller = owner}) actor class () = this {
     stable let icpLedger = "ryjl3-tyaaa-aaaaa-aaaba-cai";
     stable let ckbtcLedger = "r7inp-6aaaa-aaaaa-aaabq-cai";
     let hotelActor = actor (hotelCanisterId) : actor {
-        checkHotelExist : query (Text) -> async Bool;
+        checkHotelExist : shared query (Text) -> async Bool;
     };
 
     func validate(bookingData : Types.BookingInfo) {
