@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'column',
         alignItems:'center',
-        backgroundColor:'white',
+        backgroundColor:COLORS.white,
         width:'100%',
         height:'100%'
     },
@@ -49,13 +49,13 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
     },
     text:{
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontSize:SIZES.medium-2,
         marginVertical:10,
         width:'95%'
     },
     link:{
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontSize:SIZES.medium-1,
         fontWeight:'700',
         textDecorationLine:'underline'

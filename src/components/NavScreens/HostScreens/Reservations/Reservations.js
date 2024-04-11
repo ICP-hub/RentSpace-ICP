@@ -131,11 +131,11 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'flex-start',
         height:'100%',
-        backgroundColor:'white'
+        backgroundColor:COLORS.mainGrey
     },
     title:{
         width:'50%',
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:16,
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         borderWidth:1,
-        borderColor:COLORS.hostTitle,
+        borderColor:COLORS.mainPurple,
         height:40,
         paddingHorizontal:10,
         marginHorizontal:6,
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
       },
       reservationTypeText:{
           fontSize:SIZES.small,
-          color:COLORS.textLightGrey,
+          color:COLORS.black,
           fontWeight:'600'
       },
       selectedReservationType:{
@@ -169,12 +169,12 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         borderWidth:1,
-        borderColor:COLORS.hostTitle,
+        borderColor:COLORS.mainPurple,
         height:40,
         paddingHorizontal:10,
         marginHorizontal:6,
         borderRadius:30,
-        backgroundColor:COLORS.hostTitle
+        backgroundColor:COLORS.mainPurple
       },
       selectedReservationTypeText:{
         fontSize:SIZES.small,
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'column',
         alignItems:'center',
-        backgroundColor:COLORS.lighterGrey,
+        backgroundColor:COLORS.mainLightGrey,
         width:'90%',
         marginLeft:'5%',
         borderRadius:20,
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
       },
       simpleText:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         textAlign:'center',
         maxWidth:'70%',
         marginBottom:10,

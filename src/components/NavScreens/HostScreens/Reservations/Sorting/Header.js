@@ -6,7 +6,7 @@ const Header = ({setSorting}) => {
   return (
     <View style={styles.header}>
         <TouchableOpacity style={styles.cross} onPress={()=>setSorting(false)}>
-            <Icon name='cross' color={COLORS.textLightGrey} size={25}/>
+            <Icon name='cross' color={COLORS.black} size={25}/>
         </TouchableOpacity>
         <Text style={styles.text}>Sort</Text>
     </View>
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize:SIZES.medium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontWeight:'500' 
     }
 })

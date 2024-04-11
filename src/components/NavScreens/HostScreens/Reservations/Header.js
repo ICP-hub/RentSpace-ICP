@@ -9,14 +9,14 @@ const Header = ({setShowReservations,setSorting}) => {
   return (
     <View style={styles.header}>
         <TouchableOpacity onPress={()=>{setShowReservations(false)}}>
-        <Icon name="angle-left" size={30} color={COLORS.textLightGrey}/>    
+        <Icon name="angle-left" size={30} color={COLORS.black}/>    
       </TouchableOpacity>
       <View style={styles.iconCont}>
         <TouchableOpacity style={styles.roundIcon}>
-            <Icon2 name='filter-outline' color={COLORS.textLightGrey} size={23}/>
+            <Icon2 name='filter-outline' color={COLORS.black} size={23}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.roundIcon} onPress={()=>setSorting(true)}>
-            <Icon2 name='compare-vertical' color={COLORS.textLightGrey} size={30}/>
+            <Icon2 name='compare-vertical' color={COLORS.black} size={30}/>
         </TouchableOpacity> 
       </View>
       
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
         borderRadius:30,
         width:35,
         height:35,
-        backgroundColor:'white',
+        backgroundColor:COLORS.white,
         elevation:5
     }
 })

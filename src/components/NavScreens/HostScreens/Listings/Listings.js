@@ -69,10 +69,10 @@ const Listings = ({navigation}) => {
         <Text style={styles.title}>Your listings</Text>
         <View style={styles.iconCont}>
             <TouchableOpacity style={styles.icon}>
-                <Icon name='collage' size={30} color={COLORS.textLightGrey}/>
+                <Icon name='collage' size={30} color={COLORS.black}/>
             </TouchableOpacity>
             <TouchableOpacity style={styles.icon} onPress={()=>setHostModal(4)}>
-                <Icon2 name='plus' size={30} color={COLORS.textLightGrey}/>
+                <Icon2 name='plus' size={30} color={COLORS.black}/>
             </TouchableOpacity>
         </View>
       </View>
@@ -82,7 +82,7 @@ const Listings = ({navigation}) => {
                 <ListingCard item={item.item}/>
             )}/>
         :
-            <Text style={{color:'red',marginTop:50}}>Sorry! No listings to show</Text>    
+            <Text style={{color:COLORS.black,marginTop:50}}>Sorry! No listings to show</Text>    
       }
       
       <BottomNavHost navigation={navigation} setShowDrawer={setShowDrawer} showDrawer={showDrawer}/>
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         height:'100%',
-        backgroundColor:'white'
+        backgroundColor:COLORS.mainGrey
     },
     header:{
         display:'flex',

@@ -13,7 +13,7 @@ const MenuItem = ({item}) => {
             }
             <Text style={styles.title}>{item?.title}</Text>
         </View>
-        <Icon name='chevron-small-right' size={28} color={COLORS.textLightGrey}/>
+        <Icon name='chevron-small-right' size={28} color={COLORS.black}/>
     </TouchableOpacity>
   )
 }

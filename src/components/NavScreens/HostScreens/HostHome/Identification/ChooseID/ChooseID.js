@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     display:'flex',
     flexDirection:'column',
     alignItems:'flex-start',
-    backgroundColor:'white',
+    backgroundColor:COLORS.mainGrey,
     width:'100%',
     height:'100%'
   },
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
   smallText:{
     fontSize:SIZES.small-2,
-    color:COLORS.textLightGrey,
+    color:COLORS.black,
     fontWeight:'300',
     marginLeft:'10%',
     width:'65%',
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     width:'80%',
     marginLeft:'10%',
     height:1,
-    backgroundColor:COLORS.textLightGrey,
+    backgroundColor:COLORS.black,
     opacity:0.5,
     marginVertical:15
   },
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     width:'85%',
     borderRadius:12,
     borderWidth:1,
-    borderColor:COLORS.textLightGrey,
+    borderColor:COLORS.black,
     marginLeft:'7.5%',
     marginVertical:30,
     height:50

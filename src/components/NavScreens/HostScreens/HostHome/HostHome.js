@@ -75,10 +75,14 @@ const HostHome = ({navigation}) => {
     setHostingCount(0)
     setOutCount(0)
     let bookingList=[]
+    
     setRefreshing(true)
     hotels.map(async(h)=>{
       await actors?.bookingActor?.gethotelXBookingId(h).then((res)=>{
         // console.log(res)
+        if(res.length==0){
+          setRefreshing(false)
+        }
         res.map(async(r)=>{
           setRefreshing(true)
           await actors?.bookingActor?.getBookingDetials(r).then(async(bookingRes)=>{
@@ -221,7 +225,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'flex-start',
         height:'100%',
-        backgroundColor:'white'
+        backgroundColor:COLORS.mainGrey
     },
     title:{
         width:'45%',

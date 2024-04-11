@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import BottomBtn from './BottomBtn'
 import Header from './Header'
 import Options from './Options'
+import { COLORS } from '../../../../../constants/themes'
 
 const Sorting = ({setSorting,sortCreatedAt,sortCheckIn,setReservations}) => {
 
@@ -70,6 +71,6 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'flex-start',
         height:'100%',
-        backgroundColor:'white'
+        backgroundColor:COLORS.mainGrey
     },
 })

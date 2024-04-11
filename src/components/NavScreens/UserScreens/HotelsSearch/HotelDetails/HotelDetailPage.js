@@ -84,7 +84,7 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
         }}>
             <Text style={styles.btnText}>Chat with {host?.firstName}</Text>
         </TouchableOpacity>
-      <BottomSheetModal ref={btmBtn} index={0} snapPoints={['12']} style={{elevation:10,backgroundColor:COLORS.mainGrey}}>
+      <BottomSheetModal ref={btmBtn} index={0} snapPoints={['12']} backgroundStyle={{backgroundColor:COLORS.mainGrey}} style={{elevation:10,backgroundColor:COLORS.mainGrey}}>
         <ReserveBtn item={item} onClick={()=>setBookingForm(true)}/>
       </BottomSheetModal>
       <Modal animationType='slide' visible={bookingForm} transparent>

@@ -20,10 +20,10 @@ const StatusCard = ({item}) => {
             {
                 (item?.status=="Complete")?
                 <>
-                    <Icon name="checkcircleo" size={18} color={COLORS.lightGreen}/>
+                    <Icon name="checkcircleo" size={18} color={COLORS.black}/>
                 </>
                 :
-                <Icon2 name='warning' size={18} color='red'/>
+                <Icon2 name='warning' size={18} color={COLORS.black}/>
             }
             <Text style={styles.status}>{item?.status}</Text>
         </View>
@@ -43,12 +43,12 @@ const styles = StyleSheet.create({
     },
     title:{
         fontSize:SIZES.medium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         marginBottom:10
     },
     text:{
         fontSize:SIZES.small,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontWeight:'300',
         width:'85%',
         marginBottom:5

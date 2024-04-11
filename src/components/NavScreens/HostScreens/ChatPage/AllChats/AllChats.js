@@ -153,10 +153,10 @@ const AllChats = ({navigation}) => {
                         <Text style={styles.title}>Your Chats</Text>
                         <View style={styles.iconCont}>
                             <TouchableOpacity style={styles.icon} onPress={()=>console.log("newChat : ",newChat)}>
-                                <Icon name='collage' size={30} color={COLORS.textLightGrey}/>
+                                <Icon name='collage' size={30} color={COLORS.black}/>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.icon}>
-                                <Icon2 name='plus' size={30} color={COLORS.textLightGrey}/>
+                                <Icon2 name='plus' size={30} color={COLORS.black}/>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         height:'100%',
-        backgroundColor:'white'
+        backgroundColor:COLORS.mainGrey
     },
     header:{
         display:'flex',

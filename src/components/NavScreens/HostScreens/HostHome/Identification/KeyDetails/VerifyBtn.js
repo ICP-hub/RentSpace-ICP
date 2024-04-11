@@ -8,17 +8,17 @@ import { COLORS,SIZES } from '../../../../../../constants/themes'
 const VerifyBtn = ({item,setIdprocess,pos}) => {
   return (
     <TouchableOpacity style={styles.card} onPress={()=>{setIdprocess(pos+1)}}>
-      <Icon3 name='chevron-small-right' size={28} color={COLORS.textLightGrey} style={styles.iconNext}/>
+      <Icon3 name='chevron-small-right' size={28} color={COLORS.black} style={styles.iconNext}/>
       <Text style={styles.title}>{item?.title}</Text>
       <Text style={styles.text}>{item?.text}</Text>
       <View style={styles.statusCont}>
             {
                 (item?.status=="Complete")?
                 <>
-                    <Icon name="checkcircleo" size={18} color={COLORS.lightGreen}/>
+                    <Icon name="checkcircleo" size={18} color={COLORS.black}/>
                 </>
                 :
-                <Icon2 name='warning' size={18} color='red'/>
+                <Icon2 name='warning' size={18} color={COLORS.black}/>
             }
             <Text style={styles.status}>{item?.status}</Text>
       </View>
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize:SIZES.small,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontWeight:'300',
         width:'85%',
         marginBottom:5

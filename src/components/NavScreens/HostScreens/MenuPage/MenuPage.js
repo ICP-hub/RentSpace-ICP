@@ -21,69 +21,69 @@ const MenuPage = ({navigation}) => {
     const hostingItems=[
         {
             title:'Reservations',
-            icon:<Icon3 name='bag-check-outline' size={25} color={COLORS.textLightGrey}/>,
+            icon:<Icon3 name='bag-check-outline' size={25} color={COLORS.black}/>,
             onClick:()=>{navigation.navigate('hostHome')}
         },
         {
             title:'Earnings',
-            icon:<Icon3 name='cash-outline' size={25} color={COLORS.textLightGrey}/>,
+            icon:<Icon3 name='cash-outline' size={25} color={COLORS.black}/>,
             onClick:()=>{}
         },
         {
             title:'Insights',
-            icon:<Icon name='linechart' size={25} color={COLORS.textLightGrey}/>,
+            icon:<Icon name='linechart' size={25} color={COLORS.black}/>,
             onClick:()=>{}
         },
         {
             title:'Guidebooks',
-            icon:<Icon name='book' size={25} color={COLORS.textLightGrey}/>,
+            icon:<Icon name='book' size={25} color={COLORS.black}/>,
             onClick:()=>{}
         },
         {
             title:'Create a new listing',
-            icon:<Icon5 name='home-plus-outline' size={25} color={COLORS.textLightGrey}/>,
+            icon:<Icon5 name='home-plus-outline' size={25} color={COLORS.black}/>,
             onClick:()=>{navigation.navigate('hostListing')}
         }
     ]
     const accountItems=[
         {
             title:"Profile",
-            icon:<Icon name='user' size={25} color={COLORS.textLightGrey}/>,
+            icon:<Icon name='user' size={25} color={COLORS.black}/>,
             onClick:()=>{}
         },
         {
             title:"Settings",
-            icon:<Icon name='setting' size={25} color={COLORS.textLightGrey}/>,
+            icon:<Icon name='setting' size={25} color={COLORS.black}/>,
             onClick:()=>{}
         },
         {
             title:"Visit the help center",
-            icon:<Icon name='questioncircleo' size={25} color={COLORS.textLightGrey}/>,
+            icon:<Icon name='questioncircleo' size={25} color={COLORS.black}/>,
             onClick:()=>{}
         },
         {
             title:"Get help with a safety issue",
-            icon:<Icon2 name='clipboard' size={25} color={COLORS.textLightGrey}/>,
+            icon:<Icon2 name='clipboard' size={25} color={COLORS.black}/>,
             onClick:()=>{}
         },
         {
             title:"Explore hosting resources",
-            icon:<Icon3 name='document-text-outline' size={25} color={COLORS.textLightGrey}/>,
+            icon:<Icon3 name='document-text-outline' size={25} color={COLORS.black}/>,
             onClick:()=>{}
         },
         {
             title:"Contact with Hosts near you",
-            icon:<Icon4 name='groups' size={25} color={COLORS.textLightGrey}/>,
+            icon:<Icon4 name='groups' size={25} color={COLORS.black}/>,
             onClick:()=>{}
         },
         {
             title:"Give us feedback",
-            icon:<Icon name='edit' size={23} color={COLORS.textLightGrey}/>,
+            icon:<Icon name='edit' size={23} color={COLORS.black}/>,
             onClick:()=>{}
         },
         {
             title:"Refer a Host",
-            icon:<Icon4 name='group' size={25} color={COLORS.textLightGrey}/>,
+            icon:<Icon4 name='group' size={25} color={COLORS.black}/>,
             onClick:()=>{}
         },
     ]

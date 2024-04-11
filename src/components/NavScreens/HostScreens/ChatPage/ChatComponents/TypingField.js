@@ -19,7 +19,7 @@ const TypingField = ({setMessages,messages,setMessage,message,sendMessage}) => {
        onChangeText={value=>setMessage(value)}
       />
       <TouchableOpacity style={styles.icon} onPress={sendMessage}>
-        <Icon name='location-arrow' color={COLORS.hostTitle} size={30}/>
+        <Icon name='location-arrow' color={COLORS.mainPurple} size={30}/>
       </TouchableOpacity>
       
     </View>
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     input:{
         width:'85%',
         marginRight:10,
-        color:COLORS.textLightGrey
+        color:COLORS.black
     },
     inputText:{
 

@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     },
     title:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
     },
     radio:{
         display:'flex',
@@ -37,12 +37,12 @@ const styles = StyleSheet.create({
         height:22,
         borderWidth:1.3,
         borderRadius:20,
-        borderColor:COLORS.textLightGrey
+        borderColor:COLORS.black
     },
     radioSelected:{
         width:12,
         height:12,
         borderRadius:10,
-        backgroundColor:COLORS.textLightGrey
+        backgroundColor:COLORS.black
     }
 })
