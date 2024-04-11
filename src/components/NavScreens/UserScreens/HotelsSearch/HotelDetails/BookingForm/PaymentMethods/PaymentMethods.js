@@ -16,7 +16,7 @@ const PaymentMethods = ({setMethod,method,connect,item}) => {
     },
     {
       label:'ICP',
-      icon:<Text style={{color:COLORS.textLightGrey,fontWeight:'bold',fontSize:SIZES.largeMed}}>ICP</Text>
+      icon:<Text style={{color:COLORS.black,fontWeight:'bold',fontSize:SIZES.largeMed}}>ICP</Text>
     },
     {
       label:'gPay',
@@ -24,7 +24,7 @@ const PaymentMethods = ({setMethod,method,connect,item}) => {
     },
     {
       label:'SOL',
-      icon:<Text style={{color:COLORS.textLightGrey,fontWeight:'bold',fontSize:SIZES.largeMed}}>SOL</Text>
+      icon:<Text style={{color:COLORS.black,fontWeight:'bold',fontSize:SIZES.largeMed}}>SOL</Text>
     },
     {
       label:'ckBTC',
