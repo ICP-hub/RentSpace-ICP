@@ -22,7 +22,7 @@ const OptionCard = ({item,setOption,option,check}) => {
     <View style={styles.card}>
       <Text style={styles.title}>{item}</Text>
       <TouchableOpacity style={styles.checkBox} onPress={setCheck}>
-        <Icon name='check' color={check?COLORS.textLightGrey:'white'} size={18}/>
+        <Icon name='check' color={check?COLORS.black:COLORS.white} size={18}/>
       </TouchableOpacity>
     </View>
   )
@@ -46,12 +46,12 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
         borderWidth:1.2,
-        borderColor:COLORS.textLightGrey,
+        borderColor:COLORS.black,
         borderRadius:4,
     },
     title:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontWeight:'500'
     }
 })

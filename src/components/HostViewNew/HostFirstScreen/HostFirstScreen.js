@@ -13,12 +13,12 @@ const HostFirstScreen = ({setHostModal,navigation}) => {
             <BackBtn setHostModal={setHostModal} navigation={navigation}/>
             <Header/>
             <SearchMap/>
-            <ComparisonFeatures/>
+            {/* <ComparisonFeatures/> */}
             <Questions/>
             <View style={styles.footer}>
                 <View style={styles.footerEnv}>
                     <TouchableOpacity onPress={()=>{setHostModal(2)}}>
-                        <Text style={styles.text}>Ready to Rentspace it?</Text>
+                        <Text style={styles.text}>Continue</Text>
                     </TouchableOpacity>
                 </View>
                 
@@ -35,21 +35,21 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         width:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     footer:{
         width:'100%',
         height:100,
-        backgroundColor:COLORS.bgLightGrey
     },
     footerEnv:{
-        backgroundColor:'white',
+        backgroundColor:COLORS.white,
         borderTopLeftRadius:20,
         borderTopRightRadius:20,
         height:'100%',
         elevation:5
     },
     text:{
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         textAlign:'center',
         opacity:0.8,
         fontWeight:'bold',

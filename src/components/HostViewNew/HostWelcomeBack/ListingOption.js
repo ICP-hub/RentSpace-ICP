@@ -10,20 +10,20 @@ const ListingOption = ({type,action}) => {
         {
             type=='newListing'?
             <>
-                <Icon name='add-home-work' size={30} color={COLORS.textLightGrey}/>
-                <Text style={styles.text}>Create a new listing</Text>
+                <Icon name='add-home-work' size={30} color={COLORS.black}/>
+                <Text style={styles.text}>Create a new space</Text>
             </>
             :
             <>
-                <Icon name='copy-all' size={30} color={COLORS.textLightGrey}/>
-                <Text style={styles.text}>Duplicate an existing listing</Text>
+                <Icon name='copy-all' size={30} color={COLORS.black}/>
+                <Text style={styles.text}>Duplicate an existing space</Text>
             </>
              
         }
        
         
       </View>
-      <Icon name='arrow-forward-ios' size={20} color={COLORS.textLightGrey}/>
+      <Icon name='arrow-forward-ios' size={20} color={COLORS.black}/>
     </TouchableOpacity>
   )
 }
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         opacity:0.8,
         marginLeft:'5%'
     }

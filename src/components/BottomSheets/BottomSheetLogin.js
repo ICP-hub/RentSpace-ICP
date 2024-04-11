@@ -88,11 +88,11 @@ const styles = StyleSheet.create({
         paddingVertical:5,
         marginTop:5,
         marginBottom:40,
-        color:"black"
+        color:COLORS.black
     },
     bottomSheet:{
         width:"100%",
-        backgroundColor:"white",
+        backgroundColor:COLORS.white,
         position:'absolute',
         display:'flex',
         flexDirection:'column',
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
         alignItems:"center",
         paddingVertical:10,
         borderWidth:1,
-        borderColor:COLORS.inputBorder,
+        borderColor:COLORS.mainPurple,
         borderRadius:10,
         marginBottom:10,
         
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     loginBtnText:{
         fontSize:SIZES.medium,
         width:"40%",
-        color:COLORS.inputBorder,
+        color:COLORS.black,
         fontWeight:'bold',
         textAlign:'left'
     },
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
         alignItems:"center",
         paddingVertical:10,
         borderWidth:1,
-        borderColor:COLORS.inputBorder,
+        borderColor:COLORS.mainPurple,
         borderRadius:10,
         marginBottom:10,
     }

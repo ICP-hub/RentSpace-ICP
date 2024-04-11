@@ -28,7 +28,7 @@ const ReorderPhotos = ({setHostModal,pos}) => {
                 </Text>
             </View>
             <TouchableOpacity style={styles.Addbtn}>
-            <Icon name='plus' size={20} color={COLORS.textLightGrey}/>
+            <Icon name='plus' size={20} color={COLORS.black}/>
                 <Text style={styles.AddbtnText}>Add more</Text>
             </TouchableOpacity>
         </View>
@@ -63,7 +63,7 @@ const ReorderPhotos = ({setHostModal,pos}) => {
         </View>
         <View style={styles.iconCont}>
             <TouchableOpacity style={styles.plusIcon}>
-                <Icon name='plus' size={30} color={COLORS.textLightGrey} style={styles.icon}/>
+                <Icon name='plus' size={30} color={COLORS.black} style={styles.icon}/>
             </TouchableOpacity>
         </View>
       </ScrollView>
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     subView:{
         display:'flex',
@@ -105,20 +106,20 @@ const styles = StyleSheet.create({
     heading:{
         fontWeight:'bold',
         fontSize:SIZES.medium,
-        color:'black',
+        color:COLORS.black,
         marginVertical:8
     },
     text:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
-        opacity:0.6,
-        marginBottom:10
+        color:COLORS.black,
+        marginBottom:10,
+        fontWeight:'300'
     },
     Addbtn:{
         display:'flex',
         flexDirection:'row',
         paddingVertical:10,
-        borderColor:COLORS.hostTitle,
+        borderColor:COLORS.mainPurple,
         borderWidth:1,
         borderRadius:25,
         alignItems:'center',
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
     AddbtnText:{
         fontWeight:'bold',
         fontSize:SIZES.small,
-        color:'black',
+        color:COLORS.black,
     },
     imgCont:{
         width:'80%',
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         borderStyle:'dashed',
         borderWidth:1,
-        borderColor:COLORS.textLightGrey,
+        borderColor:COLORS.black,
         width:50,
         height:50,
         borderRadius:30,

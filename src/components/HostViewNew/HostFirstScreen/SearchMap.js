@@ -9,11 +9,11 @@ const SearchMap = () => {
   return (
     <View style={styles.cont}>
       <View style={styles.searchBar}>
-        <Icon name="search1" size={30} style={{marginHorizontal:10}} color={COLORS.textLightGrey}/>
+        <Icon name="search1" size={30} style={{marginHorizontal:10}} color={COLORS.mainGrey}/>
         <TextInput 
             placeholder='Ludhiana • Entire place • 2 bedrooms ' 
             value={mapValue} 
-            placeholderTextColor={COLORS.textLightGrey}
+            placeholderTextColor={COLORS.black}
             onChangeText={(value)=>setMapValue(value)}
             style={styles.input}
         />
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
         width:'90%',
     },
     searchBar:{
-        borderColor:COLORS.mediumGrey,
+        borderColor:COLORS.black,
         borderWidth:1,
         display:'flex',
         width:'95%',
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     },
     input:{
         fontSize:SIZES.small,
-        color:COLORS.textLightGrey
+        color:COLORS.black
     }
 
 })

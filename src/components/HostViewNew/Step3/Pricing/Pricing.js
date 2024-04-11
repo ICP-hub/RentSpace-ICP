@@ -15,31 +15,31 @@ import GetWalletId from './GetWalletId'
 const methods=[
     {
       label:'ckEth',
-      icon:<Icon name='ethereum' color={COLORS.textLightGrey} size={30}/>
+      icon:<Icon name='ethereum' color={COLORS.black} size={30}/>
     },
     {
       label:'applePay',
-      icon:<Icon name='apple-pay' color={COLORS.textLightGrey} size={30}/>
+      icon:<Icon name='apple-pay' color={COLORS.black} size={30}/>
     },
     {
       label:'ICP',
-      icon:<Text style={{color:COLORS.textLightGrey,fontWeight:'bold',fontSize:SIZES.largeMed}}>ICP</Text>
+      icon:<Text style={{color:COLORS.black,fontWeight:'bold',fontSize:SIZES.largeMed}}>ICP</Text>
     },
     {
       label:'gPay',
-      icon:<Icon name='google-pay' color={COLORS.textLightGrey} size={26}/>
+      icon:<Icon name='google-pay' color={COLORS.black} size={26}/>
     },
     {
       label:'ckBTC',
-      icon:<Icon name='btc' color={COLORS.textLightGrey} size={25}/>
+      icon:<Icon name='btc' color={COLORS.black} size={25}/>
     },
     {
       label:'creditCard',
-      icon:<Icon name='credit-card' color={COLORS.textLightGrey} size={25}/>
+      icon:<Icon name='credit-card' color={COLORS.black} size={25}/>
     },
     {
       label:'SOL',
-      icon:<Text style={{color:COLORS.textLightGrey,fontWeight:'bold',fontSize:SIZES.largeMed}}>SOL</Text>
+      icon:<Text style={{color:COLORS.black,fontWeight:'bold',fontSize:SIZES.largeMed}}>SOL</Text>
     }
   ]
 
@@ -104,7 +104,7 @@ const Pricing = ({setHostModal,pos}) => {
                 value={`$${price}`}
                 onChangeText={(value)=>{setPrice(value.substring(1))}}
             />
-                <Icon2 name='pencil' size={12} color={COLORS.textLightGrey} />
+                <Icon2 name='pencil' size={12} color={COLORS.black} />
             </View>
         <View style={styles.pricingCard}>
             <View style={styles.pricingRow}>
@@ -152,17 +152,17 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     subView:{
         display:'flex',
         flexDirection:'column',
         alignItems:'flex-start',
-        // backgroundColor:'red',
         width:'100%'
     },
     title:{
         width:'85%',
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:5,
@@ -170,13 +170,14 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         width:'85%',
         marginLeft:'7.5%',
-        marginBottom:10
+        marginBottom:10,
+        fontWeight:'300'
     },
     bigText:{
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:5,
@@ -199,9 +200,8 @@ const styles = StyleSheet.create({
         borderWidth:1,
         borderRadius:10,
         paddingTop:15,
-        borderColor:COLORS.textLightGrey,
+        borderColor:COLORS.black,
         marginVertical:30,
-        // backgroundColor:'blue'
     },
     pricingRow:{
         display:'flex',
@@ -212,8 +212,8 @@ const styles = StyleSheet.create({
     },
     pricingNormal:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
-        opacity:0.5
+        color:COLORS.black,
+        fontWeight:'300'
     },
     pricingBold:{
         fontSize:SIZES.preMedium,
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     },
     DarkLine:{
         height:1,
-        backgroundColor:COLORS.textLightGrey,
+        backgroundColor:COLORS.black,
         width:'90%',
         marginBottom:15
     },
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         width:'40%',
-        borderColor:COLORS.textLightGrey,
+        borderColor:COLORS.black,
         borderWidth:1,
         marginLeft:'30%',
         borderRadius:10 

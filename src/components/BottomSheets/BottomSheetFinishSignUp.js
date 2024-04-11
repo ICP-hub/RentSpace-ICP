@@ -74,11 +74,11 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
           <Image source={images.cross} style={styles.crossImg} />
         </TouchableOpacity>
 
-        <Text style={styles.heading}>FINISHING SIGNING UP</Text>
+        <Text style={styles.heading}>FINISHING SIGN UP</Text>
       </View>
       <TextInput
         placeholder="First name"
-        placeholderTextColor={COLORS.inputBorder}
+        placeholderTextColor={COLORS.mainPurple}
         style={styles.firstName}
         value={fname}
         onChangeText={value => {
@@ -87,7 +87,7 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
       />
       <TextInput
         placeholder="Last name"
-        placeholderTextColor={COLORS.inputBorder}
+        placeholderTextColor={COLORS.mainPurple}
         style={styles.lastName}
         value={lname}
         onChangeText={value => {
@@ -111,7 +111,7 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
       </Text>
       <TextInput
         placeholder="Email"
-        placeholderTextColor={COLORS.inputBorder}
+        placeholderTextColor={COLORS.mainPurple}
         style={styles.simpleInput}
         value={email}
         onChangeText={value => {
@@ -179,50 +179,49 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: SIZES.preMedium,
     fontWeight: 'bold',
-    color: 'black',
+    color: COLORS.black,
   },
   simpleText: {
-    color: COLORS.textLightGrey,
+    color: COLORS.black,
     fontSize: SIZES.small,
     width: '80%',
+    opacity:0.4,
     marginBottom: 20,
   },
   simpleInput: {
-    borderColor: COLORS.inputBorder,
+    borderColor: COLORS.mainPurple,
     borderWidth: 1,
     borderRadius: 10,
     width: '80%',
     marginBottom: 20,
     height: 50,
     padding: 15,
-    color: COLORS.inputBorder,
+    color: COLORS.black,
     fontSize: SIZES.preMedium,
-    opacity: 0.5,
+    // opacity: 0.5,
   },
   dateDiv: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    borderColor: COLORS.inputBorder,
+    borderColor: COLORS.mainPurple,
     borderWidth: 1,
     borderRadius: 10,
     width: '100%',
     marginBottom: 20,
     height: 50,
     padding: 15,
-    color: COLORS.inputBorder,
+    color: COLORS.black,
     fontSize: SIZES.preMedium,
-    opacity: 0.5,
     minWidth: '80%',
   },
   dateDivText: {
-    color: COLORS.inputBorder,
+    color: COLORS.black,
     fontSize: SIZES.preMedium,
-    opacity: 0.5,
     marginRight: 'auto',
   },
   firstName: {
-    borderColor: COLORS.inputBorder,
+    borderColor: COLORS.mainPurple,
     borderWidth: 1,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
@@ -230,12 +229,11 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     height: 50,
     padding: 15,
-    color: COLORS.inputBorder,
+    color: COLORS.black,
     fontSize: SIZES.preMedium,
-    opacity: 0.5,
   },
   lastName: {
-    borderColor: COLORS.inputBorder,
+    borderColor: COLORS.mainPurple,
     borderWidth: 1,
     borderTopWidth: 0,
     borderBottomLeftRadius: 10,
@@ -244,9 +242,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     height: 50,
     padding: 15,
-    color: COLORS.inputBorder,
+    color: COLORS.black,
     fontSize: SIZES.preMedium,
-    opacity: 0.5,
   },
   linkText: {
     fontWeight: 'bold',
@@ -258,7 +255,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    backgroundColor: COLORS.inputBorder,
+    backgroundColor: COLORS.mainPurple,
     borderRadius: 10,
     height: 50,
     paddingHorizontal: 80,
@@ -275,6 +272,6 @@ const styles = StyleSheet.create({
     elevation: 2,
     marginTop: '60%',
     borderWidth: 1,
-    borderBlockColor: COLORS.inputBorder,
+    borderBlockColor: COLORS.mainPurple,
   },
 });

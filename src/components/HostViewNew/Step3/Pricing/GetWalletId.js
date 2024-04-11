@@ -54,14 +54,14 @@ const GetWalletId = ({phantomAccID,setPhantomAccID,setPhantomAccIDValidated,setW
             </View>
             <TextInput
                 placeholder="account ID"
-                placeholderTextColor={COLORS.textLightGrey}
+                placeholderTextColor={COLORS.black}
                 style={styles.input}
                 value={phantomAccID}
                 onChangeText={value => {
                     setPhantomAccID(value);
                 }}
             />
-            <Text style={[styles.requirement,{color:(formatValid?COLORS.black:"red")}]}>{respText}</Text>
+            <Text style={[styles.requirement,{color:COLORS.black}]}>{respText}</Text>
             <TouchableOpacity style={styles.btn} onPress={validateID}>
                 <Text style={styles.btnText}>Submit</Text>
             </TouchableOpacity>
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
       },
       alert:{
         width:'90%',
-        backgroundColor:'white',
+        backgroundColor:COLORS.white,
         elevation:10,
         borderRadius:12,
         display:'flex',
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
         alignItems:'center'
       },
       title:{
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.large,
         marginVertical:10,
         fontWeight:'500',
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'column',
         justifyContent:'center',
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.mainPurple,
         borderRadius:12,
         paddingVertical:15,
         alignItems:'center',
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
         left:'45%'
       },
       input:{
-        borderColor: COLORS.textLightGrey,
+        borderColor: COLORS.black,
         borderWidth: 1,
         borderRadius:10,
         width: '80%',

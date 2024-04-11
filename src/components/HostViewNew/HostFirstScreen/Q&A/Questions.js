@@ -30,7 +30,7 @@ const Questions = () => {
   const [Ques,setQues]=useState(-1)
   return (
     <View style={styles.cont}>
-      <Text style={styles.title}>Your questions, answered</Text>
+      <Text style={styles.title}>FAQ</Text>
       <View style={styles.hrLine}/>
       {
         questions.map((ques,index)=>{
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'flex-start',
     width:'100%',
-    backgroundColor:COLORS.bgLightGrey,
+    backgroundColor:COLORS.mainLightGrey,
     paddingTop:15,
     marginTop:30
   },
@@ -80,10 +80,10 @@ const styles = StyleSheet.create({
   hrLine:{
     height:1,
     borderBottomWidth:1,
-    borderBottomColor:COLORS.textLightGrey,
+    borderBottomColor:COLORS.black,
     width:"100%",
     marginTop:10,
     marginBottom:5,
-    opacity:0.2
+    opacity:0.1
   },
 })

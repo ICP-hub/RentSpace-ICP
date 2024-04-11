@@ -18,7 +18,7 @@ const cards=[
         img:images.hostMirror
     },
     {
-        title:"Finish up and Publish",
+        title:"Publish",
         text:"Our comprehensive verification system checks details such as name, address, government ID and more to confirm the identity of guests who book on Rentspace.",
         img:images.hostDoor
     }
@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         justifyContent:'space-between',
-        height:'100%'
+        height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     subView:{
         display:'flex',

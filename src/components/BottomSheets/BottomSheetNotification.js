@@ -28,8 +28,8 @@ const BottomSheetNotification = ({self}) => {
                 style={{ transform: [{ scaleX: 1.5 }, { scaleY: 1.3 }] }}
                 value={switchVal}
                 onValueChange={()=>{setSwitchVal(!switchVal)}}
-                thumbColor='bisque'
-                trackColor={{false:"red",true:COLORS.inputBorder}}
+                thumbColor={COLORS.white}
+                trackColor={{false:COLORS.mainGrey,true:COLORS.mainPurple}}
                 
             />
         </View>
@@ -72,21 +72,22 @@ const styles = StyleSheet.create({
         width:"80%",
         fontSize:SIZES.xLarge,
         fontWeight:'bold',
-        color:"black",
+        color:COLORS.black,
         marginBottom:25
     },
     simpleText:{
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontSize:SIZES.small,
         width:'80%',
-        marginBottom:20
+        marginBottom:20,
+        opacity:0.6
     },
     alignSwitchCont:{
         display:'flex',
         flexDirection:'column',
         alignItems:'flex-start',
         width:'100%',
-        backgroundColor:'black',
+        backgroundColor:COLORS.black,
         paddingHorizontal:20
     },
     switchCont:{
@@ -96,7 +97,6 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
         width:'80%',
         marginBottom:20
-        // backgroundColor:COLORS.inputBorder
     },
     switch:{
         height:20,
@@ -104,9 +104,10 @@ const styles = StyleSheet.create({
         
     },
     shortSimpleText:{
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontSize:SIZES.small,
-        maxWidth:'80%'
+        maxWidth:'80%',
+        opacity:0.6
     },
     btnCont:{
         display:'flex',
@@ -119,14 +120,14 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:COLORS.inputBorder,
+        backgroundColor:COLORS.mainPurple,
         borderRadius:10,
         height:50,
         paddingHorizontal:30,
         marginTop:10
     },
     notifyText:{
-        color:'white',
+        color:COLORS.white,
         fontWeight:'bold',
         fontSize:SIZES.medium
     },
@@ -136,16 +137,16 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:"white",
+        backgroundColor:COLORS.white,
         borderRadius:10,
         height:50,
         paddingHorizontal:30,
         marginTop:10,
         borderWidth:1,
-        borderColor:COLORS.inputBorder
+        borderColor:COLORS.mainPurple
     },
     skipText:{
-        color:COLORS.inputBorder,
+        color:COLORS.mainPurple,
         fontWeight:'bold',
         fontSize:SIZES.medium
     }

@@ -53,21 +53,21 @@ const FillAdress = ({self,setLocation,location}) => {
                 placeholderStyle={styles.textDropdownPlaceHolder}
                 selectedTextStyle={styles.textDropdown}
                 itemTextStyle={styles.textDropdownPlaceHolder}
-                iconColor={COLORS.hostTitle}
+                iconColor={COLORS.mainPurple}
             />
         <TextInput
             style={styles.firstInp}
             value={address?.streetAdd}
             onChangeText={value=>setAddress({...address,streetAdd:value})}
             placeholder='Street address'
-            placeholderTextColor={COLORS.textLightGrey}
+            placeholderTextColor={COLORS.black}
         />
         <TextInput
             style={styles.middleInputs}
             value={address?.building}
             onChangeText={value=>setAddress({...address,building:value})}
             placeholder='Apt, suite, bldg (optinal)'
-            placeholderTextColor={COLORS.textLightGrey}
+            placeholderTextColor={COLORS.black}
         />
         <TextInput
             style={styles.middleInputs}
@@ -77,21 +77,21 @@ const FillAdress = ({self,setLocation,location}) => {
 
             }}
             placeholder='City'
-            placeholderTextColor={COLORS.textLightGrey}
+            placeholderTextColor={COLORS.black}
         />
         <TextInput
             style={styles.middleInputs}
             value={address?.country}
             onChangeText={value=>setAddress({...address,country:value})}
             placeholder='Country'
-            placeholderTextColor={COLORS.textLightGrey}
+            placeholderTextColor={COLORS.black}
         />
         <TextInput
             style={styles.lastInp}
             value={address?.postalCode}
             onChangeText={value=>setAddress({...address,postalCode:value})}
             placeholder='Postcode'
-            placeholderTextColor={COLORS.textLightGrey}
+            placeholderTextColor={COLORS.black}
         />
       </View>
       <View style={(bottom)?[styles.btnCont,{bottom:0}]:[styles.btnCont,{bottom:-100}]}>
@@ -124,14 +124,14 @@ const styles = StyleSheet.create({
         height:'94%',
         position:'absolute',
         top:'6%',
-        backgroundColor:'white',
+        backgroundColor:COLORS.white,
         borderTopLeftRadius:12,
         borderTopRightRadius:12,
         elevation:10,
     },
     title:{
         width:'85%',
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:8,
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         justifyContent:'center',
         alignItems:'center',
-        backgroundColor:'white',
+        backgroundColor:COLORS.white,
         borderTopLeftRadius:10,
         borderTopRightRadius:10,
         elevation:10,

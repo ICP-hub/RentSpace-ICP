@@ -9,21 +9,22 @@ import ListingOption from './ListingOption'
 
 
 const HostWelcomeBack = ({setHostModal}) => {
+  
   return (
     <ScrollView contentContainerStyle={styles.view}>
       <BackBtn setHostModal={setHostModal}/>
-      <Text style={styles.title}>Welcome back! Lucy</Text>
-      <Text style={styles.subTitle}>Finish your listing</Text>
+      <Text style={styles.title}>Welcome back, {"Lucy"}!</Text>
+      <Text style={styles.subTitle}>Complete your space</Text>
       <View style={styles.listingCard}>
-        <Icon2 name='home' color={COLORS.hostTitle} size={40}/>
+        <Icon2 name='home' color={COLORS.mainPurple} size={40}/>
         <Text style={styles.listingCardText}>
-            Your listing started on 25 November 2023
+            Your space started on 25 November 2023
         </Text>
-        <Icon name='arrow-forward-ios' size={20} color={COLORS.textLightGrey}/>
+        <Icon name='arrow-forward-ios' size={20} color={COLORS.black}/>
       </View>
       <Line/>
       <View style={styles.listingFuncCont}>
-        <Text style={styles.listingFuncTitle}>Start a new listing</Text>
+        <Text style={styles.listingFuncTitle}>Start a new space</Text>
         <ListingOption type={'newListing'} action={()=>setHostModal(3)}/>
         <ListingOption type={'duplicateListing'} action={()=>setHostModal(3)}/>
       </View>
@@ -39,9 +40,11 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'flex-start',
         width:'100%',
+        backgroundColor:COLORS.mainGrey,
+        height:'100%'
     },
     title:{
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:24,
@@ -49,7 +52,7 @@ const styles = StyleSheet.create({
         marginLeft:'10%'
     },
     subTitle:{
-      color:COLORS.hostTitle,
+      color:COLORS.mainPurple,
       fontSize:SIZES.large,
       fontWeight:'800',
       marginBottom:14,
@@ -63,7 +66,7 @@ const styles = StyleSheet.create({
       marginLeft:'10%',
       justifyContent:'space-between',
       marginVertical:20,
-      borderColor:COLORS.hostTitle,
+      borderColor:COLORS.mainPurple,
       borderRadius:10,
       borderWidth:1,
       paddingHorizontal:10,
@@ -87,7 +90,7 @@ const styles = StyleSheet.create({
     listingFuncTitle:{
       fontSize:SIZES.medium,
       fontWeight:'bold',
-      color:'black',
+      color:COLORS.black,
       marginBottom:10
     }
 })

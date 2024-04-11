@@ -21,14 +21,15 @@ const styles = StyleSheet.create({
         paddingHorizontal:15,
         paddingVertical:10,
         borderWidth:1,
-        borderColor:COLORS.textLightGrey,
+        borderColor:COLORS.black,
         borderRadius:30,
         marginRight:20,
-        marginBottom:10
+        marginBottom:10,
+        opacity:0.6
     },
     text:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontWeight:'bold',
     },
     

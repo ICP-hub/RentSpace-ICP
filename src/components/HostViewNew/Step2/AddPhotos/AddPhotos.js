@@ -70,8 +70,8 @@ const AddPhotos = ({setHostModal,pos}) => {
       <Text style={styles.text}>
         Our comprehensive verification system checks details such as name, address, government ID and more to confirm the identity of guests who book on Rentspace.
       </Text>
-      <PhotoBtn text={"Add photos"} icon={<Icon name='plus' size={25} color={COLORS.textLightGrey}/>} onClick={chooseUserImg}/>
-      <PhotoBtn text={"Add a video"} icon={<Icon name='plus' size={25} color={COLORS.textLightGrey}/>} onClick={chooseVideo}/>
+      <PhotoBtn text={"Add photos"} icon={<Icon name='plus' size={25} color={COLORS.black}/>} onClick={chooseUserImg}/>
+      <PhotoBtn text={"Add a video"} icon={<Icon name='plus' size={25} color={COLORS.black}/>} onClick={chooseVideo}/>
       <BottomBtn setHostModal={setHostModal} pos={pos} step={2} back={2} nextFunc={checkEmpty}/>
     </View>
   )
@@ -86,10 +86,11 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     title:{
         width:'88%',
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:10,
@@ -97,9 +98,10 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         width:'85%',
         marginLeft:'7.5%',
-        marginBottom:10
+        marginBottom:10,
+        fontWeight:'300'
     }
 })

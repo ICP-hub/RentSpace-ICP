@@ -54,10 +54,11 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     title:{
         width:'85%',
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:10,
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     },
     textNormal:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontWeight:'300',
         lineHeight:20
     },
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     },
     textLink:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontWeight:'300',
         textDecorationLine:'underline'
     },
@@ -108,6 +109,6 @@ const styles = StyleSheet.create({
         backgroundColor:COLORS.black,
         width:'85%',
         marginBottom:15,
-        marginLeft:'7.5%'
+        marginLeft:'7.5%',
     },
 })

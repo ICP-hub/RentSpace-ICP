@@ -14,17 +14,17 @@ const ReviewListing = ({setHostModal,pos}) => {
 
     const todos=[
         {
-            icon:<Icon name='checklist' size={26} color={COLORS.textLightGrey} style={styles.icon}/>,
+            icon:<Icon name='checklist' size={26} color={COLORS.black} style={styles.icon}/>,
             title:'Confirm a few details and publish',
             text:"We'll let you know if you need to verify your identity or register with the local government."
         },
         {
-            icon:<Icon name='checklist' size={26} color={COLORS.textLightGrey} style={styles.icon}/>,
+            icon:<Icon name='checklist' size={26} color={COLORS.black} style={styles.icon}/>,
             title:"Set up your calendar",
             text:"Choose which dates your listing is available. It will be visible 24 hours after you publish"
         },
         {
-            icon:<Icon name='checklist' size={26} color={COLORS.textLightGrey} style={styles.icon}/>,
+            icon:<Icon name='checklist' size={26} color={COLORS.black} style={styles.icon}/>,
             title:"Adjust your settings",
             text:"Set house rules, select a cancellation policy, choose how guests book and more."
         }
@@ -32,7 +32,7 @@ const ReviewListing = ({setHostModal,pos}) => {
   return (
     <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal}/>  
-      <Text style={styles.title}>Review your listing</Text>
+      <Text style={styles.title}>Review your Space</Text>
       <Text style={styles.text}>Our comprehensive verification system checks details such as name, address.</Text>
       <View style={styles.imgCont}>
         <Image source={images.hotelImg2} style={styles.sideImg}/>
@@ -57,10 +57,11 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     title:{
         width:'85%',
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:5,
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         width:'85%',
         marginLeft:'7.5%',
         marginBottom:15

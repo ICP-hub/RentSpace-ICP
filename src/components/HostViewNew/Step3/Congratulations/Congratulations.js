@@ -122,7 +122,7 @@ const Congratulations = ({setHostModal,pos}) => {
             <Text style={styles.btnText}>Let’s get started</Text>
         </TouchableOpacity>
       </View>
-      <ActivityIndicator size={40} animating={loading} style={styles.loader}/>
+      <ActivityIndicator size={40} animating={loading} style={styles.loader} />
     </View>
   )
 }
@@ -136,10 +136,11 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     title:{
         width:'85%',
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:20,
@@ -147,10 +148,11 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         width:'85%',
         marginBottom:15,
-        marginLeft:'7.5%'
+        marginLeft:'7.5%',
+        opacity:0.7
     },
     subtitle:{
         fontSize:SIZES.xLarge,
@@ -170,7 +172,7 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         borderTopLeftRadius:20,
         borderTopRightRadius:20,
-        backgroundColor:'white',
+        backgroundColor:COLORS.white,
         elevation:15,
         width:'100%',
         paddingVertical:20,
@@ -183,13 +185,13 @@ const styles = StyleSheet.create({
         alignItems:'center',
         width:'90%',
         paddingVertical:15,
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.mainPurple,
         borderRadius:10
     },
     btnText:{
         fontSize:SIZES.medium,
         fontWeight:'bold',
-        color:'white'
+        color:COLORS.white
     },
     loader:{
       position:'absolute',

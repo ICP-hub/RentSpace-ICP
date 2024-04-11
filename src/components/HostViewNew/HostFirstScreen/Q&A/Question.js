@@ -29,12 +29,12 @@ const styles = StyleSheet.create({
   },
   question:{
     fontSize:SIZES.preMedium,
-    color:COLORS.textLightGrey,
+    color:COLORS.black,
     opacity:0.8,
     marginVertical:15
   },
   answer:{
-    backgroundColor:'white',
+    backgroundColor:COLORS.white,
     color:COLORS.black,
     fontSize:SIZES.preMedium,
     paddingVertical:20,

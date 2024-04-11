@@ -6,7 +6,7 @@ const BackBtn = ({setHostModal}) => {
   return (
     <>
       <TouchableOpacity style={styles.backIcon} onPress={()=>{setHostModal(0)}}>
-        <Icon2 name="angle-left" size={30} color={COLORS.textLightGrey}/>    
+        <Icon2 name="angle-left" size={30} color={COLORS.black}/>    
       </TouchableOpacity>
     </>
   )

@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     imageCont:{
         display:'flex',
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
     },
     title:{
         width:'88%',
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:15,
@@ -71,14 +72,14 @@ const styles = StyleSheet.create({
     subTitle:{
         fontSize:SIZES.largeMed,
         fontWeight:'bold',
-        color:'black',
+        color:COLORS.black,
         marginLeft:'7.5%',
         marginBottom:0
     },
     text:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         width:'85%',
-        marginLeft:'7.5%'
+        marginLeft:'7.5%',
     }
 })

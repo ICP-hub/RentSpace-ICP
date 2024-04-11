@@ -24,15 +24,14 @@ const styles = StyleSheet.create({
         paddingVertical:12,
         width:'30%',
         marginLeft:'7.5%',
-        backgroundColor:'white',
-        borderColor:COLORS.hostTitle,
+        borderColor:COLORS.mainPurple,
         borderWidth:1.2,
         marginTop:20,
         borderRadius:15,
         marginBottom:20
     },
     btnText:{
-        color:'black',
+        color:COLORS.black,
         fontWeight:'bold',
         fontSize:SIZES.preMedium
     }

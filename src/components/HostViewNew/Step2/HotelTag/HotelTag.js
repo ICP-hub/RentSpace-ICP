@@ -35,10 +35,11 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     title:{
         width:'85%',
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.prexxLarge,
         fontWeight:'500',
         marginBottom:10,
@@ -46,10 +47,11 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         width:'85%',
         marginLeft:'7.5%',
-        marginBottom:20
+        marginBottom:20,
+        fontWeight:'300'
     },
     tagCont:{
         width:'85%',

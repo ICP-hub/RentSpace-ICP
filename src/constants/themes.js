@@ -24,7 +24,7 @@
 const COLORS={
   text:"red",
   inputBorder:'#8280D4',
-  black:"#000000",
+  
   textLightGrey:"#666666",
   iconColourModal:'#8280D4',
   hrLine:"#F4F4F4",
@@ -40,7 +40,13 @@ const COLORS={
   bgLightGrey:'#F1F1F1',
   lightGreen:"#4CC900",
   pink:"#D377A6",
-  gold:'#FFD683'
+  gold:'#FFD683',
+  //new theme colors -->
+  white:"#FFFFFF",
+  mainGrey:"#E0E0E0",
+  mainPurple:"#8280D4",
+  black:"#000000",
+  mainLightGrey:"#F1F1F1"
 }
 const SIZES={
     xSmall: 10,

@@ -95,18 +95,20 @@ const styles = StyleSheet.create({
         marginBottom:10
     },
     simpleText:{
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontSize:SIZES.small,
         width:'80%',
-        marginBottom:20
+        marginBottom:20,
+        opacity:0.4
     },
     linkText:{
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontSize:SIZES.small,
         width:'80%',
         marginBottom:30,
         fontWeight:'bold',
         textDecorationLine:'underline',
+        opacity:0.6
         
     },
     agreeBtn:{
@@ -115,7 +117,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         width:'100%',
-        backgroundColor:COLORS.inputBorder,
+        backgroundColor:COLORS.mainPurple,
         borderRadius:10,
         height:50,
         paddingHorizontal:80,
@@ -132,16 +134,16 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         width:'100%',
-        backgroundColor:"white",
+        backgroundColor:COLORS.white,
         borderRadius:10,
         height:50,
         paddingHorizontal:125,
         marginTop:10,
         borderWidth:1,
-        borderColor:COLORS.inputBorder
+        borderColor:COLORS.mainPurple
     },
     declineText:{
-        color:COLORS.inputBorder,
+        color:COLORS.mainPurple,
         fontWeight:'bold',
         fontSize:SIZES.medium
     },

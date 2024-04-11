@@ -38,7 +38,7 @@ const HotelLocation = ({setHostModal,pos}) => {
       <Text style={styles.text}>Our comprehensive verification system checks details such as name, address.</Text>
       
       <TouchableOpacity style={styles.searchBar} onPress={()=>setShowLocationPicker(true)}>
-        <Icon name='location' size={20} color={COLORS.textLightGrey} style={styles.icon}/>
+        <Icon name='location' size={20} color={COLORS.black} style={styles.icon}/>
         <Text style={styles.inputText}>Enter Your Address</Text>
       </TouchableOpacity>
       <Image source={images.map2} style={styles.map}/>
@@ -62,10 +62,11 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     title:{
         width:'88%',
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:8,
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontWeight:"300",
         width:'75%',
         marginLeft:'8%',
@@ -99,14 +100,12 @@ const styles = StyleSheet.create({
     inputText:{
         fontSize:SIZES.small,
         fontWeight:'bold',
-        color:COLORS.textLightGrey,
-        opacity:0.4
+        color:COLORS.black,
+        opacity:0.7
     },
     map:{
         marginLeft:'6%',
         borderRadius:10,
-        // width:'85%',
-        // height:350,
         objectFit:'fill'
     }
 })

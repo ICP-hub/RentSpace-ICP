@@ -49,17 +49,17 @@ const PickLocation = ({setShowAddressForm,setShowLocationPicker,coords,setCoords
         <Text style={styles.headerText}>Enter your address</Text>
       </View>
       <View style={styles.searchBar}>
-      <Icon2 name='location' size={20} color={COLORS.textLightGrey} style={styles.icon}/>
+      <Icon2 name='location' size={20} color={COLORS.black} style={styles.icon}/>
       <TextInput 
         value={searchText} 
         placeholder='search your area' 
-        placeholderTextColor={COLORS.textLightGrey}
+        placeholderTextColor={COLORS.black}
         onChangeText={value=>setSearchText(value)}
         style={styles.inputText}
         />
       </View>
       <TouchableOpacity style={styles.locationButton} onPress={pickCurrentLocation}>
-        <Icon3 name='location-arrow' color={COLORS.textLightGrey} size={15}/>
+        <Icon3 name='location-arrow' color={COLORS.black} size={15}/>
         <Text style={styles.chooseLocation}>Use my current location</Text>
       </TouchableOpacity>  
       <View style={styles.mapCont}>
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         height:'94%',
         position:'absolute',
         top:'6%',
-        backgroundColor:'white',
+        backgroundColor:COLORS.white,
         borderTopLeftRadius:12,
         borderTopRightRadius:12,
         elevation:10
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
         marginTop:15
     },
     headerText:{
-        color:'black',
+        color:COLORS.black,
         fontSize:SIZES.preMedium,
         fontWeight:'bold'
     },
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
         top:'2%'
     },
     searchBar:{
-        borderColor:COLORS.mediumGrey,
+        borderColor:COLORS.black,
         borderWidth:1,
         display:'flex',
         width:'85%',
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
         marginVertical:15,
         alignItems:'center',
         borderRadius:40,
-        height:45
+        height:45,
     },
     icon:{
         marginLeft:15,
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     inputText:{
         fontSize:SIZES.small,
         fontWeight:'bold',
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         opacity:0.4,
         width:'70%'
     },
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
         width:'90%',
         height:450,
         borderRadius:12,
-        backgroundColor:'white',
+        backgroundColor:COLORS.white,
         elevation:10
     },
     map:{
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     },
     chooseLocation:{    
         fontWeight:'600',
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         textAlign:'left',
         textDecorationLine:'underline',
         fontSize:SIZES.preMedium-1,
@@ -182,11 +182,11 @@ const styles = StyleSheet.create({
         width:'90%',
         paddingVertical:12,
         borderRadius:12,
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.mainPurple,
         marginTop:15
     },
     btnText:{
-        color:'white',
+        color:COLORS.white,
         fontSize:SIZES.medium,
         fontWeight:'bold'
     }

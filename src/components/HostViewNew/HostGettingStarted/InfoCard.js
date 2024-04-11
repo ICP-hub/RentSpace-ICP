@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
-        
+        color:COLORS.black,
+        fontWeight:'300'
     },
     img:{
         alignSelf:'flex-start',

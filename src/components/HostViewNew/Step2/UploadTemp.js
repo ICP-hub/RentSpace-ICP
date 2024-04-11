@@ -27,10 +27,11 @@ const styles = StyleSheet.create({
         alignItems:'center',
         width:'100%',
         height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     title:{
         width:'88%',
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:30,
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
         textAlign:'center'
     },
     text:{
-        color:'black',
+        color:COLORS.black,
         fontSize:SIZES.preMedium,
         fontWeight:'bold'
     }

@@ -25,7 +25,7 @@ const DiscountCard = ({discount,setDiscount,item}) => {
         </Text>
       </View>
       <View style={styles.iconCont}>
-        <Icon name='check' size={16} color={COLORS.textLightGrey}/>
+        <Icon name='check' size={16} color={COLORS.black}/>
       </View>
     </TouchableOpacity>
   )
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         alignItems:'flex-start'
     },
     bigText:{
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
     },
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         fontWeight:'500',
     },
     smallText:{
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontSize:SIZES.preMedium,
         fontWeight:'300',
     },
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         justifyContent:'center',
-        borderColor:COLORS.textLightGrey,
+        borderColor:COLORS.black,
         borderWidth:1.5,
         borderRadius:4,
         padding:1,

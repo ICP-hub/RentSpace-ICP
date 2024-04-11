@@ -28,8 +28,10 @@ const BottomBtn = ({setHostModal,pos,step,back,nextFunc}) => {
     }
   return (
     <View style={(bottom)?[styles.bottomCont,{bottom:0}]:[styles.bottomCont,{bottom:-100}]}>
+        <View style={styles.progressBarCont}>
         <View style={styles.progressCont}>
             <View style={[styles.progress,{width:progress}]}/>
+        </View>
         </View>
         <View style={styles.btnCont}>
             <TouchableOpacity onPress={()=>{
@@ -60,20 +62,29 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         width:'100%',
-        backgroundColor:'white',
+        backgroundColor:COLORS.mainGrey,
         position:'absolute',
+    },
+    progressBarCont:{
+        width:'100%',
+        height:6,
+        backgroundColor:COLORS.mainGrey,
+        display:'flex',
+        flexDirection:'column',
+        justifyContent:'center',
+        alignItems:'center'
     },
     progressCont:{
         width:'85%',
         height:4,
         borderRadius:10,
-        backgroundColor:COLORS.hrLine,
+        backgroundColor:COLORS.mainLightGrey,
         display:'flex',
         flexDirection:'flex-start',
         
     },
     progress:{
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.mainPurple,
         height:'100%',
         borderRadius:10
     },
@@ -91,7 +102,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         width:'37%',
         paddingVertical:15,
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.mainPurple,
         borderRadius:10
     },
     btnText:{

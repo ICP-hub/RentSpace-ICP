@@ -29,22 +29,20 @@ const BottomNav = ({navigation}) => {
     
     
             <View style={[styles.viewNav,{bottom:0}]}>
-                {/* <Icon name="home" size={20} color={COLORS.inputBorder}/> */}
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{alert(message)}}>
-                <Icon name="filter" size={25} color={COLORS.inputBorder}/>
+                <Icon name="filter" size={25} color={COLORS.mainPurple}/>
                 </TouchableOpacity >
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{alert(message)}}>
-                    {/* <Image source={images.search}/> */}
-                    <Icon name="search1" size={25} color={COLORS.inputBorder}/>
+                    <Icon name="search1" size={25} color={COLORS.mainPurple}/>
                 </TouchableOpacity >
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('reels')}}>
-                <Icon name="hearto" size={25} color={COLORS.inputBorder}/>
+                <Icon name="hearto" size={25} color={COLORS.mainPurple}/>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{alert(message)}}>
-                <Icon2 name="comment" size={20} color={COLORS.inputBorder}/>
+                <Icon2 name="comment" size={20} color={COLORS.mainPurple}/>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('Launch')}}>
-                <Icon name="user" size={25} color={COLORS.inputBorder}/>
+                <Icon name="user" size={25} color={COLORS.mainPurple}/>
                 </TouchableOpacity>
             </View>
               
@@ -56,22 +54,20 @@ const BottomNav = ({navigation}) => {
     
     
             <View style={[styles.viewNav,{bottom:bottom}]}>
-                {/* <Icon name="home" size={20} color={COLORS.inputBorder}/> */}
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('Launch')}}>
-                <Icon name="filter" size={25} color={COLORS.inputBorder}/>
+                <Icon name="filter" size={25} color={COLORS.mainPurple}/>
                 </TouchableOpacity >
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('mapSearch')}}>
-                    {/* <Image source={images.search}/> */}
-                    <Icon name="search1" size={25} color={COLORS.inputBorder}/>
+                    <Icon name="search1" size={25} color={COLORS.mainPurple}/>
                 </TouchableOpacity >
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('reels')}}>
-                <Icon name="hearto" size={25} color={COLORS.inputBorder}/>
+                <Icon name="hearto" size={25} color={COLORS.mainPurple}/>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('UserChat')}}>
-                <Icon2 name="comment" size={20} color={COLORS.inputBorder}/>
+                <Icon2 name="comment" size={20} color={COLORS.mainPurple}/>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('profile')}}>
-                <Icon name="user" size={25} color={COLORS.inputBorder}/>
+                <Icon name="user" size={25} color={COLORS.mainPurple}/>
                 </TouchableOpacity>
             </View>
               
@@ -98,26 +94,20 @@ const styles=StyleSheet.create({
         height:25
     },
     viewNav:{
-        backgroundColor:"white",
+        backgroundColor:COLORS.white,
         width:"100%",
         display:'flex',
         justifyContent:"space-around",
         position:"absolute",
-        // bottom:0,
         paddingVertical:20,
         flexDirection:"row",
         borderTopRightRadius:20,
         borderTopLeftRadius:20,
         elevation:15,
-        shadowColor:'black',
+        shadowColor:COLORS.black,
         shadowOffset:{width:-2,height:4},
         shadowRadius:3,
-        // zIndex:10
     },
-    text:{
-        textAlign:"center",
-        color:"blue"
-    }
 })
 
 export default BottomNav

@@ -8,8 +8,8 @@ const Header = () => {
   return (
     <View style={styles.cont}>
     
-      <Text style={styles.title}>Rent space it.</Text>
-      <Text style={styles.subTitle}>You could earn</Text>
+      <Text style={styles.title}>You Could Earn</Text>
+      {/* <Text style={styles.subTitle}>You Could Earn</Text> */}
       <View style={styles.priceCont}>
         <Text style={styles.price}>${slider*38}</Text>
       </View>
@@ -22,8 +22,8 @@ const Header = () => {
             step={1}
             onValueChange={value=>setSlider(value)}
             minimumTrackTintColor={COLORS.hostTitle}
-            thumbTintColor={COLORS.hostTitle}
-            maximumTrackTintColor={COLORS.lighterGrey}
+            thumbTintColor={COLORS.mainPurple}
+            maximumTrackTintColor={COLORS.white}
             trackStyle={styles.sliderTrack}
         />
       <Text style={styles.lightLink}>Learn how we estimated your earnings</Text>
@@ -42,14 +42,14 @@ const styles = StyleSheet.create({
         width:'90%',
     },
     title:{
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:5,
         marginTop:10,
     },
     subTitle:{
-      color:COLORS.hostTitle,
+      color:COLORS.mainPurple,
       fontSize:SIZES.large,
       fontWeight:'800',
       marginBottom:14
@@ -59,20 +59,20 @@ const styles = StyleSheet.create({
       flexDirection:'column',
       alignItems:'center',
       justifyContent:'center',
-      borderColor:COLORS.hostTitle,
+      borderColor:COLORS.mainPurple,
       borderWidth:1,
       borderRadius:10,
       width:'40%',
       paddingVertical:10
     },
     price:{
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.xxLarge,
         fontWeight:'bold',
     },
     darkLink:{
       fontSize:SIZES.preMedium,
-      color:COLORS.textLightGrey,
+      color:COLORS.black,
       textDecorationLine:'underline',
       marginTop:20,
       marginBottom:5,
@@ -80,15 +80,14 @@ const styles = StyleSheet.create({
     },
     lightLink:{
       fontSize:SIZES.small,
-      color:COLORS.textLightGrey,
+      color:COLORS.black,
       textDecorationLine:'underline',
       marginTop:5,
       marginBottom:10,
       fontWeight:'bold',
-      opacity:0.5
     },
     slider:{
-        width:'90%'
+        width:'90%',
     },
     sliderTrack:{
 

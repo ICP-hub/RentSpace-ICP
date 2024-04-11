@@ -24,7 +24,7 @@ const Step1 = ({setHostModal,pos}) => {
         </View>
       </View>
       <Text style={styles.subTitle}>Step 1</Text>
-      <Text style={styles.title}>Tell us about your place</Text>
+      <Text style={styles.title}>Concisely highlight the key features and location of your property.</Text>
       <Text style={styles.text}>
       Our comprehensive verification system checks details such as name, address, government ID and more to confirm the identity of guests who book on Rentspace.
       </Text>
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     imageCont:{
         display:'flex',
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
     },
     title:{
         width:'88%',
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:15,
@@ -76,14 +77,15 @@ const styles = StyleSheet.create({
     subTitle:{
         fontSize:SIZES.largeMed,
         fontWeight:'bold',
-        color:'black',
+        color:COLORS.black,
         marginLeft:'7.5%',
         marginBottom:0
     },
     text:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         width:'85%',
-        marginLeft:'7.5%'
+        marginLeft:'7.5%',
+        fontWeight:'300'
     }
 })

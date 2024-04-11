@@ -51,10 +51,11 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     title:{
         width:'85%',
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:5,
@@ -62,16 +63,16 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         width:'85%',
         marginLeft:'7.5%',
-        marginBottom:15
+        marginBottom:15,
     },
     DarkLine:{
         height:1,
-        backgroundColor:COLORS.textLightGrey,
+        backgroundColor:COLORS.black,
         width:'85%',
         marginLeft:'7.5%',
-        marginTop:15
+        marginTop:15,
     },
 })

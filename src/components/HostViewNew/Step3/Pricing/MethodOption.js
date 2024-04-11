@@ -36,21 +36,21 @@ export default MethodOption
 const styles = StyleSheet.create({
     card:{
         width:'30%',
-        backgroundColor:'white',
+        backgroundColor:COLORS.mainGrey,
         height:50,
-        borderColor:COLORS.lighterGrey,
+        borderColor:COLORS.white,
         borderWidth:1.2,
         borderRadius:8,
         display:'flex',
         flexDirection:'column',
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
     },
     selectedCard:{
         width:'30%',
-        backgroundColor:'white',
+        backgroundColor:COLORS.white,
         height:50,
-        borderColor:COLORS.hostTitle,
+        borderColor:COLORS.mainPurple,
         // borderWidth:1.2,
         elevation:2,
         borderRadius:8,

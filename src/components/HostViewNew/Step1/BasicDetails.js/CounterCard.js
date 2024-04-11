@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     },
     title:{
         fontSize:SIZES.medium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontWeight:"800",
     },
     counterCont:{
@@ -108,13 +108,13 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         borderRadius:20,
-        borderColor:COLORS.textLightGrey,
+        borderColor:COLORS.black,
         borderWidth:1
     },
     btnText:{
         fontSize:SIZES.xLarge,
         fontWeight:'200',
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         width:22,
         height:22,
         marginBottom:10,

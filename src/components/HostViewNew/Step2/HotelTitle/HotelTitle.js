@@ -65,10 +65,11 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
+        backgroundColor:COLORS.mainGrey
     },
     title:{
         width:'85%',
-        color:COLORS.hostTitle,
+        color:COLORS.mainPurple,
         fontSize:SIZES.prexxLarge,
         fontWeight:'500',
         marginBottom:10,
@@ -76,17 +77,18 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         width:'85%',
         marginLeft:'7.5%',
-        marginBottom:20
+        marginBottom:20,
+        fontWeight:'300'
     },
     input:{
         height:150,
         width:'85%',
         marginLeft:'7.5%',
         borderWidth:1,
-        borderColor:COLORS.textLightGrey,
+        borderColor:COLORS.black,
         borderRadius:20,
         color:COLORS.black,
         textAlignVertical:'top',
@@ -94,11 +96,10 @@ const styles = StyleSheet.create({
         lineHeight:20,
         fontWeight:'bold',
         letterSpacing:2,
-        opacity:0.5
     },
     smallText:{
         fontSize:SIZES.xSmall,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         marginLeft:'8.5%',
     }
 })

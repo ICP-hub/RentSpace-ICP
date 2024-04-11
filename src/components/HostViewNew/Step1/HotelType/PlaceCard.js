@@ -7,16 +7,16 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 const PlaceCard = ({item,sr,hotelType,setHotelType}) => {
 
   const icons=[
-    <Icon2 name='home' size={32} color={(sr==hotelType)?COLORS.hostTitle:COLORS.textLightGrey} style={styles.icon}/>,
-    <Icon name='meeting-room' size={32} color={(sr==hotelType)?COLORS.hostTitle:COLORS.textLightGrey} style={styles.icon}/>,
-    <Icon name='groups' size={32} color={(sr==hotelType)?COLORS.hostTitle:COLORS.textLightGrey} style={styles.icon}/>
+    <Icon2 name='home' size={32} color={(sr==hotelType)?COLORS.mainPurple:COLORS.black} style={styles.icon}/>,
+    <Icon name='meeting-room' size={32} color={(sr==hotelType)?COLORS.mainPurple:COLORS.black} style={styles.icon}/>,
+    <Icon name='groups' size={32} color={(sr==hotelType)?COLORS.mainPurple:COLORS.black} style={styles.icon}/>
   ]
 
   return (
     <TouchableOpacity style={styles.card} onPress={()=>setHotelType(sr)}>
       <View style={styles.textCont}>
         <Text 
-        style={(sr==hotelType)?[styles.title,{color:COLORS.hostTitle}]:styles.title}
+        style={(sr==hotelType)?[styles.title,{color:COLORS.mainPurple}]:styles.title}
         >
             {item?.title}
         </Text>
@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize:SIZES.preMedium,
-        color:COLORS.textLightGrey,
-        fontWeight:"300"
+        color:COLORS.black,
+        fontWeight:"300",
     },
     icon:{
         marginTop:15

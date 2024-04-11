@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'flex-start',
         alignItems:'center',
-        borderColor:COLORS.hostTitle,
+        borderColor:COLORS.mainPurple,
         borderWidth:1.2,
         borderRadius:10,
         width:'77%',
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     text:{
         fontSize:SIZES.small,
         fontWeight:'bold',
-        color:'black',
+        color:COLORS.black,
         marginLeft:12
     },
 })

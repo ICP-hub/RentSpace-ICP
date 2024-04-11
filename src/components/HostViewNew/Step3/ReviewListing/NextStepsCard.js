@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         fontWeight:'bold'
     },
     text:{
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         fontSize:SIZES.preMedium-1,
         fontWeight:'300'
     },

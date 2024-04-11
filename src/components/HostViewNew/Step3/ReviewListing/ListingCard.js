@@ -24,7 +24,7 @@ const ListingCard = ({listing}) => {
         </View>
         <View style={styles.tagCont}>
             <Text style={styles.tag}>New{" "}</Text>
-            <Icon name='star' color='black' size={10}/>
+            <Icon name='star' color={COLORS.black} size={10}/>
         </View>
       </View>
     </View>
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         height:200,
         width:'65%',
         elevation:5,
-        backgroundColor:'white',
+        backgroundColor:COLORS.white,
         borderRadius:12
     },
     img:{
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     },
     normalText:{
         fontSize:SIZES.small,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         opacity:0.5
     },
     normalTextCrossed:{

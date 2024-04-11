@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
         alignItems:'center',
         borderWidth:1,
-        borderColor:COLORS.hostTitle,
+        borderColor:COLORS.mainPurple,
         borderRadius:15,
         paddingHorizontal:10,
         width:'80%',
@@ -49,14 +49,14 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize:SIZES.small,
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         marginBottom:10
     },
     radio:{
         width:25,
         height:25,
         borderWidth:1,
-        borderColor:COLORS.hostTitle,
+        borderColor:COLORS.mainPurple,
         borderRadius:20,
         display:'flex',
         flexDirection:'column',
@@ -66,13 +66,13 @@ const styles = StyleSheet.create({
     checked:{
         width:'65%',
         height:'65%',
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.mainPurple,
         borderRadius:20
     },
     unchecked:{
         width:'65%',
         height:'65%',
-        backgroundColor:'white',
+        backgroundColor:COLORS.mainGrey,
         borderRadius:20
     }
 })
