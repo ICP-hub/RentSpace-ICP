@@ -41,6 +41,7 @@ const COLORS={
   lightGreen:"#4CC900",
   pink:"#D377A6",
   gold:'#FFD683',
+  
   //new theme colors -->
   white:"#FFFFFF",
   mainGrey:"#E0E0E0",
