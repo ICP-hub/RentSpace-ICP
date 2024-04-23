@@ -93,10 +93,10 @@ const Main = ({navigation}) => {
     
   })
 
-  useEffect(()=>{
-    console.log("filter query'")
-    filterQuery()
-  },[query])
+  // useEffect(()=>{
+  //   console.log("filter query'")
+  //   filterQuery()
+  // },[query])
 
   //Refs for managing bottomsheets
   // const btmSheetLoginRef = useRef(null);

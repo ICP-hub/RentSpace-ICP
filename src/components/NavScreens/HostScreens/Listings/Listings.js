@@ -97,7 +97,7 @@ const Listings = ({navigation}) => {
           style={styles.list}
           contentContainerStyle={{paddingBottom: 80}}
           data={listings}
-          renderItem={item => <ListingCard item={item.item} />}
+          renderItem={item => <ListingCard navigation={navigation} item={item.item} />}
         />
       ) : (
         <Text style={{color: COLORS.black, marginTop: 50}}>

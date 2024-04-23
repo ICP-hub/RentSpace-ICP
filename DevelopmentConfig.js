@@ -26,7 +26,7 @@ export const ids = {
     : 'br5f7-7uaaa-aaaaa-qaaca-cai',
   ICPtokenCan: production
     ? 'ryjl3-tyaaa-aaaaa-aaaba-cai'
-    : 'bw4dl-smaaa-aaaaa-qaacq-cai',
+    : 'ryjl3-tyaaa-aaaaa-aaaba-cai', //bw4dl-smaaa-aaaaa-qaacq-cai
   ckBTCtokenCan: production
     ? 'mxzaz-hqaaa-aaaar-qaada-cai'
     : 'mxzaz-hqaaa-aaaar-qaada-cai',

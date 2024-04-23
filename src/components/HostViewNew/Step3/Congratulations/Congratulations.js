@@ -35,7 +35,7 @@ const Congratulations = ({setHostModal,pos}) => {
      })
     }
     useEffect(()=>{
-      ApiLogin()
+      // ApiLogin()
     },[])
     const ApiHotelFilters=async()=>{
       await axios.get(`${baseUrl}/api/v1/hotel/filters`).then((res)=>{
@@ -99,11 +99,29 @@ const Congratulations = ({setHostModal,pos}) => {
         // setHostModal(false)
       })
     }
+    const testLocalHotelCreation=async()=>{
+      console.log(listing,actors?.hotelActor.createHotel)
+      await actors.hotelActor?.createHotel({
+        hotelTitle:listing?.hotelTitle,
+        hotelDes:listing?.hotelDes,
+        hotelPrice:listing?.hotelPrice,
+        hotelLocation:listing?.hotelLocation.split('#')[2],
+        createdAt:'to be set',
+        hotelImage:"img"
+      }).then((res)=>{
+        console.log(res)
+        setLoading(false)
+      }).catch((err)=>{
+        setLoading(false)
+        console.log(err)
+      })
+    }
   const createHotel=async()=>{
     console.log('create hotel : ',listing)
     setLoading(true)
-      ApiHotelFilters()
-      ApiHotelCreate()
+      // ApiHotelFilters()
+      // ApiHotelCreate()
+      testLocalHotelCreation()
   }
   
   return (

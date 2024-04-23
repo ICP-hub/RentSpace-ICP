@@ -1,7 +1,9 @@
 import {
   Alert,
+  Button,
   Image,
   Modal,
+  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -11,6 +13,7 @@ import {React, useState} from 'react';
 // import { images } from '../../../../constants'
 import {COLORS, SIZES} from '../../../../constants/themes';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Update from '../UpdatePage/Update';
 
 const CustomAlert = ({showAlert, setShowAlert}) => {
   const handleYes = () => {
@@ -60,13 +63,17 @@ const ListingCard = ({item}) => {
   }
 
   const [showAlert, setShowAlert] = useState(false);
-
   const deleteListing = () => {
     setShowAlert(true);
   };
 
+  const [openUpdate, setOpenUpdate] = useState(false);
+  const openUpdateModal = () => {
+    setOpenUpdate(true);
+  };
+
   return (
-    <View style={styles.card}>
+    <Pressable style={styles.card} onPress={openUpdateModal}>
       <View style={styles.cardView}>
         <Text style={styles.status}>{status}</Text>
         <Image source={item.image} style={styles.img} />
@@ -82,7 +89,12 @@ const ListingCard = ({item}) => {
         </TouchableOpacity>
         <CustomAlert showAlert={showAlert} setShowAlert={setShowAlert} />
       </View>
-    </View>
+
+      <Modal visible={openUpdate} onRequestClose={() => setOpenUpdate(false)} >
+        <Update setOpenUpdate={setOpenUpdate} />
+      </Modal>
+
+    </Pressable>
   );
 };
 

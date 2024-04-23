@@ -62,7 +62,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
         }}>
             <Icon name='cross' size={20} color={COLORS.textLightGrey}/>
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=>setDate('')}>
+        <TouchableOpacity onPress={()=>setSelected('')}>
             <Text style={{color:'black',fontSize:SIZES.preMedium-1,fontWeight:'700'}}>CLEAR DATES</Text>
         </TouchableOpacity> 
       </View>

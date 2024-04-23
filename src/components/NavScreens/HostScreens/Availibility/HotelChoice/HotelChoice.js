@@ -2,6 +2,7 @@ import {
   Dimensions,
   Image,
   Modal,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -108,16 +109,15 @@ const HotelChoice = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.mainHeader}>
+      
         <Text style={styles.mainText}>Hotel Selection</Text>
-      </View>
 
       <ScrollView
         style={styles.listContainer}
-        contentContainerStyle={{width: Dimensions.get('window').width}}>
+        contentContainerStyle={styles.contentContainerStyle}>
         {hotels.map((hotel, index) => {
           return (
-            <TouchableOpacity
+            <Pressable
               style={styles.listItem}
               key={index}
               onPress={() => openCalendarModal({hotelName: hotel.name})}>
@@ -125,11 +125,14 @@ const HotelChoice = ({navigation}) => {
 
               <View style={{flex: 1, flexDirection: 'column'}}>
                 <Text style={styles.listItemText}>{hotel.name}</Text>
-                <Text>15 Mar - 28 Mar </Text>
+                <Text style={styles.listItemSubText}>Available On</Text>
               </View>
 
-              <Icon name="edit" size={20} color={COLORS.black} />
-            </TouchableOpacity>
+              <View style={styles.editContainer} >
+                <Icon name="edit" size={20} color={COLORS.black} />
+                <Text style={styles.dates}>15 Mar - 28 Mar </Text>
+              </View>
+            </Pressable>
           );
         })}
       </ScrollView>
@@ -159,19 +162,13 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 
-  mainHeader: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 20,
-    alignItems: 'center',
-    marginVertical: 20,
-  },
-
   mainText: {
     fontSize: 25,
     fontWeight: 'bold',
     width: '100%',
-    textAlign: 'center',
+    textAlign: 'left',
+    color: COLORS.black,
+    padding:20,
   },
 
   listContainer: {
@@ -179,6 +176,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 20,
     marginBottom: 70,
+  },
+
+  contentContainerStyle: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   listItem: {
@@ -191,19 +194,46 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 15,
     marginVertical: 10,
-    width: '90%',
-    marginLeft: '5%',
+    width: '95%',
   },
 
   listItemImage: {
-    height: 50,
-    width: 50,
-    borderRadius: 50,
+    height: 80,
+    width: 100,
+    borderRadius: 10,
   },
 
   listItemText: {
     fontSize: 20,
+    fontWeight: '500',
+    color: COLORS.black,
+    paddingLeft: 5,
+
+  },
+
+  listItemSubText: {
+    fontSize: 12,
+    color: COLORS.black,
+    padding: 5,
+    marginTop: 5,
+  },
+
+  editContainer:{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    justifyContent: 'baseline',
+    gap: 10,
+  },
+
+
+  dates: {
+    fontSize: 12,
     fontWeight: 'bold',
+    color: COLORS.white,
+    backgroundColor: COLORS.lightPurple,
+    padding: 5,
+    borderRadius: 25,
   },
 
   modalVisible: {

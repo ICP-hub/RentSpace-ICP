@@ -91,7 +91,8 @@ const BookHotelPage = ({navigation,queryHotels}) => {
   }
   const refresh=()=>{
     console.log(queryHotels)
-    getQueryHotelDetails()
+    // getQueryHotelDetails()
+    getReservations()
   }
 
     // useEffect(()=>{
@@ -108,9 +109,10 @@ const BookHotelPage = ({navigation,queryHotels}) => {
       console.log(firstRender.current)
       firstRender.current=false
     }else{
-      getQueryHotelDetails()
+      // getQueryHotelDetails(/)
+      getReservations()
     }
-   
+   ``
   },[queryHotels,principle])
 
   if(hotelsList?.length>0){
