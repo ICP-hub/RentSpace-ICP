@@ -19,10 +19,13 @@ module {
     public type HotelId = Text;
     public type HotelInfo = {
         hotelTitle : Text;
-        hotelDes : Text;
+        hotelDes : Text; 
         hotelImage : Text;
         hotelPrice : Text;
         hotelLocation : Text;
+        hotelAvailableFrom : Text;
+        hotelAvailableTill : Text;
         createdAt : Text;
+        updatedAt : ?Text;
     };
 };

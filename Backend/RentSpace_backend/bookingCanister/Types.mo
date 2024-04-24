@@ -23,10 +23,14 @@ module {
         date : Text;
         hotelId : Text;
         checkInDate : Text;
-        bookingDuration : Text;
         cancelStatus : Bool;
         refundStatus : Bool;
+        bookingDuration : BookingDuration;
         paymentStatus : Bool;
         paymentId : Text;
+    };
+    public type BookingDuration = {
+        bookedAt : Text;
+        bookedTill : Text;
     };
 };
