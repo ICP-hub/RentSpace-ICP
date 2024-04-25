@@ -25,14 +25,9 @@ const ReviewCard = ({item}) => {
           ))
         }
         
-        {/* <Icon name="star" size={16} color={COLORS.hostTitle} />
-        <Icon name="star" size={16} color={COLORS.hostTitle} />
-        <Icon name="star" size={16} color={COLORS.hostTitle} />
-        <Icon name="star" size={16} color={COLORS.hostTitle} /> */}
-        {/* <Text style={styles.dateText}>{months[month-1]+" "+year}</Text> */}
-        <Text style={styles.dateText}>{item?.title}</Text>
+        <Text style={styles.dateText}>{item?.date}</Text>
       </View>
-      <Text style={styles.normalText}>{item?.des}</Text>
+      <Text style={styles.normalText}>{item?.review}</Text>
     </View>
   )
 }
@@ -44,7 +39,7 @@ const styles = StyleSheet.create({
     display:'flex',
     flexDirection:'column',
     alignItems:'center',
-    backgroundColor:COLORS.white,
+    backgroundColor:'hsla(183, 66%, 60%, 1)',
     width:300,
     borderRadius:12,
     opacity:1,
@@ -57,7 +52,8 @@ const styles = StyleSheet.create({
     display:'flex',
     flexDirection:'row',
     width:'77%',
-    marginTop:10
+    marginTop:10,
+    marginLeft:30,
   },
   img:{
     width:40,
@@ -76,10 +72,12 @@ const styles = StyleSheet.create({
     opacity:0.9
   },
   normalText:{
-    width:'80%',
     color:COLORS.textLightGrey,
-    fontSize:SIZES.small,
+    fontSize:SIZES.preMedium-2,
     fontWeight:'300',
+    marginVertical:10,
+    width:'85%',
+    textAlign:'justify',
     
   }
 })

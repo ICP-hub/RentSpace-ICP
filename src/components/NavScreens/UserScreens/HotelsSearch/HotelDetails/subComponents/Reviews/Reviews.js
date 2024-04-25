@@ -1,110 +1,115 @@
-import { FlatList, Modal, StyleSheet, Text,  TouchableOpacity,  View } from 'react-native'
-import React, { useState } from 'react'
-import Icon from 'react-native-vector-icons/AntDesign'
-import { SIZES,COLORS } from '../../../../../../../constants/themes'
-import ReviewCard from './ReviewCard'
-import AllReviews from './AllReviews'
+import {
+  FlatList,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState} from 'react';
+import Icon from 'react-native-vector-icons/AntDesign';
+import {SIZES, COLORS} from '../../../../../../../constants/themes';
+import ReviewCard from './ReviewCard';
+import AllReviews from './AllReviews';
 
+const reviews = require('./sampleReviews.json');
 
-const reviewsSample=require('./sampleReviews.json')
+const itemSample = {
+  title: 'Great place',
+  des: 'Loved every second of the stay, great hospitality',
+  rating: 4,
+};
 
-const itemSample={
-    title:"Great place",
-    des:'Loved every second of the stay, great hospitality',
-    rating:4
-}
-
-const Reviews = ({reviews}) => {
-    console.log("reviews : ",reviews)
-  const [showReview,setShowReviews]=useState(false)
+const Reviews = () => {
+  // console.log("reviews : ",reviews)
+  const [showReview, setShowReviews] = useState(false);
   return (
     <View style={styles.reviewCont}>
-        <View style={styles.headerCont}>
-            <Icon name="star" size={16} color={COLORS.mainPurple} />
-            <Text style={styles.reviewText}>4.92 • 432 reviews</Text>
-        </View>
-        {
-            reviews.map((r)=>{console.log("review element : ",r)})
-        }
-        {
-            (reviews?.length==0)?
-            <Text style={styles.empty}>No Reviews to show yet</Text>
-            // <ReviewCard item={itemSample}/>
-            :
-            <FlatList contentContainerStyle={styles.list} data={reviews} renderItem={(item)=>(
-            <ReviewCard item={item?.item}/>
-            )} horizontal/>
-        }
-        {/* <FlatList contentContainerStyle={styles.list} data={reviewsSample} renderItem={(item)=>(
-            <ReviewCard item={item?.item}/>
-        )}
-        horizontal/> */}
-        
-        <TouchableOpacity style={styles.btn} onPress={()=>{
-            setShowReviews(!showReview)
-        }}>
-            <Text style={styles.btnText}>Show all reviews</Text>
-        </TouchableOpacity>
-        <Modal animationType='slide' visible={showReview}>
-            <AllReviews setShowReviews={setShowReviews} reviews={reviews}/>
-        </Modal>
-    </View>
-  )
-}
+      <View style={styles.headerCont}>
+        <Icon name="star" size={16} color={COLORS.mainPurple} />
+        <Text style={styles.reviewText}>4.92 • 432 reviews</Text>
+      </View>
+      {reviews.map(r => {
+        console.log('review element : ', r);
+      })}
+      {reviews?.length == 0 ? (
+        <Text style={styles.empty}>No Reviews to show yet</Text>
+      ) : (
+        // <ReviewCard item={itemSample}/>
+        <FlatList
+          contentContainerStyle={styles.list}
+          data={reviews}
+          renderItem={item => <ReviewCard item={item?.item} />}
+          horizontal
+        />
+      )}
 
-export default Reviews
+      <TouchableOpacity
+        style={styles.btn}
+        onPress={() => {
+          setShowReviews(!showReview);
+        }}>
+        <Text style={styles.btnText}>Show all reviews</Text>
+      </TouchableOpacity>
+      <Modal animationType="slide" visible={showReview}>
+        <AllReviews setShowReviews={setShowReviews} reviews={reviews} />
+      </Modal>
+    </View>
+  );
+};
+
+export default Reviews;
 
 const styles = StyleSheet.create({
-    reviewCont:{
-        backgroundColor:COLORS.mainGrey,
-        display:'flex',
-        flexDirection:'column',
-        width:'100%',
-        alignItems:'center',
-        marginBottom:20
-    },
-    headerCont:{
-        display:'flex',
-        flexDirection:'row',
-        justifyContent:'flex-start',
-        width:'80%',
-        
-    },
-    reviewText:{
-        fontWeight:'600',
-        color:COLORS.black,
-        fontSize:SIZES.preMedium,
-        marginLeft:10
-    },
-    btn:{
-        display:'flex',
-        flexDirection:'column',
-        alignItems:'center',
-        justifyContent:'center',
-        width:'80%',
-        backgroundColor:COLORS.mainGrey,
-        borderWidth:1.2,
-        borderColor:COLORS.mainPurple,
-        borderRadius:12,
-        paddingVertical:10,
-        zIndex:10
-    },
-    btnText:{
-        fontSize:SIZES.large,
-        color:COLORS.mainPurple,
-        fontWeight:'600',
-    },
-    list:{
-        paddingHorizontal:20,
-        paddingVertical:15
-    },
-    empty:{
-        width:'100%',
-        fontSize:SIZES.preMedium,
-        color:COLORS.black,
-        fontWeight:'300',
-        // backgroundColor:COLORS.black,
-        textAlign:'center',
-        marginVertical:40
-      }
-})
+  reviewCont: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 20,
+    paddingBottom: 20,
+  },
+  headerCont: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    width: '80%',
+  },
+  reviewText: {
+    fontWeight: '600',
+    color: COLORS.black,
+    fontSize: SIZES.preMedium,
+    marginLeft: 10,
+  },
+  btn: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '80%',
+    borderWidth: 1.2,
+    borderColor: COLORS.mainPurple,
+    borderRadius: 12,
+    paddingVertical: 10,
+    zIndex: 10,
+    marginBottom: 70,
+  },
+  btnText: {
+    fontSize: SIZES.large,
+    color: COLORS.mainPurple,
+    fontWeight: '600',
+  },
+  list: {
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+  },
+  empty: {
+    width: '100%',
+    fontSize: SIZES.preMedium,
+    color: COLORS.black,
+    fontWeight: '300',
+    // backgroundColor:COLORS.black,
+    textAlign: 'center',
+    marginVertical: 40,
+  },
+});

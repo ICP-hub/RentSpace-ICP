@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,Image, Touchable,TouchableOpacity,FlatList, Modal, Alert, Keyboard } from 'react-native'
+import { StyleSheet, Text, View,Image, Touchable,TouchableOpacity,FlatList, Modal, Alert, Keyboard, Pressable } from 'react-native'
 import React, { useEffect, useState,useRef } from 'react'
 import { images } from '../../../../constants'
 import { COLORS, SIZES } from '../../../../constants/themes'
@@ -9,8 +9,12 @@ import { setBookings } from '../../../../redux/UserBookings/actions'
 import ShowBookings from './HotelDetails/ShowBookings/ShowBookings'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Icon2 from 'react-native-vector-icons/Ionicons'
+import RateHawk from './RateHawk'
 
 const BookHotelPage = ({navigation,queryHotels}) => {
+
+
+  const [hotelProfile, setHotelProfile] = useState('false');
 
   const firstRender=useRef(true)
   const {user}=useSelector(state=>state.userReducer)
@@ -148,6 +152,14 @@ const BookHotelPage = ({navigation,queryHotels}) => {
     <>
     {/* <HotelCard name={sampleName} des={sampleDes} rating={4} /> */}
     <Text style={styles.empty}>Sorry nothing to show</Text>
+
+    {/* UI test for Rate Hawk  */}
+    <Pressable onPress={()=>setHotelProfile(true)}>
+      <Text style={{backgroundColor:'grey', maxWidth:'fit-content',marginHorizontal:50, color:'white', padding:10}}>Make it visible</Text>
+    </Pressable>
+    <Modal visible={hotelProfile}  onRequestClose={()=>setHotelProfile(false)}>
+      <RateHawk setHotelProfile={setHotelProfile}/>
+    </Modal>
     
     </>
   )
