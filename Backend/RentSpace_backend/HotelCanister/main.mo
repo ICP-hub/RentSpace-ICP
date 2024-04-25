@@ -1,5 +1,6 @@
 import Text "mo:base/Text";
 import List "mo:base/List";
+import Time "mo:base/Time";
 import Principal "mo:base/Principal";
 import Debug "mo:base/Debug";
 import Trie "mo:base/Trie";
@@ -7,12 +8,12 @@ import Types "Types";
 import Utils "../utils";
 
 shared ({caller = owner}) actor class () {
-    stable let userCanisterId = "wenzb-uyaaa-aaaan-qlwsa-cai";
+    // stable let userCanisterId = "wenzb-uyaaa-aaaan-qlwsa-cai";
+     stable let userCanisterId = "asrmz-lmaaa-aaaaa-qaaeq-cai";
     stable var hotelDataMap = Trie.empty<Types.HotelId, Types.HotelInfo>();
     stable var hotelIdMap = Trie.empty<Types.UserId, List.List<Types.HotelId>>();
     stable var hotelRegisterFrequencyMap = Trie.empty<Types.Year, Types.AnnualData>();
     stable var admin : [Types.AdminId] = [];
-
 
     let userActor = actor (userCanisterId) : actor {
         checkUserExist : query (Text) -> async Bool;
@@ -48,12 +49,15 @@ shared ({caller = owner}) actor class () {
             hotelImage = hotelData.hotelImage;
             hotelPrice = hotelData.hotelPrice;
             hotelLocation = hotelData.hotelLocation;
+            hotelAvailableFrom = hotelData.hotelAvailableFrom;
+            hotelAvailableTill = hotelData.hotelAvailableTill;
             createdAt = getTime;
+            updatedAt = null;
         };
-        // hotelDataMap.put(hotelId, hotelInfo);
         hotelDataMap := Trie.put(hotelDataMap, Utils.textKey hotelId, Text.equal, hotelInfo).0;
         hotelId;
     };
+
     public query func getHotel(hotelId : Types.HotelId) : async ?Types.HotelInfo {
         // hotelDataMap.get(hotelId);
         Trie.get(hotelDataMap, Utils.textKey hotelId, Text.equal);
@@ -86,11 +90,12 @@ shared ({caller = owner}) actor class () {
             hotelDes = hotelData.hotelDes;
             hotelImage = hotelData.hotelImage;
             hotelPrice = hotelData.hotelPrice;
-
+            hotelAvailableFrom = hotelData.hotelAvailableFrom;
+            hotelAvailableTill = hotelData.hotelAvailableTill;
             hotelLocation = hotelData.hotelLocation;
-            createdAt = getTime;
+            createdAt = hotelData.createdAt;
+            updatedAt = ?getTime;
         };
-        // hotelDataMap.replace(hotelId, hotelInfo);
         hotelDataMap := Trie.put(hotelDataMap, Utils.textKey hotelId, Text.equal, hotelInfo).0;
         ?hotelInfo;
     };
@@ -128,6 +133,22 @@ shared ({caller = owner}) actor class () {
         // Checking if the user exists in the user data map
         Utils.checkKeyExist<Types.HotelInfo>(hotelId, hotelDataMap);
     };
+    public query func getHotelAvailabilty(hotelId : Types.HotelId) : async ?{
+        hotelAvailableFrom : Text;
+        hotelAvailableTill : Text;
+    } {
+        let hotelInfo = Trie.get(hotelDataMap, Utils.textKey hotelId, Text.equal);
+        switch (hotelInfo) {
+            case (?value) {
+                return ?{
+                    hotelAvailableFrom = value.hotelAvailableFrom;
+                    hotelAvailableTill = value.hotelAvailableTill;
+                };
+            };
+            case (null) {null};
+        };
+
+    };
 
     public shared ({caller}) func addOwner(ownerIds : Text) : async Text {
         if (caller == owner) {
@@ -147,5 +168,9 @@ shared ({caller = owner}) actor class () {
             return ["No Access"];
         };
         return admin;
+    };
+    public query func getTime() : async Int {
+        let getTime = Time.now();
+        return getTime;
     };
 };

@@ -5,8 +5,12 @@ import Debug "mo:base/Debug";
 import Trie "mo:base/Trie";
 import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
+import Error "mo:base/Error";
+import Blob "mo:base/Blob";
+import Cycles "mo:base/ExperimentalCycles";
 import Icrc "icrc";
 
+import Api "./api";
 import Types "Types";
 import Utils "../utils";
 
@@ -16,16 +20,21 @@ shared ({caller = owner}) actor class () = this {
     stable var userXBookingIdMap = Trie.empty<Types.UserId, List.List<Types.BookingId>>();
     stable var hotelXBookingIdMap = Trie.empty<Types.HotelId, List.List<Types.BookingId>>();
     stable var bookingFrequencyMap = Trie.empty<Types.Year, Types.AnnualData>();
+    stable var hotelIdBookedDurations = Trie.empty<Types.HotelId, Trie.Trie<Types.BookingId, Types.BookingDuration>>();
 
     stable var admin : [Types.AdminId] = [];
     stable let icpLedger = "ryjl3-tyaaa-aaaaa-aaaba-cai";
     stable let ckbtcLedger = "r7inp-6aaaa-aaaaa-aaabq-cai";
     let hotelActor = actor (hotelCanisterId) : actor {
         checkHotelExist : shared query (Text) -> async Bool;
+        getHotelAvailabilty : query (Text) -> async ?{
+            hotelAvailableFrom : Text;
+            hotelAvailableTill : Text;
+        };
     };
 
     func validate(bookingData : Types.BookingInfo) {
-        if (Utils.validText(bookingData.userId, 70) == false or Utils.validText(bookingData.date, 20) == false or Utils.validText(bookingData.bookingDuration, 20) == false or Utils.validText(bookingData.paymentId, 20) == false) {
+        if (Utils.validText(bookingData.userId, 70) == false or Utils.validText(bookingData.date, 20) == false or Utils.validText(bookingData.paymentId, 20) == false) {
             Debug.trap("Error! Text overflow");
         };
     };
@@ -34,6 +43,7 @@ shared ({caller = owner}) actor class () = this {
         let array = Iter.toArray(Text.split(hotelId, #char '#'));
         array[0];
     };
+
     func createBookingId(userIdentity : Text, hotelId : Text) : async Text {
         let uuid = await Utils.getUuid();
         let date = Utils.getDate();
@@ -43,6 +53,44 @@ shared ({caller = owner}) actor class () = this {
         let hotelIdData = Utils.putIdInList<Types.BookingId>(hotelId, bookingId, hotelXBookingIdMap);
         hotelXBookingIdMap := hotelIdData.updatedTrie;
         hotelIdData.value;
+    };
+    func bookingDuration(hotelId : Types.HotelId, bookingId : Text, bookingDuration : Types.BookingDuration) : async () {
+        let {hotelAvailableFrom; hotelAvailableTill} = switch (await hotelActor.getHotelAvailabilty(hotelId)) {
+            case (?value) {value};
+            case (null) {throw Error.reject("No Hotel Found")};
+        };
+
+        if (bookingDuration.bookedAt < hotelAvailableFrom or hotelAvailableTill < bookingDuration.bookedTill) {
+            throw Error.reject("Invalid Time Durations");
+        };
+
+        let hotelBookingDurationData = Trie.get(hotelIdBookedDurations, Utils.textKey hotelId, Text.equal);
+        switch (hotelBookingDurationData) {
+            case (?value) {
+                let hotelIdDurationData = value;
+                switch (Trie.get(hotelIdDurationData, Utils.textKey hotelId, Text.equal)) {
+                    case (null) {
+                        let durationData = Trie.toArray<Types.BookingId, Types.BookingDuration, Types.BookingDuration>(value, func(k, v) = v);
+                        for (item in durationData.vals()) {
+                            if (item.bookedAt < bookingDuration.bookedAt and bookingDuration.bookedTill < item.bookedTill) {
+                                throw Error.reject("Already Booked Hotel At this time duration");
+                            };
+                        };
+                        let bookingDurationTrie = Trie.put(hotelIdDurationData, Utils.textKey bookingId, Text.equal, bookingDuration).0;
+                        hotelIdBookedDurations := Trie.put(hotelIdBookedDurations, Utils.textKey hotelId, Text.equal, bookingDurationTrie).0;
+                    };
+                    case (?v) {
+                        throw Error.reject("already added time durations");
+                    };
+                };
+            };
+            case (null) {
+                let emptyBookingDuration = Trie.empty<Types.BookingId, Types.BookingDuration>();
+                let bookingDurationTrie = Trie.put(emptyBookingDuration, Utils.textKey bookingId, Text.equal, bookingDuration).0;
+                hotelIdBookedDurations := Trie.put(hotelIdBookedDurations, Utils.textKey hotelId, Text.equal, bookingDurationTrie).0;
+            };
+        };
+
     };
 
     public shared ({caller = user}) func bookHotel(hotelId : Types.HotelId, bookingInfo : Types.BookingInfo, paymentOption : {#icp; #ckbtc; #solana : Text}, amount : Nat) : async Text {
@@ -77,6 +125,7 @@ shared ({caller = owner}) actor class () = this {
                             paymentStatus = true;
                             paymentId = Nat.toText(value);
                         };
+                        await bookingDuration(hotelId, bookingId, bookingInfo.bookingDuration);
                         bookingDataMap := Trie.put(bookingDataMap, Utils.textKey bookingId, Text.equal, bookingData).0;
                         return " Sucessfully booked hotel";
                     };
@@ -99,6 +148,7 @@ shared ({caller = owner}) actor class () = this {
                             paymentStatus = true;
                             paymentId = Nat.toText(value);
                         };
+                        await bookingDuration(hotelId, bookingId, bookingInfo.bookingDuration);
                         bookingDataMap := Trie.put(bookingDataMap, Utils.textKey bookingId, Text.equal, bookingData).0;
                         return " Sucessfully booked hotel";
                     };
@@ -173,6 +223,14 @@ shared ({caller = owner}) actor class () = this {
 
         bookingDataMap := Trie.put(bookingDataMap, Utils.textKey bookingId, Text.equal, bookingData).0;
     };
+    public func hotelBookingDuration(hotelId : Types.HotelId) : async [(Types.BookingId, Types.BookingDuration)] {
+        let durationData : Trie.Trie<Types.BookingId, Types.BookingDuration> = switch (Trie.get(hotelIdBookedDurations, Utils.textKey hotelId, Text.equal)) {
+            case (null) {throw Error.reject("Hotel has not been booked by any")};
+            case (?v) {v};
+        };
+        let duration : [(Types.BookingId, Types.BookingDuration)] = Trie.toArray<Types.BookingId, Types.BookingDuration, (Types.BookingId, Types.BookingDuration)>(durationData, func(k, v) = (k, v));
+        return duration;
+    };
 
     public shared query func getNoOfPages(chunkSize : Nat) : async Nat {
         let data : [(Types.BookingId, Types.BookingInfo)] = Trie.toArray<Types.BookingId, Types.BookingInfo, (Types.BookingId, Types.BookingInfo)>(bookingDataMap, func(k, v) = (k, v));
@@ -228,6 +286,64 @@ shared ({caller = owner}) actor class () = this {
             created_at_time = null;
         });
 
+    };
+    public func get_icp_usd_exchange() : async Text {
+
+        let ic : Api.IC = actor ("aaaaa-aa");
+
+        let url = "https://api.coinbase.com/v2/exchange-rates?currency=USD";
+
+        let request_headers = [
+            {name = "Accept"; value = "*/*"},
+            {name = "User-Agent"; value = url},
+        ];
+        let transform_context : Api.TransformContext = {
+            function = transform;
+            context = Blob.fromArray([]);
+        };
+
+        let http_request : Api.HttpRequestArgs = {
+            url = url;
+            max_response_bytes = null; //optional for request
+            headers = request_headers;
+            body = null; //optional for request
+            method = #get;
+            transform = ?transform_context;
+        };
+
+        Cycles.add<system>(20_949_972_000);
+
+        let http_response : Api.HttpResponsePayload = await ic.http_request(http_request);
+
+        let response_body : Blob = Blob.fromArray(http_response.body);
+        let decoded_text : Text = switch (Text.decodeUtf8(response_body)) {
+            case (null) {"No value returned"};
+            case (?y) {y};
+        };
+
+        decoded_text;
+    };
+
+    public query func transform(raw : Api.TransformArgs) : async Api.CanisterHttpResponsePayload {
+        let transformed : Api.CanisterHttpResponsePayload = {
+            status = raw.response.status;
+            body = raw.response.body;
+            headers = [
+                {
+                    name = "Content-Security-Policy";
+                    value = "default-src 'self'";
+                },
+                {name = "Referrer-Policy"; value = "strict-origin"},
+                {name = "Permissions-Policy"; value = "geolocation=(self)"},
+                {
+                    name = "Strict-Transport-Security";
+                    value = "max-age=63072000";
+                },
+                {name = "X-Frame-Options"; value = "DENY"},
+                {name = "X-Content-Type-Options"; value = "nosniff"},
+            ];
+        };
+        transformed;
     };
 
 };
