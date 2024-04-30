@@ -3,14 +3,14 @@ import { Actor, HttpAgent } from "@dfinity/agent";
 // Imports and re-exports candid interface
 import { idlFactory } from "./supportChat.did.js";
 export { idlFactory } from "./supportChat.did.js";
-import { ids,host } from "../../../DevelopmentConfig.js";
 
 /* CANISTER_ID is replaced by webpack based on node environment
  * Note: canister environment variable will be standardized as
  * process.env.CANISTER_ID_<CANISTER_NAME_UPPERCASE>
  * beginning in dfx 0.15.0
  */
-export const canisterId =ids.supportCan
+export const canisterId =
+  process.env.CANISTER_ID_SUPPORTCHAT;
 
 export const createActor = (canisterId, options = {}) => {
   const agent = options.agent || new HttpAgent({ ...options.agentOptions });
@@ -35,25 +35,8 @@ export const createActor = (canisterId, options = {}) => {
   return Actor.createActor(idlFactory, {
     agent,
     canisterId,
-    blsVerify:()=>true,
     ...options.actorOptions,
   });
 };
 
-export const supportChat = createActor(canisterId, {
-    agentOptions: {
-      fetchOptions: {
-        reactNative: {
-          __nativeResponseType: 'base64',
-        },
-      },
-      callOptions: {
-        reactNative: {
-          textStreaming: true,
-        },
-      },
-      blsVerify: () => true,
-      host: host,
-    },
-  });
-
+export const supportChat = canisterId ? createActor(canisterId) : undefined;

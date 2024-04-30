@@ -9,7 +9,7 @@ import Utils "../utils";
 
 shared ({caller = owner}) actor class () {
     // stable let userCanisterId = "wenzb-uyaaa-aaaan-qlwsa-cai";
-     stable let userCanisterId = "asrmz-lmaaa-aaaaa-qaaeq-cai";
+     let userCanisterId = "be2us-64aaa-aaaaa-qaabq-cai";
     stable var hotelDataMap = Trie.empty<Types.HotelId, Types.HotelInfo>();
     stable var hotelIdMap = Trie.empty<Types.UserId, List.List<Types.HotelId>>();
     stable var hotelRegisterFrequencyMap = Trie.empty<Types.Year, Types.AnnualData>();
@@ -104,9 +104,9 @@ shared ({caller = owner}) actor class () {
     };
 
     public shared ({caller}) func deleteHotel(hotelId : Types.HotelId) : async Text {
-        if (Utils.getOwnerFromArray(caller, admin) == false) {
-            Debug.trap("No Access");
-        };
+        // if (Utils.getOwnerFromArray(caller, admin) == false) {
+        //     Debug.trap("No Access");
+        // };
         // hotelDataMap.delete(hotelId);
         hotelDataMap := Trie.remove(hotelDataMap, Utils.textKey hotelId, Text.equal).0;
         "Suceessfully Deleted the hotel";

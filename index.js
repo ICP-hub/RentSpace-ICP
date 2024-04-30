@@ -67,12 +67,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {host, ids} from './DevelopmentConfig';
 import MainProfile from './src/components/NavScreens/UserScreens/Profile/MainProfile/MainProfile';
 import HotelChoice from './src/components/NavScreens/HostScreens/Availibility/HotelChoice/HotelChoice';
+import * as firebase from '@react-native-firebase/app'
+import '@react-native-firebase/storage'
 
 const Stack = createNativeStackNavigator();
 
 const linking = {
   prefixes: ['rentspace://'],
 };
+
+// firebase.
 
 PushNotification.configure({
   // (optional) Called when Token is generated (iOS and Android)
@@ -333,7 +337,7 @@ const RootComponent: React.FC = () => {
     // alert('inside handle deeplink')
     try {
       // alert('inside handle deeplink try')
-      let actor = backend;
+      // let actor = backend;
       const deepLink = event.url;
       const urlObject = new URL(deepLink);
       const delegation = urlObject.searchParams.get('delegation');
@@ -429,9 +433,9 @@ const RootComponent: React.FC = () => {
       await getSignObject().then(async () => {
         console.log('getting sign obj : ', signObj);
         store.dispatch(setAuthData(signObj));
-        // const baseUrl="http://localhost:5000"
+        const baseUrl="http://localhost:5000"
         // alert('implementing chat register')
-        const baseUrl = 'https://rentspace.kaifoundry.com';
+        // const baseUrl = 'https://rentspace.kaifoundry.com';
         await axios
           .post(
             `${baseUrl}/api/v1/register/user`,
@@ -452,7 +456,7 @@ const RootComponent: React.FC = () => {
             if (err?.response?.data?.error == 'User already exists') {
               console.log('chat user already exists!');
             } else {
-              console.log('err resp : ', err?.response?.data?.error);
+              console.log('err resp : ', err);
             }
           });
       });

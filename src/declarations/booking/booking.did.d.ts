@@ -17,6 +17,7 @@ export interface AnnualData {
   'july' : bigint,
   'june' : bigint,
 }
+export interface BookingDuration { 'bookedAt' : string, 'bookedTill' : string }
 export type BookingId = string;
 export interface BookingInfo {
   'paymentStatus' : boolean,
@@ -25,28 +26,37 @@ export interface BookingInfo {
   'date' : string,
   'hotelId' : string,
   'checkInDate' : string,
-  'bookingDuration' : string,
+  'bookingDuration' : BookingDuration,
   'paymentId' : string,
   'cancelStatus' : boolean,
 }
+export interface CanisterHttpResponsePayload {
+  'status' : bigint,
+  'body' : Uint8Array | number[],
+  'headers' : Array<HttpHeader>,
+}
 export type HotelId = string;
-export type Result_2 = { 'Ok' : bigint } |
-  { 'Err' : TransferFromError };
-export type TransferFromError = {
-    'GenericError' : { 'message' : string, 'error_code' : bigint }
-  } |
-  { 'TemporarilyUnavailable' : null } |
-  { 'InsufficientAllowance' : { 'allowance' : bigint } } |
-  { 'BadBurn' : { 'min_burn_amount' : bigint } } |
-  { 'Duplicate' : { 'duplicate_of' : bigint } } |
-  { 'BadFee' : { 'expected_fee' : bigint } } |
-  { 'CreatedInFuture' : { 'ledger_time' : bigint } } |
-  { 'TooOld' : null } |
-  { 'InsufficientFunds' : { 'balance' : bigint } };
-export interface anon_class_13_1 {
+export interface HttpHeader { 'value' : string, 'name' : string }
+export interface HttpResponsePayload {
+  'status' : bigint,
+  'body' : Uint8Array | number[],
+  'headers' : Array<HttpHeader>,
+}
+export interface TransformArgs {
+  'context' : Uint8Array | number[],
+  'response' : HttpResponsePayload,
+}
+export interface _anon_class_17_1 {
   'addOwner' : ActorMethod<[AdminId], string>,
   'bookHotel' : ActorMethod<
-    [HotelId, BookingInfo, { 'icp' : null } | { 'ckbtc' : null }, bigint],
+    [
+      HotelId,
+      BookingInfo,
+      { 'icp' : null } |
+        { 'solana' : string } |
+        { 'ckbtc' : null },
+      bigint,
+    ],
     string
   >,
   'getAllAdmin' : ActorMethod<[], Array<AdminId>>,
@@ -54,18 +64,20 @@ export interface anon_class_13_1 {
   'getBookingFrequencyInYear' : ActorMethod<[string], [] | [AnnualData]>,
   'getBookingId' : ActorMethod<[], Array<string>>,
   'getNoOfPages' : ActorMethod<[bigint], bigint>,
+  'get_icp_usd_exchange' : ActorMethod<[], string>,
   'gethotelXBookingId' : ActorMethod<[string], Array<string>>,
-  'icrc2_transferFrom' : ActorMethod<
-    [{ 'icp' : null } | { 'ckbtc' : null }, Principal, Principal, bigint],
-    Result_2
+  'hotelBookingDuration' : ActorMethod<
+    [HotelId],
+    Array<[BookingId, BookingDuration]>
   >,
   'scanBooking' : ActorMethod<
     [bigint, bigint],
     Array<[BookingId, BookingInfo]>
   >,
+  'transform' : ActorMethod<[TransformArgs], CanisterHttpResponsePayload>,
   'updateBookingStatus' : ActorMethod<[string, BookingInfo], undefined>,
   'whoami' : ActorMethod<[], string>,
 }
-export interface _SERVICE extends anon_class_13_1 {}
+export interface _SERVICE extends _anon_class_17_1 {}
 export declare const idlFactory: IDL.InterfaceFactory;
-export declare const init: ({ IDL }: { IDL: IDL }) => IDL.Type[];
+export declare const init: (args: { IDL: typeof IDL }) => IDL.Type[];

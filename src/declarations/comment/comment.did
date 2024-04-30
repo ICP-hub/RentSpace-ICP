@@ -1,4 +1,4 @@
-type anon_class_13_1 = 
+type _anon_class_13_1 = 
  service {
    addOwner: (AdminId) -> (text);
    createComment: (text, text, text) -> (Result);
@@ -46,4 +46,4 @@ type Comment =
    userId: text;
  };
 type AdminId = text;
-service : () -> anon_class_13_1
+service : () -> _anon_class_13_1

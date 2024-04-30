@@ -31,7 +31,9 @@ const Listings = ({navigation}) => {
     setHotelList([]);
     for (let i = 0; i < hotels?.length; i++) {
       await actors.hotelActor?.getHotel(hotels[i]).then(res => {
-        setHotelList(hotelList => [...hotelList, res[0]]);
+        let newEL={...res[0],id:hotels[i]}
+        setHotelList(hotelList => [...hotelList,newEL]);
+        console.log(res[0])
       });
     }
   }
@@ -92,11 +94,11 @@ const Listings = ({navigation}) => {
         </View>
       </View>
 
-      {listings.length > 0 ? (
+      {hotelList.length > 0 ? (
         <FlatList
           style={styles.list}
           contentContainerStyle={{paddingBottom: 80}}
-          data={listings}
+          data={hotelList}
           renderItem={item => <ListingCard navigation={navigation} item={item.item} />}
         />
       ) : (

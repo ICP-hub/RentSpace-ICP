@@ -14,7 +14,7 @@ import {Calendar} from 'react-native-calendars';
 import Icon from 'react-native-vector-icons/Feather';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 
-const CalendarScreen = ({hotelName, setModalVisible}) => {
+const CalendarScreen = ({item, setModalVisible}) => {
   let today = new Date().toJSON().slice(0, 10);
 
   const [startDate, setStartDate] = useState({
@@ -58,7 +58,7 @@ const CalendarScreen = ({hotelName, setModalVisible}) => {
           style={styles.headerImage}
           source={require('../../../../../assets/images/hotelDemo.jpg')}
         />
-        <Text style={styles.headerText}>{hotelName}</Text>
+        <Text style={styles.headerText}>{item?.hotelTitle}</Text>
         <View style={styles.headerIcon}>
           <Icon name="calendar" size={20} color={COLORS.black} />
           <Icon2 name="settings-outline" size={20} color={COLORS.black} />

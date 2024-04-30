@@ -1,6 +1,10 @@
 export const idlFactory = ({ IDL }) => {
   const AdminId = IDL.Text;
   const HotelId = IDL.Text;
+  const BookingDuration = IDL.Record({
+    'bookedAt' : IDL.Text,
+    'bookedTill' : IDL.Text,
+  });
   const BookingInfo = IDL.Record({
     'paymentStatus' : IDL.Bool,
     'refundStatus' : IDL.Bool,
@@ -8,7 +12,7 @@ export const idlFactory = ({ IDL }) => {
     'date' : IDL.Text,
     'hotelId' : IDL.Text,
     'checkInDate' : IDL.Text,
-    'bookingDuration' : IDL.Text,
+    'bookingDuration' : BookingDuration,
     'paymentId' : IDL.Text,
     'cancelStatus' : IDL.Bool,
   });
@@ -26,29 +30,33 @@ export const idlFactory = ({ IDL }) => {
     'july' : IDL.Nat,
     'june' : IDL.Nat,
   });
-  const TransferFromError = IDL.Variant({
-    'GenericError' : IDL.Record({
-      'message' : IDL.Text,
-      'error_code' : IDL.Nat,
-    }),
-    'TemporarilyUnavailable' : IDL.Null,
-    'InsufficientAllowance' : IDL.Record({ 'allowance' : IDL.Nat }),
-    'BadBurn' : IDL.Record({ 'min_burn_amount' : IDL.Nat }),
-    'Duplicate' : IDL.Record({ 'duplicate_of' : IDL.Nat }),
-    'BadFee' : IDL.Record({ 'expected_fee' : IDL.Nat }),
-    'CreatedInFuture' : IDL.Record({ 'ledger_time' : IDL.Nat64 }),
-    'TooOld' : IDL.Null,
-    'InsufficientFunds' : IDL.Record({ 'balance' : IDL.Nat }),
-  });
-  const Result_2 = IDL.Variant({ 'Ok' : IDL.Nat, 'Err' : TransferFromError });
   const BookingId = IDL.Text;
-  const anon_class_13_1 = IDL.Service({
+  const HttpHeader = IDL.Record({ 'value' : IDL.Text, 'name' : IDL.Text });
+  const HttpResponsePayload = IDL.Record({
+    'status' : IDL.Nat,
+    'body' : IDL.Vec(IDL.Nat8),
+    'headers' : IDL.Vec(HttpHeader),
+  });
+  const TransformArgs = IDL.Record({
+    'context' : IDL.Vec(IDL.Nat8),
+    'response' : HttpResponsePayload,
+  });
+  const CanisterHttpResponsePayload = IDL.Record({
+    'status' : IDL.Nat,
+    'body' : IDL.Vec(IDL.Nat8),
+    'headers' : IDL.Vec(HttpHeader),
+  });
+  const _anon_class_17_1 = IDL.Service({
     'addOwner' : IDL.Func([AdminId], [IDL.Text], []),
     'bookHotel' : IDL.Func(
         [
           HotelId,
           BookingInfo,
-          IDL.Variant({ 'icp' : IDL.Null, 'ckbtc' : IDL.Null }),
+          IDL.Variant({
+            'icp' : IDL.Null,
+            'solana' : IDL.Text,
+            'ckbtc' : IDL.Null,
+          }),
           IDL.Nat,
         ],
         [IDL.Text],
@@ -67,15 +75,11 @@ export const idlFactory = ({ IDL }) => {
       ),
     'getBookingId' : IDL.Func([], [IDL.Vec(IDL.Text)], ['query']),
     'getNoOfPages' : IDL.Func([IDL.Nat], [IDL.Nat], ['query']),
+    'get_icp_usd_exchange' : IDL.Func([], [IDL.Text], []),
     'gethotelXBookingId' : IDL.Func([IDL.Text], [IDL.Vec(IDL.Text)], ['query']),
-    'icrc2_transferFrom' : IDL.Func(
-        [
-          IDL.Variant({ 'icp' : IDL.Null, 'ckbtc' : IDL.Null }),
-          IDL.Principal,
-          IDL.Principal,
-          IDL.Nat,
-        ],
-        [Result_2],
+    'hotelBookingDuration' : IDL.Func(
+        [HotelId],
+        [IDL.Vec(IDL.Tuple(BookingId, BookingDuration))],
         [],
       ),
     'scanBooking' : IDL.Func(
@@ -83,9 +87,14 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(IDL.Tuple(BookingId, BookingInfo))],
         ['query'],
       ),
+    'transform' : IDL.Func(
+        [TransformArgs],
+        [CanisterHttpResponsePayload],
+        ['query'],
+      ),
     'updateBookingStatus' : IDL.Func([IDL.Text, BookingInfo], [], []),
     'whoami' : IDL.Func([], [IDL.Text], ['query']),
   });
-  return anon_class_13_1;
+  return _anon_class_17_1;
 };
 export const init = ({ IDL }) => { return []; };

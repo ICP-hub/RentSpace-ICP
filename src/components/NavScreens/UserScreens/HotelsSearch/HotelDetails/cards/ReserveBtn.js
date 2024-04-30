@@ -7,14 +7,14 @@ const ReserveBtn = ({item,onClick,setCloseBottomSheet}) => {
     <View style={styles.card}>
       <View style={styles.textCont}>
         <View style={styles.price}>
-            {/* <Text style={styles.boldText}>${item?.hotelPrice}</Text> */}
-            <Text style={styles.boldText}>$500</Text>
+            <Text style={styles.boldText}>${item?.hotelPrice}</Text>
+            {/* <Text style={styles.boldText}>$500</Text> */}
             <Text style={styles.smallText}>/night</Text>
         </View>
         <Text style={styles.normalText}>1-6 Jan</Text>
       </View>
-      {/* <TouchableOpacity style={styles.btn} onPress={onClick}> */}
-      <TouchableOpacity>
+      <TouchableOpacity style={styles.btn} onPress={onClick}>
+      {/* <TouchableOpacity> */}
         <Text style={styles.btnText}>Reserve</Text>
       </TouchableOpacity>
     </View>
@@ -27,11 +27,11 @@ const styles = StyleSheet.create({
     card:{
         display:'flex',
         flexDirection:'row',
-        justifyContent:'space-evenly',
+        justifyContent:'space-between',
         alignItems:'center',
         height:80,
         width:'100%',
-        // backgroundColor:COLORS.mainGrey,
+        // backgroundColor:'red',
     },
     textCont:{
         display:'flex',
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         backgroundColor:COLORS.mainPurple,
         borderRadius:12,
         width:'37%',
-        paddingVertical:16,
+        paddingVertical:6,
         marginRight:'6%'
     },
     btnText:{

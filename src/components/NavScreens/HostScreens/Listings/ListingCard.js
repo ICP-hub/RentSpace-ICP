@@ -14,10 +14,29 @@ import {React, useState} from 'react';
 import {COLORS, SIZES} from '../../../../constants/themes';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Update from '../UpdatePage/Update';
+import { images } from '../../../../constants';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
-const CustomAlert = ({showAlert, setShowAlert}) => {
-  const handleYes = () => {
-    setShowAlert(false);
+const CustomAlert = ({showAlert, setShowAlert,id}) => {
+  // const [loading,setLoading]=useState(false)
+  const baseUrl="http://localhost:5000"
+  const {authData}=useSelector(state=>state.authDataReducer)
+  const handleYes = async() => {
+    console.log(authData.privateKey,authData.publicKey,authData.delegation)
+    await axios.delete(`${baseUrl}/api/v1/hotel/deleteHotel?hotelId=${id}`,{
+      headers:{
+        "x-private":authData.privateKey,
+        "x-public":authData.publicKey,
+        "x-delegation":authData.delegation,
+        "Content-Type":"multipart/form-data"
+      }
+    }).then((res)=>{
+      console.log(res)
+      setShowAlert(false);
+    }).catch((err)=>{
+      console.log(err)
+    })
   };
 
   const handleNo = () => {
@@ -31,9 +50,9 @@ const CustomAlert = ({showAlert, setShowAlert}) => {
       transparent>
       <View style={styles.customAlertBox}>
         <View style={styles.customAlert}>
-          <Text style={styles.CustomAlertTitle}>Delete Listing</Text>
+          <Text style={styles.CustomAlertTitle}>Delete Space</Text>
           <Text style={styles.CustomAlertMsg}>
-            Are you sure you want to delete this listing?
+            Are you sure you want to delete this space?
           </Text>
           <View style={styles.customAlertBtnContainer}>
             <TouchableOpacity onPress={handleYes}>
@@ -75,19 +94,19 @@ const ListingCard = ({item}) => {
   return (
     <Pressable style={styles.card} onPress={openUpdateModal}>
       <View style={styles.cardView}>
-        <Text style={styles.status}>{status}</Text>
-        <Image source={item.image} style={styles.img} />
+        <Text style={styles.status}>{"verified"}</Text>
+        <Image source={images.hotelImg1} style={styles.img} />
       </View>
       <View style={styles.textCont}>
         <View>
-          <Text style={styles.text}>{item?.name}</Text>
-          <Text style={styles.address}>{item?.address}</Text>
+          <Text style={styles.text}>{item?.hotelTitle}</Text>
+          <Text style={styles.address}>{item?.hotelLocation}</Text>
         </View>
 
         <TouchableOpacity onPress={deleteListing}>
           <Icon name="delete" color={COLORS.black} size={20} />
         </TouchableOpacity>
-        <CustomAlert showAlert={showAlert} setShowAlert={setShowAlert} />
+        <CustomAlert showAlert={showAlert} setShowAlert={setShowAlert} id={item?.id} />
       </View>
 
       <Modal visible={openUpdate} onRequestClose={() => setOpenUpdate(false)} >

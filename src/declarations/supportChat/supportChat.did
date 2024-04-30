@@ -1,4 +1,4 @@
-type anon_class_12_1 = 
+type _anon_class_12_1 = 
  service {
    addOwner: (AdminId) -> (text);
    createIssue: (text) -> (Result);
@@ -75,4 +75,4 @@ type Address =
    region: text;
    streetAddress: text;
  };
-service : () -> anon_class_12_1
+service : () -> _anon_class_12_1
