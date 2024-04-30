@@ -14,8 +14,16 @@ import Icon2 from 'react-native-vector-icons/AntDesign';
 import {COLORS} from '../../../../constants/themes';
 import Icon4 from 'react-native-vector-icons/FontAwesome5';
 import Video from 'react-native-video';
+import {launchImageLibrary} from 'react-native-image-picker';
+
+import {ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
+import {storage} from '../../../../../firebaseConfig';
+// import {} from 'firebase/firestore';
 
 const UpdateModal = ({exitModal}) => {
+  const [imageReturnUrl, setImageReturnUrl] = useState('');
+  const [videoReturnUrl, setVideoReturnUrl] = useState('');
+
   const [checkOption, setCheckOption] = useState({
     camera: true,
     weapon: true,
@@ -48,6 +56,93 @@ const UpdateModal = ({exitModal}) => {
     setTimeout(() => {
       setVideoControlOpacity(!videoControlOpacity);
     }, 1500);
+  };
+
+  let img = require('../../../../assets/images/hostView/hotelImg1.png');
+  let vdo = require('./sample_video.mp4');
+
+  const [hotelImg, setHotelImg] = useState(img);
+  const [hotelVdo, setHotelVdo] = useState(vdo);
+  const [transferred, setTransferred] = useState(0);
+
+  const chooseHotelImg = async () => {
+    const result = await launchImageLibrary(
+      {mediaType: 'photo', includeBase64: true},
+      response => {
+        if (response) {
+          setHotelImg({uri: response.assets[0].uri});
+          console.log('Image => ', response.assets[0].uri);
+          uploadImage(response.assets[0].uri);
+        } else {
+          console.log('No Image Selected');
+        }
+      },
+    );
+  };
+
+  const chooseHotelvdo = async () => {
+    await launchImageLibrary(
+      {mediaType: 'video', includeBase64: true},
+      response => {
+        console.log('Video => ', response.assets[0].uri);
+        setHotelVdo({uri: response.assets[0].uri});
+        uploadVideo(response.assets[0].uri);
+      },
+    );
+  };
+
+  // upload function to upload image to firebase
+  const uploadImage = async uri => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const storageRef = ref(storage, 'hotelImage/' + new Date().getTime());
+    const uploadTask = uploadBytesResumable(storageRef, blob);
+
+    uploadTask.on(
+      'state_changed',
+      snapshot => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        setTransferred(progress.toFixed());
+      },
+      error => {
+        console.log('Error => ', error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
+          // console.log('File available at', downloadURL);
+          setImageReturnUrl(downloadURL);
+        });
+      },
+    );
+  };
+
+  // upload function to upload image to firebase
+  const uploadVideo = async uri => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const storageRef = ref(storage, 'hotelVideo/' + new Date().getTime());
+    const uploadTask = uploadBytesResumable(storageRef, blob);
+
+    uploadTask.on(
+      'state_changed',
+      snapshot => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        setTransferred(progress.toFixed());
+      },
+      error => {
+        console.log('Error => ', error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
+          // console.log('File available at', downloadURL);
+          setVideoReturnUrl(downloadURL);
+        });
+      },
+    );
   };
 
   return (
@@ -84,17 +179,15 @@ const UpdateModal = ({exitModal}) => {
           <Text style={styles.sectionTitle}>Cover Photo</Text>
         </View>
         <View style={styles.imageContainer}>
-          <Image
-            source={require('../../../../assets/images/hostView/hotelImg1.png')}
-            style={styles.imgStyle}
-          />
+          <Image source={hotelImg} style={styles.imgStyle} />
         </View>
         <View style={styles.btnContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => chooseHotelImg()}>
             <Text style={styles.btn}>Upload New Photo</Text>
           </TouchableOpacity>
           <TouchableOpacity>
-            <Text style={styles.btn}>Add Photo</Text>
+            <Text style={styles.btn}>Add Photo Upoald</Text>
+            {/* Add Photo */}
           </TouchableOpacity>
         </View>
 
@@ -104,7 +197,7 @@ const UpdateModal = ({exitModal}) => {
         </View>
         <View style={styles.imageContainer}>
           <Video
-            source={require('./sample_video.mp4')}
+            source={hotelVdo}
             resizeMode="cover"
             paused={pauseReel}
             onEnd={() => setPauseReel(true)}
@@ -138,7 +231,7 @@ const UpdateModal = ({exitModal}) => {
           </TouchableOpacity>
         </View>
         <View style={styles.btnContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => chooseHotelvdo()}>
             <Text style={styles.btn}>Upload New Video</Text>
           </TouchableOpacity>
           <TouchableOpacity>

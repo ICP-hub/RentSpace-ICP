@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useState, useRef} from 'react';
+import {useState} from 'react';
 import {COLORS} from '../../../../constants/themes';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/AntDesign';
@@ -25,10 +25,6 @@ import Icon13 from 'react-native-vector-icons/Foundation'; //2
 
 const Update = ({setOpenUpdate}) => {
 
-  const inputRef1 = useRef(null);
-  const inputRef2 = useRef(null);
-
-
   const exitModal = value => {
     setSecondPage(value);
     setOpenUpdate(false);
@@ -40,6 +36,7 @@ const Update = ({setOpenUpdate}) => {
     status: false,
     icon: 'apartment',
     name: 'Apartment',
+    class: 0,
   });
 
   const [amenities, setAmenities] = useState({
@@ -124,6 +121,22 @@ const Update = ({setOpenUpdate}) => {
     }
   };
 
+  const [passData, setPassData] = useState({
+    property: '', //propertyType.name
+    amenities: '', //amenities.data
+    location: '',
+    title: '',
+  });
+
+  const goToNextPage = () => {
+    console.log(propertyType.name);
+
+    setPassData({...passData, property: propertyType.name, amenities: amenities.data});
+    console.log(passData.property)
+    // setSecondPage(true);
+
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -188,6 +201,7 @@ const Update = ({setOpenUpdate}) => {
             style={styles.textInput}
             placeholder="Property's Address"
             placeholderTextColor={COLORS.textLightGrey}
+            onChangeText={(text) => {setPassData({...passData, location: text});}}
           />
         </View>
         {/* fourth-section */}
@@ -255,6 +269,9 @@ const Update = ({setOpenUpdate}) => {
             style={styles.textInput}
             placeholder="Property's Title"
             placeholderTextColor={COLORS.textLightGrey}
+            onChangeText={(text) => {setPassData({...passData, title: text});}
+            
+            }
           />
         </View>
         {/* sixth-section */}
@@ -334,7 +351,7 @@ const Update = ({setOpenUpdate}) => {
         </View>
         {/* seventh-section */}
         <View style={styles.buttonSection}>
-          <TouchableOpacity onPress={() => setSecondPage(true)}>
+          <TouchableOpacity onPress={goToNextPage}>
             <Text style={styles.buttonSectionBtn}>Save And Next</Text>
           </TouchableOpacity>
         </View>

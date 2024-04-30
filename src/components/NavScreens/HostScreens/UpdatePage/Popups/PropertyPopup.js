@@ -14,8 +14,8 @@ const PropertyPopup = ({propertyType, setPropertyType}) => {
     {name: 'Glamping', icon: 'tent', class: 1},
   ];
 
-  const updateProperty = item => {
-    setPropertyType({...propertyType, name: item.name, icon: item.icon, status:false});
+  const updateProperty = (item) => {
+    setPropertyType({...propertyType,  status:false, name: item.name, icon: item.icon, class: item.class});
   };
 
   return (

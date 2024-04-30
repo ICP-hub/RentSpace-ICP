@@ -68,6 +68,9 @@ import {host, ids} from './DevelopmentConfig';
 import MainProfile from './src/components/NavScreens/UserScreens/Profile/MainProfile/MainProfile';
 import HotelChoice from './src/components/NavScreens/HostScreens/Availibility/HotelChoice/HotelChoice';
 
+
+
+
 const Stack = createNativeStackNavigator();
 
 const linking = {
@@ -96,6 +99,8 @@ PushNotification.configure({
 });
 
 const RootComponent: React.FC = () => {
+ 
+
   const btmSheetLoginRef = useRef(null);
   const btmSheetFinishRef = useRef(null);
   const [middleKeyIdentity, setMiddleKeyIdentity] = useState('');
@@ -460,11 +465,11 @@ const RootComponent: React.FC = () => {
       let actorUser = createUserActor(ids.userCan, {agent});
       let actorHotel = createHotelActor(ids.hotelCan, {agent});
       let actorBooking = createBookingActor(ids.bookingCan, {agent});
-      let actorICPToken=Actor.createActor(idlFactory, {
+      let actorICPToken = Actor.createActor(idlFactory, {
         agent,
-        blsVerify:()=>true,
-        canisterId:ids.ICPtokenCan
-      })
+        blsVerify: () => true,
+        canisterId: ids.ICPtokenCan,
+      });
       // let actorCkBTCToken=Actor.createActor(idlFactory, {
       //   agent,
       //   blsVerify:()=>true,
@@ -484,9 +489,9 @@ const RootComponent: React.FC = () => {
           userActor: actorUser,
           hotelActor: actorHotel,
           bookingActor: actorBooking,
-          icpTokenActor:actorICPToken,
-          ckbtcTokenActor:actorICPToken,
-          ckETHtokenActor:actorICPToken,
+          icpTokenActor: actorICPToken,
+          ckbtcTokenActor: actorICPToken,
+          ckETHtokenActor: actorICPToken,
           reviewActor: actorReview,
           commentActor: actorComment,
           supportActor: actorSupport,
@@ -607,3 +612,4 @@ const RootComponent: React.FC = () => {
 };
 
 AppRegistry.registerComponent(appName, () => RootComponent);
+// AppRegistry.registerComponent(appName, () => App);
