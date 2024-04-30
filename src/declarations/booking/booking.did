@@ -1,51 +1,57 @@
-type anon_class_13_1 = 
+type _anon_class_17_1 = 
  service {
    addOwner: (AdminId) -> (text);
    bookHotel: (HotelId, BookingInfo, variant {
                                        ckbtc;
                                        icp;
+                                       solana: text;
                                      }, nat) -> (text);
    getAllAdmin: () -> (vec AdminId) query;
    getBookingDetials: (text) -> (opt BookingInfo) query;
    getBookingFrequencyInYear: (text) -> (opt AnnualData) query;
    getBookingId: () -> (vec text) query;
    getNoOfPages: (nat) -> (nat) query;
+   get_icp_usd_exchange: () -> (text);
    gethotelXBookingId: (text) -> (vec text) query;
-   icrc2_transferFrom: (variant {
-                          ckbtc;
-                          icp;
-                        }, principal, principal, nat) -> (Result_2);
+   hotelBookingDuration: (HotelId) ->
+    (vec record {
+           BookingId;
+           BookingDuration;
+         });
    scanBooking: (nat, nat) -> (vec record {
                                      BookingId;
                                      BookingInfo;
                                    }) query;
+   transform: (TransformArgs) -> (CanisterHttpResponsePayload) query;
    updateBookingStatus: (text, BookingInfo) -> ();
    whoami: () -> (text) query;
  };
-type TransferFromError = 
- variant {
-   BadBurn: record {min_burn_amount: nat;};
-   BadFee: record {expected_fee: nat;};
-   CreatedInFuture: record {ledger_time: nat64;};
-   Duplicate: record {duplicate_of: nat;};
-   GenericError: record {
-                   error_code: nat;
-                   message: text;
-                 };
-   InsufficientAllowance: record {allowance: nat;};
-   InsufficientFunds: record {balance: nat;};
-   TemporarilyUnavailable;
-   TooOld;
+type TransformArgs = 
+ record {
+   context: blob;
+   response: HttpResponsePayload;
  };
-type Result_2 = 
- variant {
-   Err: TransferFromError;
-   Ok: nat;
+type HttpResponsePayload = 
+ record {
+   body: vec nat8;
+   headers: vec HttpHeader;
+   status: nat;
+ };
+type HttpHeader = 
+ record {
+   name: text;
+   value: text;
  };
 type HotelId = text;
+type CanisterHttpResponsePayload = 
+ record {
+   body: vec nat8;
+   headers: vec HttpHeader;
+   status: nat;
+ };
 type BookingInfo = 
  record {
-   bookingDuration: text;
+   bookingDuration: BookingDuration;
    cancelStatus: bool;
    checkInDate: text;
    date: text;
@@ -56,6 +62,11 @@ type BookingInfo =
    userId: text;
  };
 type BookingId = text;
+type BookingDuration = 
+ record {
+   bookedAt: text;
+   bookedTill: text;
+ };
 type AnnualData = 
  record {
    april: nat;
@@ -72,4 +83,4 @@ type AnnualData =
    sep: nat;
  };
 type AdminId = text;
-service : () -> anon_class_13_1
+service : () -> _anon_class_17_1

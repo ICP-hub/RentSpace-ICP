@@ -40,7 +40,8 @@ const Main = ({navigation}) => {
   // const [loading,setLoading]=useState(false)
   
 
-  const baseQueryUrl=`https://rentspace.kaifoundry.com/api/v1/hotel/filters?`
+  // const baseQueryUrl=`https://rentspace.kaifoundry.com/api/v1/hotel/filters?`
+  const baseQueryUrl=`http://localhost:5000/api/v1/hotel/filters?`
 
   const route=useRoute()
   const dispatch=useDispatch()
@@ -93,10 +94,10 @@ const Main = ({navigation}) => {
     
   })
 
-  // useEffect(()=>{
-  //   console.log("filter query'")
-  //   filterQuery()
-  // },[query])
+  useEffect(()=>{
+    console.log("filter query'")
+    filterQuery()
+  },[query])
 
   //Refs for managing bottomsheets
   // const btmSheetLoginRef = useRef(null);

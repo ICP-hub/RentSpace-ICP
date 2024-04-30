@@ -17,8 +17,8 @@ const Congratulations = ({setHostModal,pos}) => {
   const {actors}=useSelector(state=>state.actorReducer)
   const {authData}=useSelector(state=>state.authDataReducer)
   const dispatch=useDispatch()
-  const baseUrl="https://rentspace.kaifoundry.com"
-  // const baseUrl="http://localhost:5000"
+  // const baseUrl="https://rentspace.kaifoundry.com"
+  const baseUrl="http://localhost:5000"
   const {files}=useSelector(state=>state.filesReducer)
   const {user}=useSelector(state=>state.userReducer)
   
@@ -35,13 +35,13 @@ const Congratulations = ({setHostModal,pos}) => {
      })
     }
     useEffect(()=>{
-      // ApiLogin()
+      ApiLogin()
     },[])
-    const ApiHotelFilters=async()=>{
-      await axios.get(`${baseUrl}/api/v1/hotel/filters`).then((res)=>{
-        console.log("hotel filters resp : ")
-      }).catch((err)=>{console.log("hotel filters err : ",err)})
-    }
+    // const ApiHotelFilters=async()=>{
+    //   await axios.get(`${baseUrl}/api/v1/hotel/filters`).then((res)=>{
+    //     console.log("hotel filters resp : ")
+    //   }).catch((err)=>{console.log("hotel filters err : ",err)})
+    // }
     const ApiHotelCreate=async()=>{
       const data={
         hotelTitle:listing?.hotelTitle,
@@ -53,25 +53,30 @@ const Congratulations = ({setHostModal,pos}) => {
         amenities:listing?.amenities,
         propertyType:listing?.propertyType,
         phantomWalletID:listing?.phantomWalletID,
-        paymentMethods:listing?.paymentMethods
+        paymentMethods:listing?.paymentMethods,
+        files:["vid1","img1","img2"]
       }
       
       const formData = new FormData();
-      Object.entries(data).forEach(([key, value]) => {
+      // Object.entries(data).forEach(([key, value]) => {
+      //   formData.append(key, value);
+      // });
+      for (const [key, value] of Object.entries(data)) {
         formData.append(key, value);
-      });
-      let newFiles=[]
-      await FileSystem.readFile(files[0].uri,'base64').then((res)=>{
-        console.log(res)
-        files.map((file,index)=>{
-            newFiles.push({...file,fileIndex:`file${index}`})
-            formData.append(`file${index}`,file)
-        })
-      })
+      }
+      
+      // let newFiles=[]
+      // await FileSystem.readFile(files[0].uri,'base64').then((res)=>{
+      //   console.log(res)
+      //   files.map((file,index)=>{
+      //       newFiles.push({...file,fileIndex:`file${index}`})
+      //       formData.append(`file${index}`,file)
+      //   })
+      // })
       
       
-      formData.append("files",JSON.stringify(newFiles))
-      console.log(formData)
+      // formData.append("files",JSON.stringify(newFiles))
+      console.log("form",formData)
       await axios.post(`${baseUrl}/api/v1/hotel/register`,formData,{
         headers:{
           "x-private":authData.privateKey,
@@ -120,8 +125,8 @@ const Congratulations = ({setHostModal,pos}) => {
     console.log('create hotel : ',listing)
     setLoading(true)
       // ApiHotelFilters()
-      // ApiHotelCreate()
-      testLocalHotelCreation()
+      ApiHotelCreate()
+      // testLocalHotelCreation()
   }
   
   return (

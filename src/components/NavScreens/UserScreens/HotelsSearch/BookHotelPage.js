@@ -113,8 +113,8 @@ const BookHotelPage = ({navigation,queryHotels}) => {
       console.log(firstRender.current)
       firstRender.current=false
     }else{
-      // getQueryHotelDetails(/)
-      getReservations()
+      getQueryHotelDetails()
+      // getReservations()
     }
    ``
   },[queryHotels,principle])
