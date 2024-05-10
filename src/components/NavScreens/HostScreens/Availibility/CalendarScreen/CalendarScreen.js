@@ -6,24 +6,23 @@ import {
   Text,
   View,
   Dimensions,
-  Alert,
 } from 'react-native';
+import axios from 'axios';
 import {useState} from 'react';
-import {COLORS} from '../../../../../constants/themes';
 import {Calendar} from 'react-native-calendars';
 import Icon from 'react-native-vector-icons/Feather';
 import Icon2 from 'react-native-vector-icons/Ionicons';
+import {COLORS} from '../../../../../constants/themes';
 
-const CalendarScreen = ({item, setModalVisible}) => {
-  let today = new Date().toJSON().slice(0, 10);
-
+const CalendarScreen = ({item, setModalVisible, getHotelDetails}) => {
   const [startDate, setStartDate] = useState({
-    date: today,
+    // date: today,
+    date: item.availableFrom.slice(0, 10),
     marked: false,
   });
 
   const [endDate, setEndDate] = useState({
-    date: new Date().toJSON().slice(0, 10),
+    date: '',
     marked: false,
   });
 
@@ -44,20 +43,34 @@ const CalendarScreen = ({item, setModalVisible}) => {
     });
   };
 
-  const updateDates = () => {
-    Alert.alert(
-      'Start Date: ' + startDate.date + '\n' + 'End Date: ' + endDate.date,
-    );
+  const updateDates = async () => {
+    const updateDates = {
+      hotelId: item.hotelId,
+      availableFrom: startDate.date + ' 00:00:00+05:30',
+      availableTill: endDate.date + ' 00:00:00+05:30',
+    };
+    console.log(updateDates);
+
+    await axios
+      .put(
+        'http://localhost:5000/api/v1/hotel/updateHotelAvailbility',
+        updateDates,
+      )
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
     setModalVisible(false);
+    getHotelDetails();
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image
-          style={styles.headerImage}
-          source={require('../../../../../assets/images/hotelDemo.jpg')}
-        />
+        <Image style={styles.headerImage} source={{uri: item.imagesUrls}} />
         <Text style={styles.headerText}>{item?.hotelTitle}</Text>
         <View style={styles.headerIcon}>
           <Icon name="calendar" size={20} color={COLORS.black} />
@@ -70,7 +83,7 @@ const CalendarScreen = ({item, setModalVisible}) => {
         contentContainerStyle={{width: Dimensions.get('window').width}}>
         <Calendar
           style={styles.calendar}
-          minDate={today}
+          minDate={item.availableFrom.slice(0, 10)}
           onDayPress={day => selectStartDate(day)}
           markedDates={{
             [startDate.date]: {

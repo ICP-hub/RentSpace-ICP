@@ -6,16 +6,17 @@ import Icon2 from 'react-native-vector-icons/Fontisto';
 const PropertyPopup = ({propertyType, setPropertyType}) => {
 
   const propertiesList = [
-    {name: 'House', icon: 'house', class: 0},
-    {name: 'Villa', icon: 'villa', class: 0},
-    {name: 'Apartment', icon: 'apartment', class: 0},
-    {name: 'Hotel', icon: 'hotel', class: 0},
-    {name: 'Resort', icon: 'fort', class: 0},
-    {name: 'Glamping', icon: 'tent', class: 1},
+    {name: 'House', icon: 'house'},
+    {name: 'Villa', icon: 'villa'},
+    {name: 'Apartment', icon: 'apartment'},
+    {name: 'Hotel', icon: 'hotel'},
+    {name: 'Resort', icon: 'fort'},
+    {name: 'Glamping', icon: 'tent'}
   ];
 
   const updateProperty = (item) => {
-    setPropertyType({...propertyType,  status:false, name: item.name, icon: item.icon, class: item.class});
+    // setPropertyType({...propertyType,  status:false, name: item.name, icon: item.icon, class: item.class});
+    setPropertyType({...propertyType,  status:false, name: item.name, icon: item.icon});
   };
 
   return (
@@ -23,7 +24,7 @@ const PropertyPopup = ({propertyType, setPropertyType}) => {
       <Text style={styles.popupTitle}>Select Property Type</Text>
       <View style={styles.popupItemContainer}>
         {propertiesList.map((item, index) => {
-          if (item.class === 0) {
+          if (['House', 'Villa', 'Apartment', 'Hotel', 'Resort'].includes(item?.name)) {
             return (
               <TouchableOpacity
                 onPress={() => updateProperty(item)}
@@ -47,7 +48,7 @@ const PropertyPopup = ({propertyType, setPropertyType}) => {
               </TouchableOpacity>
             );
           }
-          if (item.class === 1) {
+          else {
             return (
               <TouchableOpacity
                 onPress={() => updateProperty(item)}

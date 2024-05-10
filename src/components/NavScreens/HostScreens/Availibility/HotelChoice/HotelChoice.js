@@ -14,144 +14,104 @@ import {COLORS} from '../../../../../constants/themes';
 import BottomNavHost from '../../../../Navigation/BottomNavHost';
 import Icon from 'react-native-vector-icons/AntDesign';
 import CalendarScreen from '../CalendarScreen/CalendarScreen';
-import { useSelector } from 'react-redux';
-import { images } from '../../../../../constants';
+// import {useSelector} from 'react-redux';
+import axios from 'axios';
 
 const HotelChoice = ({navigation}) => {
-  const {hotels} = useSelector(state => state.hotelsReducer);
-  const {actors} = useSelector(state => state.actorReducer);
-  // const hotels = [
-    // {
-    //   name: 'Hotel 1',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 2',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 3',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 4',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 5',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 6',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 7',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 8',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 9',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 10',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 11',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 12',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 13',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 14',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 15',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 16',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 17',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 18',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 19',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-    // {
-    //   name: 'Hotel 20',
-    //   image: require('../../../../../assets/images/hotelDemo.jpg'),
-    // },
-  // ];
+
+  // const {hotels} = useSelector(state => state.hotelsReducer);
+  // const {actors} = useSelector(state => state.actorReducer);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedHotel, setSelectedHotel] = useState({});
-  const [hotelList,setHotelList]=useState([])
 
-  async function getHotelDetails() {
-    setHotelList([]);
-    for (let i = 0; i < hotels?.length; i++) {
-      await actors.hotelActor?.getHotel(hotels[i]).then(res => {
-        let newEL={...res[0],id:hotels[i]}
-        setHotelList(hotelList => [...hotelList,newEL]);
-        console.log(res[0])
+  const [hotelList, setHotelList] = useState([]);
+
+  // async function getHotelDetails() {
+  //   setHotelList([]);
+  //   for (let i = 0; i < hotels?.length; i++) {
+  //     await actors.hotelActor?.getHotel(hotels[i]).then(res => {
+  //       let newEL={...res[0],id:hotels[i]}
+  //       setHotelList(hotelList => [...hotelList,newEL]);
+  //       console.log(res[0])
+  //     });
+  //   }
+  // }
+
+  // useEffect(()=>{
+  //   getHotelDetails()
+  // },[])
+
+  function getHotelDetails() {
+    const userPrincipal =
+      '2yv67-vdt7m-6ajix-goswt-coftj-5d2db-he4fl-t5knf-qii2a-3pajs-cqe'; // for testing only
+    axios
+      .get(
+        `http://localhost:5000/api/v1/hotel/getAllHotels?userPrincipal=${userPrincipal}`,
+      ) // for testing only
+      // .get('http://localhost:5000/api/v1/hotel/getAllHotels')  // when userPrincipal is passed in header
+      .then(res => {
+        // console.log(res.data.hotels);
+        setHotelList(res.data.hotels);
+      })
+      .catch(error => {
+        console.log(error);
       });
-    }
   }
 
-  const openCalendarModal = (hotel) => {
-    setModalVisible(true);
+  useEffect(() => {
+    getHotelDetails();
+  }, []);
+
+  const openCalendarModal = hotel => {
     setSelectedHotel(hotel);
+    setModalVisible(true);
   };
 
-  useEffect(()=>{
-    getHotelDetails()
-  },[])
+  // func to change the date format to dd-mm (25 Dec)
+  function changeDateFormat(date) {
+    const d = new Date(date);
+    const month = d.toLocaleString('default', {month: 'short'});
+    return `${d.getDate()} ${month}`;
+  }
 
   return (
     <View style={styles.container}>
-      
-        <Text style={styles.mainText}>Hotel Selection</Text>
+      <Text style={styles.mainText}>Hotel Selection</Text>
 
       <ScrollView
         style={styles.listContainer}
         contentContainerStyle={styles.contentContainerStyle}>
         {hotelList.map((hotel, index) => {
+
+          const startDate = changeDateFormat(hotel.availableFrom);
+          const endDate = changeDateFormat(hotel.availableTill);
+
           return (
-            <Pressable
-              style={styles.listItem}
-              key={index}
-              onPress={() => openCalendarModal(hotel)}>
-              <Image style={styles.listItemImage} source={images.hotelImg2} />
-
-              <View style={{flex: 1, flexDirection: 'column'}}>
-                <Text style={styles.listItemText}>{hotel?.hotelTitle}</Text>
-                <Text style={styles.listItemSubText}>Available On</Text>
+            <View style={styles.listItem}>
+              <Image
+                style={styles.listItemImage}
+                source={{uri: hotel.imagesUrls}}
+              />
+              <View style={styles.listItemOverlay}>
+                <View style={styles.editContainer}>
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => openCalendarModal(hotel)}>
+                    <Icon name="edit" size={20} style={styles.editIcon} />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.listItemBottomBar}>
+                  <Text style={styles.listItemText}>{hotel.hotelName}</Text>
+                  <Text style={styles.dates}>{startDate} - {endDate}</Text>
+                  {/* <BlurView
+                    style={styles.absolute}
+                    blurType="light"
+                    blurAmount={10}
+                  /> */}
+                  {/* BlurView package open an unexpected modal on exit */}
+                </View>
               </View>
-
-              <View style={styles.editContainer} >
-                <Icon name="edit" size={20} color={COLORS.black} />
-                <Text style={styles.dates}>15 Mar - 28 Mar </Text>
-              </View>
-            </Pressable>
+            </View>
           );
         })}
       </ScrollView>
@@ -164,9 +124,11 @@ const HotelChoice = ({navigation}) => {
         <CalendarScreen
           item={selectedHotel}
           setModalVisible={setModalVisible}
+          getHotelDetails={getHotelDetails}
         />
       </Modal>
     </View>
+    
   );
 };
 
@@ -187,7 +149,7 @@ const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'left',
     color: COLORS.black,
-    padding:20,
+    padding: 20,
   },
 
   listContainer: {
@@ -204,68 +166,94 @@ const styles = StyleSheet.create({
   },
 
   listItem: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 20,
-    alignItems: 'center',
-    backgroundColor: COLORS.white,
-    padding: 10,
-    borderRadius: 10,
-    elevation: 15,
-    marginVertical: 10,
     width: '95%',
+    height: 220,
+    padding: 10,
+    elevation: 15,
+    borderRadius: 10,
+    marginVertical: 10,
+    backgroundColor: COLORS.white,
   },
 
   listItemImage: {
-    height: 80,
-    width: 100,
+    height: '100%',
+    width: '100%',
     borderRadius: 10,
   },
 
-  listItemText: {
-    fontSize: 20,
-    fontWeight: '500',
-    color: COLORS.black,
-    paddingLeft: 5,
-
-  },
-
-  listItemSubText: {
-    fontSize: 12,
-    color: COLORS.black,
-    padding: 5,
-    marginTop: 5,
-  },
-
-  editContainer:{
+  listItemOverlay: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    borderRadius: 10,
+    height: '100%',
+    width: '100%',
+    // backgroundColor: 'rgba(0, 0, 0, 0.5)',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-end',
-    justifyContent: 'baseline',
-    gap: 10,
+    justifyContent: 'space-between',
   },
 
+  editContainer: {
+    maxWidth: '100%',
+    // backgroundColor: 'red',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    padding: 10,
+  },
+
+  editIcon: {
+    color: COLORS.white,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    padding: 10,
+    borderRadius: 10,
+  },
+
+  listItemBottomBar: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    overflow: 'hidden',
+  },
+
+  listItemText: {
+    fontSize: 19,
+    fontWeight: '400',
+    color: COLORS.white,
+    paddingLeft: 5,
+    zIndex: 1,
+  },
 
   dates: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: COLORS.white,
-    backgroundColor: COLORS.lightPurple,
+    color: COLORS.mainPurple,
+    backgroundColor: COLORS.white,
     padding: 5,
     borderRadius: 25,
+    width: 120,
+    textAlign: 'center',
+    zIndex: 1,
   },
 
-  modalVisible: {
-    display: 'block',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    backgroundColor: COLORS.mainGrey,
-  },
+  // modalVisible: {
+  //   display: 'block',
+  //   position: 'absolute',
+  //   top: 0,
+  //   left: 0,
+  //   width: '100%',
+  //   height: '100%',
+  //   backgroundColor: COLORS.mainGrey,
+  // },
 
-  modalHidden: {
-    display: 'none',
-  },
+  // modalHidden: {
+  //   display: 'none',
+  // },
 });

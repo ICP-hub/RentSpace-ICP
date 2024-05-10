@@ -22,7 +22,7 @@ import MenuPage from './src/components/NavScreens/HostScreens/MenuPage/MenuPage'
 import Listings from './src/components/NavScreens/HostScreens/Listings/Listings';
 import AllChats from './src/components/NavScreens/HostScreens/ChatPage/AllChats/AllChats';
 import UserDetailDemo from './src/components/NavScreens/UserScreens/Profile/Modals/UserDetailDemo';
-import Map from './src/components/NavScreens/UserScreens/Map/Map';
+// import Map from './src/components/NavScreens/UserScreens/Map/Map';
 import Reels from './src/components/NavScreens/UserScreens/Reels/Reels';
 import {User} from './src/declarations/User';
 import {hotel} from './src/declarations/hotel';
@@ -67,8 +67,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {host, ids} from './DevelopmentConfig';
 import MainProfile from './src/components/NavScreens/UserScreens/Profile/MainProfile/MainProfile';
 import HotelChoice from './src/components/NavScreens/HostScreens/Availibility/HotelChoice/HotelChoice';
-import * as firebase from '@react-native-firebase/app'
-import '@react-native-firebase/storage'
+// import * as firebase from '@react-native-firebase/app'
+// import '@react-native-firebase/storage'
 
 
 
@@ -573,11 +573,11 @@ const RootComponent: React.FC = () => {
               name="profile"
               component={MainProfile}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
               options={{headerShown: false}}
               name="mapSearch"
               component={Map}
-            />
+            /> */}
             <Stack.Screen
               options={{headerShown: false}}
               name="reels"

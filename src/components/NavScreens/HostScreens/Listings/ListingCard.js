@@ -68,7 +68,7 @@ const CustomAlert = ({showAlert, setShowAlert,id}) => {
   );
 };
 
-const ListingCard = ({item}) => {
+const ListingCard = ({item, getHotelDetails}) => {
   let status = item?.status;
   switch (status) {
     case 0:
@@ -91,26 +91,28 @@ const ListingCard = ({item}) => {
     setOpenUpdate(true);
   };
 
+  const imgX = item.imagesUrls;
+
   return (
     <Pressable style={styles.card} onPress={openUpdateModal}>
       <View style={styles.cardView}>
         <Text style={styles.status}>{"verified"}</Text>
-        <Image source={images.hotelImg1} style={styles.img} />
+        <Image source={{uri:imgX}} style={styles.img} />
       </View>
       <View style={styles.textCont}>
         <View>
-          <Text style={styles.text}>{item?.hotelTitle}</Text>
-          <Text style={styles.address}>{item?.hotelLocation}</Text>
+          <Text style={styles.text}>{item?.hotelName}</Text>
+          <Text style={styles.address}>{item?.location}</Text>
         </View>
 
         <TouchableOpacity onPress={deleteListing}>
           <Icon name="delete" color={COLORS.black} size={20} />
         </TouchableOpacity>
-        <CustomAlert showAlert={showAlert} setShowAlert={setShowAlert} id={item?.id} />
+        <CustomAlert showAlert={showAlert} setShowAlert={setShowAlert} id={item?.hotelId} />
       </View>
 
       <Modal visible={openUpdate} onRequestClose={() => setOpenUpdate(false)} >
-        <Update setOpenUpdate={setOpenUpdate} />
+        <Update item={item} setOpenUpdate={setOpenUpdate} getHotelDetails={getHotelDetails} />
       </Modal>
 
     </Pressable>

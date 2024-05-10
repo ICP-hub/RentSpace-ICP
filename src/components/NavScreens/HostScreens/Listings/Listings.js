@@ -19,6 +19,7 @@ import Step2Manager from '../../../HostViewNew/Step2Manager';
 import Step3Manager from '../../../HostViewNew/Step3Manager';
 import ChatDrawer from '../ChatPage/ChatDrawer/ChatDrawer';
 import Update from '../UpdatePage/Update';
+import axios from 'axios';
 
 const Listings = ({navigation}) => {
   const {hotels} = useSelector(state => state.hotelsReducer);
@@ -27,58 +28,82 @@ const Listings = ({navigation}) => {
   const [hostModal, setHostModal] = useState(0);
   const [newHotel, setNewHotel] = useState({});
   const [showDrawer, setShowDrawer] = useState(false);
-  async function getHotelDetails() {
-    setHotelList([]);
-    for (let i = 0; i < hotels?.length; i++) {
-      await actors.hotelActor?.getHotel(hotels[i]).then(res => {
-        let newEL={...res[0],id:hotels[i]}
-        setHotelList(hotelList => [...hotelList,newEL]);
-        console.log(res[0])
+
+  const [listings, setListings] = useState([]);
+
+  // async function getHotelDetails() {
+  //   setHotelList([]);
+  //   for (let i = 0; i < hotels?.length; i++) {
+  //     await actors.hotelActor?.getHotel(hotels[i]).then(res => {
+  //       let newEL={...res[0],id:hotels[i]}
+  //       setHotelList(hotelList => [...hotelList,newEL]);
+  //       console.log(res[0])
+  //     });
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   // getHotelDetails();
+
+  // }, [hotels]);
+
+  // Geting hotel details from the server
+
+  function getHotelDetails() {
+    const userPrincipal = "2yv67-vdt7m-6ajix-goswt-coftj-5d2db-he4fl-t5knf-qii2a-3pajs-cqe" // for testing only
+    axios
+      .get(`http://localhost:5000/api/v1/hotel/getAllHotels?userPrincipal=${userPrincipal}`) // for testing only
+      // .get('http://localhost:5000/api/v1/hotel/getAllHotels')  // when userPrincipal is passed in header
+      .then(res => {
+        // console.log(res.data.hotels);
+        setListings(res.data.hotels);
+      })
+      .catch(error => {
+        console.log(error);
       });
-    }
   }
 
   useEffect(() => {
     getHotelDetails();
-  }, [hotels]);
+  }, []);
 
-  const listings = [
-    {
-      name: 'Taj Hotel',
-      address: 'Mumbai, Maharashtra',
-      image: images.hotelImg1,
-      status: 2,
-      rating: 7.5,
-    },
-    {
-      name: 'Hotel Ramada',
-      address: 'Lucknow, UP',
-      image: images.hotelImg2,
-      status: 0,
-      rating: 8.5,
-    },
-    {
-      name: 'Hotel Pennsylvania',
-      address: 'Pennsylvania, Austria',
-      image: images.hotelImg3,
-      status: 1,
-      rating: 9.5,
-    },
-    {
-      name: 'Constantinople Inn',
-      address: 'Istanbul',
-      image: images.hotelImg4,
-      status: 0,
-      rating: 6.5,
-    },
-    {
-      name: 'Jaypur Palace',
-      address: 'Jaypur, Rajasthan',
-      image: images.hotelImg5,
-      status: 1,
-      rating: 7.5,
-    },
-  ];
+  // const listings = [
+  //   {
+  //     hotelTitle: 'Taj Hotel',
+  //     hotelLocation: 'Mumbai, Maharashtra',
+  //     image: images.hotelImg1,
+  //     status: 2,
+  //     rating: 7.5,
+  //   },
+  //   {
+  //     hotelTitle: 'Hotel Ramada',
+  //     hotelLocation: 'Lucknow, UP',
+  //     image: images.hotelImg2,
+  //     status: 0,
+  //     rating: 8.5,
+  //   },
+  //   {
+  //     hotelTitle: 'Hotel Pennsylvania',
+  //     hotelLocation: 'Pennsylvania, Austria',
+  //     image: images.hotelImg3,
+  //     status: 1,
+  //     rating: 9.5,
+  //   },
+  //   {
+  //     hotelTitle: 'Constantinople Inn',
+  //     hotelLocation: 'Istanbul',
+  //     image: images.hotelImg4,
+  //     status: 0,
+  //     rating: 6.5,
+  //   },
+  //   {
+  //     hotelTitle: 'Jaypur Palace',
+  //     hotelLocation: 'Jaypur, Rajasthan',
+  //     image: images.hotelImg5,
+  //     status: 1,
+  //     rating: 7.5,
+  //   },
+  // ];
 
   return (
     <View style={styles.view}>
@@ -94,12 +119,14 @@ const Listings = ({navigation}) => {
         </View>
       </View>
 
-      {hotelList.length > 0 ? (
+      {listings.length > 0 ? (
         <FlatList
           style={styles.list}
           contentContainerStyle={{paddingBottom: 80}}
-          data={hotelList}
-          renderItem={item => <ListingCard navigation={navigation} item={item.item} />}
+          data={listings}
+          renderItem={item => (
+            <ListingCard navigation={navigation} item={item.item} getHotelDetails={getHotelDetails} />
+          )}
         />
       ) : (
         <Text style={{color: COLORS.black, marginTop: 50}}>
@@ -138,12 +165,6 @@ const Listings = ({navigation}) => {
         visible={hostModal > 16 && hostModal <= 23 ? true : false}>
         <Step3Manager hostModal={hostModal} setHostModal={setHostModal} />
       </Modal>
-
-      {/* Model to open Update Screen */}
-
-      {/* <Modal >
-        <Update/>
-      </Modal> */}
     </View>
   );
 };

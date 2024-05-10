@@ -31,6 +31,7 @@ import { ids } from '../../../../../../../DevelopmentConfig'
 import { Principal } from '@dfinity/principal'
 import { toHex } from '@dfinity/agent'
 import { fromHexString } from '@dfinity/candid'
+import CustomPopAlert from '../../../../CustomPopAlert'
 
 const onConnectRedirectLink ="rentspace://onConnect";
 const connection = new Connection(clusterApiUrl("devnet"));
@@ -38,6 +39,16 @@ const onSignAndSendTransactionRedirectLink="rentspace://onSignAndSendTransaction
 const SOLANA_DEVNET_USDC_PUBLIC_KEY="4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
 
 const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoading,showBookingAnimation,bookingAnimation,setOpen}) => {
+
+  const [showAlertPop, setShowAlertPop] = useState({
+    type: '',
+    title: '',
+    message: '',
+    color: '',
+    visibility: false,
+    yesRequest:()=>{},
+    noRequest:()=>{}
+  });
 
   const {user}=useSelector(state=>state.userReducer)
   const [fullPayment,setFullPayment]=useState(true)
@@ -269,7 +280,15 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
     // const hostAccID="CUT6rrZag3dpAYPZksQ7LvqcHrxatcdqxjCnTvxXdHo8"
     setLoading(true)
       if (!phantomWalletPublicKey){
-        Alert.alert("Connection Required",'Please connect to phantom wallet first!')
+        // Alert.alert("Connection Required",'Please connect to phantom wallet first!')
+        setShowAlertPop({
+          type: 'default',
+          title: 'Connection Required',
+          message: 'Please connect to phantom wallet first!',
+          color: COLORS.mainPurple,
+          visibility: true,
+        });
+        
         return;
       };
       const transaction=new Transaction()
@@ -317,7 +336,15 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
     console.log("error: ", error);
     setLoading(false)
     if(error==4001){
-      Alert.alert("Transaction failed","You rejected the payment request!")
+      // Alert.alert("Transaction failed","You rejected the payment request!")
+      setShowAlertPop({
+        type: 'default',
+        title: 'Transaction failed',
+        message: 'You rejected the payment request!',
+        color: COLORS.mainPurple,
+        visibility: true,
+      });
+     
     }
     // if(error==-32503){
     //   Alert.alert("Transaction failed","Insufficient balance in the account you are trying to pay with!")
@@ -385,9 +412,25 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
       console.log(err?.code," err code")
       setFiatPaymentStart(false)
       if(err.code==4001){
-        Alert.alert("Transaction Rejected","You rejected the transaction")
+        // Alert.alert("Transaction Rejected","You rejected the transaction")
+        setShowAlertPop({
+          type: 'default',
+          title: 'Transaction Rejected',
+          message: 'You rejected the transaction',
+          color: COLORS.mainPurple,
+          visibility: true,
+        });
+        
       }else if(err.code==32603){
-        Alert.alert("Transaction Rejected","The transaction is rejected, check if you have enough balance in your wallet!")
+        // Alert.alert("Transaction Rejected","The transaction is rejected, check if you have enough balance in your wallet!")
+        setShowAlertPop({
+          type: 'default',
+          title: 'Transaction Rejected',
+          message: 'The transaction is rejected, check if you have enough balance in your wallet!',
+          color: COLORS.mainPurple,
+          visibility: true,
+        });
+
       }
     }
     
@@ -422,7 +465,14 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
       setPaymentType('phantom')
     }
     else{
-      Alert.alert("KYC needed","For this option, if you are a first time transak user, you may need to complete your KYC!")
+      // Alert.alert("KYC needed","For this option, if you are a first time transak user, you may need to complete your KYC!")
+      setShowAlertPop({
+        type: 'default',
+        title: 'KYC needed',
+        message: 'For this option, if you are a first time transak user, you may need to complete your KYC!',
+        color: COLORS.mainPurple,
+        visibility: true,
+      });
       setPaymentType('fiat')
     }
   },[paymentMethod])
@@ -466,23 +516,50 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
       </ScrollView>
       <ActivityIndicator animating={loading} size={40} style={styles.loader}/>
       <Modal visible={fiatPaymentStart} animationType='fade' onRequestClose={()=>{
-        if(skipable.current){
-            Alert.alert("Interrupt Transaction","Do you relly want to cancel the transaction?",[
-              {
-                text:'Yes',
-                onPress:()=>{
-                  setFiatPaymentStart(false)
-                  Alert.alert("Transaction failed","Fiat transaction interrupted by the user!")
-                }
+        if(skipable.current)
+          {
+            // Alert.alert("Interrupt Transaction","Do you relly want to cancel the transaction?",[
+            //   {
+            //     text:'Yes',
+            //     onPress:()=>{
+            //       setFiatPaymentStart(false)
+            //       Alert.alert("Transaction failed","Fiat transaction interrupted by the user!")
+            //     }
+            //   },
+            //   {
+            //     text:'No',
+            //     onPress:()=>console.log('Transaction continued!')
+            //   }
+            // ])
+            setShowAlertPop({
+              type: 'confirm',
+              title: 'Interrupt Transaction',
+              message: 'Do you relly want to cancel the transaction?',
+              color: COLORS.mainPurple,
+              visibility: true,
+              yesRequest:()=>{
+                setFiatPaymentStart(false)
+                setShowAlertPop({
+                  type: 'default',
+                  title: 'Transaction failed',
+                  message: 'Fiat transaction interrupted by the user!',
+                  color: COLORS.mainPurple,
+                  visibility: true,
+                });
               },
-              {
-                text:'No',
-                onPress:()=>console.log('Transaction continued!')
-              }
-            ])
+              noRequest:()=>console.log('Transaction continued!')
+            });
+            
           }else{
             console.log(skipable.current)
-            Alert.alert("Cancel request rejected","Cannot cancel transaction after order creation, Please do not close the screen unitl completion!")
+            // Alert.alert("Cancel request rejected","Cannot cancel transaction after order creation, Please do not close the screen unitl completion!")
+            setShowAlertPop({
+              type: 'default',
+              title: 'Cancel request rejected',
+              message: 'Cannot cancel transaction after order creation, Please do not close the screen unitl completion!',
+              color: COLORS.mainPurple,
+              visibility: true,
+            });
           }
     }
     }
@@ -535,6 +612,27 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
           cryptoPrice={cryptoPrice}
         />
       </Modal>
+
+      <Modal
+        transparent
+        visible={showAlertPop.visibility}
+        onRequestClose={() => {
+          setShowAlertPop({...showAlertPop, visibility: false});
+        }}>
+        <CustomPopAlert
+          type={showAlertPop.type}
+          title={showAlertPop.title}
+          message={showAlertPop.message}
+          color={showAlertPop.color}
+          onCloseRequest={setShowAlertPop}
+          // yesRequest={()=>{}} 
+          // noRequest={()=>{}}
+          yesRequest={showAlertPop.yesRequest}
+          noRequest={showAlertPop.noRequest}
+        />
+      </Modal>
+
+      
     </View>
   )
 }

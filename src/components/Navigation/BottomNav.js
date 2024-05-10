@@ -32,9 +32,9 @@ const BottomNav = ({navigation}) => {
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{alert(message)}}>
                 <Icon name="filter" size={25} color={COLORS.mainPurple}/>
                 </TouchableOpacity >
-                <TouchableOpacity style={styles.iconNav} onPress={()=>{alert(message)}}>
+                {/* <TouchableOpacity style={styles.iconNav} onPress={()=>{alert(message)}}>
                     <Icon name="search1" size={25} color={COLORS.mainPurple}/>
-                </TouchableOpacity >
+                </TouchableOpacity > */}
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('reels')}}>
                 <Icon name="hearto" size={25} color={COLORS.mainPurple}/>
                 </TouchableOpacity>
@@ -57,9 +57,9 @@ const BottomNav = ({navigation}) => {
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('Launch')}}>
                 <Icon name="filter" size={25} color={COLORS.mainPurple}/>
                 </TouchableOpacity >
-                <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('mapSearch')}}>
+                {/* <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('mapSearch')}}>
                     <Icon name="search1" size={25} color={COLORS.mainPurple}/>
-                </TouchableOpacity >
+                </TouchableOpacity > */}
                 <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('reels')}}>
                 <Icon name="hearto" size={25} color={COLORS.mainPurple}/>
                 </TouchableOpacity>

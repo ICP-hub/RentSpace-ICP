@@ -1,5 +1,16 @@
-import {View, Text, StyleSheet, TouchableOpacity, Image,Modal,Linking, Platform, Alert, ActivityIndicator} from 'react-native';
-import React, {useEffect, useRef,useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Modal,
+  Linking,
+  Platform,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
 import {COLORS, SIZES} from '../../../../constants/themes';
 import BottomNav from '../../../Navigation/BottomNav';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
@@ -18,91 +29,99 @@ import HeaderSearch from '../Reusables/Header/HeaderSearch';
 import BookHotelPage from './BookHotelPage';
 import HotelCreationForm from '../Profile/Modals/HotelCreationForm';
 import HotelDetailPage from './HotelDetails/HotelDetailPage';
-import {DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain} from "@dfinity/identity";
-import {HttpAgent, toHex,fromHex} from "@dfinity/agent";
-import { createActor,backend } from '../../../../declarations/backend';
-import { createActor as createUserActor } from '../../../../declarations/User';
-import { createActor as createHotelActor } from '../../../../declarations/hotel';
-import { useDispatch,useSelector } from 'react-redux';
-import { setUser } from '../../../../redux/users/actions';
-import { setPrinciple } from '../../../../redux/principle/actions';
-import { setActor} from '../../../../redux/actor/actions'
-import { useRoute } from '@react-navigation/native';
-import { setAgent } from '../../../../redux/agent/actions';
+import {
+  DelegationIdentity,
+  Ed25519PublicKey,
+  ECDSAKeyIdentity,
+  DelegationChain,
+} from '@dfinity/identity';
+import {HttpAgent, toHex, fromHex} from '@dfinity/agent';
+import {createActor, backend} from '../../../../declarations/backend';
+import {createActor as createUserActor} from '../../../../declarations/User';
+import {createActor as createHotelActor} from '../../../../declarations/hotel';
+import {useDispatch, useSelector} from 'react-redux';
+import {setUser} from '../../../../redux/users/actions';
+import {setPrinciple} from '../../../../redux/principle/actions';
+import {setActor} from '../../../../redux/actor/actions';
+import {useRoute} from '@react-navigation/native';
+import {setAgent} from '../../../../redux/agent/actions';
 import Filters from './Filters/Filters';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { host, ids } from '../../../../../DevelopmentConfig';
+import {host, ids} from '../../../../../DevelopmentConfig';
 global.Buffer = require('buffer').Buffer;
 
 const Main = ({navigation}) => {
-
   // const [loading,setLoading]=useState(false)
-  
 
   // const baseQueryUrl=`https://rentspace.kaifoundry.com/api/v1/hotel/filters?`
-  const baseQueryUrl=`http://localhost:5000/api/v1/hotel/filters?`
+  const baseQueryUrl = `http://localhost:5000/api/v1/hotel/filters?`;
 
-  const route=useRoute()
-  const dispatch=useDispatch()
-  const {user}=useSelector(state=>state.userReducer)
-  const {hotels}=useSelector(state=>state.hotelsReducer)
-  const {actors}=useSelector(state=>state.actorReducer)
-  const {principle}=useSelector(state=>state.principleReducer)
-  const {handleLogin,btmSheetFinishRef,btmSheetLoginRef,delegationValidation}=route.params
+  const route = useRoute();
+  const dispatch = useDispatch();
+  const {user} = useSelector(state => state.userReducer);
+  const {hotels} = useSelector(state => state.hotelsReducer);
+  const {actors} = useSelector(state => state.actorReducer);
+  const {principle} = useSelector(state => state.principleReducer);
+  const {
+    handleLogin,
+    btmSheetFinishRef,
+    btmSheetLoginRef,
+    delegationValidation,
+  } = route.params;
   //States for managing modals
   const [safetyModal, setSafetyModal] = useState(false);
   const [cancelModal, setCancelModal] = useState(false);
   const [rulesModal, setRulesModal] = useState(false);
   const [hotelCreateForm, setHotelCreateForm] = useState(false);
-  const [showFilters,setShowFilters]=useState(false)
-  const [queryHotels,setQueryHotels]=useState([])
-  const [query,setQuery]=useState(`maxPrice=${800}&pageSize=${15}&amenities=${[]}&propertyType=${"Hotel"}`)
-  const [searchText,setSearchText]=useState("")
+  const [showFilters, setShowFilters] = useState(false);
+  const [queryHotels, setQueryHotels] = useState([]);
+  const [query, setQuery] = useState(
+    `maxPrice=${800}&pageSize=${15}&amenities=${[]}&propertyType=${'Hotel'}`,
+  );
+  const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
-    
     SplashScreen.hide();
     // getUserAgent()
-    if(principle!=''){
-      console.log(principle)
-    }else{
-      btmSheetLoginRef.current.present()
+    if (principle != '') {
+      console.log(principle);
+    } else {
+      btmSheetLoginRef.current.present();
     }
-    
+
     // generateIdentity();
-  },[])
+  }, []);
   // const getAsyncData=async()=>{
   //   let data=await AsyncStorage.getItem("d2")
   //   console.log("async fetched data",JSON.parse(data))
   //   let parsedData =JSON.parse(data)
   //   delegationValidation(parsedData.publicKey,parsedData.privateKey,parsedData.delegation)
   // }
-  
-  const clearAsyncStore=async()=>{
-    await AsyncStorage.clear()
-  }
-  useEffect(()=>{
+
+  const clearAsyncStore = async () => {
+    await AsyncStorage.clear();
+  };
+  useEffect(() => {
     // getAsyncData()
     // clearAsyncStore()
-   
-    if(principle!=""){
-      console.log(principle)
-    }else{
-      btmSheetLoginRef.current.present()
-    }
-    
-  })
 
-  useEffect(()=>{
-    console.log("filter query'")
-    filterQuery()
-  },[query])
+    if (principle != '') {
+      console.log(principle);
+    } else {
+      btmSheetLoginRef.current.present();
+    }
+  });
+
+  useEffect(() => {
+    console.log("filter query'");
+    filterQuery();
+  }, [query]);
 
   //Refs for managing bottomsheets
   // const btmSheetLoginRef = useRef(null);
   // const btmSheetFinishRef = useRef(null);
-  
+
   const btmSheetCommRef = useRef(null);
   const btmSheetNotiRef = useRef(null);
   const btmExtraDetailsRef = useRef(null);
@@ -111,35 +130,44 @@ const Main = ({navigation}) => {
   const handlePresentModal = () => {
     btmSheetLoginRef.current.present();
   };
-  const openFilters=()=>{
-    console.log("executing")
-    setShowFilters(true)
-  }
+  const openFilters = () => {
+    console.log('executing');
+    setShowFilters(true);
+  };
 
-  const filterQuery=async()=>{
-    console.log("filter query func")
-    await axios.get(`${baseQueryUrl}${query}`).then((res)=>{
-      setQueryHotels([...res?.data?.hotels])
-    })
-  }
+  const filterQuery = async () => {
+    console.log('filter query func', query);
+    await axios
+      .get(`${baseQueryUrl}${query}`)
+      .then(res => {
+        if (res?.data?.hotels === undefined) {
+          console.log('no hotels found');
+          setQueryHotels([]);
+        } else {
+          setQueryHotels([...res?.data?.hotels]);
+        }
+      })
+      .catch(err => console.error(err));
+  };
 
-  const getUserData=async()=>{
-    
+  const getUserData = async () => {
     // console.log(actors)
-    await actors.userActor?.getUserInfo().then((res)=>{
-      if(res[0].firstName!=''){
-        dispatch(setUser(res[0]))
-        btmSheetLoginRef.current.dismiss()
-        alert(`welcome back ${res[0].firstName}!`)
-        
-      }else{
-        alert('Now please follow the registeration process!')
-        btmSheetLoginRef.current.dismiss()
-        btmSheetFinishRef.current.present()
-      }
-    }).catch((err)=>console.error(err))
+    await actors.userActor
+      ?.getUserInfo()
+      .then(res => {
+        if (res[0].firstName != '') {
+          dispatch(setUser(res[0]));
+          btmSheetLoginRef.current.dismiss();
+          alert(`welcome back ${res[0].firstName}!`);
+        } else {
+          alert('Now please follow the registeration process!');
+          btmSheetLoginRef.current.dismiss();
+          btmSheetFinishRef.current.present();
+        }
+      })
+      .catch(err => console.error(err));
     // await AsyncStorage.clear()
-  }
+  };
 
   //methods for opening and closing bottomsheets
   const closeModal = valRef => {
@@ -151,8 +179,6 @@ const Main = ({navigation}) => {
   const openNotiModal = () => {
     btmSheetNotiRef.current.present();
   };
-
-
 
   return (
     // Necessary for capturing touch gestures in the screen
@@ -174,30 +200,34 @@ const Main = ({navigation}) => {
         <Modal visible={hotelCreateForm} animationType="slide">
           <HotelCreationForm setHotelCreateForm={setHotelCreateForm} />
         </Modal>
-        <Modal visible={showFilters} animationType='slide' transparent>
+        <Modal visible={showFilters} animationType="slide" transparent>
           <Filters setQuery={setQuery} setShowFilters={setShowFilters} />
         </Modal>
 
         {/* navigation Bar */}
-        <BottomNav
-          navigation={navigation}
-        />
+        <BottomNav navigation={navigation} />
 
         {/* searchBar Top */}
-        <HeaderSearch filterAction={openFilters} setQuery={setQuery} setSearchText={setSearchText} searchText={searchText}/>
+        <HeaderSearch
+          filterAction={openFilters}
+          setQuery={setQuery}
+          setSearchText={setSearchText}
+          searchText={searchText}
+        />
 
         {/* <UserDetailDemo user={user}/> */}
-        <BookHotelPage navigation={navigation} queryHotels={queryHotels}
-        />
+        <BookHotelPage navigation={navigation} queryHotels={queryHotels} />
 
         {/* BottomSheets */}
         <BottomSheetModal
           ref={btmSheetLoginRef}
           index={0}
           snapPoints={snapPoints}
-          enablePanDownToClose={false}
-          >
-          <BottomSheetLogin handleLogin={handleLogin} delegationValidation={delegationValidation}/>
+          enablePanDownToClose={false}>
+          <BottomSheetLogin
+            handleLogin={handleLogin}
+            delegationValidation={delegationValidation}
+          />
         </BottomSheetModal>
         <BottomSheetModal
           ref={btmSheetFinishRef}
@@ -241,14 +271,14 @@ const Main = ({navigation}) => {
 export default Main;
 
 const styles = StyleSheet.create({
-  view:{
-    width:'100%',
-    height:'100%',
-    backgroundColor:'white'
+  view: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'white',
   },
-  loader:{
-    position:'absolute',
-    top:'45%',
-    left:'45%'
-  }
+  loader: {
+    position: 'absolute',
+    top: '45%',
+    left: '45%',
+  },
 });

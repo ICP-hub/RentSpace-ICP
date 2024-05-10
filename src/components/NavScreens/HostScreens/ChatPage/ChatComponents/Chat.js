@@ -6,7 +6,7 @@ import ChatMessage from './ChatMessage'
 import { io } from 'socket.io-client'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
-import { COLORS } from '../../../../../constants/themes'
+import { COLORS } from '../../../../../constants/themes' 
 
 const Chat = ({item,setOpenChat}) => {
   const [messages,setMessages]=useState([])

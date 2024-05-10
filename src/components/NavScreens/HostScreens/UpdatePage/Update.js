@@ -20,10 +20,12 @@ import AmenitiesPopup from './Popups/AmenitiesPopup';
 
 import Icon11 from 'react-native-vector-icons/MaterialIcons'; //0
 import Icon12 from 'react-native-vector-icons/MaterialCommunityIcons'; //1
-import Icon13 from 'react-native-vector-icons/Foundation'; //2
 
-
-const Update = ({setOpenUpdate}) => {
+const Update = ({item, setOpenUpdate, getHotelDetails}) => {
+  function nameToIcon(name) {
+    const lowerCase = name.charAt(0).toLowerCase() + name.slice(1);
+    return lowerCase;
+  }
 
   const exitModal = value => {
     setSecondPage(value);
@@ -34,18 +36,27 @@ const Update = ({setOpenUpdate}) => {
 
   const [propertyType, setPropertyType] = useState({
     status: false,
-    icon: 'apartment',
-    name: 'Apartment',
-    class: 0,
+    icon: nameToIcon(item.propertyType),
+    name: item.propertyType,
   });
+
+  const amenitiesList = [
+    {name: 'tv', icon: 'tv'},
+    {name: 'wifi', icon: 'wifi'},
+    {name: 'ac', icon: 'air-conditioner'},
+    {name: 'gym', icon: 'dumbbell'},
+    {name: 'dining', icon: 'dining'},
+    {name: 'laundry', icon: 'washing-machine'},
+    {name: 'parking', icon: 'car'},
+    {name: 'medication', icon: 'medication'},
+    {name: 'gaming', icon: 'gamepad-variant'},
+  ];
 
   const [amenities, setAmenities] = useState({
     status: false,
-    data: [
-      {name: 'Pool', icon: 'pool', class: 0},
-      {name: 'Smoke Alarm', icon: 'smoke-detector-variant', class: 1},
-      {name: 'Parking', icon: 'car', class: 1},
-    ],
+    data: item.amenities.map(amenity => {
+      return amenitiesList.find(item => item.name === amenity);
+    }),
   });
 
   const [guest, setGuest] = useState(1);
@@ -122,19 +133,28 @@ const Update = ({setOpenUpdate}) => {
   };
 
   const [passData, setPassData] = useState({
-    property: '', //propertyType.name
-    amenities: '', //amenities.data
+    hotelId: item.hotelId,
     location: '',
     title: '',
+    propertyName: '',
+    propertyAmenities: [],
   });
 
   const goToNextPage = () => {
-    console.log(propertyType.name);
+    const newPropertyAmenities = amenities.data.map(amenity => amenity.name);
 
-    setPassData({...passData, property: propertyType.name, amenities: amenities.data});
-    console.log(passData.property)
-    // setSecondPage(true);
+    setPassData({
+      ...passData,
+      propertyName: propertyType.name,
+      propertyAmenities: [
+        ...passData.propertyAmenities,
+        ...newPropertyAmenities,
+      ],
+    });
 
+    setSecondPage(true);
+    
+  
   };
 
   return (
@@ -163,7 +183,7 @@ const Update = ({setOpenUpdate}) => {
         </View>
         <View style={styles.sectionContent}>
           <View style={styles.sectionItem}>
-            {propertyType.name === 'Glamping' ? (
+            {propertyType.class === 1 ? (
               <Icon4 name={propertyType.icon} size={30} color={COLORS.black} />
             ) : (
               <Icon3 name={propertyType.icon} size={30} color={COLORS.black} />
@@ -182,11 +202,21 @@ const Update = ({setOpenUpdate}) => {
         </View>
         <View style={styles.sectionContent}>
           {amenities.data.map((item, index) => {
-            const IconComponent = item.class === 0 ? Icon11 : item.class === 1 ? Icon12 : Icon13;
+            // const IconComponent = item.class === 0 ? Icon11 : Icon12;
+            const IconComponent = ['tv', 'wifi', 'dining', 'medication'].includes(item.name) ? Icon11 : Icon12;
+            const word = item.name;
+            const firstLetter = word.charAt(0);
+            const firstLetterCap = firstLetter.toUpperCase();
+            const remainingLetters = word.slice(1);
+            const capitalizedName = firstLetterCap + remainingLetters;
             return (
               <View style={styles.sectionItem} key={index}>
-                <IconComponent name={item.icon} size={30} color={COLORS.black} />
-                <Text style={styles.sectionItemText}>{item.name}</Text>
+                <IconComponent
+                  name={item.icon}
+                  size={30}
+                  color={COLORS.black}
+                />
+                <Text style={styles.sectionItemText}>{capitalizedName}</Text>
               </View>
             );
           })}
@@ -197,11 +227,12 @@ const Update = ({setOpenUpdate}) => {
         </View>
         <View style={styles.sectionContent}>
           <TextInput
-            autoFocus
             style={styles.textInput}
-            placeholder="Property's Address"
+            placeholder={item?.location}
             placeholderTextColor={COLORS.textLightGrey}
-            onChangeText={(text) => {setPassData({...passData, location: text});}}
+            onChangeText={text => {
+              setPassData({...passData, location: text});
+            }}
           />
         </View>
         {/* fourth-section */}
@@ -267,11 +298,9 @@ const Update = ({setOpenUpdate}) => {
         <View style={styles.sectionContent}>
           <TextInput
             style={styles.textInput}
-            placeholder="Property's Title"
+            placeholder={item?.hotelName}
             placeholderTextColor={COLORS.textLightGrey}
-            onChangeText={(text) => {setPassData({...passData, title: text});}
-            
-            }
+            onChangeText={text => setPassData({...passData, title: text})}
           />
         </View>
         {/* sixth-section */}
@@ -360,7 +389,7 @@ const Update = ({setOpenUpdate}) => {
       {/* 2nd page modal */}
 
       <Modal visible={secondPage} onRequestClose={() => setSecondPage(false)}>
-        <UpdateModal exitModal={exitModal} />
+        <UpdateModal item={item} passData={passData} exitModal={exitModal} getHotelDetails={getHotelDetails}/>
       </Modal>
 
       {/* property popup modal */}
@@ -379,11 +408,10 @@ const Update = ({setOpenUpdate}) => {
 
       <Modal
         visible={amenities.status}
-        onRequestClose={() => setAmenities({...amenities, status:false})}
+        onRequestClose={() => setAmenities({...amenities, status: false})}
         transparent>
         <AmenitiesPopup amenities={amenities} setAmenities={setAmenities} />
       </Modal>
-
     </View>
   );
 };
@@ -572,7 +600,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 15,
     marginVertical: 10,
-    textAlign: 'center',  
+    textAlign: 'center',
     marginRight: 10,
   },
 });

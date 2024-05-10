@@ -1,6 +1,7 @@
 import {
   Dimensions,
   Image,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -8,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useState, useRef} from 'react';
+import {useState,useEffect} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import {COLORS} from '../../../../constants/themes';
@@ -18,11 +19,26 @@ import {launchImageLibrary} from 'react-native-image-picker';
 
 import {ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
 import {storage} from '../../../../../firebaseConfig';
-// import {} from 'firebase/firestore';
+import axios from 'axios';
+import UploadModal from './Popups/UploadModal';
+import SubmitUpdates from './Popups/SubmitUpdates';
 
-const UpdateModal = ({exitModal}) => {
-  const [imageReturnUrl, setImageReturnUrl] = useState('');
-  const [videoReturnUrl, setVideoReturnUrl] = useState('');
+const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
+  // console.log(item.paymentMethods);
+
+  let img = item.imagesUrls;
+  let vdo = item.videoUrls;
+
+  const [upload, setUpload] = useState(false);
+  const [submit, setSubmit] = useState(false);
+  const [pauseReel, setPauseReel] = useState(true);
+  const [videoControlOpacity, setVideoControlOpacity] = useState(true);
+  const [hotelImg, setHotelImg] = useState(item.imagesUrls);
+  const [hotelVdo, setHotelVdo] = useState(item.videoUrls);
+
+  const [transferred, setTransferred] = useState(0);
+
+ 
 
   const [checkOption, setCheckOption] = useState({
     camera: true,
@@ -45,9 +61,18 @@ const UpdateModal = ({exitModal}) => {
     '30%': false,
   });
 
-  const [pauseReel, setPauseReel] = useState(true);
-
-  const [videoControlOpacity, setVideoControlOpacity] = useState(true);
+  const [finalData, setFinalData] = useState({
+    hotelId: passData.hotelId,
+    hotelName: passData.title,
+    location: passData.location,
+    amenities: passData.propertyAmenities,
+    propertyType: passData.propertyName,
+    hotelDes: '',
+    price: '',
+    imagesUrls: '',
+    videoUrls: '',
+    paymentMethods: [],
+  });
 
   const videoControl = () => {
     setVideoControlOpacity(!videoControlOpacity);
@@ -58,23 +83,17 @@ const UpdateModal = ({exitModal}) => {
     }, 1500);
   };
 
-  let img = require('../../../../assets/images/hostView/hotelImg1.png');
-  let vdo = require('./sample_video.mp4');
-
-  const [hotelImg, setHotelImg] = useState(img);
-  const [hotelVdo, setHotelVdo] = useState(vdo);
-  const [transferred, setTransferred] = useState(0);
-
-  const chooseHotelImg = async () => {
-    const result = await launchImageLibrary(
-      {mediaType: 'photo', includeBase64: true},
+    const chooseHotelImg = async () => {
+    await launchImageLibrary(
+      { mediaType: 'photo', includeBase64: true },
       response => {
-        if (response) {
-          setHotelImg({uri: response.assets[0].uri});
+        if (response && !response.didCancel) { // Check if response is valid and not cancelled
+          setHotelImg(response.assets[0].uri);
           console.log('Image => ', response.assets[0].uri);
+          setUpload(true);
           uploadImage(response.assets[0].uri);
         } else {
-          console.log('No Image Selected');
+          console.log('No Image Selected or Image Picker Cancelled');
         }
       },
     );
@@ -82,11 +101,16 @@ const UpdateModal = ({exitModal}) => {
 
   const chooseHotelvdo = async () => {
     await launchImageLibrary(
-      {mediaType: 'video', includeBase64: true},
+      { mediaType: 'video', includeBase64: true },
       response => {
-        console.log('Video => ', response.assets[0].uri);
-        setHotelVdo({uri: response.assets[0].uri});
-        uploadVideo(response.assets[0].uri);
+        if (response && !response.didCancel) { // Check if response is valid and not cancelled
+          setHotelVdo(response.assets[0].uri);
+          console.log('Video => ', response.assets[0].uri);
+          setUpload(true);
+          uploadVideo(response.assets[0].uri);
+        } else {
+          console.log('No Video Selected or Video Picker Cancelled');
+        }
       },
     );
   };
@@ -111,8 +135,9 @@ const UpdateModal = ({exitModal}) => {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
-          // console.log('File available at', downloadURL);
-          setImageReturnUrl(downloadURL);
+          console.log('File available at', downloadURL);
+          setFinalData({...finalData, imagesUrls: downloadURL});
+          setUpload(false);
         });
       },
     );
@@ -138,12 +163,43 @@ const UpdateModal = ({exitModal}) => {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
-          // console.log('File available at', downloadURL);
-          setVideoReturnUrl(downloadURL);
+          console.log('File available at', downloadURL);
+          setFinalData({...finalData, videoUrls: downloadURL});
+          setUpload(false);
         });
       },
     );
   };
+
+
+
+  // save and exit function to save data and exit modal
+  const saveAndExit = async () => {
+    console.log('Save And Exit');
+
+    setSubmit(true);
+
+    await axios
+      .put('http://localhost:5000/api/v1/hotel/updateHotel', finalData)
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    setTimeout(() => {
+      setSubmit(false);
+    }, 5000);
+
+    getHotelDetails();
+    exitModal(false);
+    console.log(finalData);
+  };
+
+
+
+
 
   return (
     <View style={styles.container}>
@@ -171,7 +227,8 @@ const UpdateModal = ({exitModal}) => {
         <TextInput
           style={[styles.textInput, {height: 100, textAlignVertical: 'top'}]}
           multiline={true}
-          placeholder="Place Description"
+          placeholder={item.hotelDescription}
+          onChangeText={text => setFinalData({...finalData, hotelDes: text})}
         />
 
         {/* sec2 */}
@@ -179,7 +236,7 @@ const UpdateModal = ({exitModal}) => {
           <Text style={styles.sectionTitle}>Cover Photo</Text>
         </View>
         <View style={styles.imageContainer}>
-          <Image source={hotelImg} style={styles.imgStyle} />
+          <Image source={{uri: hotelImg}} style={styles.imgStyle} />
         </View>
         <View style={styles.btnContainer}>
           <TouchableOpacity onPress={() => chooseHotelImg()}>
@@ -197,7 +254,7 @@ const UpdateModal = ({exitModal}) => {
         </View>
         <View style={styles.imageContainer}>
           <Video
-            source={hotelVdo}
+            source={{uri: hotelVdo}}
             resizeMode="cover"
             paused={pauseReel}
             onEnd={() => setPauseReel(true)}
@@ -207,8 +264,9 @@ const UpdateModal = ({exitModal}) => {
             ignoreSilentSwitch="ignore"
             controls={true}
             posterResizeMode="cover"
-            poster="https://picsum.photos/seed/picsum/200/300"
+            poster={hotelImg}
             style={styles.backgroundVideo}
+            
           />
           <TouchableOpacity
             onPress={videoControl}
@@ -246,7 +304,10 @@ const UpdateModal = ({exitModal}) => {
         <TextInput
           style={styles.textInput}
           inputMode="numeric"
-          placeholder="$745/Night"
+          placeholder={`$${item.price}/Night`}
+          onChangeText={text =>
+            setFinalData({...finalData, price: parseFloat(text)})
+          }
         />
 
         {/* sec5 */}
@@ -255,9 +316,13 @@ const UpdateModal = ({exitModal}) => {
         </View>
         <View style={styles.payContainer}>
           <TouchableOpacity
-            onPress={() =>
-              setPayOption({...payOption, ethereum: !payOption.ethereum})
-            }>
+            onPress={() => {
+              setPayOption({...payOption, ethereum: !payOption.ethereum});
+              setFinalData(prevState => ({
+                ...prevState,
+                paymentMethods: [...prevState.paymentMethods, 'ckEth'],
+              }));
+            }}>
             <View
               style={
                 payOption.ethereum ? styles.payItemActive : styles.payItem
@@ -266,9 +331,13 @@ const UpdateModal = ({exitModal}) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() =>
-              setPayOption({...payOption, applePay: !payOption.applePay})
-            }>
+            onPress={() => {
+              setPayOption({...payOption, applePay: !payOption.applePay});
+              setFinalData(prevState => ({
+                ...prevState,
+                paymentMethods: [...prevState.paymentMethods, 'applePay'],
+              }));
+            }}>
             <View
               style={
                 payOption.applePay ? styles.payItemActive : styles.payItem
@@ -277,9 +346,13 @@ const UpdateModal = ({exitModal}) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() =>
-              setPayOption({...payOption, googlePay: !payOption.googlePay})
-            }>
+            onPress={() => {
+              setPayOption({...payOption, googlePay: !payOption.googlePay});
+              setFinalData(prevState => ({
+                ...prevState,
+                paymentMethods: [...prevState.paymentMethods, 'gPay'],
+              }));
+            }}>
             <View
               style={
                 payOption.googlePay ? styles.payItemActive : styles.payItem
@@ -288,21 +361,37 @@ const UpdateModal = ({exitModal}) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setPayOption({...payOption, btc: !payOption.btc})}>
+            onPress={() => {
+              setPayOption({...payOption, btc: !payOption.btc});
+              setFinalData(prevState => ({
+                ...prevState,
+                paymentMethods: [...prevState.paymentMethods, 'ckBTC'],
+              }));
+            }}>
             <View style={payOption.btc ? styles.payItemActive : styles.payItem}>
               <Icon4 name="btc" color={COLORS.black} size={30} />
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setPayOption({...payOption, icp: !payOption.icp})}>
+            onPress={() => {
+              setPayOption({...payOption, icp: !payOption.icp});
+              setFinalData(prevState => ({
+                ...prevState,
+                paymentMethods: [...prevState.paymentMethods, 'ICP'],
+              }));
+            }}>
             <View style={payOption.icp ? styles.payItemActive : styles.payItem}>
               <Text style={styles.payItemText}>ICP</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() =>
-              setPayOption({...payOption, creditCard: !payOption.creditCard})
-            }>
+            onPress={() => {
+              setPayOption({...payOption, creditCard: !payOption.creditCard});
+              setFinalData(prevState => ({
+                ...prevState,
+                paymentMethods: [...prevState.paymentMethods, 'creditCard'],
+              }));
+            }}>
             <View
               style={
                 payOption.creditCard ? styles.payItemActive : styles.payItem
@@ -430,12 +519,21 @@ const UpdateModal = ({exitModal}) => {
         </TouchableOpacity>
 
         {/* sec8 */}
-        <TouchableOpacity
-          style={styles.saveBtn}
-          onPress={() => exitModal(false)}>
+        <TouchableOpacity style={styles.saveBtn} onPress={saveAndExit}>
           <Text style={styles.saveBtnText}>Update And Save</Text>
         </TouchableOpacity>
       </ScrollView>
+
+      {/* Upload Modal */}
+
+      <Modal visible={upload} transparent>
+        <UploadModal transferred={transferred} />
+      </Modal>
+
+      {/* Submit Modal */}
+      <Modal visible={submit} transparent>
+        <SubmitUpdates />
+      </Modal>
     </View>
   );
 };
