@@ -7,6 +7,7 @@ import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'
 import HotelDetailPage from '../HotelDetailPage'
 
 const HotelCard = ({item,navigation}) => {
+    // console.log(item?.details?.imagesUrls)
     const [open,setOpen]=useState(false)
   return (
     <View style={styles.cardCont}>
@@ -14,8 +15,8 @@ const HotelCard = ({item,navigation}) => {
             <Icon2 name="page-next" size={30} color='white' />
         </TouchableOpacity>
         
-        {/* <Image source={{uri:item?.details?.imagesUrls[0].url}} style={styles.img}/> */}
-        <Image source={images.hotelImg3} style={styles.img}/>
+        <Image source={(item?.details?.imagesUrls==""?images.hotel:{uri:item?.details?.imagesUrls})} style={styles.img}/>
+        {/* <Image source={images.hotelImg3} style={styles.img}/> */}
         <View style={styles.dataCont}>
             <Text style={styles.title}>{(item?.hotelTitle)?item?.hotelTitle:"Sample Hotel"}</Text>
             <Text style={styles.simpleText}>{item?.hotelDes??"sample Description"}</Text>

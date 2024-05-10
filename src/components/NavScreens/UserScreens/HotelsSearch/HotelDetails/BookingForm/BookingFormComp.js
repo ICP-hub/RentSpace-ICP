@@ -62,7 +62,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
   const [paymentType,setPaymentType]=useState('cypto')
   const [balanceScreen,setBalanceScreen]=useState(false)
   const [total,setTotal]=useState(
-    ((item?.hotelPrice*booking.bookingDuration)*0.15)+((item?.hotelPrice*booking.bookingDuration)*0.10)+(item?.hotelPrice*booking.bookingDuration)
+    ((item?.hotelPrice)*0.15)+((item?.hotelPrice)*0.10)+(item?.hotelPrice)
   )
   const [cryptoPrice,setCryptoPrice]=useState()
 
@@ -124,8 +124,10 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
       paymentId:paymentId,
       paymentStatus:true,
       hotelId:item?.id,
+      // bookedAt:"start",
+      // bookedTill:"end"
     }
-    alert("in after payment")
+    // alert("in after payment")
     console.log(newObj)  
     book(newObj,notifyBookingConfirm,amnt)
     setBalanceScreen(false)
@@ -171,6 +173,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
           setLoading(false)
         })
       }else{
+        console.log("balance is less : ",amnt)
         setLoading(false)
       }
   }

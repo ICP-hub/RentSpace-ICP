@@ -6,15 +6,15 @@ import PriceCard from './PriceCard'
 const months=["Jan","Feb","Mar","Apr","May","June","July","Aug","Sep","Oct","Nov","Dec"]
 const PriceDetails = ({basePrice,nights,fullPayment,checkIn}) => {
 
-    const [finalPrice,setFinalPrice]=useState(((basePrice*nights)*0.15)+((basePrice*nights)*0.10)+(basePrice*nights))
+    const [finalPrice,setFinalPrice]=useState(((basePrice)*0.15)+((basePrice)*0.10)+(basePrice))
     const prices=[
         {
-            label:`$${basePrice} x ${nights}`,
-            price:basePrice*nights
+            label:`$${basePrice} x 1`,
+            price:basePrice
         },
         {
             label:'RentSpace service fee',
-            price:(basePrice*nights)*0.15
+            price:(basePrice)*0.15
         },
         {
             label:'Taxes',

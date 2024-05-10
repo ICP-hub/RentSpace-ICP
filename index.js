@@ -67,11 +67,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {host, ids} from './DevelopmentConfig';
 import MainProfile from './src/components/NavScreens/UserScreens/Profile/MainProfile/MainProfile';
 import HotelChoice from './src/components/NavScreens/HostScreens/Availibility/HotelChoice/HotelChoice';
-// import * as firebase from '@react-native-firebase/app'
-// import '@react-native-firebase/storage'
-
-
-
 
 const Stack = createNativeStackNavigator();
 

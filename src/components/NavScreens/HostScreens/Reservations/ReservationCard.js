@@ -12,7 +12,7 @@ const ReservationCard = ({item}) => {
     let month=months[d.getMonth()]
     return `${day} ${month}`
   }
-
+//yuku.app nfts rent
   return (
     <View style={styles.card}>
       <View style={styles.textCont}>
@@ -22,7 +22,7 @@ const ReservationCard = ({item}) => {
         </View>
         <View style={styles.textRow}>
           <Text style={styles.title}>Duration</Text>
-          <Text style={styles.normalText}>{item?.bookingData?.bookingDuration} days</Text>
+          <Text style={styles.normalText}>1 days</Text>
           </View>
         <View style={styles.textRow}>
           <Text style={styles.title}>Customer Name</Text>

@@ -58,8 +58,8 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
       <TouchableOpacity style={styles.backIcon} onPress={()=>{setOpen(false)}}>
         <Icon name="angle-left" size={30} color={COLORS.textLightGrey} />    
       </TouchableOpacity> 
-      {/* <Image source={{uri:item?.details?.imagesUrls[0].url}} style={styles.hotelImg}/> */}
-      <Image source={images.hotel} style={styles.hotelImg}/>
+      <Image source={(item?.details?.imagesUrls==""?images.hotel:{uri:item?.details?.imagesUrls})} style={styles.hotelImg}/>
+      {/* <Image source={images.hotel} style={styles.hotelImg}/> */}
       <View style={styles.hotelTitleReviewCont}>
         <View style={styles.hotelTitleCont}>
             <Text style={styles.hotelTitle}>{item?.hotelTitle}</Text>

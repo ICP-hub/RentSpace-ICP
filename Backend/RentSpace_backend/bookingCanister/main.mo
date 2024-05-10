@@ -15,7 +15,7 @@ import Types "Types";
 import Utils "../utils";
 
 shared ({caller = owner}) actor class () = this {
-    stable var hotelCanisterId = "wkpuj-piaaa-aaaan-qlwta-cai";
+    var hotelCanisterId = "b77ix-eeaaa-aaaaa-qaada-cai";
     stable var bookingDataMap = Trie.empty<Types.BookingId, Types.BookingInfo>();
     stable var userXBookingIdMap = Trie.empty<Types.UserId, List.List<Types.BookingId>>();
     stable var hotelXBookingIdMap = Trie.empty<Types.HotelId, List.List<Types.BookingId>>();
@@ -60,9 +60,9 @@ shared ({caller = owner}) actor class () = this {
             case (null) {throw Error.reject("No Hotel Found")};
         };
 
-        if (bookingDuration.bookedAt < hotelAvailableFrom or hotelAvailableTill < bookingDuration.bookedTill) {
-            throw Error.reject("Invalid Time Durations");
-        };
+        // if (bookingDuration.bookedAt < hotelAvailableFrom or hotelAvailableTill < bookingDuration.bookedTill) {
+        //     throw Error.reject("Invalid Time Durations");
+        // };
 
         let hotelBookingDurationData = Trie.get(hotelIdBookedDurations, Utils.textKey hotelId, Text.equal);
         switch (hotelBookingDurationData) {
@@ -71,11 +71,11 @@ shared ({caller = owner}) actor class () = this {
                 switch (Trie.get(hotelIdDurationData, Utils.textKey hotelId, Text.equal)) {
                     case (null) {
                         let durationData = Trie.toArray<Types.BookingId, Types.BookingDuration, Types.BookingDuration>(value, func(k, v) = v);
-                        for (item in durationData.vals()) {
-                            if (item.bookedAt < bookingDuration.bookedAt and bookingDuration.bookedTill < item.bookedTill) {
-                                throw Error.reject("Already Booked Hotel At this time duration");
-                            };
-                        };
+                        // for (item in durationData.vals()) {
+                        //     if (item.bookedAt < bookingDuration.bookedAt and bookingDuration.bookedTill < item.bookedTill) {
+                        //         throw Error.reject("Already Booked Hotel At this time duration");
+                        //     };
+                        // };
                         let bookingDurationTrie = Trie.put(hotelIdDurationData, Utils.textKey bookingId, Text.equal, bookingDuration).0;
                         hotelIdBookedDurations := Trie.put(hotelIdBookedDurations, Utils.textKey hotelId, Text.equal, bookingDurationTrie).0;
                     };

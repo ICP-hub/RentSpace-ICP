@@ -19,7 +19,10 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
     const [booking,setBooking]=useState({
         userId:principle,
         checkInDate:'',
-        bookingDuration:"1",
+        bookingDuration:{
+          bookedAt:"start",
+          bookedTill:"end"
+        },
         cancelStatus:false,
         refundStatus:false,
         paymentStatus:false,
@@ -69,12 +72,13 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
       <View style={styles.textCont}>
             <View style={styles.textContHorz}>
                 <TextInput
-                    value={booking?.bookingDuration}
-                    placeholder=''
+                    value={"1"}
+                    placeholder='1'
                     style={styles.boldLargeText}
                     onChangeText={value=>{
-                        setBooking({...booking,bookingDuration:value.toString()})
-                    }}
+                        // setBooking({...booking,bookingDuration:value.toString()})
+                        console.log("something")
+                      }}
                     keyboardType='numeric'
                 />
                 <Text style={styles.boldLargeText}>night</Text>
@@ -107,7 +111,14 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
       <Calendar
             onDayPress={day => {
               setSelected(day.dateString);
-              setBooking({...booking,date:`${(day.day<10)?"0"+day.day:day.day}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`})
+              setBooking({...booking,
+                date:`${(day.day<10)?"0"+day.day:day.day}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`,
+                checkInDate:`${(day.day<10)?"0"+day.day:day.day}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`,
+                bookingDuration:{
+                  bookedAt:`${(day.day<10)?"0"+day.day:day.day}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`,
+                  bookedTill:`${((day.day+1)<10)?"0"+(day.day+1):(day.day+1)}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`
+              }
+              })
             }}
             style={styles.calendar}
             markedDates={{

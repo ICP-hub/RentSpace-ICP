@@ -42,14 +42,15 @@ const BookingCard = ({item}) => {
       </View>
       <View style={styles.textCont}>
         <Text style={styles.title}>Details</Text>
-        <Text style={styles.normalText}>Check In : {date}</Text>
-        <Text style={styles.normalText}>Duration of Stay : {Number(item?.bookingDuration)} days</Text>
+        <Text style={styles.normalText}>Check In : {item?.date}</Text>
+        <Text style={styles.normalText}>Duration of Stay : 1 days</Text>
+        {/* {Number(item?.bookingDuration)} */}
         <Text style={styles.normalText}>Price per night : ${Number(item?.hotel?.hotelPrice)}</Text>
       </View>
       <View style={styles.whiteHR}/>
       <View style={styles.priceCont}>
         <Text style={styles.total}>Total</Text>
-        <Text style={styles.total}>${Number(item?.hotel?.hotelPrice)*Number(item?.bookingDuration)}</Text>
+        <Text style={styles.total}>${Number(item?.hotel?.hotelPrice)}</Text>
       </View>
       <Modal animationType='slide' visible={showAddReview}>
         <AddReview item={item} setAddReview={setAddReview}/>

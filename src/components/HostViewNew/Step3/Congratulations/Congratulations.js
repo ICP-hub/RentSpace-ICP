@@ -9,6 +9,8 @@ import { setHotels } from '../../../../redux/hotels/actions'
 import { setChatToken } from '../../../../redux/chatToken/actions'
 import axios, { formToJSON } from 'axios'
 import { FileSystem } from 'react-native-file-access'
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
+import { storage } from '../../../../../firebaseConfig'
 
 const Congratulations = ({setHostModal,pos}) => {
   const [loading,setLoading]=useState(false)
@@ -21,6 +23,75 @@ const Congratulations = ({setHostModal,pos}) => {
   const baseUrl="http://localhost:5000"
   const {files}=useSelector(state=>state.filesReducer)
   const {user}=useSelector(state=>state.userReducer)
+  const [imageList,setImageList]=useState([])
+  const [videoList,setVideoList]=useState([])
+
+  // upload function to upload image to firebase
+  async function uploadImage(uri){
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const storageRef = ref(storage, 'hotelImage/' + new Date().getTime());
+    const uploadTask = uploadBytesResumable(storageRef, blob);
+
+    uploadTask.on(
+      'state_changed',
+      snapshot => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+      },
+      error => {
+        console.log('Error => ', error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
+          // console.log('File available at', downloadURL);
+          setImageList(list=>[...list,downloadURL])
+        });
+      },
+    );
+  };
+
+  // upload function to upload image to firebase
+  async function uploadVideo(uri){
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const storageRef = ref(storage, 'hotelVideo/' + new Date().getTime());
+    const uploadTask = uploadBytesResumable(storageRef, blob);
+
+    uploadTask.on(
+      'state_changed',
+      snapshot => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        // setTransferred(progress.toFixed());
+      },
+      error => {
+        console.log('Error => ', error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
+          // console.log('File available at', downloadURL);
+          setVideoList(list=>[...list,downloadURL])
+        });
+      },
+    );
+  };
+  const uploadAllFiles=async()=>{
+    try {
+      setLoading(true)
+      await uploadVideo(files[0].uri)
+      for(let i=1;i<files.length;i++){
+        await uploadImage(files[i].uri)
+      }
+      ApiHotelCreate()
+    } catch (error) {
+      console.log(error)
+    }
+    
+    
+  }
   
   const ApiLogin=async()=>{
     console.log("files",files)
@@ -42,7 +113,7 @@ const Congratulations = ({setHostModal,pos}) => {
     //     console.log("hotel filters resp : ")
     //   }).catch((err)=>{console.log("hotel filters err : ",err)})
     // }
-    const ApiHotelCreate=async()=>{
+    async function ApiHotelCreate(){
       const data={
         hotelTitle:listing?.hotelTitle,
         hotelDes:listing?.hotelDes,
@@ -54,7 +125,8 @@ const Congratulations = ({setHostModal,pos}) => {
         propertyType:listing?.propertyType,
         phantomWalletID:listing?.phantomWalletID,
         paymentMethods:listing?.paymentMethods,
-        files:["vid1","img1","img2"]
+        vidFiles:videoList,
+        imgFiles:imageList
       }
       
       const formData = new FormData();
@@ -121,14 +193,7 @@ const Congratulations = ({setHostModal,pos}) => {
         console.log(err)
       })
     }
-  const createHotel=async()=>{
-    console.log('create hotel : ',listing)
-    setLoading(true)
-      // ApiHotelFilters()
-      ApiHotelCreate()
-      // testLocalHotelCreation()
-  }
-  
+
   return (
     <View style={styles.view}>
       <Image source={images.congrats} style={styles.img}/>  
@@ -141,7 +206,7 @@ const Congratulations = ({setHostModal,pos}) => {
       Thank You...
       </Text>
       <View style={styles.btnView}>
-        <TouchableOpacity style={styles.btn} onPress={createHotel}>
+        <TouchableOpacity style={styles.btn} onPress={uploadAllFiles}>
             <Text style={styles.btnText}>Let’s get started</Text>
         </TouchableOpacity>
       </View>
