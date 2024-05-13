@@ -1,4 +1,4 @@
-import {Alert, Modal, StyleSheet, Text, View} from 'react-native';
+import {Alert, Modal, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import BottomBtn from '../../Reusables/BottomBtn';
 import SaveBtn from '../../Reusables/SaveBtn';
@@ -78,7 +78,7 @@ const Amenities = ({setHostModal, pos}) => {
 
   const emptyCheck = () => {
     if (amenities.length == 0) {
-    //   Alert.alert('No aminities slected!', 'Select atleast one aminity');
+      // Alert.alert('No aminities slected!', 'Select atleast one aminity');
         setShowAlertPop({
             type: 'default',
             title: 'No aminities slected!',
@@ -101,7 +101,7 @@ const Amenities = ({setHostModal, pos}) => {
   };
 
   return (
-    <View style={styles.view}>
+    <SafeAreaView style={styles.view}>
       <SaveBtn setHostModal={setHostModal} />
       <Text style={styles.title}>Property Type</Text>
       <View style={[styles.listCont, {marginBottom: 30}]}>
@@ -146,7 +146,7 @@ const Amenities = ({setHostModal, pos}) => {
           onCloseRequest={setShowAlertPop}
         />
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 

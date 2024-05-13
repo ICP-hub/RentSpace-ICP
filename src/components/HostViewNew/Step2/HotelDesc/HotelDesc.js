@@ -1,12 +1,26 @@
-import { TextInput, StyleSheet, Text, View } from 'react-native'
+import { TextInput, StyleSheet, Text, View, Modal } from 'react-native'
 import React, { useState } from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
 import SaveBtn from '../../Reusables/SaveBtn'
 import BottomBtn from '../../Reusables/BottomBtn'
 import { useDispatch, useSelector } from 'react-redux'
 import { setListing } from '../../../../redux/NewListing/actions'
+import CustomPopAlert from '../../../NavScreens/CustomPopAlert'
 
 const HotelDesc = ({setHostModal,pos}) => {
+
+  const [showAlertPop, setShowAlertPop] = useState({
+    show: false,
+    title: '',
+    message: '',
+    color: '',
+  });
+
+
+
+
+
+
   const [len,setLen]=useState(0)
   const [desc,setDesc]=useState('')
 
@@ -14,7 +28,13 @@ const HotelDesc = ({setHostModal,pos}) => {
   const {listing}=useSelector(state=>state.listingReducer)
   const descChange=(value)=>{
     if(value.length>500){
-      alert('Description cannot be longer than 500 characters')
+      // alert('Description cannot be longer than 500 characters')
+      setShowAlertPop({
+        show: true,
+        title: 'Description cannot be longer than 500 characters',
+        message: '',
+        color: 'black',
+      });
     }else{
       setLen(value.length)
       setDesc(value)
@@ -22,7 +42,13 @@ const HotelDesc = ({setHostModal,pos}) => {
   }
   const checkEmpty=()=>{
     if(desc==''){
-      alert("Please do not leave description empty")
+      // alert("Please do not leave description empty")
+      setShowAlertPop({
+        show: true,
+        title: 'Please do not leave description empty',
+        message: '',
+        color: 'black',
+      });
       return false
     }else{
       dispatch(setListing({...listing,hotelDes:desc}))
@@ -43,6 +69,14 @@ const HotelDesc = ({setHostModal,pos}) => {
       />
       <Text style={styles.smallText}>{len}/500</Text>
       <BottomBtn setHostModal={setHostModal} pos={pos} step={2} nextFunc={checkEmpty}/>
+      <Modal visible={showAlertPop.show} transparent>
+        <CustomPopAlert
+          title={showAlertPop.title}
+          message={showAlertPop.message}
+          color={showAlertPop.color}
+          onCloseRequest={setShowAlertPop}
+        />
+      </Modal>
     </View>
   )
 }

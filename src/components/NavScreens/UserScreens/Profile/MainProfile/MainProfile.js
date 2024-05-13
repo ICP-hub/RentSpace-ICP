@@ -23,8 +23,9 @@ import UserDetailDemo from '../Modals/UserDetailDemo'
 import Report from '../Report/Report'
 import Feedback from '../Feedback/Feedback'
 import MainChat from '../SupportChat/MainChat'
-
-
+import Privacy from '../Privacy/Privacy'
+import Terms from '../TermAndConditions/Terms'
+import Faq from '../Faq/Faq'
 
 const MainProfile = ({navigation}) => {
 
@@ -36,6 +37,10 @@ const MainProfile = ({navigation}) => {
   const [reportPage,setReportPage]=useState(false)
   const [feedbackPage,setFeedbackPage]=useState(false)
   const [supportChatPage,setSupportChatPage]=useState(false)
+  //below are the states for the new pages
+  const [privacyPage,setPrivacyPage]=useState(false)
+  const [FAQPage,setFAQPage]=useState(false)
+  const [termsPage,setTermsPage]=useState(false)
 
   const logout=()=>{
     dispatch(setActor({
@@ -112,19 +117,19 @@ const makeHost=async()=>{
       onClick:()=>{setShowDetails(true)},
       icon:<Icon4 name='user'color={COLORS.black} size={20}/>
     },
-    {
-      text:"Payments",
-      onClick:()=>{},
-      icon:<Icon5 name='payments'color={COLORS.black} size={20}/>
-    },
-    {
-      text:"Notification",
-      onClick:()=>{},
-      icon:<Icon2 name='bell'color={COLORS.black} size={20}/>
-    },
+    // {
+    //   text:"Payments",
+    //   onClick:()=>{},
+    //   icon:<Icon5 name='payments'color={COLORS.black} size={20}/>
+    // },
+    // {
+    //   text:"Notification",
+    //   onClick:()=>{},
+    //   icon:<Icon2 name='bell'color={COLORS.black} size={20}/>
+    // },
     {
       text:"Privacy",
-      onClick:()=>{},
+      onClick:()=>{setPrivacyPage(true)},
       icon:<Icon2 name='lock'color={COLORS.black} size={20}/>
     },
   ]
@@ -151,7 +156,7 @@ const makeHost=async()=>{
   const supportList=[
     {
       text:"F&Q",
-      onClick:()=>{},
+      onClick:()=>{setFAQPage(true)},
       icon:<Icon3 color={COLORS.black} name='notebook' size={20}/>
     },
     {
@@ -159,11 +164,11 @@ const makeHost=async()=>{
       onClick:()=>{setFeedbackPage(true)},
       icon:<Icon3 color={COLORS.black} name='pencil' size={20}/>
     },
-    {
-      text:"How RentSpace works",
-      onClick:()=>{},
-      icon:<Icon2 color={COLORS.black} name='book-open' size={20}/>
-    },
+    // {
+    //   text:"How RentSpace works",
+    //   onClick:()=>{},
+    //   icon:<Icon2 color={COLORS.black} name='book-open' size={20}/>
+    // },
     {
       text:"Report",
       icon:<Icon6 name='warning' color={COLORS.black} size={20}/>,
@@ -178,7 +183,7 @@ const makeHost=async()=>{
   const legalList=[
     {
       text:"Terms and Conditions",
-      onClick:()=>{},
+      onClick:()=>{setTermsPage(true)},
       icon:<Icon2 color={COLORS.black} name='book-open' size={20}/>
     }
   ]
@@ -232,6 +237,19 @@ const makeHost=async()=>{
         <Modal visible={supportChatPage} animationType='slide'>
           <MainChat setSupportChatPage={setSupportChatPage}/>
         </Modal>
+        {/* new UI below */}
+        <Modal visible={privacyPage} animationType='slide' onRequestClose={()=>setPrivacyPage(false)}>
+          <Privacy setPrivacyPage={setPrivacyPage}/>
+        </Modal>
+
+        <Modal visible={FAQPage} animationType='slide' onRequestClose={()=>setFAQPage(false)}>
+          <Faq setFAQPage={setFAQPage}/>
+        </Modal>
+
+        <Modal visible={termsPage} animationType='slide' onRequestClose={()=>setTermsPage(false)}>
+          <Terms setTermsPage={setTermsPage}/>
+        </Modal>
+
     </View>
   )
 }

@@ -1,155 +1,195 @@
-import { StyleSheet, Text, View ,Image, ActivityIndicator} from 'react-native'
-import React,{useState} from 'react'
-import { SIZES,COLORS } from '../../constants/themes'
-import {  images } from '../../constants'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { useSelector } from 'react-redux'
+import {StyleSheet, Text, View, Image, ActivityIndicator, Modal} from 'react-native';
+import React, {useState} from 'react';
+import {SIZES, COLORS} from '../../constants/themes';
+import {images} from '../../constants';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useSelector} from 'react-redux';
+import CustomPopAlert from '../NavScreens/CustomPopAlert';
 
-const BottomSheetCommunity = ({selfMod,openNotiModal}) => {
+const BottomSheetCommunity = ({selfMod, openNotiModal}) => {
+  const [showAlertPop, setShowAlertPop] = useState({
+    show: false,
+    title: '',
+    message: '',
+    color: '',
+  }); // use this
 
-    const {user}=useSelector(state=>state.userReducer)
-    const {actors}=useSelector(state=>state.actorReducer)
-    const [loading,setLoading]=useState(false)
-    const agreeOnAgreement=async()=>{
-        console.log({...user,agreementStatus:true,userGovId:'123',userProfile:"img1"})
-        setLoading(true)
-        await actors?.userActor.updateUserInfo({...user,agreementStatus:true,userGovId:'123',userProfile:"img1"}).then((res)=>{
-            setLoading(false)
-            alert('Thanks for accepting our guidelines!')
-            selfMod.current.dismiss()
-            openNotiModal()
-        }).catch((err)=>{
-            console.log(err)
-            setLoading(false)
-        })
-        
-    }
+  const {user} = useSelector(state => state.userReducer);
+  const {actors} = useSelector(state => state.actorReducer);
+  const [loading, setLoading] = useState(false);
+  const agreeOnAgreement = async () => {
+    console.log({
+      ...user,
+      agreementStatus: true,
+      userGovId: '123',
+      userProfile: 'img1',
+    });
+    setLoading(true);
+    await actors?.userActor
+      .updateUserInfo({
+        ...user,
+        agreementStatus: true,
+        userGovId: '123',
+        userProfile: 'img1',
+      })
+      .then(res => {
+        setLoading(false);
+        // alert('Thanks for accepting our guidelines!')
+        setShowAlertPop({
+          show: true,
+          title: 'Thanks for accepting our guidelines!',
+          message: '',
+          color: 'black',
+        });
+
+        selfMod.current.dismiss();
+        openNotiModal();
+      })
+      .catch(err => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
 
   return (
     <View style={styles.bottomSheet}>
-        <View style={styles.commImgCont}>
-            <Image source={images.commLogo}/>
-        </View>
-      <Text style={styles.heading}>
-        Our community commitment
-      </Text>
+      <View style={styles.commImgCont}>
+        <Image source={images.commLogo} />
+      </View>
+      <Text style={styles.heading}>Our community commitment</Text>
       <Text style={styles.tagLine}>
-        Rent Space is a community where anyone can belong. 
+        Rent Space is a community where anyone can belong.
       </Text>
       <Text style={styles.simpleText}>
-      To ensure this, we're asking you to commit to the following:
+        To ensure this, we're asking you to commit to the following:
       </Text>
       <Text style={styles.simpleText}>
-      I agree to treat everyone in the Rent space community -regardless of their race, religion, national origin, ethnicity, skin colour, disability, sex, gender identity, sexual orientation or age
-- with respect, and without judgement or bias.
+        I agree to treat everyone in the Rent space community -regardless of
+        their race, religion, national origin, ethnicity, skin colour,
+        disability, sex, gender identity, sexual orientation or age - with
+        respect, and without judgement or bias.
       </Text>
-      <Text style={styles.linkText}>
-        Learn More.
-      </Text>
-      
-      <TouchableOpacity style={styles.agreeBtn} onPress={agreeOnAgreement}>
-                <Text style={styles.agreeText}>Accept and continue</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.declineBtn} onPress={()=>{
-            alert("Please agree to the Community Guideline")
-        }}>
-                <Text style={styles.declineText}>Decline</Text>
-        </TouchableOpacity>
-        <ActivityIndicator animating={loading} style={styles.loader} size={40}/>
-    </View>
-  )
-}
+      <Text style={styles.linkText}>Learn More.</Text>
 
-export default BottomSheetCommunity
+      <TouchableOpacity style={styles.agreeBtn} onPress={agreeOnAgreement}>
+        <Text style={styles.agreeText}>Accept and continue</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.declineBtn}
+        onPress={() => {
+          // alert("Please agree to the Community Guideline")
+          setShowAlertPop({
+            show: true,
+            title: 'Please agree to the Community Guideline',
+            message: '',
+            color: 'black',
+          });
+        }}>
+        <Text style={styles.declineText}>Decline</Text>
+      </TouchableOpacity>
+      <ActivityIndicator animating={loading} style={styles.loader} size={40} />
+
+      <Modal visible={showAlertPop.show} transparent>
+        <CustomPopAlert
+          title={showAlertPop.title}
+          message={showAlertPop.message}
+          color={showAlertPop.color}
+          onCloseRequest={setShowAlertPop}
+        />
+      </Modal>
+    </View>
+  );
+};
+
+export default BottomSheetCommunity;
 
 const styles = StyleSheet.create({
+  bottomSheet: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    height: '100%',
+  },
 
-    bottomSheet:{
-        width:"100%",
-        display:'flex',
-        flexDirection:'column',
-        alignItems:'center',
-        height:'100%'
-    },
-
-    commImgCont:{
-        display:'flex',
-        flexDirection:'column',
-        alignItems:'left',
-        width:'80%',
-        marginTop:50,
-        marginBottom:35
-    },
-    heading:{
-        width:"80%",
-        fontSize:SIZES.medium,
-        fontWeight:'bold',
-        color:"black",
-        marginBottom:20
-    },
-    tagLine:{
-        width:"80%",
-        fontSize:SIZES.xLarge,
-        fontWeight:'bold',
-        color:"black",
-        marginBottom:10
-    },
-    simpleText:{
-        color:COLORS.black,
-        fontSize:SIZES.small,
-        width:'80%',
-        marginBottom:20,
-        opacity:0.4
-    },
-    linkText:{
-        color:COLORS.black,
-        fontSize:SIZES.small,
-        width:'80%',
-        marginBottom:30,
-        fontWeight:'bold',
-        textDecorationLine:'underline',
-        opacity:0.6
-        
-    },
-    agreeBtn:{
-        display:'flex',
-        flexDirection:'column',
-        alignItems:'center',
-        justifyContent:'center',
-        width:'100%',
-        backgroundColor:COLORS.mainPurple,
-        borderRadius:10,
-        height:50,
-        paddingHorizontal:80,
-        marginTop:10
-    },
-    agreeText:{
-        color:'white',
-        fontWeight:'bold',
-        fontSize:SIZES.medium
-    },
-    declineBtn:{
-        display:'flex',
-        flexDirection:'column',
-        alignItems:'center',
-        justifyContent:'center',
-        width:'100%',
-        backgroundColor:COLORS.white,
-        borderRadius:10,
-        height:50,
-        paddingHorizontal:125,
-        marginTop:10,
-        borderWidth:1,
-        borderColor:COLORS.mainPurple
-    },
-    declineText:{
-        color:COLORS.mainPurple,
-        fontWeight:'bold',
-        fontSize:SIZES.medium
-    },
-    loader:{
-        position:'absolute',
-        top:'45%',
-        left:'45%'
-    }
-})
+  commImgCont: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'left',
+    width: '80%',
+    marginTop: 50,
+    marginBottom: 35,
+  },
+  heading: {
+    width: '80%',
+    fontSize: SIZES.medium,
+    fontWeight: 'bold',
+    color: 'black',
+    marginBottom: 20,
+  },
+  tagLine: {
+    width: '80%',
+    fontSize: SIZES.xLarge,
+    fontWeight: 'bold',
+    color: 'black',
+    marginBottom: 10,
+  },
+  simpleText: {
+    color: COLORS.black,
+    fontSize: SIZES.small,
+    width: '80%',
+    marginBottom: 20,
+    opacity: 0.4,
+  },
+  linkText: {
+    color: COLORS.black,
+    fontSize: SIZES.small,
+    width: '80%',
+    marginBottom: 30,
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
+    opacity: 0.6,
+  },
+  agreeBtn: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    backgroundColor: COLORS.mainPurple,
+    borderRadius: 10,
+    height: 50,
+    paddingHorizontal: 80,
+    marginTop: 10,
+  },
+  agreeText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: SIZES.medium,
+  },
+  declineBtn: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    backgroundColor: COLORS.white,
+    borderRadius: 10,
+    height: 50,
+    paddingHorizontal: 125,
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: COLORS.mainPurple,
+  },
+  declineText: {
+    color: COLORS.mainPurple,
+    fontWeight: 'bold',
+    fontSize: SIZES.medium,
+  },
+  loader: {
+    position: 'absolute',
+    top: '45%',
+    left: '45%',
+  },
+});

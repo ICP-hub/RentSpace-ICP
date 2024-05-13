@@ -60,30 +60,7 @@ const confirmAlert = (title,message,color,onCloseRequest,yesRequest,noRequest,) 
     </View>
   );
 };
-const errorAlert = (title, message, color, onCloseRequest) => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.errAlertBox}>
-        <View style={styles.errAlertSec}>
-          <View style={styles.errAlertHeader}>
-            <Icon name="warning" size={25} color={color ? color : 'red'} />
-            <Text style={styles.errAlertTitle}>{title}</Text>
-          </View>
 
-          <Text style={styles.errAlertMsg}>{message}</Text>
-        </View>
-        <TouchableOpacity onPress={() => onCloseRequest(false)}>
-          <Icon
-            name="cross"
-            size={25}
-            color={color ? color : 'grey'}
-            style={{position: 'absolute', top: 2, right: 3}}
-          />
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-};
 
 const CustomPopAlert = ({
   type,
@@ -106,9 +83,6 @@ const CustomPopAlert = ({
       yesRequest,
       noRequest,
     );
-  }
-  if (type === 'error') {
-    return errorAlert(title, message, color, onCloseRequest);
   }
 };
 

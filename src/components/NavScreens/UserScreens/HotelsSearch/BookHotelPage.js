@@ -224,13 +224,13 @@ const BookHotelPage = ({navigation, queryHotels}) => {
           visible={makeVisible}
           onRequestClose={() => setMakeVisible(false)}>
           <CustomPopAlert
-            type="confirmation"
+            type="default"
             title="Oops! Something went wrong."
             message="We're sorry, but the mobile app encountered a serious error.
             Please try again later or contact support for assistance."
             color={COLORS.mainPurple}
             onCloseRequest={setMakeVisible}
-            yesRequest={()=>testyesFunc('Yeah')}
+            yesRequest={testyesFunc}
             noRequest={testnoFunc}
             
           />
