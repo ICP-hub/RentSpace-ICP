@@ -18,13 +18,14 @@ import { images } from '../../../../constants';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
-const CustomAlert = ({showAlert, setShowAlert,id}) => {
+const CustomAlert = ({showAlert, setShowAlert,item}) => {
   // const [loading,setLoading]=useState(false)
   const baseUrl="http://localhost:5000"
   const {authData}=useSelector(state=>state.authDataReducer)
   const handleYes = async() => {
+    console.log(item.hotelId)
     console.log(authData.privateKey,authData.publicKey,authData.delegation)
-    await axios.delete(`${baseUrl}/api/v1/hotel/deleteHotel?hotelId=${id}`,{
+    await axios.delete(`${baseUrl}/api/v1/hotel/deleteHotel?hotelId=${encodeURIComponent(item.hotelId)}`,{
       headers:{
         "x-private":authData.privateKey,
         "x-public":authData.publicKey,
@@ -108,7 +109,7 @@ const ListingCard = ({item, getHotelDetails}) => {
         <TouchableOpacity onPress={deleteListing}>
           <Icon name="delete" color={COLORS.black} size={20} />
         </TouchableOpacity>
-        <CustomAlert showAlert={showAlert} setShowAlert={setShowAlert} id={item?.hotelId} />
+        <CustomAlert showAlert={showAlert} setShowAlert={setShowAlert} item={item} />
       </View>
 
       <Modal visible={openUpdate} onRequestClose={() => setOpenUpdate(false)} >

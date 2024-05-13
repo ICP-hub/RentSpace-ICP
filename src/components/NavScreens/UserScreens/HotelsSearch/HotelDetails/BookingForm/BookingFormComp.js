@@ -173,7 +173,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
           setLoading(false)
         })
       }else{
-        console.log("balance is less : ",amnt)
+        console.log("balance is less : ",amnt,sendAmount)
         setLoading(false)
       }
   }
@@ -521,37 +521,37 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
       <Modal visible={fiatPaymentStart} animationType='fade' onRequestClose={()=>{
         if(skipable.current)
           {
-            // Alert.alert("Interrupt Transaction","Do you relly want to cancel the transaction?",[
-            //   {
-            //     text:'Yes',
-            //     onPress:()=>{
-            //       setFiatPaymentStart(false)
-            //       Alert.alert("Transaction failed","Fiat transaction interrupted by the user!")
-            //     }
-            //   },
-            //   {
-            //     text:'No',
-            //     onPress:()=>console.log('Transaction continued!')
-            //   }
-            // ])
-            setShowAlertPop({
-              type: 'confirm',
-              title: 'Interrupt Transaction',
-              message: 'Do you relly want to cancel the transaction?',
-              color: COLORS.mainPurple,
-              visibility: true,
-              yesRequest:()=>{
-                setFiatPaymentStart(false)
-                setShowAlertPop({
-                  type: 'default',
-                  title: 'Transaction failed',
-                  message: 'Fiat transaction interrupted by the user!',
-                  color: COLORS.mainPurple,
-                  visibility: true,
-                });
+            Alert.alert("Interrupt Transaction","Do you relly want to cancel the transaction?",[
+              {
+                text:'Yes',
+                onPress:()=>{
+                  setFiatPaymentStart(false)
+                  Alert.alert("Transaction failed","Fiat transaction interrupted by the user!")
+                }
               },
-              noRequest:()=>console.log('Transaction continued!')
-            });
+              {
+                text:'No',
+                onPress:()=>console.log('Transaction continued!')
+              }
+            ])
+            // setShowAlertPop({
+            //   type: 'confirm',
+            //   title: 'Interrupt Transaction',
+            //   message: 'Do you relly want to cancel the transaction?',
+            //   color: COLORS.mainPurple,
+            //   visibility: true,
+            //   yesRequest:()=>{
+            //     setFiatPaymentStart(false)
+            //     setShowAlertPop({
+            //       type: 'default',
+            //       title: 'Transaction failed',
+            //       message: 'Fiat transaction interrupted by the user!',
+            //       color: COLORS.mainPurple,
+            //       visibility: true,
+            //     });
+            //   },
+            //   noRequest:()=>console.log('Transaction continued!')
+            // });
             
           }else{
             console.log(skipable.current)
@@ -647,7 +647,8 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'column',
         alignItems:'center',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.mainGrey,
+        // zIndex:60
     },
     backIconCont:{
         position:'absolute',

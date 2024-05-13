@@ -16,6 +16,8 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import CalendarScreen from '../CalendarScreen/CalendarScreen';
 // import {useSelector} from 'react-redux';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { setChatToken } from '../../../../../redux/chatToken/actions';
 
 const HotelChoice = ({navigation}) => {
 
@@ -23,6 +25,10 @@ const HotelChoice = ({navigation}) => {
   // const {actors} = useSelector(state => state.actorReducer);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedHotel, setSelectedHotel] = useState({});
+  const {authData}=useSelector(state=>state.authDataReducer)
+  const dispatch=useDispatch()
+  // const baseUrl="https://rentspace.kaifoundry.com"
+  const baseUrl="http://localhost:5000"
 
   const [hotelList, setHotelList] = useState([]);
 
@@ -40,6 +46,19 @@ const HotelChoice = ({navigation}) => {
   // useEffect(()=>{
   //   getHotelDetails()
   // },[])
+
+  const ApiLogin=async()=>{
+    // console.log("files",files)
+     await axios.post(`${baseUrl}/api/v1/login/user`,{},{headers:{
+      "x-private":authData.privateKey,
+      "x-public":authData.publicKey,
+      "x-delegation":authData.delegation
+     }}).then((res)=>{
+        console.log('hotel login api : ',res.data.userToken)
+        dispatch(setChatToken(res.data.userToken))
+        // setToken(res.data.userToken)
+     })
+    }
 
   function getHotelDetails() {
     const userPrincipal =
@@ -60,6 +79,7 @@ const HotelChoice = ({navigation}) => {
 
   useEffect(() => {
     getHotelDetails();
+    ApiLogin()
   }, []);
 
   const openCalendarModal = hotel => {

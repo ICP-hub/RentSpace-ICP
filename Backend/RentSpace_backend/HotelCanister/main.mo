@@ -78,8 +78,9 @@ shared ({caller = owner}) actor class () {
         };
     };
     public shared ({caller}) func updateHotel(hotelId : Types.HotelId, hotelData : Types.HotelInfo) : async ?Types.HotelInfo {
+        // or Utils.checkKeyExist<Types.HotelInfo>(Principal.toText(caller), hotelDataMap) == false
 
-        if (Principal.isAnonymous(caller) == true or Utils.checkKeyExist<Types.HotelInfo>(Principal.toText(caller), hotelDataMap) == false) {
+        if (Principal.isAnonymous(caller) == true ) {
             Debug.trap("No Access");
         };
         createHotelValidation(hotelData);
