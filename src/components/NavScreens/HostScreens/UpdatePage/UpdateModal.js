@@ -22,9 +22,10 @@ import {storage} from '../../../../../firebaseConfig';
 import axios from 'axios';
 import UploadModal from './Popups/UploadModal';
 import SubmitUpdates from './Popups/SubmitUpdates';
+import { useSelector } from 'react-redux';
 
 const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
-  // console.log(item.paymentMethods);
+  console.log(item);
 
   let img = item.imagesUrls;
   let vdo = item.videoUrls;
@@ -35,6 +36,7 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
   const [videoControlOpacity, setVideoControlOpacity] = useState(true);
   const [hotelImg, setHotelImg] = useState(item.imagesUrls);
   const [hotelVdo, setHotelVdo] = useState(item.videoUrls);
+  const {authData}=useSelector(state => state.authDataReducer)
 
   const [transferred, setTransferred] = useState(0);
 
@@ -180,7 +182,12 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
     setSubmit(true);
 
     await axios
-      .put('http://localhost:5000/api/v1/hotel/updateHotel', finalData)
+      .put('http://localhost:5000/api/v1/hotel/updateHotel', finalData,{
+        headers:{
+        "x-private":authData.privateKey,
+        "x-public":authData.publicKey,
+        "x-delegation":authData.delegation,
+      }})
       .then(res => {
         console.log(res.data);
       })

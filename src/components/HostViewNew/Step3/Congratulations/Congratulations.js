@@ -28,63 +28,69 @@ const Congratulations = ({setHostModal,pos}) => {
 
   // upload function to upload image to firebase
   async function uploadImage(uri){
-    const response = await fetch(uri);
-    const blob = await response.blob();
-    const storageRef = ref(storage, 'hotelImage/' + new Date().getTime());
-    const uploadTask = uploadBytesResumable(storageRef, blob);
-
-    uploadTask.on(
-      'state_changed',
-      snapshot => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-      },
-      error => {
-        console.log('Error => ', error);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
-          // console.log('File available at', downloadURL);
-          setImageList(list=>[...list,downloadURL])
-        });
-      },
-    );
+    return new Promise(async(resolve,reject)=>{
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const storageRef = ref(storage, 'hotelImage/' + new Date().getTime());
+      const uploadTask = uploadBytesResumable(storageRef, blob);
+  
+      uploadTask.on(
+        'state_changed',
+        snapshot => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+        },
+        error => {
+          console.log('Error => ', error);
+          reject(new Error("Some error occured while trying to upload images"))
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
+            // console.log('File available at', downloadURL);
+            setImageList(list=>[...list,downloadURL])
+            resolve(downloadURL)
+          });
+        },
+      );
+    })
+    
   };
 
   // upload function to upload image to firebase
   async function uploadVideo(uri){
-    const response = await fetch(uri);
-    const blob = await response.blob();
-    const storageRef = ref(storage, 'hotelVideo/' + new Date().getTime());
-    const uploadTask = uploadBytesResumable(storageRef, blob);
+    return new Promise(async(resolve,reject)=>{
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const storageRef = ref(storage, 'hotelVideo/' + new Date().getTime());
+      const uploadTask = uploadBytesResumable(storageRef, blob);
 
-    uploadTask.on(
-      'state_changed',
-      snapshot => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-        // setTransferred(progress.toFixed());
-      },
-      error => {
-        console.log('Error => ', error);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
-          // console.log('File available at', downloadURL);
-          setVideoList(list=>[...list,downloadURL])
-        });
-      },
-    );
+      uploadTask.on(
+        'state_changed',
+        snapshot => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          // setTransferred(progress.toFixed());
+        },
+        error => {
+          console.log('Error => ', error);
+          reject("Some error occured while trying to upload video")
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
+            // console.log('File available at', downloadURL);
+            setVideoList(list=>[...list,downloadURL])
+            resolve(downloadURL)
+          });
+        },
+      );
+    })
+    
   };
   const uploadAllFiles=async()=>{
     try {
-      setLoading(true)
-      await uploadVideo(files[0].uri)
-      for(let i=1;i<files.length;i++){
-        await uploadImage(files[i].uri)
-      }
+      
       ApiHotelCreate()
     } catch (error) {
       console.log(error)
@@ -114,6 +120,15 @@ const Congratulations = ({setHostModal,pos}) => {
     //   }).catch((err)=>{console.log("hotel filters err : ",err)})
     // }
     async function ApiHotelCreate(){
+
+      setLoading(true)
+      // await uploadVideo(files[0].uri)
+      let uploadPromises=[uploadVideo(files[0].uri)]
+      for(let i=1;i<files.length;i++){
+        uploadPromises.push(uploadImage(files[i].uri))
+      }
+      Promise.all(uploadPromises).then(async(values)=>{
+
       const data={
         hotelTitle:listing?.hotelTitle,
         hotelDes:listing?.hotelDes,
@@ -125,8 +140,8 @@ const Congratulations = ({setHostModal,pos}) => {
         propertyType:listing?.propertyType,
         phantomWalletID:listing?.phantomWalletID,
         paymentMethods:listing?.paymentMethods,
-        vidFiles:videoList,
-        imgFiles:imageList
+        vidFiles:[values[0]],
+        imgFiles:values.slice(1)
       }
       
       const formData = new FormData();
@@ -136,6 +151,8 @@ const Congratulations = ({setHostModal,pos}) => {
       for (const [key, value] of Object.entries(data)) {
         formData.append(key, value);
       }
+
+      
       
       // let newFiles=[]
       // await FileSystem.readFile(files[0].uri,'base64').then((res)=>{
@@ -175,6 +192,7 @@ const Congratulations = ({setHostModal,pos}) => {
         alert(err)
         // setHostModal(false)
       })
+    }).catch((err)=>{console.log(err)})
     }
     const testLocalHotelCreation=async()=>{
       console.log(listing,actors?.hotelActor.createHotel)

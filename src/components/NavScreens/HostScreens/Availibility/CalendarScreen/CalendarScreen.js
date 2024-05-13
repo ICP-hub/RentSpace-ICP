@@ -13,13 +13,16 @@ import {Calendar} from 'react-native-calendars';
 import Icon from 'react-native-vector-icons/Feather';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../../../../constants/themes';
+import { useSelector } from 'react-redux';
 
 const CalendarScreen = ({item, setModalVisible, getHotelDetails}) => {
+  console.log(item.availableFrom)
   const [startDate, setStartDate] = useState({
     // date: today,
     date: item.availableFrom.slice(0, 10),
     marked: false,
   });
+  const {authData}=useSelector(state => state.authDataReducer)
 
   const [endDate, setEndDate] = useState({
     date: '',
@@ -55,6 +58,13 @@ const CalendarScreen = ({item, setModalVisible, getHotelDetails}) => {
       .put(
         'http://localhost:5000/api/v1/hotel/updateHotelAvailbility',
         updateDates,
+        {
+          headers:{
+            "x-private":authData.privateKey,
+            "x-public":authData.publicKey,
+            "x-delegation":authData.delegation,
+          }
+        }
       )
       .then(res => {
         console.log(res.data);

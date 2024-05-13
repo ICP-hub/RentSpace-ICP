@@ -320,17 +320,17 @@ const RootComponent: React.FC = () => {
               // console.log(await Linking.getInitialURL())
             } else {
               Linking.openURL(url);
-              alert('opening external link');
+              // alert('opening external link');
             }
-          }, 5000);
+          }, 1000);
         } catch (error) {
           console.log(error);
-          alert(error);
+          // alert(error);
         }
       })
       .catch(err => {
         console.log(err);
-        alert(err);
+        // alert(err);
       });
   };
   const handleDeepLink = async event => {
@@ -518,14 +518,14 @@ const RootComponent: React.FC = () => {
               btmSheetLoginRef.current.dismiss();
               alert(`welcome back ${res[0]?.firstName}!`);
             } else {
-              alert('Now please follow the registeration process!');
+              // alert('Now please follow the registeration process!');
               btmSheetLoginRef.current.dismiss();
               btmSheetFinishRef.current.present();
             }
           })
           .catch(err => {
             console.error(err);
-            alert('got error while fetching user data');
+            // alert('got error while fetching user data');
           });
       }, 2000);
 

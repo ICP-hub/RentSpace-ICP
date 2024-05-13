@@ -107,7 +107,7 @@ const Main = ({navigation}) => {
     // clearAsyncStore()
 
     if (principle != '') {
-      console.log(principle);
+      // console.log(principle);
     } else {
       btmSheetLoginRef.current.present();
     }
@@ -142,6 +142,7 @@ const Main = ({navigation}) => {
       .then(res => {
         if (res?.data?.hotels === undefined) {
           console.log('no hotels found');
+          console.log(res)
           setQueryHotels([]);
         } else {
           setQueryHotels([...res?.data?.hotels]);

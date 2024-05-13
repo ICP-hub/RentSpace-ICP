@@ -183,7 +183,7 @@ const ReelCard = ({item,reelIndex}) => {
                 snapPoints={["95%"]}>
                 <Comments id={item?.hotelId} comments={reelComments} getComments={getComments} loading={loading} setLoading={setLoading}/>
             </BottomSheetModal>
-            <ActivityIndicator animating={loading} style={styles.loader} size={40}/>
+            <ActivityIndicator animating={true} style={styles.loader} size={40}/>
         </View>
   )
 }
@@ -214,7 +214,8 @@ const styles = StyleSheet.create({
         position:'absolute',
         bottom:'10%',
         left:'8%',
-        padding:5
+        padding:5,
+        zIndex:5
     },
     infoTitle:{
         color:'white',
@@ -236,6 +237,7 @@ const styles = StyleSheet.create({
         width:40,
         height:40,
         borderRadius:30,
+        zIndex:5
     },
     bigIcon:{
         display:'flex',
@@ -246,17 +248,19 @@ const styles = StyleSheet.create({
         height:45,
         borderRadius:30,
         backgroundColor:COLORS.mainPurple,
-        marginVertical:15
+        marginVertical:15,
+        zIndex:5
     },
     bg:{
         width:'100%',
         height:'100%',
         // objectFit:'cover',
+        zIndex:5
     },
     loader:{
         position:'absolute',
         top:'45%',
         left:'45%',
-        zIndex:10
+        zIndex:0
     }
 })

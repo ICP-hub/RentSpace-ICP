@@ -13,13 +13,14 @@ import Icon2 from 'react-native-vector-icons/AntDesign';
 import {COLORS, SIZES} from '../../../../constants/themes';
 import ListingCard from './ListingCard';
 import {images} from '../../../../constants';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Step1Manager from '../../../HostViewNew/Step1Manager';
 import Step2Manager from '../../../HostViewNew/Step2Manager';
 import Step3Manager from '../../../HostViewNew/Step3Manager';
 import ChatDrawer from '../ChatPage/ChatDrawer/ChatDrawer';
 import Update from '../UpdatePage/Update';
 import axios from 'axios';
+import { setChatToken } from '../../../../redux/chatToken/actions';
 
 const Listings = ({navigation}) => {
   const {hotels} = useSelector(state => state.hotelsReducer);
@@ -28,8 +29,14 @@ const Listings = ({navigation}) => {
   const [hostModal, setHostModal] = useState(0);
   const [newHotel, setNewHotel] = useState({});
   const [showDrawer, setShowDrawer] = useState(false);
+  const {authData}=useSelector(state => state.authDataReducer)
+  const dispatch=useDispatch()
 
   const [listings, setListings] = useState([]);
+  const {principle}=useSelector(state=>state.principleReducer)
+
+  // const baseUrl="https://rentspace.kaifoundry.com"
+  const baseUrl="http://localhost:5000"
 
   // async function getHotelDetails() {
   //   setHotelList([]);
@@ -41,21 +48,34 @@ const Listings = ({navigation}) => {
   //     });
   //   }
   // }
+  const ApiLogin=async()=>{
+    // console.log("files",files)
+     await axios.post(`${baseUrl}/api/v1/login/user`,{},{headers:{
+      "x-private":authData.privateKey,
+      "x-public":authData.publicKey,
+      "x-delegation":authData.delegation
+     }}).then((res)=>{
+        console.log('hotel login api : ',res.data.userToken)
+        dispatch(setChatToken(res.data.userToken))
+        // setToken(res.data.userToken)
+     })
+    }
+  useEffect(() => {
+    // getHotelDetails();
+    ApiLogin()
 
-  // useEffect(() => {
-  //   // getHotelDetails();
-
-  // }, [hotels]);
+  }, []);
 
   // Geting hotel details from the server
 
   function getHotelDetails() {
-    const userPrincipal = "2yv67-vdt7m-6ajix-goswt-coftj-5d2db-he4fl-t5knf-qii2a-3pajs-cqe" // for testing only
+    // const userPrincipal = "2yv67-vdt7m-6ajix-goswt-coftj-5d2db-he4fl-t5knf-qii2a-3pajs-cqe" // for testing only
     axios
-      .get(`http://localhost:5000/api/v1/hotel/getAllHotels?userPrincipal=${userPrincipal}`) // for testing only
+      .get(`http://localhost:5000/api/v1/hotel/getAllHotels?userPrincipal=${principle}`) // for testing only
       // .get('http://localhost:5000/api/v1/hotel/getAllHotels')  // when userPrincipal is passed in header
       .then(res => {
         // console.log(res.data.hotels);
+        console.log("res",res)
         setListings(res.data.hotels);
       })
       .catch(error => {
