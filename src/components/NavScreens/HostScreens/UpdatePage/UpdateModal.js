@@ -25,7 +25,7 @@ import SubmitUpdates from './Popups/SubmitUpdates';
 import { useSelector } from 'react-redux';
 
 const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
-  console.log(item);
+  // console.log(item);
 
   let img = item.imagesUrls;
   let vdo = item.videoUrls;

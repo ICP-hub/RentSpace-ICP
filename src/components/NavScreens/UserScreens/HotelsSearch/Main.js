@@ -49,6 +49,7 @@ import Filters from './Filters/Filters';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {host, ids} from '../../../../../DevelopmentConfig';
+import Geolocation from '@react-native-community/geolocation';
 global.Buffer = require('buffer').Buffer;
 
 const Main = ({navigation}) => {
@@ -76,10 +77,38 @@ const Main = ({navigation}) => {
   const [hotelCreateForm, setHotelCreateForm] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [queryHotels, setQueryHotels] = useState([]);
-  const [query, setQuery] = useState(
-    `maxPrice=${800}&pageSize=${15}&amenities=${[]}&propertyType=${'Hotel'}`,
-  );
+  const [rateHawkHotel, setRateHawkHotel] = useState([]);
+
+  // const [query, setQuery] = useState(
+  //   `maxPrice=${800}&pageSize=${15}&amenities=${[]}&propertyType=${'Hotel'}`,
+  // );
+
+  const [query, setQuery] = useState({
+    location: '',
+    maxPrice: 100,
+    pageSize: 15,
+    amenities: [],
+    propertyType: "Hotel",
+  });
+
   const [searchText, setSearchText] = useState('');
+
+  // function to get current location of user (city name) and set it to the query
+  const getCurrentLocation = async () => {
+    Geolocation.getCurrentPosition(loc => {
+      const coordinates = loc.coords;
+      console.log('coordinates : ' + coordinates.latitude + ' ' + coordinates.longitude);
+      axios
+        .get(
+          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${coordinates.latitude}&longitude=${coordinates.longitude}`,
+        )
+        .then(res => {
+          console.log('City : ' + res.data.city);
+          setQuery({...query, location: res.data.city});
+        })
+        .catch(err => console.log(err));
+    });
+  };
 
   useEffect(() => {
     SplashScreen.hide();
@@ -90,8 +119,28 @@ const Main = ({navigation}) => {
       btmSheetLoginRef.current.present();
     }
 
+    // getAsyncData()
+    // clearAsyncStore()
+
+    if (principle != '') {
+      console.log(principle);
+    } else {
+      btmSheetLoginRef.current.present();
+    }
+
+    getCurrentLocation();
+
     // generateIdentity();
   }, []);
+
+  useEffect(() => {
+    console.log("filter query'");
+    filterQuery();
+
+    console.log(query.location)
+    
+  }, [query]);
+
   // const getAsyncData=async()=>{
   //   let data=await AsyncStorage.getItem("d2")
   //   console.log("async fetched data",JSON.parse(data))
@@ -102,21 +151,10 @@ const Main = ({navigation}) => {
   const clearAsyncStore = async () => {
     await AsyncStorage.clear();
   };
-  useEffect(() => {
-    // getAsyncData()
-    // clearAsyncStore()
 
-    if (principle != '') {
-      // console.log(principle);
-    } else {
-      btmSheetLoginRef.current.present();
-    }
-  });
 
-  useEffect(() => {
-    console.log("filter query'");
-    filterQuery();
-  }, [query]);
+
+
 
   //Refs for managing bottomsheets
   // const btmSheetLoginRef = useRef(null);
@@ -127,28 +165,41 @@ const Main = ({navigation}) => {
   const btmExtraDetailsRef = useRef(null);
   const btmUserDetailsRef = useRef(null);
   const snapPoints = ['94%'];
+
   const handlePresentModal = () => {
     btmSheetLoginRef.current.present();
   };
+
   const openFilters = () => {
     console.log('executing');
     setShowFilters(true);
   };
 
   const filterQuery = async () => {
-    console.log('filter query func', query);
+    let finalquery = `maxPrice=${query.maxPrice}&pageSize=${query.pageSize}&amenities=${query.amenities}&propertyType=${query.propertyType}&location=${query.location}`;
+
+    console.log('filter query func', finalquery);
     await axios
-      .get(`${baseQueryUrl}${query}`)
+      .get(`${baseQueryUrl}${finalquery}`)
       .then(res => {
-        if (res?.data?.hotels === undefined) {
+        if (
+          res?.data?.hotels === undefined ||
+          (res?.data?.hotels.length == 0 &&
+            res?.data?.externalHotels.length == 0) ||
+          res?.data?.externalHotels === undefined
+        ) {
           console.log('no hotels found');
-          console.log(res)
+          console.log(res);
           setQueryHotels([]);
         } else {
           setQueryHotels([...res?.data?.hotels]);
+          setRateHawkHotel([...res?.data?.externalHotels]);
+          // console.log(res.data);
+          console.log('External hotels : ' + res.data.externalHotels);
+          console.log('Internal hotels : ' + res.data.hotels);
         }
       })
-      .catch(err => console.error(err));
+      .catch(err => console.log(err));
   };
 
   const getUserData = async () => {
@@ -201,8 +252,9 @@ const Main = ({navigation}) => {
         <Modal visible={hotelCreateForm} animationType="slide">
           <HotelCreationForm setHotelCreateForm={setHotelCreateForm} />
         </Modal>
+
         <Modal visible={showFilters} animationType="slide" transparent>
-          <Filters setQuery={setQuery} setShowFilters={setShowFilters} />
+          <Filters query={query} setQuery={setQuery} setShowFilters={setShowFilters} />
         </Modal>
 
         {/* navigation Bar */}
@@ -217,7 +269,11 @@ const Main = ({navigation}) => {
         />
 
         {/* <UserDetailDemo user={user}/> */}
-        <BookHotelPage navigation={navigation} queryHotels={queryHotels} />
+        <BookHotelPage
+          navigation={navigation}
+          queryHotels={queryHotels}
+          rateHawkHotel={rateHawkHotel}
+        />
 
         {/* BottomSheets */}
         <BottomSheetModal

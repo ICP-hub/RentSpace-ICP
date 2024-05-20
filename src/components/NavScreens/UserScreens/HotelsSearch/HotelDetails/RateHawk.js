@@ -1,76 +1,94 @@
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {useRef, useEffect} from 'react';
+import {useRef, useEffect, useState} from 'react';
 import Icon1 from 'react-native-vector-icons/AntDesign';
 import {container} from 'webpack';
-import {COLORS, SIZES} from '../../../../constants/themes';
+import {COLORS, SIZES} from '../../../../../constants/themes';
 import Icon from 'react-native-vector-icons/MaterialIcons'; //0
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'; //1
 import Icon3 from 'react-native-vector-icons/Foundation'; //2
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import Reviews from './HotelDetails/subComponents/Reviews/Reviews';
-import ReserveBtn from './HotelDetails/cards/ReserveBtn';
+import Reviews from './subComponents/Reviews/Reviews';
+import ReserveBtn from './cards/ReserveBtn';
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
+import axios from 'axios';
 
-const RateHawk = ({setHotelProfile}) => {
+const RateHawk = ({hotelId, item, setOpen, navigation}) => {
+  console.log(hotelId);
+
+  const [hotelDetails, setHotelDetails] = useState({});
+  const [description, setDescription] = useState('');
+
   const btmBtn = useRef(null);
+
+  const baseUrl = 'http://localhost:5000/api/v1/hotel/RateHawk/getHotelInfo';
+
+  const serachData = {
+    hotelId,
+    language: 'en',
+  };
 
   useEffect(() => {
     btmBtn.current.present();
-  }, []);
 
+    axios
+      .post(baseUrl, serachData)
+      .then(response => {
+        console.log(response.data);
+        setHotelDetails(response.data.data.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, [hotelId]); // add hotelId as a dependency to re-fetch if it changes
+
+  useEffect(() => {
+    if (hotelDetails?.description_struct) {
+      console.log(hotelDetails.description_struct[0]);
+      setDescription(hotelDetails.description_struct[0].paragraphs[0]);
+    } else {
+      console.log('hotelDetails or description_struct is undefined');
+    }
+  }, [hotelDetails]); // add hotelDetails as a dependency to log whenever it updates
 
   const amenitiesList = [
     {name: 'Pool', icon: 'pool', class: 0},
-    // {name: 'Outdoor shower', icon: 'shower', class: 0},
     {name: 'Hot tub', icon: 'hot-tub', class: 0},
     {name: 'Kitchen', icon: 'kitchen', class: 0},
-    // {name: 'TV', icon: 'tv', class: 0},
     {name: 'Outdoor dining area', icon: 'dining', class: 0},
-    // {name: 'Lake access', icon: 'houseboat', class: 0},
-    // {name: 'Workspace', icon: 'computer', class: 0},
-    // {name: 'Wifi', icon: 'wifi', class: 0},
-    // {name: 'Beach access', icon: 'beach-access', class: 0},
-    // {name: 'Skii in/out', icon: 'downhill-skiing', class: 0},
     {name: 'Smoke Alarm', icon: 'smoke-detector-variant', class: 1},
-    // {name: 'Patios', icon: 'balcony', class: 1},
-    // {name: 'Washing Machine', icon: 'washing-machine', class: 1},
-    // {name: 'BBQ grill', icon: 'grill', class: 1},
     {name: 'Parking', icon: 'car', class: 1},
-    // {name: 'Fire extinguisher', icon: 'fire-extinguisher', class: 1},
-    // {name: 'indoor fireplace', icon: 'fireplace', class: 1},
-    // {name: 'AC', icon: 'air-conditioner', class: 1},
     {name: 'Gym', icon: 'dumbbell', class: 1},
-    // {name: 'Pool table', icon: 'billiards', class: 1},
-    // {name: 'Piano', icon: 'piano', class: 1},
-    // {name: 'Safe', icon: 'safe', class: 1},
-    // {name: 'First Aid Kit', icon: 'first-aid', class: 2},
   ];
+
+  const defaultImg = {
+    uri: 'https://firebasestorage.googleapis.com/v0/b/rentspace-e58b7.appspot.com/o/hotelImage%2F1715757730736?alt=media&token=76fd4072-38ae-437c-b3fe-4b1f857ec4d8',
+  };
+
+  // console.log(hotelDetails)
 
   return (
     <BottomSheetModalProvider style={styles.container}>
       <Icon1
         name="left"
         size={25}
-        style={{padding:10, backgroundColor: COLORS.mainGrey}}
-        onPress={() => setHotelProfile(false)}
+        style={{padding: 10, backgroundColor: COLORS.mainGrey}}
+        onPress={() => setOpen(false)}
       />
       <ScrollView style={styles.scrollView}>
         <View style={styles.imageContainer}>
-          <Image
-            style={styles.hotelImage}
-            source={require('../../../../assets/images/hostView/hotelImg4.png')}
-          />
+          <Image style={styles.hotelImage} source={defaultImg} />
         </View>
         <View style={styles.hotelInfo}>
           <Text style={styles.hotelName}>
-            Charm Ville - Villa with Nature! FarmVilla n Hosur
+            {/* Charm Ville - Villa with Nature! FarmVilla n Hosur */}
+            {hotelDetails.name}
           </Text>
           <View style={styles.ratingContainer}>
             <Icon1 name="star" size={17} style={{color: COLORS.mainPurple}} />
             <Text style={styles.ratingText}>4.92</Text>
             <Text style={styles.ratingText}>• 432 reviews</Text>
-            <Text style={styles.ratingText}>• Ubdu, Bai, Indonesia</Text>
           </View>
+          <Text style={styles.ratingText2}>{hotelDetails.address}</Text>
         </View>
         <View style={styles.verificationTag}>
           <Icon name="verified" size={15} style={{color: COLORS.mainPurple}} />
@@ -78,11 +96,7 @@ const RateHawk = ({setHotelProfile}) => {
         </View>
         <View style={styles.descriptionContainer}>
           <Text style={styles.descriptionTitle}>Description</Text>
-          <Text style={styles.description}>
-            A sleepover in Villa surrounded by agricultural land, where you get
-            to enjoy Wakeup calls from birds, Lotus breaks the surface of the
-            water and blooms untouched by the mud with sunshine.
-          </Text>
+          <Text style={styles.description}>{description}</Text>
           <Text style={styles.showMoreBtn}>Show more</Text>
         </View>
         <View style={styles.descriptionContainer}>
@@ -104,33 +118,13 @@ const RateHawk = ({setHotelProfile}) => {
           </View>
         </View>
 
-        <Reviews />
+        
 
-        {/* <View style={styles.bottomLink}>
-          <View style={styles.bottomLinkHead}>
-            <Text style={styles.bottomLinkText}>Availability</Text>
-            <Icon1 name="right" size={20} />
-          </View>
-          <Text style={styles.bottomLinkSubText}>17-22 Dec</Text>
-        </View>
-        <View style={styles.bottomLink}>
-          <View style={styles.bottomLinkHead}>
-            <Text style={styles.bottomLinkText}>Cancellation policy</Text>
-            <Icon1 name="right" size={20} />
-          </View>
-          <Text style={styles.bottomLinkSubText2}>
-            Free cancellation before{' '}
-            <Text style={{fontWeight: 'bold'}}>19 Dec</Text>.
-          </Text>
-          <Text style={styles.bottomLinkSubText2}>
-            Reviews the host full cancelation policy which applies even if you
-            cancel for illness or disruptions caused by COVID-19.
-          </Text>
-        </View>
+        {/* <Reviews /> */}
+
         <View style={styles.bottomLink}>
           <View style={styles.bottomLinkHead}>
             <Text style={styles.bottomLinkText}>Staying rules</Text>
-            <Icon1 name="right" size={20} />
           </View>
           <Text style={[styles.bottomLinkSubText2, {marginVertical: 2}]}>
             Check-in:14:00 - 17:00
@@ -138,26 +132,8 @@ const RateHawk = ({setHotelProfile}) => {
           <Text style={[styles.bottomLinkSubText2, {marginVertical: 2}]}>
             Check-out before:11:00
           </Text>
-          <Text style={[styles.bottomLinkSubText2, {marginVertical: 2}]}>
-            4 guests maximum
-          </Text>
-          <Text style={styles.showMoreBtn2}>Show more</Text>
         </View>
-        <View style={styles.bottomLink}>
-          <View style={styles.bottomLinkHead}>
-            <Text style={styles.bottomLinkText}>Safety & property</Text>
-            <Icon1 name="right" size={20} />
-          </View>
-          <Text style={[styles.bottomLinkSubText2, {marginVertical: 2}]}>
-            Carbon monoxide alarm not reported
-          </Text>
-          <Text style={[styles.bottomLinkSubText2, {marginVertical: 2}]}>
-            Smoke alarm not reported
-          </Text>
-          <Text style={styles.showMoreBtn2}>Show more</Text>
-        </View>
-        <Icon name="report" size={25} style={{marginLeft: 20,color:COLORS.mainPurple}} />
-        <Text style={styles.showMoreBtn2}>Report this listing </Text> */}
+        
 
         <BottomSheetModal
           ref={btmBtn}
@@ -203,7 +179,7 @@ const styles = StyleSheet.create({
   hotelInfo: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'left',
     marginBottom: 10,
   },
 
@@ -211,8 +187,10 @@ const styles = StyleSheet.create({
     fontSize: SIZES.large,
     fontWeight: '500',
     color: COLORS.black,
-    marginHorizontal: 35,
     marginVertical: 10,
+    width: '100%',
+    paddingHorizontal: 40,
+    // backgroundColor:'red'
   },
 
   ratingContainer: {
@@ -228,6 +206,15 @@ const styles = StyleSheet.create({
     fontSize: SIZES.small,
     fontWeight: '400',
     color: COLORS.black,
+  },
+
+  ratingText2: {
+    fontSize: SIZES.small,
+    fontWeight: '400',
+    color: COLORS.textLightGrey,
+    marginVertical: 5,
+    marginLeft: 40,
+    // backgroundColor:'red',
   },
 
   verificationTag: {
@@ -313,7 +300,7 @@ const styles = StyleSheet.create({
   bottomLink: {
     display: 'flex',
     flexDirection: 'column',
-    marginBottom: 10,
+    marginBottom: 100,
   },
 
   bottomLinkHead: {

@@ -26,6 +26,7 @@ const HotelChoice = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedHotel, setSelectedHotel] = useState({});
   const {authData}=useSelector(state=>state.authDataReducer)
+  const {principle}=useSelector(state=>state.principleReducer)
   const dispatch=useDispatch()
   // const baseUrl="https://rentspace.kaifoundry.com"
   const baseUrl="http://localhost:5000"
@@ -61,16 +62,17 @@ const HotelChoice = ({navigation}) => {
     }
 
   function getHotelDetails() {
-    const userPrincipal =
-      '2yv67-vdt7m-6ajix-goswt-coftj-5d2db-he4fl-t5knf-qii2a-3pajs-cqe'; // for testing only
-    axios
-      .get(
-        `http://localhost:5000/api/v1/hotel/getAllHotels?userPrincipal=${userPrincipal}`,
-      ) // for testing only
+
+    // console.log(principle)
+    // const userPrincipal = '2yv67-vdt7m-6ajix-goswt-coftj-5d2db-he4fl-t5knf-qii2a-3pajs-cqe'; // for testing only
+    axios.get(`http://localhost:5000/api/v1/hotel/getAllHotels?userPrincipal=${principle}`) // for testing only
       // .get('http://localhost:5000/api/v1/hotel/getAllHotels')  // when userPrincipal is passed in header
       .then(res => {
         // console.log(res.data.hotels);
-        setHotelList(res.data.hotels);
+        // setHotelList(res.data.hotels);
+        if(res.data.hotels !== undefined && res.data.hotels !== null && res.data.hotels.length > 0){
+          setHotelList(res.data.hotels);
+        }
       })
       .catch(error => {
         console.log(error);
@@ -98,7 +100,8 @@ const HotelChoice = ({navigation}) => {
     <View style={styles.container}>
       <Text style={styles.mainText}>Hotel Selection</Text>
 
-      <ScrollView
+      {hotelList.length > 0 ? (
+        <ScrollView
         style={styles.listContainer}
         contentContainerStyle={styles.contentContainerStyle}>
         {hotelList.map((hotel, index) => {
@@ -135,6 +138,9 @@ const HotelChoice = ({navigation}) => {
           );
         })}
       </ScrollView>
+      ) : (
+        <Text style={{color:COLORS.mainPurple, fontSize:20,marginLeft:"25%", marginTop:"50%"}}>No hotels available</Text>
+      )}
 
       <BottomNavHost navigation={navigation} />
 

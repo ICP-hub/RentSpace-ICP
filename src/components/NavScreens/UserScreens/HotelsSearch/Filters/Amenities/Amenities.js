@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'column',
         alignItems:'flex-start',
-        width:'85%',
+        width:'90%',
         marginVertical:20,
         marginLeft:'7.5%'
     },
@@ -36,9 +36,9 @@ const styles = StyleSheet.create({
       flexDirection:'row',
       flexWrap:'wrap',
       width:'90%',
-      columnGap:20,
-      rowGap:30,
+      columnGap:10,
+      rowGap:10,
       marginLeft:'5%',
-      marginTop:30
+      marginTop:30,
     }
 })

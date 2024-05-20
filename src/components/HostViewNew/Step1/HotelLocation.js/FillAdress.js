@@ -11,7 +11,7 @@ import React, {useEffect, useState} from 'react';
 import {SIZES, COLORS} from '../../../../constants/themes';
 import Icon from 'react-native-vector-icons/Entypo';
 import {Dropdown} from 'react-native-element-dropdown';
-import CustomPopAlert from '../../../NavScreens/CustomPopAlert';
+// import CustomPopAlert from '../../../NavScreens/CustomPopAlert';
 
 const data = [
   {label: 'India', value: 'India'},
@@ -22,12 +22,12 @@ const data = [
 ];
 
 const FillAdress = ({self, setLocation, location}) => {
-  const [showAlertPop, setShowAlertPop] = useState({
-    show: false,
-    title: '',
-    message: '',
-    color: '',
-  });
+  // const [showAlertPop, setShowAlertPop] = useState({
+  //   show: false,
+  //   title: '',
+  //   message: '',
+  //   color: '',
+  // });
 
   const [address, setAddress] = useState({
     region: '',
@@ -122,27 +122,27 @@ const FillAdress = ({self, setLocation, location}) => {
               console.log(location);
               self(false);
             } else {
-            //   alert('Please do not leave any fields empty!');
-                setShowAlertPop({
-                    show: true,
-                    title: 'Please do not leave any fields empty!',
-                    message: '',
-                    color: 'black',
-                });
+              alert('Please do not leave any fields empty!');
+                // setShowAlertPop({
+                //     show: true,
+                //     title: 'Please do not leave any fields empty!',
+                //     message: '',
+                //     color: 'black',
+                // });
             }
           }}>
           <Text style={styles.btnText}>Looks Good</Text>
         </TouchableOpacity>
       </View>
 
-      <Modal visible={showAlertPop.show} transparent>
+      {/* <Modal visible={showAlertPop.show} transparent>
         <CustomPopAlert
           title={showAlertPop.title}
           message={showAlertPop.message}
           color={showAlertPop.color}
           onCloseRequest={setShowAlertPop}
         />
-      </Modal>
+      </Modal> */}
     </View>
   );
 };

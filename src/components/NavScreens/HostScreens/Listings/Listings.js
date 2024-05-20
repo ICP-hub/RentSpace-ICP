@@ -71,12 +71,16 @@ const Listings = ({navigation}) => {
   function getHotelDetails() {
     // const userPrincipal = "2yv67-vdt7m-6ajix-goswt-coftj-5d2db-he4fl-t5knf-qii2a-3pajs-cqe" // for testing only
     axios
-      .get(`http://localhost:5000/api/v1/hotel/getAllHotels?userPrincipal=${principle}`) // for testing only
+      .get(`http://localhost:5000/api/v1/hotel/getAllHotels?userPrincipal=${principle}`)
       // .get('http://localhost:5000/api/v1/hotel/getAllHotels')  // when userPrincipal is passed in header
       .then(res => {
         // console.log(res.data.hotels);
-        console.log("res",res)
-        setListings(res.data.hotels);
+        console.log("res",res);
+        if(res.data.hotels.length != undefined && res.data.hotels.length != 0){
+          setListings(res.data.hotels);
+        }else{
+          setListings([]);
+        }
       })
       .catch(error => {
         console.log(error);

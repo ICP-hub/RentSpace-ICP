@@ -8,6 +8,7 @@ import {
   FlatList,
   Modal,
   Pressable,
+  ScrollView,
 } from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import {images} from '../../../../constants';
@@ -19,23 +20,12 @@ import {setBookings} from '../../../../redux/UserBookings/actions';
 import ShowBookings from './HotelDetails/ShowBookings/ShowBookings';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/Ionicons';
-import RateHawk from './RateHawk';
+import RateHawk from './HotelDetails/RateHawk';
 import CustomPopAlert from '../../CustomPopAlert';
+import RateHawkCard from './HotelDetails/cards/RateHawkCard';
 
-const BookHotelPage = ({navigation, queryHotels}) => {
-
-  // --------- UI test for CustomPopAlert ---------
-  const [makeVisible, setMakeVisible] = useState(false);
-
-  const testyesFunc =()=>{
-    console.log('yes')
-  }
-  const testnoFunc =()=>{
-    console.log('no')
-  }
-
-  // --------- UI test for CustomPopAlert end ---------
-
+const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
+  
   const [hotelProfile, setHotelProfile] = useState(false);
 
   const firstRender = useRef(true);
@@ -113,7 +103,7 @@ const BookHotelPage = ({navigation, queryHotels}) => {
       return;
     }
     for (let i = 0; i < queryHotels?.length; i++) {
-      console.log('el', queryHotels[i].hotelId);
+      // console.log('Hotel ID : ', queryHotels[i].hotelId);
       await actors.hotelActor
         ?.getHotel(queryHotels[i].hotelId)
         .then(res => {
@@ -132,7 +122,7 @@ const BookHotelPage = ({navigation, queryHotels}) => {
     }
   }
   const refresh = () => {
-    console.log(queryHotels);
+    // console.log(queryHotels);
     // getQueryHotelDetails()
     getReservations();
   };
@@ -145,6 +135,7 @@ const BookHotelPage = ({navigation, queryHotels}) => {
   //         setBottom(70)
   //     })
   // })
+  
   useEffect(() => {
     if (firstRender.current) {
       console.log(firstRender.current);
@@ -153,10 +144,9 @@ const BookHotelPage = ({navigation, queryHotels}) => {
       getQueryHotelDetails();
       // getReservations()
     }
-    ``;
   }, [queryHotels, principle]);
 
-  if (hotelsList?.length > 0) {
+  if (hotelsList?.length > 0 || rateHawkHotel?.length > 0) {
     return (
       <>
         <View style={styles.btnCont}>
@@ -169,15 +159,35 @@ const BookHotelPage = ({navigation, queryHotels}) => {
             <Text style={styles.btnText}>Show my bookings</Text>
           </TouchableOpacity>
         </View>
-        <FlatList
-          data={hotelsList}
-          style={{marginBottom: 70, backgroundColor: 'white'}}
-          renderItem={item => (
-            <HotelCard item={item.item} navigation={navigation} />
-          )}
-          refreshing={refreshing}
-          onRefresh={refresh}
-        />
+
+        <ScrollView 
+          style={{width: '100%', marginBottom: 65}}
+        >
+          {hotelsList.map((item, index) => {
+            return (
+              <HotelCard
+                key={index}
+                item={item}
+                navigation={navigation}
+              />
+            );
+          })}
+
+          {rateHawkHotel.map((item, index) => {
+            return (
+              <RateHawkCard
+                key={index}
+                item={item}
+                navigation={navigation}
+              />
+            );
+          })}
+
+
+
+
+        </ScrollView>
+
         <Modal animationType="slide" visible={showReservation}>
           <ShowBookings
             getReservations={getReservations}
@@ -191,50 +201,7 @@ const BookHotelPage = ({navigation, queryHotels}) => {
     return (
       <>
         {/* <HotelCard name={sampleName} des={sampleDes} rating={4} /> */}
-        <Text style={styles.empty}>Sorry nothing to show</Text>
-
-        {/* UI test for Rate Hawk  */}
-        <Pressable onPress={() => setHotelProfile(true)}>
-          <Text
-            style={{
-              backgroundColor: 'grey',
-              maxWidth: 'fit-content',
-              marginHorizontal: 50,
-              color: 'white',
-              padding: 10,
-            }}>
-            Make RateHawk visible
-          </Text>
-        </Pressable>
-
-        <TouchableOpacity
-          style={{backgroundColor: 'red', padding: 10, marginTop: 20}}
-          onPress={() => setMakeVisible(true)}>
-          <Text>Alert Visible</Text>
-        </TouchableOpacity>
-
-        <Modal
-          visible={hotelProfile}
-          onRequestClose={() => setHotelProfile(false)}>
-          <RateHawk setHotelProfile={setHotelProfile} />
-        </Modal>
-
-        <Modal
-          transparent
-          visible={makeVisible}
-          onRequestClose={() => setMakeVisible(false)}>
-          <CustomPopAlert
-            type="default"
-            title="Oops! Something went wrong."
-            message="We're sorry, but the mobile app encountered a serious error.
-            Please try again later or contact support for assistance."
-            color={COLORS.mainPurple}
-            onCloseRequest={setMakeVisible}
-            yesRequest={testyesFunc}
-            noRequest={testnoFunc}
-            
-          />
-        </Modal>
+        <Text style={styles.empty}>Sorry nothing to show</Text>        
       </>
     );
   }

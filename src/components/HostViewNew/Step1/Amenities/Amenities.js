@@ -12,7 +12,7 @@ import Icon5 from 'react-native-vector-icons/MaterialIcons';
 import AmenityCard from '../../../NavScreens/UserScreens/HotelsSearch/Filters/Amenities/AmenityCard';
 import {useDispatch, useSelector} from 'react-redux';
 import {setListing} from '../../../../redux/NewListing/actions';
-import CustomPopAlert from '../../../NavScreens/CustomPopAlert';
+// import CustomPopAlert from '../../../NavScreens/CustomPopAlert';
 import {title} from 'process';
 import {type} from 'os';
 
@@ -68,24 +68,24 @@ const Amenities = ({setHostModal, pos}) => {
   const {listing} = useSelector(state => state.listingReducer);
   const dispatch = useDispatch();
 
-  const [showAlertPop, setShowAlertPop] = useState({
-    type: '',
-    title: '',
-    message: '',
-    color: '',
-    visibility: false,
-  });
+  // const [showAlertPop, setShowAlertPop] = useState({
+  //   type: '',
+  //   title: '',
+  //   message: '',
+  //   color: '',
+  //   visibility: false,
+  // });
 
   const emptyCheck = () => {
     if (amenities.length == 0) {
-      // Alert.alert('No aminities slected!', 'Select atleast one aminity');
-        setShowAlertPop({
-            type: 'default',
-            title: 'No aminities slected!',
-            message: 'Select atleast one aminity',
-            color: COLORS.mainPurple,
-            visibility: true,
-          });
+      Alert.alert('No aminities slected!', 'Select atleast one aminity');
+        // setShowAlertPop({
+        //     type: 'default',
+        //     title: 'No aminities slected!',
+        //     message: 'Select atleast one aminity',
+        //     color: COLORS.mainPurple,
+        //     visibility: true,
+        //   });
 
       return false;
     } else {
@@ -133,7 +133,7 @@ const Amenities = ({setHostModal, pos}) => {
         step={1}
         nextFunc={emptyCheck}
       />
-      <Modal
+      {/* <Modal
       transparent
       visible={showAlertPop.visibility}
       onRequestClose={()=>{setShowAlertPop({...showAlertPop,visibility:false})}}
@@ -145,7 +145,7 @@ const Amenities = ({setHostModal, pos}) => {
           color={showAlertPop.color}
           onCloseRequest={setShowAlertPop}
         />
-      </Modal>
+      </Modal> */}
     </SafeAreaView>
   );
 };

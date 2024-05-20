@@ -34,9 +34,9 @@ const styles = StyleSheet.create({
       flexDirection:'row',
       flexWrap:'wrap',
       width:'90%',
-      columnGap:30,
-      rowGap:30,
+      columnGap:10,
+      rowGap:10,
       marginLeft:'5%',
-      marginTop:30
+      marginTop:30,
     }
 })

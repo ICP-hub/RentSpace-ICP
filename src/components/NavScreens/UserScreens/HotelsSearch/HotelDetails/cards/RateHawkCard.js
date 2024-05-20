@@ -12,16 +12,16 @@ import {images} from '../../../../../../constants';
 import Icon from 'react-native-vector-icons/Entypo';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import HotelDetailPage from '../HotelDetailPage';
+import RateHawk from '../RateHawk';
 
-const HotelCard = ({item, navigation}) => {
-  // console.log(item?.details?.imagesUrls)
-
-  // console.log(item)
+const RateHawkCard = ({item, navigation}) => {
+  // console.log(item.name);
 
   const [open, setOpen] = useState(false);
 
-  // const defaultImg =  "https://firebasestorage.googleapis.com/v0/b/rentspace-e58b7.appspot.com/o/hotelImage%2F1715757730736?alt=media&token=76fd4072-38ae-437c-b3fe-4b1f857ec4d8"
-  // const imageurls = item?.details?.imagesUrls === '' || item?.details?.imagesUrls === null || item?.details?.imagesUrls === undefined ? defaultImg : {uri: item?.details?.imagesUrls};
+  const defaultImg = {
+    uri: 'https://firebasestorage.googleapis.com/v0/b/rentspace-e58b7.appspot.com/o/hotelImage%2F1715757730736?alt=media&token=76fd4072-38ae-437c-b3fe-4b1f857ec4d8',
+  };
 
   return (
     <View style={styles.cardCont}>
@@ -33,12 +33,11 @@ const HotelCard = ({item, navigation}) => {
         <Icon2 name="page-next" size={30} color="white" />
       </TouchableOpacity>
 
-      {/* <Image source={(item?.details?.imagesUrls==""?images.hotel:{uri:item?.details?.imagesUrls})} style={styles.img}/> */}
-      <Image source={{uri : item.details.imagesUrls }} style={styles.img} />
-      {/* <Image source={images.hotelImg3} style={styles.img}/> */}
+      <Image source={defaultImg} style={styles.img} />
+
       <View style={styles.dataCont}>
-        <Text style={styles.title}>{item.details.hotelName}</Text>
-        <Text style={styles.simpleText}>{item.details.hotelDescription}</Text>
+        <Text style={styles.title}>{item.name}</Text>
+        <Text style={styles.simpleText}>RateHawk Hotel</Text>
         <View style={styles.ratingCont}>
           <Icon name="star" size={15} color="white" />
           <Icon name="star" size={15} color="white" />
@@ -46,9 +45,10 @@ const HotelCard = ({item, navigation}) => {
           <Icon name="star" size={15} color="white" />
         </View>
       </View>
-      
+
       <Modal animationType="slide" visible={open}>
-        <HotelDetailPage
+        <RateHawk
+          hotelId={item.id}
           item={item}
           setOpen={setOpen}
           navigation={navigation}
@@ -58,7 +58,7 @@ const HotelCard = ({item, navigation}) => {
   );
 };
 
-export default HotelCard;
+export default RateHawkCard;
 
 const styles = StyleSheet.create({
   cardCont: {
