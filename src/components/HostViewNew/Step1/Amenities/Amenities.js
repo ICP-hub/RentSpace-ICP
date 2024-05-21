@@ -12,9 +12,6 @@ import Icon5 from 'react-native-vector-icons/MaterialIcons';
 import AmenityCard from '../../../NavScreens/UserScreens/HotelsSearch/Filters/Amenities/AmenityCard';
 import {useDispatch, useSelector} from 'react-redux';
 import {setListing} from '../../../../redux/NewListing/actions';
-// import CustomPopAlert from '../../../NavScreens/CustomPopAlert';
-import {title} from 'process';
-import {type} from 'os';
 
 const amenitiesList = [
   {name: 'wifi', icon: <Icon name="wifi" size={28} color={COLORS.black} />},
@@ -101,7 +98,7 @@ const Amenities = ({setHostModal, pos}) => {
   };
 
   return (
-    <SafeAreaView style={styles.view}>
+    <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal} />
       <Text style={styles.title}>Property Type</Text>
       <View style={[styles.listCont, {marginBottom: 30}]}>
@@ -146,7 +143,7 @@ const Amenities = ({setHostModal, pos}) => {
           onCloseRequest={setShowAlertPop}
         />
       </Modal> */}
-    </SafeAreaView>
+    </View>
   );
 };
 
