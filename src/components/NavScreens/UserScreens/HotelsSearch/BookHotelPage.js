@@ -21,7 +21,6 @@ import ShowBookings from './HotelDetails/ShowBookings/ShowBookings';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import RateHawk from './HotelDetails/RateHawk';
-import CustomPopAlert from '../../CustomPopAlert';
 import RateHawkCard from './HotelDetails/cards/RateHawkCard';
 
 const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {

@@ -13,15 +13,8 @@ import {images} from '../../constants';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/Fontisto';
 import {useSelector} from 'react-redux';
-import CustomPopAlert from '../NavScreens/CustomPopAlert';
 
 const BottomNav = ({navigation}) => {
-  // const [showAlertPop, setShowAlertPop] = useState({
-  //   show: false,
-  //   title: '',
-  //   message: '',
-  //   color: '',
-  // });
 
   const message = 'You need to login first, go to profile page!';
 
@@ -44,11 +37,6 @@ const BottomNav = ({navigation}) => {
           style={styles.iconNav}
           onPress={() => {
             alert(message);
-            // setShowAlertPop({
-            //   show: true,
-            //   title: "Alert",
-            //   message: 'Go to profile page!',
-            // });
           }}>
           <Icon name="filter" size={25} color={COLORS.mainPurple} />
         </TouchableOpacity>
@@ -66,12 +54,7 @@ const BottomNav = ({navigation}) => {
           style={styles.iconNav}
           onPress={() => {
             alert(message);
-            // setShowAlertPop({
-            //   show: true,
-            //   title: message,
-            //   message: 'Go to profile page!',
-            //   color: 'black',
-            // });
+
           }}>
           <Icon2 name="comment" size={20} color={COLORS.mainPurple} />
         </TouchableOpacity>
@@ -82,14 +65,6 @@ const BottomNav = ({navigation}) => {
           }}>
           <Icon name="user" size={25} color={COLORS.mainPurple} />
         </TouchableOpacity>
-        {/* <Modal visible={showAlertPop.show} transparent>
-          <CustomPopAlert
-            title={showAlertPop.title}
-            message={showAlertPop.message}
-            color={showAlertPop.color}
-            onCloseRequest={setShowAlertPop}
-          />
-        </Modal>*/}
       </View> 
     );
   } else {

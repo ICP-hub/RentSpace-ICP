@@ -2,30 +2,16 @@ import { StyleSheet, Text, View,ActivityIndicator,TouchableOpacity, Alert } from
 import {React,useState} from 'react'
 import { COLORS,SIZES } from '../../../../../../../constants/themes'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
-import CustomPopAlert from '../../../../../CustomPopAlert'
 
 const PhantomPayment = ({loading,accountId,total,connect,sendNewTransaction,connected,cryptoPrice}) => {
 
-  const [showAlertPop, setShowAlertPop] = useState({
-    type: '',
-    title: '',
-    message: '',
-    color: '',
-    visibility: false,
-  });
 
     const payWithPhantom=()=>{
         if(connected){
             sendNewTransaction(total*cryptoPrice)
         }else{
-            // Alert.alert("Connection Required","Please connect with phantom wallet first to continue the payment")
-            setShowAlertPop({
-                type: 'default',
-                title: 'Connection Required',
-                message: 'Please connect with phantom wallet first to continue the payment',
-                color: COLORS.mainPurple,
-                visibility: true,
-              });
+            Alert.alert("Connection Required","Please connect with phantom wallet first to continue the payment")
+
         }
     }
     
@@ -84,20 +70,7 @@ const PhantomPayment = ({loading,accountId,total,connect,sendNewTransaction,conn
             </TouchableOpacity>
             <ActivityIndicator animating={loading} size={40} style={styles.loader}/>
         </View>
-        <Modal
-        transparent
-        visible={showAlertPop.visibility}
-        onRequestClose={() => {
-          setShowAlertPop({...showAlertPop, visibility: false});
-        }}>
-        <CustomPopAlert
-          type={showAlertPop.type}
-          title={showAlertPop.title}
-          message={showAlertPop.message}
-          color={showAlertPop.color}
-          onCloseRequest={setShowAlertPop}
-        />
-      </Modal>
+       
     </View>
   )
 }
