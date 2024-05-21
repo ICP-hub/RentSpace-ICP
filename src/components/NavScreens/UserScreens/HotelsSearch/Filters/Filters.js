@@ -109,12 +109,13 @@ const Filters = ({setShowFilters,query, setQuery}) => {
             //   `maxPrice=${maxPrice}&pageSize=${25}&amenities=${amenities}&propertyType=${propertyType}`,
             // );
             setQuery({
-              location : query.location,
+              ...query,
               maxPrice: maxPrice,
               pageSize: 25,
               amenities: amenities,
               propertyType: propertyType,
-            });
+              location : query.location,
+            })
             setShowFilters(false);
           }}>
           <Text style={styles.btnText}>Show places</Text>

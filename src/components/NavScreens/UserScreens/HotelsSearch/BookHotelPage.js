@@ -123,7 +123,7 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
   }
   const refresh = () => {
     // console.log(queryHotels);
-    // getQueryHotelDetails()
+    getQueryHotelDetails()
     getReservations();
   };
 

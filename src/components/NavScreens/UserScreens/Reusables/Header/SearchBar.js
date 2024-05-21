@@ -3,7 +3,7 @@ import React from 'react'
 import Icon from 'react-native-vector-icons/AntDesign'
 import { COLORS,SIZES } from '../../../../../constants/themes'
 
-const SearchBar = ({filterAction,searchText,setSearchText,setQuery}) => {
+const SearchBar = ({filterAction,searchText,setSearchText,query,setQuery}) => {
   return (
     <View style={styles.searchBarCont}>
       <View style={styles.searchBar}>
@@ -14,8 +14,10 @@ const SearchBar = ({filterAction,searchText,setSearchText,setQuery}) => {
           placeholder='Search Places' 
           placeholderTextColor={COLORS.black} 
           onChangeText={value=>{
+            console.log(value)
             setSearchText(value.toString())
-            setQuery(`pageSize=${25}&name=${value.toString()}`)
+            // setQuery(`pageSize=${25}&name=${value.toString()}`)
+            setQuery({...query,name:value.toString(),pageSize:25})
           }}
         />
       </View>
@@ -50,8 +52,9 @@ const styles = StyleSheet.create({
         marginRight:15,
     },
     input:{
-        height:'60%',
-        marginLeft:15,
+        height:50,
+        width:'90%',
+        marginLeft:5,
         color:COLORS.black,
         fontSize:SIZES.small,
         padding:0,

@@ -85,10 +85,11 @@ const Main = ({navigation}) => {
 
   const [query, setQuery] = useState({
     location: '',
-    maxPrice: 100,
+    maxPrice: 1000,
     pageSize: 15,
     amenities: [],
     propertyType: "Hotel",
+    name:'hotel',
   });
 
   const [searchText, setSearchText] = useState('');
@@ -176,7 +177,7 @@ const Main = ({navigation}) => {
   };
 
   const filterQuery = async () => {
-    let finalquery = `maxPrice=${query.maxPrice}&pageSize=${query.pageSize}&amenities=${query.amenities}&propertyType=${query.propertyType}&location=${query.location}`;
+    let finalquery = `maxPrice=${query.maxPrice}&pageSize=${query.pageSize}&amenities=${query.amenities}&propertyType=${query.propertyType}&location=${query.location}&name=${query.name}`;
 
     console.log('filter query func', finalquery);
     await axios
@@ -263,6 +264,7 @@ const Main = ({navigation}) => {
         {/* searchBar Top */}
         <HeaderSearch
           filterAction={openFilters}
+          query={query}
           setQuery={setQuery}
           setSearchText={setSearchText}
           searchText={searchText}
