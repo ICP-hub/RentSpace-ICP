@@ -117,7 +117,7 @@ const Amenities = ({setHostModal, pos}) => {
         step={1}
         nextFunc={emptyCheck}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

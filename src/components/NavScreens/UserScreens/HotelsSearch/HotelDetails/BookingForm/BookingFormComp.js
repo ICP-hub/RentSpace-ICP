@@ -31,7 +31,6 @@ import { ids } from '../../../../../../../DevelopmentConfig'
 import { Principal } from '@dfinity/principal'
 import { toHex } from '@dfinity/agent'
 import { fromHexString } from '@dfinity/candid'
-import CustomPopAlert from '../../../../CustomPopAlert'
 
 const onConnectRedirectLink ="rentspace://onConnect";
 const connection = new Connection(clusterApiUrl("devnet"));
@@ -40,15 +39,6 @@ const SOLANA_DEVNET_USDC_PUBLIC_KEY="4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncD
 
 const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoading,showBookingAnimation,bookingAnimation,setOpen}) => {
 
-  const [showAlertPop, setShowAlertPop] = useState({
-    type: '',
-    title: '',
-    message: '',
-    color: '',
-    visibility: false,
-    yesRequest:()=>{},
-    noRequest:()=>{}
-  });
 
   const {user}=useSelector(state=>state.userReducer)
   const [fullPayment,setFullPayment]=useState(true)
@@ -534,35 +524,11 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
                 onPress:()=>console.log('Transaction continued!')
               }
             ])
-            // setShowAlertPop({
-            //   type: 'confirm',
-            //   title: 'Interrupt Transaction',
-            //   message: 'Do you relly want to cancel the transaction?',
-            //   color: COLORS.mainPurple,
-            //   visibility: true,
-            //   yesRequest:()=>{
-            //     setFiatPaymentStart(false)
-            //     setShowAlertPop({
-            //       type: 'default',
-            //       title: 'Transaction failed',
-            //       message: 'Fiat transaction interrupted by the user!',
-            //       color: COLORS.mainPurple,
-            //       visibility: true,
-            //     });
-            //   },
-            //   noRequest:()=>console.log('Transaction continued!')
-            // });
+      
             
           }else{
             console.log(skipable.current)
-            // Alert.alert("Cancel request rejected","Cannot cancel transaction after order creation, Please do not close the screen unitl completion!")
-            setShowAlertPop({
-              type: 'default',
-              title: 'Cancel request rejected',
-              message: 'Cannot cancel transaction after order creation, Please do not close the screen unitl completion!',
-              color: COLORS.mainPurple,
-              visibility: true,
-            });
+            Alert.alert("Cancel request rejected","Cannot cancel transaction after order creation, Please do not close the screen unitl completion!")
           }
     }
     }
@@ -616,24 +582,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
         />
       </Modal>
 
-      <Modal
-        transparent
-        visible={showAlertPop.visibility}
-        onRequestClose={() => {
-          setShowAlertPop({...showAlertPop, visibility: false});
-        }}>
-        <CustomPopAlert
-          type={showAlertPop.type}
-          title={showAlertPop.title}
-          message={showAlertPop.message}
-          color={showAlertPop.color}
-          onCloseRequest={setShowAlertPop}
-          // yesRequest={()=>{}} 
-          // noRequest={()=>{}}
-          yesRequest={showAlertPop.yesRequest}
-          noRequest={showAlertPop.noRequest}
-        />
-      </Modal>
+      
 
       
     </View>
