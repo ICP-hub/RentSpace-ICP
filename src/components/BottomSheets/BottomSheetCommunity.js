@@ -5,6 +5,7 @@ import {
   Image,
   ActivityIndicator,
   Modal,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import {SIZES, COLORS} from '../../constants/themes';
@@ -33,7 +34,7 @@ const BottomSheetCommunity = ({selfMod, openNotiModal}) => {
       })
       .then(res => {
         setLoading(false);
-        alert('Thanks for accepting our guidelines!');
+        Alert.alert('Guidelines Accepted','Thanks for accepting our guidelines!');
 
         selfMod.current.dismiss();
         openNotiModal();
@@ -71,7 +72,7 @@ const BottomSheetCommunity = ({selfMod, openNotiModal}) => {
       <TouchableOpacity
         style={styles.declineBtn}
         onPress={() => {
-          alert('Please agree to the Community Guideline');
+          Alert.alert('Agreement required','Please agree to the Community Guideline');
         }}>
         <Text style={styles.declineText}>Decline</Text>
       </TouchableOpacity>

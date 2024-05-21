@@ -209,9 +209,9 @@ const RootComponent: React.FC = () => {
           if (res[0]?.firstName != null) {
             store.dispatch(setUser(res[0]));
             btmSheetLoginRef.current.dismiss();
-            alert(`welcome back ${res[0]?.firstName}!`);
+            Alert.alert(`welcome`,`You are welcome again ${res[0]?.firstName}!`);
           } else {
-            alert('Now please follow the registeration process!');
+            Alert.alert('Now please follow the registeration process!');
             btmSheetLoginRef.current.dismiss();
             btmSheetFinishRef.current.present();
           }
@@ -516,9 +516,9 @@ const RootComponent: React.FC = () => {
             if (res[0]?.firstName != null) {
               store.dispatch(setUser(res[0]));
               btmSheetLoginRef.current.dismiss();
-              alert(`welcome back ${res[0]?.firstName}!`);
+              Alert.alert(`Welcome`,`You are welcome again ${res[0]?.firstName}!`);
             } else {
-              // alert('Now please follow the registeration process!');
+              Alert.alert("Continue",'Now please follow the registeration process!');
               btmSheetLoginRef.current.dismiss();
               btmSheetFinishRef.current.present();
             }

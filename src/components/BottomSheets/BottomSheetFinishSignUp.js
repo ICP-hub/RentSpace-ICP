@@ -45,7 +45,7 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
     await actors.userActor?.createUser(userObj).then(async(res)=>{
       console.log(res)
       setLoading(false)
-      alert(`Welcome ${fname}! You are successfully registered `)
+      Alert.alert('Registration successful',`Welcome ${fname}! You are successfully registered `)
       
       await actors.userActor?.getUserInfo().then((res)=>{
         console.log(res[0]),
@@ -70,7 +70,7 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
             if(user?.fname!=null){
               closeModal();
             }else{
-              alert('Please Register first to continue further')
+              Alert.alert('Cannot skip','Please Register first to continue further')
               
             }
             
