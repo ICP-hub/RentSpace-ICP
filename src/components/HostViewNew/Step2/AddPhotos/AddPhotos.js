@@ -10,16 +10,8 @@ import {setListing} from '../../../../redux/NewListing/actions';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {setFiles} from '../../../../redux/files/actions';
 import RNFS from 'react-native-fs';
-import CustomPopAlert from '../../../NavScreens/CustomPopAlert';
 
 const AddPhotos = ({setHostModal, pos}) => {
-  const [showAlertPop, setShowAlertPop] = useState({
-    type: '',
-    title: '',
-    message: '',
-    color: '',
-    visibility: false,
-  });
 
   const [images, setImages] = useState('img2');
   const [hotelImgs, setHotelImgs] = useState(null);
@@ -29,25 +21,13 @@ const AddPhotos = ({setHostModal, pos}) => {
   const checkEmpty = () => {
     console.log(video, hotelImgs);
     if (hotelImgs == null) {
-      // Alert.alert('No image selected', 'Please add atleast one image');
-      setShowAlertPop({
-        type: 'default',
-        title: 'No image selected',
-        message: 'Please add atleast one image',
-        color: COLORS.mainPurple,
-        visibility: true,
-      });
+      Alert.alert('No image selected', 'Please add atleast one image');
+      
       console.log('no images');
       return false;
     } else if (video == null) {
-      // Alert.alert('No video selected', 'Please add a Video');
-      setShowAlertPop({
-        type: 'default',
-        title: 'No video selected',
-        message: 'Please add a Video',
-        color: COLORS.mainPurple,
-        visibility: true,
-      });
+      Alert.alert('No video selected', 'Please add a Video');
+      
       console.log('no video');
       return false;
     } else {
@@ -83,18 +63,11 @@ const AddPhotos = ({setHostModal, pos}) => {
           .catch(err => {
             {
               console.log(err);
-              // Alert.alert(
-              //   'Unsupported format!',
-              //   'The file format you are selected is not a correct video format',
-              // );
-              setShowAlertPop({
-                type: 'default',
-                title: 'Unsupported format!',
-                message:
-                  'The file format you are selected is not a correct video format',
-                color: COLORS.mainPurple,
-                visibility: true,
-              });
+              Alert.alert(
+                'Unsupported format!',
+                'The file format you are selected is not a correct video format',
+              );
+              
             }
           });
       },
@@ -130,20 +103,7 @@ const AddPhotos = ({setHostModal, pos}) => {
         back={2}
         nextFunc={checkEmpty}
       />
-      <Modal
-        transparent
-        visible={showAlertPop.visibility}
-        onRequestClose={() => {
-          setShowAlertPop({...showAlertPop, visibility: false});
-        }}>
-        <CustomPopAlert
-          type={showAlertPop.type}
-          title={showAlertPop.title}
-          message={showAlertPop.message}
-          color={showAlertPop.color}
-          onCloseRequest={setShowAlertPop}
-        />
-      </Modal>
+      
     </View>
   );
 };

@@ -1,16 +1,9 @@
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
-// import CustomPopAlert from '../../../NavScreens/CustomPopAlert';
 
 const CounterCard = ({title,counts,setCounts,self}) => {
 
-    // const [showAlertPop, setShowAlertPop] = useState({
-    //     show: false,
-    //     title: '',
-    //     message: '',
-    //     color: '',
-    //   });
 
   const increment=()=>{
     switch(self){
@@ -33,12 +26,6 @@ const CounterCard = ({title,counts,setCounts,self}) => {
         case(1):
             if(counts?.guests<=0){
                 alert('You have already selected minimum number of Guests!')
-                // setShowAlertPop({
-                //     show: true,
-                //     title: 'You have already selected minimum number of Guests!',
-                //     message: '',
-                //     color: 'black',
-                // });
                 break
             }
             setCounts({...counts,guests:counts?.guests-1})
@@ -46,12 +33,6 @@ const CounterCard = ({title,counts,setCounts,self}) => {
         case(2):
             if(counts?.bedrooms<=0){
                 alert('You have already selected minimum number of Bedrooms!')
-                // setShowAlertPop({
-                //     show: true,
-                //     title: 'You have already selected minimum number of Bedrooms!',
-                //     message: '',
-                //     color: 'black',
-                // });
                 break
             }
             setCounts({...counts,bedrooms:counts?.bedrooms-1})
@@ -59,12 +40,6 @@ const CounterCard = ({title,counts,setCounts,self}) => {
         case(3):
             if(counts?.beds<=0){
                 alert('You have already selected minimum number of Beds!')
-                // setShowAlertPop({
-                //     show: true,
-                //     title: 'You have already selected minimum number of Beds!',
-                //     message: '',
-                //     color: 'black',
-                // });
                 break
             }
             setCounts({...counts,beds:counts?.beds-1})
@@ -72,12 +47,6 @@ const CounterCard = ({title,counts,setCounts,self}) => {
         case(4):
             if(counts?.bathrooms<=0){
                 alert('You have already selected minimum number of Bathrooms!')
-                // setShowAlertPop({
-                //     show: true,
-                //     title: 'You have already selected minimum number of Bathrooms!',
-                //     message: '',
-                //     color: 'black',
-                // });
                 break
             }
             setCounts({...counts,bathrooms:counts?.bathrooms-1})
@@ -104,14 +73,7 @@ const CounterCard = ({title,counts,setCounts,self}) => {
             <Text style={styles.btnText}>+</Text>
         </TouchableOpacity>
       </View>
-      {/* <Modal visible={showAlertPop.show} transparent>
-        <CustomPopAlert
-          title={showAlertPop.title}
-          message={showAlertPop.message}
-          color={showAlertPop.color}
-          onCloseRequest={setShowAlertPop}
-        />
-      </Modal> */}
+       
     </View>
   )
 }

@@ -11,16 +11,10 @@ import {User} from '../../declarations/User/index.js';
 import { useSelector,useDispatch } from 'react-redux';
 import { setUser } from '../../redux/users/actions';
 import DatePicker from 'react-native-date-picker';
-import CustomPopAlert from '../NavScreens/CustomPopAlert';
 
 const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
 
-  const [showAlertPop, setShowAlertPop] = useState({
-    show:false,
-    title:'',
-    message:'',
-    color:''   
-}); // use this
+
 
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
@@ -51,13 +45,8 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
     await actors.userActor?.createUser(userObj).then(async(res)=>{
       console.log(res)
       setLoading(false)
-      // alert(`Welcome ${fname}! You are successfully registered `)
-      setShowAlertPop({
-        show:true,
-        title:`Welcome ${fname}! You are successfully registered `,
-        message:'',
-        color:'black'
-      })
+      alert(`Welcome ${fname}! You are successfully registered `)
+      
       await actors.userActor?.getUserInfo().then((res)=>{
         console.log(res[0]),
         dispatch(setUser(res[0]))
@@ -81,13 +70,8 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
             if(user?.fname!=null){
               closeModal();
             }else{
-              // alert('Please Register first to continue further')
-              setShowAlertPop({
-                show:true,
-                title:'Please Register first to continue further',
-                message:'',
-                color:'black'
-              })
+              alert('Please Register first to continue further')
+              
             }
             
           }}>
@@ -168,10 +152,6 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
         }}
         maximumDate={new Date()}
       />
-
-      <Modal visible={showAlertPop.show} transparent>
-        <CustomPopAlert title={showAlertPop.title} message={showAlertPop.message} color={showAlertPop.color} onCloseRequest={setShowAlertPop}/>
-      </Modal>
 
 
     </View>

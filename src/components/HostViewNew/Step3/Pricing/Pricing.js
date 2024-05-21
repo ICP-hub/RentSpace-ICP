@@ -18,7 +18,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setListing} from '../../../../redux/NewListing/actions';
 import MethodOption from './MethodOption';
 import GetWalletId from './GetWalletId';
-import CustomPopAlert from '../../../NavScreens/CustomPopAlert';
 
 const methods = [
   {
@@ -70,14 +69,7 @@ const methods = [
 ];
 
 const Pricing = ({setHostModal, pos}) => {
-  const [showAlertPop, setShowAlertPop] = useState({
-    type: '',
-    title: '',
-    message: '',
-    color: '',
-    visibility: false,
-  });
-
+ 
   const [price, setPrice] = useState(0);
   const {listing} = useSelector(state => state.listingReducer);
   const dispatch = useDispatch();
@@ -98,30 +90,18 @@ const Pricing = ({setHostModal, pos}) => {
 
   const checkEmpty = () => {
     if (price == 0) {
-      //   Alert.alert(
-      //     'No price selected',
-      //     'You cannot add a listing for free! Please add a price for it',
-      //   );
-      setShowAlertPop({
-        type: 'default',
-        title: 'No price selected',
-        message: 'You cannot add a listing for free! Please add a price for it',
-        color: COLORS.mainPurple,
-        visibility: true,
-      });
+        Alert.alert(
+          'No price selected',
+          'You cannot add a listing for free! Please add a price for it',
+        );
+      
       return false;
     } else if (paymentMethods.length == 0) {
-    //   Alert.alert(
-    //     'No payment method selected',
-    //     'Add atleast one payment method through which you are willing to accept payments',
-    //   );
-        setShowAlertPop({
-            type: 'default',
-        title: 'No payment method selected',
-        message: 'Add atleast one payment method through which you are willing to accept payments',
-        color: COLORS.mainPurple,
-        visibility: true,
-        })
+      Alert.alert(
+        'No payment method selected',
+        'Add atleast one payment method through which you are willing to accept payments',
+      );
+        
     } else {
       dispatch(
         setListing({
@@ -210,20 +190,7 @@ const Pricing = ({setHostModal, pos}) => {
           setWalletIDModal={setWalletIDModal}
         />
       </Modal>
-      <Modal
-        transparent
-        visible={showAlertPop.visibility}
-        onRequestClose={() => {
-          setShowAlertPop({...showAlertPop, visibility: false});
-        }}>
-        <CustomPopAlert
-          type={showAlertPop.type}
-          title={showAlertPop.title}
-          message={showAlertPop.message}
-          color={showAlertPop.color}
-          onCloseRequest={setShowAlertPop}
-        />
-      </Modal>
+      
     </View>
   );
 };

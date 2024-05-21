@@ -1,19 +1,18 @@
-import {StyleSheet, Text, View, Image, ActivityIndicator, Modal} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ActivityIndicator,
+  Modal,
+} from 'react-native';
 import React, {useState} from 'react';
 import {SIZES, COLORS} from '../../constants/themes';
 import {images} from '../../constants';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
-import CustomPopAlert from '../NavScreens/CustomPopAlert';
 
 const BottomSheetCommunity = ({selfMod, openNotiModal}) => {
-  const [showAlertPop, setShowAlertPop] = useState({
-    show: false,
-    title: '',
-    message: '',
-    color: '',
-  }); // use this
-
   const {user} = useSelector(state => state.userReducer);
   const {actors} = useSelector(state => state.actorReducer);
   const [loading, setLoading] = useState(false);
@@ -34,13 +33,7 @@ const BottomSheetCommunity = ({selfMod, openNotiModal}) => {
       })
       .then(res => {
         setLoading(false);
-        // alert('Thanks for accepting our guidelines!')
-        setShowAlertPop({
-          show: true,
-          title: 'Thanks for accepting our guidelines!',
-          message: '',
-          color: 'black',
-        });
+        alert('Thanks for accepting our guidelines!');
 
         selfMod.current.dismiss();
         openNotiModal();
@@ -78,26 +71,11 @@ const BottomSheetCommunity = ({selfMod, openNotiModal}) => {
       <TouchableOpacity
         style={styles.declineBtn}
         onPress={() => {
-          // alert("Please agree to the Community Guideline")
-          setShowAlertPop({
-            show: true,
-            title: 'Please agree to the Community Guideline',
-            message: '',
-            color: 'black',
-          });
+          alert('Please agree to the Community Guideline');
         }}>
         <Text style={styles.declineText}>Decline</Text>
       </TouchableOpacity>
       <ActivityIndicator animating={loading} style={styles.loader} size={40} />
-
-      <Modal visible={showAlertPop.show} transparent>
-        <CustomPopAlert
-          title={showAlertPop.title}
-          message={showAlertPop.message}
-          color={showAlertPop.color}
-          onCloseRequest={setShowAlertPop}
-        />
-      </Modal>
     </View>
   );
 };

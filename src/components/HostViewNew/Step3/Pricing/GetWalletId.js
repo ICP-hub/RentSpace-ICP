@@ -11,7 +11,6 @@ import {
 import React, {useState} from 'react';
 import {COLORS, SIZES} from '../../../../constants/themes';
 import {Connection, PublicKey, clusterApiUrl} from '@solana/web3.js';
-import CustomPopAlert from '../../../NavScreens/CustomPopAlert';
 
 const connection = new Connection(clusterApiUrl('devnet'));
 
@@ -21,13 +20,7 @@ const GetWalletId = ({
   setPhantomAccIDValidated,
   setWalletIDModal,
 }) => {
-  const [showAlertPop, setShowAlertPop] = useState({
-    type: '',
-    title: '',
-    message: '',
-    color: '',
-    visibility: false,
-  });
+
 
   const [loading, setLoading] = useState(false);
   const [respText, setRespText] = useState(
@@ -49,14 +42,8 @@ const GetWalletId = ({
             setLoading(false);
             setPhantomAccIDValidated(true);
             setWalletIDModal(false);
-            // Alert.alert("Verified !","We have verified your phantom account ID")
-            setShowAlertPop({
-              type: 'default',
-              title: 'Verified !',
-              message: 'We have verified your phantom account ID',
-              color: COLORS.mainPurple,
-              visibility: true,
-            });
+            Alert.alert("Verified !","We have verified your phantom account ID")
+            
           } else {
             setRespText('Account do not exists');
             setLoading(false);
@@ -107,20 +94,7 @@ const GetWalletId = ({
           animating={loading}
         />
       </View>
-      <Modal
-        transparent
-        visible={showAlertPop.visibility}
-        onRequestClose={() => {
-          setShowAlertPop({...showAlertPop, visibility: false});
-        }}>
-        <CustomPopAlert
-          type={showAlertPop.type}
-          title={showAlertPop.title}
-          message={showAlertPop.message}
-          color={showAlertPop.color}
-          onCloseRequest={setShowAlertPop}
-        />
-      </Modal>
+     
     </View>
   );
 };

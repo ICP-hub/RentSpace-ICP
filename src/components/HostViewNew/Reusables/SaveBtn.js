@@ -1,11 +1,9 @@
 import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, { useState } from 'react';
 import {COLORS, SIZES} from '../../../constants/themes';
-import CustomPopAlert from '../../NavScreens/CustomPopAlert';
 
 const SaveBtn = ({setHostModal}) => {
 
-  const [showAlertPop, setShowAlertPop] = useState(false);
 
   return (
     <View>
@@ -13,24 +11,12 @@ const SaveBtn = ({setHostModal}) => {
         style={styles.btn}
         onPress={() => {
           // setHostModal(0)
-          // alert('Please complete your listing first!');
-          setShowAlertPop({
-            show: true,
-            title: 'Please complete your listing first!',
-            message: '',
-            color: 'black',
-          });
+          alert('Please complete your listing first!');
+          
         }}>
         <Text style={styles.btnText}>Save & exit</Text>
       </TouchableOpacity>
-      <Modal visible={showAlertPop.show} transparent={true}>
-        <CustomPopAlert
-          title={showAlertPop.title}
-          message={showAlertPop.message}
-          color={showAlertPop.color}
-          onCloseRequest={setShowAlertPop}
-        />
-      </Modal>
+      
     </View>
   );
 };

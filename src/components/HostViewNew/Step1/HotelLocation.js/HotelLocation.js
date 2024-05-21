@@ -9,16 +9,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setListing } from '../../../../redux/NewListing/actions'
 import PickLocation from './PickLocation'
 import FillAdress from './FillAdress'
-// import CustomPopAlert from '../../../NavScreens/CustomPopAlert'
 
 const HotelLocation = ({setHostModal,pos}) => {
-
-  // const [showAlertPop, setShowAlertPop] = useState({
-  //   show: false,
-  //   title: '',
-  //   message: '',
-  //   color: '',
-  // });
 
   const [location,setLocation]=useState("Ludhiana")
   const [coords, setCoords] = useState({
@@ -37,12 +29,7 @@ const HotelLocation = ({setHostModal,pos}) => {
       return true
     }else{
       alert('Please select a location before moving forward!')
-      // setShowAlertPop({
-      //   show: true,
-      //   title: 'Please select a location before moving forward!',
-      //   message: '',
-      //   color: 'black',
-      // });
+      
       return false
     }
   }
@@ -65,14 +52,6 @@ const HotelLocation = ({setHostModal,pos}) => {
         <FillAdress self={setShowAddressForm} setLocation={setLocation} location={location}/>
       </Modal>
 
-      {/* <Modal visible={showAlertPop.show} transparent>
-        <CustomPopAlert
-          title={showAlertPop.title}
-          message={showAlertPop.message}
-          color={showAlertPop.color}
-          onCloseRequest={setShowAlertPop}
-        />
-      </Modal> */}
 
     </View>
   )

@@ -5,17 +5,8 @@ import SaveBtn from '../../Reusables/SaveBtn'
 import BottomBtn from '../../Reusables/BottomBtn'
 import { useDispatch, useSelector } from 'react-redux'
 import { setListing } from '../../../../redux/NewListing/actions'
-import CustomPopAlert from '../../../NavScreens/CustomPopAlert'
 
 const HotelTitle = ({setHostModal,pos}) => {
-
-    const [showAlertPop, setShowAlertPop] = useState({
-        show: false,
-        title: '',
-        message: '',
-        color: '',
-      });
-
 
     const [title,setTitle]=useState('')
     const [len,setLen]=useState(0)
@@ -24,13 +15,8 @@ const HotelTitle = ({setHostModal,pos}) => {
 
     const checkEmpty=()=>{
         if(title==''){
-            // alert("You cannot leave title empty")
-            setShowAlertPop({
-                show: true,
-                title: 'You cannot leave title empty',
-                message: '',
-                color: 'black',
-            });
+            alert("You cannot leave title empty")
+            
             return false
         }else{
             dispatch(setListing({...listing,hotelTitle:title,createdAt:"to be set"}))
@@ -43,13 +29,8 @@ const HotelTitle = ({setHostModal,pos}) => {
             setTitle(value)
             setLen(value.length)
         }else{
-            // alert('Title must be within 32 characters!')
-            setShowAlertPop({
-                show: true,
-                title: 'Title must be within 32 characters!',
-                message: '',
-                color: 'black',
-            });
+            alert('Title must be within 32 characters!')
+            
         }
     }
 
@@ -75,14 +56,7 @@ const HotelTitle = ({setHostModal,pos}) => {
       <Text style={styles.smallText}>{len}/32</Text>
       <BottomBtn setHostModal={setHostModal} pos={pos} step={2} nextFunc={checkEmpty}/>
 
-      <Modal visible={showAlertPop.show} transparent>
-        <CustomPopAlert
-          title={showAlertPop.title}
-          message={showAlertPop.message}
-          color={showAlertPop.color}
-          onCloseRequest={setShowAlertPop}
-        />
-      </Modal>
+      
 
     </View>
   )
