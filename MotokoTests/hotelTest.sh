@@ -1,26 +1,92 @@
-echo "stopping canister"
-echo "---------Stoping dfx----------"
-dfx stop
-echo "---------Starting dfx----------"
-dfx start --clean --background
-echo "---------Deploying Backend Canister----------"
-dfx deploy backend
-userCanister=$(dfx canister call backend createNewUserCanister userCanister | grep -oP '(?<=\")(.*?)(?=\")')
-hotelCanister=$(dfx canister call backend createNewHotelCanister hotelCanister | grep -oP '(?<=\")(.*?)(?=\")')
-echo "---------Accessing user Canister and creating account of the user, using principal of idenitity in terminal----------"
-dfx canister call $userCanister createUser '(record {firstName="Mohammad "; lastName="Anas";dob="18/09/2003";userEmail = "mohdanaspctebca@0@gmail.com";})'
-echo "---------Accessing user Canister and executing getPK function and returns canister name, using principal of idenitity in terminal----------"
-dfx canister call $userCanister getUserInfo
-echo "---------Accessing user Canister and executing updateUserInfo and returns canister name, using principal of idenitity in terminal----------"
-dfx canister call $userCanister updateUserInfo '(record {firstName="Mohammad "; lastName="Anas";dob="18/09/2003";userEmail = "mohdanaspctebca@0@gmail.com";userType="user";userProfile="random"; userGovId= "sddffdf"; hostStatus= false; verificationStatus= true;})'
-echo "---------Accessing user Canister and  getOwner the idenitity  of owner in terminal----------"
-dfx canister call $userCanister getOwner
-echo "---------Accessing Hotel canister and  register the hotel with hotel id of user  in terminal----------"
-dfx canister call $hotelCanister createHotel '(record {hotelTitle= "venture";hotelDes="Huge rooms";hotelImage="djnjvnjvnfd";hotelPrice="$2000";hotelLocation="Ludhiana"})'
-echo "---------Accessing hotel Canister and inserting Hotel Id HotelIds linked with userId, using principal of idenitity in terminal----------"
-hotelUuid=$(dfx canister call $hotelCanister getHotelId | grep -o '"[^"]*"' | awk 'NR==1')
-echo $hotelUuid
-echo "---------Accessing hotel Canister and inserting Hotel Id HotelIds linked with userId, using principal of idenitity in terminal----------"
-dfx canister call $hotelCanister getHotel "(""$hotelUuid"")"
-echo "---------Accessing hotel Canister and updateinng  Hotel Id HotelIds , using principal of idenitity in terminal----------"
-dfx canister call $hotelCanister updateHotel "("$hotelUuid",record {hotelTitle= 'Indane';hotelDes='Comfyrooms';hotelImage='djnjdseed';hotelPrice='120000';hotelLocation='London'})"
+# canister names
+userCanister="User"
+hotelCanister="hotel"
+
+# user variables
+name="user1"
+email="u@gmail.com"
+date="12/11/2012"
+samplestr="sdksd,xl,x"
+principal=$(dfx identity get-principal)
+
+# hotel variables
+hname="hotel1"
+changedHname="hotel2"
+des="sdnjndwndwdnimwidnwindWdiwndiwndiwd"
+price="300"
+location="haryana"
+image="img1"
+hdate="12/11/2012"
+hotelId=$(dfx canister call $hotelCanister getHotelId | grep -o '"[^"]*"' | awk 'NR==1')
+pageNumber=0
+entriesNeeded=8
+chunksize=10
+year="2024"
+
+echo "---------Creating new user for hotel----------"
+dfx canister call $userCanister createUser '(record {
+        firstName="'${name}'"; 
+        lastName="'${name}'";
+        dob="'${date}'";
+        userEmail = "'${email}'";
+    })'
+echo "-------------Creating new hotel----------------"
+dfx canister call $hotelCanister createHotel '(record {
+        hotelTitle= "'${hname}'";
+        hotelDes="'${des}'";
+        hotelImage="'${image}'";
+        hotelPrice="'${price}'";
+        hotelLocation="'${location}'";
+        hotelAvailableFrom="'${hdate}'";
+        hotelAvailableTill="'${hdate}'";
+        createdAt="'${hdate}'"
+    })'
+
+
+echo "---------Getting hotels listed by a user----------"
+dfx canister call $hotelCanister getHotelId
+
+echo "-------------Getting a particular hotel's details : $hotelId----------------"
+dfx canister call $hotelCanister getHotel '('${hotelId}')'
+
+echo "--------------Update hotel---------------"
+dfx canister call $hotelCanister updateHotel '(
+    '${hotelId}',
+    record {
+        hotelTitle= "'${changedHname}'";
+        hotelDes="'${des}'";
+        hotelImage="'${image}'";
+        hotelPrice="'${price}'";
+        hotelLocation="'${location}'";
+        hotelAvailableFrom="'${hdate}'";
+        hotelAvailableTill="'${hdate}'";
+        createdAt="'${hdate}'";
+    }
+)'
+
+echo "-------------Getting hotel's details after updation----------------"
+dfx canister call $hotelCanister getHotel '('${hotelId}')'
+
+echo "-----------------Deleting hotel----------------"
+dfx canister call $hotelCanister deleteHotel '('${hotelId}')'
+
+echo "-------------Getting hotel's details after deletion----------------"
+dfx canister call $hotelCanister getHotel '('${hotelId}')'
+
+echo "-------------Adding new admin------------"
+dfx canister call $hotelCanister addOwner '("'${principal}'")'
+
+echo "------------Get all admins--------------"
+dfx canister call $hotelCanister getAllAdmin
+
+echo "-------------Getting hotel availability--------------"
+dfx canister call $hotelCanister getHotelAvailabilty '('${hotelId}')'
+
+echo "--------------Getting yearly frequency of hotels registered---------------"
+dfx canister call $hotelCanister getHotelFrequencyByYear '("'${year}'")'
+
+echo "----------------Getting number of pages for a chunksize-------------------"
+dfx canister call $hotelCanister getNoOfPages '('${chunksize}')'
+
+echo "----------------Getting all the users by scan users for a page----------------"
+dfx canister call $hotelCanister scanHotel '('${pageNumber}','${entriesNeeded}')'
