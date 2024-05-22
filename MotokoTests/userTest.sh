@@ -53,8 +53,11 @@ dfx canister call $userCanister getAnnualRegisterByYear '("'${year}'")'
 echo "---------Getting number of pages for a chunksize-----------"
 dfx canister call $userCanister getNoOfPages '('${chunksize}')'
 
-echo "---------Getting all the users by scan users for a page---------"
+echo "---------Getting all the users by scan users for a page number---------"
 dfx canister call $userCanister scanUsers '('${pageNumber}','${entriesNeeded}')'
 
-echo "----------calling whoami-----------"
+echo "----------Calling whoami-----------"
 dfx canister call $userCanister whoami
+
+echo "-------------Getting all the admin's principal-------------"
+dfx canister call $userCanister getAllAdmin

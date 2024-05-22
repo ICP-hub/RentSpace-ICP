@@ -88,5 +88,8 @@ dfx canister call $hotelCanister getHotelFrequencyByYear '("'${year}'")'
 echo "----------------Getting number of pages for a chunksize-------------------"
 dfx canister call $hotelCanister getNoOfPages '('${chunksize}')'
 
-echo "----------------Getting all the users by scan users for a page----------------"
+echo "----------------Getting all the users by scan users for a page number----------------"
 dfx canister call $hotelCanister scanHotel '('${pageNumber}','${entriesNeeded}')'
+
+echo "---------------Calling whoami------------------"
+dfx canister call $hotelCanister whoami
