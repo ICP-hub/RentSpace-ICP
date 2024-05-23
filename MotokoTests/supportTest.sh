@@ -1,26 +1,100 @@
-echo "stopping canister"
-echo "---------Stoping dfx----------"
-dfx stop
-echo "---------Starting dfx----------"
-dfx start --clean --background
-echo "---------Deploying Backend Canister----------"
-dfx deploy backend
-userCanister=$(dfx canister call backend createNewUserCanister userCanister | grep -oP '(?<=\")(.*?)(?=\")')
-hotelCanister=$(dfx canister call backend createNewHotelCanister hotelCanister | grep -oP '(?<=\")(.*?)(?=\")')
-echo "---------Accessing user Canister and creating account of the user, using principal of idenitity in terminal----------"
-dfx canister call $userCanister createUser '(record {firstName="Mohammad "; lastName="Anas";dob="18/09/2003";userEmail = "mohdanaspctebca@0@gmail.com";})'
-echo "---------Accessing user Canister and executing getPK function and returns canister name, using principal of idenitity in terminal----------"
-dfx canister call $userCanister getUserInfo
-echo "---------Accessing user Canister and executing updateUserInfo and returns canister name, using principal of idenitity in terminal----------"
-dfx canister call $userCanister updateUserInfo '(record {firstName="Mohammad "; lastName="Anas";dob="18/09/2003";userEmail = "mohdanaspctebca@0@gmail.com";userType="user";userProfile="random"; userGovId= "sddffdf"; hostStatus= false; verificationStatus= true;})'
-echo "---------Accessing user Canister and  getOwner the idenitity  of owner in terminal----------"
-dfx canister call $userCanister getOwner
-echo "---------Accessing Hotel canister and  register the hotel with hotel id of user  in terminal----------"
-dfx canister call $hotelCanister createHotel '(record {hotelTitle= "venture";hotelDes="Huge rooms";hotelImage="djnjvnjvnfd";hotelPrice="$2000";hotelLocation="Ludhiana"})'
-echo "---------Accessing hotel Canister and inserting Hotel Id HotelIds linked with userId, using principal of idenitity in terminal----------"
-hotelUuid=$(dfx canister call $hotelCanister getHotelId | grep -o '"[^"]*"' | awk 'NR==1')
-echo $hotelUuid
-echo "---------Accessing hotel Canister and inserting Hotel Id HotelIds linked with userId, using principal of idenitity in terminal----------"
-dfx canister call $hotelCanister getHotel "(""$hotelUuid"")"
-echo "---------Accessing hotel Canister and updateinng  Hotel Id HotelIds , using principal of idenitity in terminal----------"
-dfx canister call $hotelCanister updateHotel "("$hotelUuid",record {hotelTitle= 'Indane';hotelDes='Comfyrooms';hotelImage='djnjdseed';hotelPrice='120000';hotelLocation='London'})"
+# canisters
+userCanister="User"
+supportCanister="supportChat"
+
+# user variables
+userCanister="User"
+name="user1"
+email="u@gmail.com"
+date="12/11/2012"
+samplestr="sdksd,xl,x"
+principal=$(dfx identity get-principal)
+
+# support chat variables
+issue="supportChatMessage"
+resolveResponse="IResolvedYourIssue"
+
+# ticket raising variables
+reason="reason"
+adminMessage="messageForAdmin"
+hostMessage="messageForHost"
+pageNumber=0
+entriesNeeded=8
+chunksize=10
+year="2024"
+ticket_id=$(dfx canister call $supportCanister scanBooking '('${pageNumber}','${entriesNeeded}')'| grep -o '"[^"]*"'| awk 'NR==2')
+user_id=$(dfx canister call $supportCanister scanBooking '('${pageNumber}','${entriesNeeded}')'| grep -o '"[^"]*"'| awk 'NR==1')
+
+echo "-------------Creating a new user for testing--------------"
+dfx canister call $userCanister createUser '(record {
+        firstName="'${name}'"; 
+        lastName="'${name}'";
+        dob="'${date}'";
+        userEmail = "'${email}'";
+    })'
+
+echo "---------------Adding an admin----------------"
+dfx canister call $supportCanister addOwner '("'${principal}'")'
+
+echo "----------------Getting all admins----------------"
+dfx canister call $supportCanister getAllAdmin 
+
+echo "-------------Reporting issue in support chat---------------"
+dfx canister call $supportCanister createIssue '("'${issue}'")'
+
+echo "-------------Getting all user issues-----------------"
+dfx canister call $supportCanister getAllUserIssue 
+
+echo "--------------Getting all unresolved issues------------------"
+dfx canister call $supportCanister getAllUnResolvedIssue
+
+echo "-----------------Resolving user issues-----------------------"
+dfx canister call $supportCanister resolveUserIssue '("'${principal}'","'${resolveResponse}'")'
+
+echo "-----------Getting all resolved issues-----------"
+dfx canister call $supportCanister getResolvedIssue 
+
+echo "----------------Raising new ticket-------------------"
+dfx canister call $supportCanister raiseNewTicket '(
+        "'${reason}'", 
+        "'${hostMessage}'", 
+        "'${adminMessage}'", 
+        record {
+            region="'${samplestr}'"; 
+            country="'${samplestr}'"; 
+            city="'${samplestr}'"; 
+            postalCode="'${samplestr}'"; 
+            building="'${samplestr}'"; 
+            streetAddress="'${samplestr}'"
+        }
+    )'
+
+echo "------------------Getting all tickets raised--------------------"
+dfx canister call $supportCanister getTicket
+
+echo "-----------------------Getting tickets raised by a particular user------------------------"
+dfx canister call $supportCanister getUserTicketsByAdmin '("'${principal}'")'
+
+echo "--------------------Checking if user is an admin or not-----------------------"
+dfx canister call $supportCanister isAdmin
+
+echo "----------------Getting number of pages based on chunk size----------------"
+dfx canister call $supportCanister getNoOfPages '('${chunksize}')'
+
+echo "-----------------Getting all the tickets by scanning tickets by page number-----------------"
+dfx canister call $supportCanister scanBooking '('${pageNumber}','${entriesNeeded}')'
+
+echo "----------------Resolving a ticket--------------------"
+dfx canister call $supportCanister resolveTicketRaised '('${ticket_id}','${user_id}')'
+
+echo "-----------------Getting all the tickets after resolution-----------------"
+dfx canister call $supportCanister scanBooking '('${pageNumber}','${entriesNeeded}')'
+
+echo "--------------------Deleting resolved ticket------------------------"
+dfx canister call $supportCanister removeResolvedTicketRaised '('${ticket_id}','${user_id}')'
+
+echo "-----------------Getting all the tickets after deletion-----------------"
+dfx canister call $supportCanister scanBooking '('${pageNumber}','${entriesNeeded}')'
+
+echo "--------------Calling whoami---------------"
+dfx canister call $supportCanister whoami
