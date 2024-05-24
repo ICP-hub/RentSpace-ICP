@@ -6,6 +6,7 @@ import { Calendar } from 'react-native-calendars'
 import { useSelector } from 'react-redux'
 import BookingFormComp from './BookingFormComp'
 import CheckAnim from './CheckAnim'
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
 const FirstForm = ({setBookingForm,item,setOpen}) => {
     const [selected,setSelected]=useState('')
@@ -48,11 +49,23 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
           }).catch((err)=>{
             console.log(booking,item?.id)
             console.log(err)
-            alert(err)
+            // alert(err)
+            Dialog.show({
+              type:ALERT_TYPE.DANGER,
+              title:"ERROR",
+              textBody:err,
+              button:'OK',
+            })
             setLoading(false)
           })
         }else{
-          alert("You need to complete the payment first!")
+          // alert("You need to complete the payment first!")
+          Dialog.show({
+            type:ALERT_TYPE.WARNING,
+            title:'WARNING',
+            textBody:'You need to complete the payment first',
+            button:'OK',
+          })
         }
     }
 

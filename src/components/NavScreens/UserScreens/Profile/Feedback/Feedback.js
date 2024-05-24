@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { COLORS,SIZES } from '../../../../../constants/themes'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import RatingCont from '../../HotelsSearch/HotelDetails/AddReview/RatingCont'
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
 const Feedback = ({setFeedbackPage}) => {
     const [feedback,setFeedback]=useState({
@@ -17,7 +18,13 @@ const Feedback = ({setFeedbackPage}) => {
         setLoading(true)
         setTimeout(()=>{
             setLoading(false)
-            alert('Thanks for your valueble feedback!')
+            // alert('Thanks for your valueble feedback!')
+            Dialog.show({
+              type:ALERT_TYPE.SUCCESS,
+              title:'SUCCESS',
+              textBody:'Thanks for your valueble feedback!',
+              button:'OK',
+            })
             console.log(feedback)
             setFeedbackPage(false)
         },3000)

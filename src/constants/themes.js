@@ -21,6 +21,7 @@
 //   gold:'#FFD683'
 // }
 // '#8280D4'
+
 const COLORS={
   text:"red",
   inputBorder:'#8280D4',
@@ -49,6 +50,18 @@ const COLORS={
   black:"#000000",
   mainLightGrey:"#F1F1F1"
 }
+
+export const AlertThemes=[
+  {
+    label:COLORS.mainPurple,
+    card:'#fff',
+    overlay:'#E0E0E0',
+    success:COLORS.mainPurple,
+    danger:COLORS.mainPurple,
+    warning:COLORS.mainPurple,
+  }
+]
+
 const SIZES={
     xSmall: 10,
   small: 12,

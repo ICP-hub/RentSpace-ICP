@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import { COLORS,SIZES } from '../../../../../../constants/themes'
 import RatingCont from './RatingCont'
 import { useSelector } from 'react-redux'
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
 const AddReview = ({item,setAddReview}) => {
   const {actors}=useSelector(state=>state.actorReducer)
@@ -22,7 +23,12 @@ const AddReview = ({item,setAddReview}) => {
     await actors.reviewActor.createReview(item?.bookingId,review).then((res)=>{
       console.log("review creation response : ",res)
       setLoading(false)
-      alert('Thanks for giving your valueble feedback!')
+      // alert('Thanks for giving your valueble feedback!')
+      Dialog.show({
+        title:'SUCCESS',
+        type:ALERT_TYPE.SUCCESS,
+        textBody:'Thanks for giving your valueable feedback'
+      })
       setAddReview(false)
     }).catch((err)=>{
       console.log("review err :",err)
