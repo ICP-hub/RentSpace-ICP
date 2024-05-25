@@ -35,13 +35,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10,
     borderRadius: 4,
-    width: '30%',
+    width: '25%',
   },
   cardActive: {
     display: 'flex',
     alignItems: 'center',
     padding: 10,
-    width: '30%',
+    width: '25%',
     backgroundColor: COLORS.mainPurple,
     borderRadius: 10,
 

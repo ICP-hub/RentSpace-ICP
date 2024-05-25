@@ -1,24 +1,22 @@
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {useRef, useEffect, useState} from 'react';
+import {Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, Modal} from 'react-native';
+import {useEffect, useState} from 'react';
 import Icon1 from 'react-native-vector-icons/AntDesign';
-import {container} from 'webpack';
 import {COLORS, SIZES} from '../../../../../constants/themes';
 import Icon from 'react-native-vector-icons/MaterialIcons'; //0
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'; //1
 import Icon3 from 'react-native-vector-icons/Foundation'; //2
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import Reviews from './subComponents/Reviews/Reviews';
-import ReserveBtn from './cards/ReserveBtn';
-import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import axios from 'axios';
+import RoomList from './RoomList';
 
 const RateHawk = ({hotelId, item, setOpen, navigation}) => {
-  console.log(hotelId);
+  // console.log(hotelId);
 
   const [hotelDetails, setHotelDetails] = useState({});
   const [description, setDescription] = useState('');
 
-  const btmBtn = useRef(null);
+  const [roomsPage, setRoomsPage] = useState(false);
+  
+
 
   const baseUrl = 'http://localhost:5000/api/v1/hotel/RateHawk/getHotelInfo';
 
@@ -28,8 +26,6 @@ const RateHawk = ({hotelId, item, setOpen, navigation}) => {
   };
 
   useEffect(() => {
-    btmBtn.current.present();
-
     axios
       .post(baseUrl, serachData)
       .then(response => {
@@ -64,10 +60,8 @@ const RateHawk = ({hotelId, item, setOpen, navigation}) => {
     uri: 'https://firebasestorage.googleapis.com/v0/b/rentspace-e58b7.appspot.com/o/hotelImage%2F1715757730736?alt=media&token=76fd4072-38ae-437c-b3fe-4b1f857ec4d8',
   };
 
-  // console.log(hotelDetails)
-
   return (
-    <BottomSheetModalProvider style={styles.container}>
+    <View style={styles.container}>
       <Icon1
         name="left"
         size={25}
@@ -118,33 +112,40 @@ const RateHawk = ({hotelId, item, setOpen, navigation}) => {
           </View>
         </View>
 
-        
-
-        {/* <Reviews /> */}
-
         <View style={styles.bottomLink}>
           <View style={styles.bottomLinkHead}>
             <Text style={styles.bottomLinkText}>Staying rules</Text>
           </View>
           <Text style={[styles.bottomLinkSubText2, {marginVertical: 2}]}>
-            Check-in:14:00 - 17:00
+            Check In : {hotelDetails.check_in_time}
           </Text>
           <Text style={[styles.bottomLinkSubText2, {marginVertical: 2}]}>
-            Check-out before:11:00
+            Check Out : {hotelDetails.check_out_time}
           </Text>
         </View>
-        
 
-        <BottomSheetModal
-          ref={btmBtn}
-          index={0}
-          snapPoints={['15%']}
-          backgroundStyle={{backgroundColor: COLORS.white}}
-          style={{elevation: 20}}>
-          <ReserveBtn />
-        </BottomSheetModal>
+        <TouchableOpacity
+          style={styles.reserveBtn}
+          onPress={()=>{
+            setRoomsPage(true);
+          }}>
+          <Text
+            style={{
+              color: COLORS.white,
+              fontSize: SIZES.medium,
+              fontWeight: 'bold',
+            }}>
+            Select Room
+          </Text>
+        </TouchableOpacity>
       </ScrollView>
-    </BottomSheetModalProvider>
+
+      <Modal visible={roomsPage} transparent={true} onRequestClose={()=>setRoomsPage(false)}>
+        <RoomList hotelId={hotelId}/>
+      </Modal>
+
+
+    </View>
   );
 };
 
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
   bottomLink: {
     display: 'flex',
     flexDirection: 'column',
-    marginBottom: 100,
+    marginBottom: 20,
   },
 
   bottomLinkHead: {
@@ -338,5 +339,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 10,
     textDecorationLine: 'underline',
+  },
+
+  reserveBtn: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '80%',
+    height: 50,
+    backgroundColor: COLORS.mainPurple,
+    borderRadius: 10,
+    marginVertical: 10,
+    marginHorizontal: 40,
+    color: COLORS.white,
   },
 });

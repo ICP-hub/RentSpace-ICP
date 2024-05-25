@@ -91,44 +91,6 @@ const Listings = ({navigation}) => {
     getHotelDetails();
   }, []);
 
-  // const listings = [
-  //   {
-  //     hotelTitle: 'Taj Hotel',
-  //     hotelLocation: 'Mumbai, Maharashtra',
-  //     image: images.hotelImg1,
-  //     status: 2,
-  //     rating: 7.5,
-  //   },
-  //   {
-  //     hotelTitle: 'Hotel Ramada',
-  //     hotelLocation: 'Lucknow, UP',
-  //     image: images.hotelImg2,
-  //     status: 0,
-  //     rating: 8.5,
-  //   },
-  //   {
-  //     hotelTitle: 'Hotel Pennsylvania',
-  //     hotelLocation: 'Pennsylvania, Austria',
-  //     image: images.hotelImg3,
-  //     status: 1,
-  //     rating: 9.5,
-  //   },
-  //   {
-  //     hotelTitle: 'Constantinople Inn',
-  //     hotelLocation: 'Istanbul',
-  //     image: images.hotelImg4,
-  //     status: 0,
-  //     rating: 6.5,
-  //   },
-  //   {
-  //     hotelTitle: 'Jaypur Palace',
-  //     hotelLocation: 'Jaypur, Rajasthan',
-  //     image: images.hotelImg5,
-  //     status: 1,
-  //     rating: 7.5,
-  //   },
-  // ];
-
   return (
     <View style={styles.view}>
       <View style={styles.header}>

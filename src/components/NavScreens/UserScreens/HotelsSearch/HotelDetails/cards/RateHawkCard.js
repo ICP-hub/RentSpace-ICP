@@ -12,7 +12,7 @@ import {images} from '../../../../../../constants';
 import Icon from 'react-native-vector-icons/Entypo';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import HotelDetailPage from '../HotelDetailPage';
-import RateHawk from '../RateHawk';
+import RateHawk from '../../Ratehawk/RateHawk';
 
 const RateHawkCard = ({item, navigation}) => {
   // console.log(item.name);

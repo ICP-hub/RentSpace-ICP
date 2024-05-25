@@ -1,4 +1,12 @@
-import {Alert, Modal, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  Modal,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 import BottomBtn from '../../Reusables/BottomBtn';
 import SaveBtn from '../../Reusables/SaveBtn';
@@ -38,12 +46,12 @@ const amenitiesList = [
 const propertyTypesList = [
   {name: 'House', icon: <Icon name="home" size={24} color={COLORS.black} />},
   {
-    name: 'Guest House',
-    icon: <Icon2 name="warehouse" size={24} color={COLORS.black} />,
+    name: 'Villa',
+    icon: <Icon5 name="villa" size={24} color={COLORS.black} />,
   },
   {
-    name: 'Flat',
-    icon: <Icon3 name="city-variant" size={24} color={COLORS.black} />,
+    name: 'Apartment',
+    icon: <Icon5 name="apartment" size={24} color={COLORS.black} />,
   },
   {
     name: 'Hotel',
@@ -54,8 +62,8 @@ const propertyTypesList = [
     icon: <Icon4 name="holiday-village" size={24} color={COLORS.black} />,
   },
   {
-    name: 'Palace',
-    icon: <Icon name="fort-awesome" size={24} color={COLORS.black} />,
+    name: 'Glamping',
+    icon: <Icon4 name="tent" size={24} color={COLORS.black} />,
   },
 ];
 
@@ -64,8 +72,6 @@ const Amenities = ({setHostModal, pos}) => {
   const [amenities, setAmenities] = useState([]);
   const {listing} = useSelector(state => state.listingReducer);
   const dispatch = useDispatch();
-
- 
 
   const emptyCheck = () => {
     if (amenities.length == 0) {
@@ -90,12 +96,16 @@ const Amenities = ({setHostModal, pos}) => {
       <Text style={styles.title}>Property Type</Text>
       <View style={[styles.listCont, {marginBottom: 30}]}>
         {propertyTypesList.map((item, index) => (
-          <PropertiesCard
-            item={item}
-            key={index}
-            propertyType={propertyType}
-            setPropertyType={setPropertyType}
-          />
+          <TouchableOpacity
+            style={
+              propertyType == item?.name
+                ? [styles.card, {borderBottomWidth: 2}]
+                : styles.card
+            }
+            onPress={() => setPropertyType(item?.name)}>
+            {item?.icon}
+            <Text style={styles.text}>{item?.name}</Text>
+          </TouchableOpacity>
         ))}
       </View>
       <Text style={styles.title}>Amenities</Text>
@@ -146,8 +156,19 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     width: '85%',
     columnGap: 30,
-    rowGap: 30,
+    rowGap: 20,
     marginLeft: '7.55%',
     marginVertical: 20,
+    paddingLeft: 5,
+  },
+  card: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 1.5,
+    width: '23%',
+    borderRadius: 4,
+    borderBottomColor: COLORS.hostTitle,
   },
 });
