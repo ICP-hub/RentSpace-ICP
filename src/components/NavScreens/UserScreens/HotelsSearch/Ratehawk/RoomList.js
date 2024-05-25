@@ -40,6 +40,9 @@ const RoomList = ({hotelId}) => {
     fetchHash(hotelId);
   }, []);
 
+
+  // ------------------- Integration Testing -------------------
+
   // testing function for orderBookingForm
   async function testorderBookingForm() {
     postData = {
@@ -56,11 +59,11 @@ const RoomList = ({hotelId}) => {
       .then(response => {
         console.log('Item_ID : ', response.data.data.item_id);
         console.log('Partner_ID : ', response.data.data.partner_order_id);
-        console.log('Payment_Types : ', response.data.data.payment_type);
+        // console.log('Payment_Types : ', response.data.data.payment_type);
         const item_id = response.data.data.item_id;
-        const partner_order_id = response.data.partner_order_id;
-        const payment_type = response.data.data.payment_type;
-        testCreditCardTokenization(item_id, partner_order_id,payment_type);
+        const partner_order_id = response.data.data.partner_order_id;
+        const payment_types = response.data.data.payment_type;
+        testCreditCardTokenization(item_id, partner_order_id, payment_types);
       })
       .catch(error => {
         console.error(error.message);
@@ -68,18 +71,21 @@ const RoomList = ({hotelId}) => {
   }
 
   // testing function for Credit Card Tokenization
-  async function testCreditCardTokenization(item_id, partner_order_id,payment_type) {
-    console.log("object id in credit card tokenization", item_id);
+  async function testCreditCardTokenization(
+    item_id,
+    partner_order_id,
+    payment_types,
+  ) {
     const postData = {
-      object_id: String(item_id), // change
+      object_id: String(item_id),
+      user_first_name: 'Isabelle',
       user_last_name: 'Mitchell',
+      card_holder: 'Isabelle Mitchell',
+      card_number: '4851728717006520',
       cvc: '378',
       is_cvc_required: true,
-      year: '24',
-      card_number: '4851728717006520',
-      card_holder: 'Isabelle Mitchell',
       month: '09',
-      user_first_name: 'Isabelle',
+      year: '24',
     };
 
     await axios
@@ -88,7 +94,18 @@ const RoomList = ({hotelId}) => {
         postData,
       )
       .then(response => {
-        console.log(response.data);
+        // console.log(response.data);
+        // console.log(payment_types);
+        const pay_uuid = response.data.pay_uuid;
+        const init_uuid = response.data.init_uuid;
+        // console.log("PAY_UUID : ",pay_uuid);
+        // console.log("INIT_UUID : ",init_uuid);
+        testOrderBookingFinish(
+          partner_order_id,
+          payment_types,
+          pay_uuid,
+          init_uuid,
+        );
       })
       .catch(error => {
         console.error(error.message);
@@ -97,11 +114,16 @@ const RoomList = ({hotelId}) => {
 
   // testing function for orderBookingFinish
 
-  async function testOrderBookingFinish(partner_order_id, pay_uuid, init_uuid,payment_type) {
+  async function testOrderBookingFinish(
+    partner_order_id,
+    payment_types,
+    pay_uuid,
+    init_uuid,
+  ) {
     const postData = {
       email: 'athsam@gmail.com',
       phone: '9914173314',
-      partner_order_id: String(partner_order_id), // change
+      partner_order_id: String(partner_order_id),
       language: 'en',
       guests: [
         {
@@ -114,15 +136,53 @@ const RoomList = ({hotelId}) => {
         },
       ],
       payment_type: {
-        type: 'now',
-        amount: '9',
-        currency_code: 'USD',
-        pay_uuid: '06fd4835-4b21-4778-84b9-d8a88b3b3320', // change
-        init_uuid: '9b84ddc7-4ef3-44af-bc52-bcccd21961c0', // change
+        type: payment_types[0].type,
+        amount: payment_types[0].amount,
+        currency_code: payment_types[0].currency_code,
+        pay_uuid: pay_uuid,
+        init_uuid: init_uuid,
       },
       return_path: 'google.com',
     };
+
+    // console.log("POST DATA : ",postData);
+    await axios
+      .post(
+        'http://localhost:5000/api/v1/hotel/RateHawk/orderBookFinish',
+        postData,
+      )
+      .then(response => {
+        // console.log(response.data);
+        testOrderBookingFinishStatus(partner_order_id);
+      })
+      .catch(error => {
+        console.error(error.message);
+      });
   }
+
+  // testing function for orderBookingFinishStatus
+
+  async function testOrderBookingFinishStatus(partner_order_id) {
+    
+    console.log(partner_order_id)
+    const postData = {
+      partner_order_id: partner_order_id
+    };
+
+    await axios
+      .post(
+        'http://localhost:5000/api/v1/hotel/RateHawk/orderBookFinishStatus',
+        postData,
+      )
+      .then(response => {
+        console.log("Final CLG")
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error(error.message);
+      });
+  }
+  
 
   return (
     <View style={styles.container}>
@@ -193,7 +253,8 @@ const RoomList = ({hotelId}) => {
                 <Text style={styles.price}>$100.00/Night</Text>
                 <TouchableOpacity
                   style={styles.bookBtn}
-                  onPress={() => testorderBookingForm()}>
+                  onPress={() => testorderBookingForm()}
+                  >
                   <Text style={styles.bookBtnText}>Book Now</Text>
                 </TouchableOpacity>
               </View>
@@ -201,6 +262,10 @@ const RoomList = ({hotelId}) => {
           </View>
         </View>
       </ScrollView>
+
+      
+
+
     </View>
   );
 };
