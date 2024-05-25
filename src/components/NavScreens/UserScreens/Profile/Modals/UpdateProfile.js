@@ -11,6 +11,7 @@ import { launchImageLibrary } from 'react-native-image-picker'
 import { useSelector,useDispatch } from 'react-redux'
 import { setUser } from '../../../../../redux/users/actions'
 import { updatingUser } from '../../../../../redux/actor/actions'
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
 const UpdateProfile = ({setEditProfile}) => {
 
@@ -41,7 +42,13 @@ const UpdateProfile = ({setEditProfile}) => {
         .then(async(res)=>{
           console.log("3")
             console.log("update res : ",res[0])
-            alert(`Your profile is updated ${updatedUser?.firstName} !`)
+            // alert(`Your profile is updated ${updatedUser?.firstName} !`)
+            Dialog.show({
+              type:ALERT_TYPE.SUCCESS,
+              title:'SUCCESS',
+              textBody:`Your profile is updated ${updatedUser?.firstName} !`,
+              button:'OK',
+            })
             await actors.userActor?.getUserInfo()
             .then(async(res)=>{
                 setLoading(false)

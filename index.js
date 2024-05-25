@@ -67,6 +67,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {host, ids} from './DevelopmentConfig';
 import MainProfile from './src/components/NavScreens/UserScreens/Profile/MainProfile/MainProfile';
 import HotelChoice from './src/components/NavScreens/HostScreens/Availibility/HotelChoice/HotelChoice';
+import {AlertNotificationRoot, ALERT_TYPE,Dialog} from 'react-native-alert-notification'
+import { AlertThemes } from './src/constants/themes';
 
 const Stack = createNativeStackNavigator();
 
@@ -209,9 +211,21 @@ const RootComponent: React.FC = () => {
           if (res[0]?.firstName != null) {
             store.dispatch(setUser(res[0]));
             btmSheetLoginRef.current.dismiss();
-            Alert.alert(`welcome`,`You are welcome again ${res[0]?.firstName}!`);
+            // Alert.alert(`welcome`,`You are welcome again ${res[0]?.firstName}!`);
+            Dialog.show({
+              type:ALERT_TYPE.SUCCESS,
+              title:'WELCOME',
+              textBody:`You are welcome again ${res[0]?.firstName}!`,
+              button:'OK',
+            })
           } else {
-            Alert.alert('Now please follow the registeration process!');
+            // Alert.alert('Now please follow the registeration process!');
+            Dialog.show({
+              type:ALERT_TYPE.INFO,
+              title:'INFO',
+              textBody:'Now please follow the registeration process!',
+              button:'OK',
+            })
             btmSheetLoginRef.current.dismiss();
             btmSheetFinishRef.current.present();
           }
@@ -516,9 +530,21 @@ const RootComponent: React.FC = () => {
             if (res[0]?.firstName != null) {
               store.dispatch(setUser(res[0]));
               btmSheetLoginRef.current.dismiss();
-              Alert.alert(`Welcome`,`You are welcome again ${res[0]?.firstName}!`);
+              // Alert.alert(`Welcome`,`You are welcome again ${res[0]?.firstName}!`);
+              Dialog.show({
+                type:ALERT_TYPE.SUCCESS,
+                title:'WELCOME',
+                textBody:`You are welcome again ${res[0]?.firstName}!`,
+                button:'OK',
+              })
             } else {
-              Alert.alert("Continue",'Now please follow the registeration process!');
+              // Alert.alert("Continue",'Now please follow the registeration process!');
+              Dialog.show({
+                type:ALERT_TYPE.SUCCESS,
+                title:'CONTINUE',
+                textBody:'Now please follow the registeration process!',
+                button:'OK',
+              })
               btmSheetLoginRef.current.dismiss();
               btmSheetFinishRef.current.present();
             }
@@ -536,7 +562,13 @@ const RootComponent: React.FC = () => {
       // getUserData()
     } catch (err) {
       console.log(err);
-      alert(err);
+      //alert(err)
+      Dialog.show({
+        type:ALERT_TYPE.DANGER,
+        title:'WARNING',
+        textBody:err,
+        button:'OK',
+      })
     }
   };
 
@@ -544,6 +576,7 @@ const RootComponent: React.FC = () => {
     <>
       <PolyfillCrypto />
       <Provider store={Store}>
+        <AlertNotificationRoot colors={AlertThemes} theme='light'>
         <NavigationContainer linking={linking}>
           <Stack.Navigator initialRouteName="reels">
             <Stack.Screen
@@ -605,10 +638,14 @@ const RootComponent: React.FC = () => {
             />
           </Stack.Navigator>
         </NavigationContainer>
+        </AlertNotificationRoot>
       </Provider>
     </>
   );
 };
+
+
+
 
 AppRegistry.registerComponent(appName, () => RootComponent);
 // AppRegistry.registerComponent(appName, () => App);

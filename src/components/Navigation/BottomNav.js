@@ -13,6 +13,7 @@ import {images} from '../../constants';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/Fontisto';
 import {useSelector} from 'react-redux';
+import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 
 const BottomNav = ({navigation}) => {
 
@@ -36,7 +37,13 @@ const BottomNav = ({navigation}) => {
         <TouchableOpacity
           style={styles.iconNav}
           onPress={() => {
-            alert(message);
+            // alert(message);
+            Dialog.show({
+              type:ALERT_TYPE.WARNING,
+              title:'WARNING',
+              textBody:message,
+              button:'OK',
+            })
           }}>
           <Icon name="filter" size={25} color={COLORS.mainPurple} />
         </TouchableOpacity>
@@ -53,8 +60,13 @@ const BottomNav = ({navigation}) => {
         <TouchableOpacity
           style={styles.iconNav}
           onPress={() => {
-            alert(message);
-
+            // alert(message);
+            Dialog.show({
+              type:ALERT_TYPE.WARNING,
+              title:'WARNING',
+              textBody:message,
+              button:'OK',
+            })
           }}>
           <Icon2 name="comment" size={20} color={COLORS.mainPurple} />
         </TouchableOpacity>

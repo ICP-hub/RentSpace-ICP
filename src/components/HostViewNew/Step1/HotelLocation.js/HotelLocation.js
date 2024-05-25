@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setListing } from '../../../../redux/NewListing/actions'
 import PickLocation from './PickLocation'
 import FillAdress from './FillAdress'
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
 const HotelLocation = ({setHostModal,pos}) => {
 
@@ -28,7 +29,13 @@ const HotelLocation = ({setHostModal,pos}) => {
       dispatch(setListing({...listing,hotelLocation:location}))
       return true
     }else{
-      alert('Please select a location before moving forward!')
+      // alert('Please select a location before moving forward!')
+      Dialog.show({
+        type:ALERT_TYPE.WARNING,
+        title:'WARNING',
+        textBody:'Please select a location before moving forward!',
+        button:'OK',
+      })
       
       return false
     }

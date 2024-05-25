@@ -12,6 +12,7 @@ import {SIZES, COLORS} from '../../constants/themes';
 import {images} from '../../constants';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification';
 
 const BottomSheetCommunity = ({selfMod, openNotiModal}) => {
   const {user} = useSelector(state => state.userReducer);
@@ -34,7 +35,13 @@ const BottomSheetCommunity = ({selfMod, openNotiModal}) => {
       })
       .then(res => {
         setLoading(false);
-        Alert.alert('Guidelines Accepted','Thanks for accepting our guidelines!');
+        // Alert.alert('Guidelines Accepted','Thanks for accepting our guidelines!');
+        Dialog.show({
+          type:ALERT_TYPE.SUCCESS,
+          title:'Guidelines Accepted',
+          textBody:'Thanks for accepting our guidelines!',
+          button:'OK',
+        })
 
         selfMod.current.dismiss();
         openNotiModal();
@@ -72,7 +79,13 @@ const BottomSheetCommunity = ({selfMod, openNotiModal}) => {
       <TouchableOpacity
         style={styles.declineBtn}
         onPress={() => {
-          Alert.alert('Agreement required','Please agree to the Community Guideline');
+          // Alert.alert('Agreement required','Please agree to the Community Guideline');
+          Dialog.show({
+            type:ALERT_TYPE.WARNING,
+            title:'Agreement required',
+            textBody:'Please agree to the Community Guideline',
+            button:'OK',
+          })
         }}>
         <Text style={styles.declineText}>Decline</Text>
       </TouchableOpacity>

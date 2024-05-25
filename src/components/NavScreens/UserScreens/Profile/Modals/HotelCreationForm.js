@@ -7,6 +7,7 @@ import Icon3 from 'react-native-vector-icons/FontAwesome5'
 import Icon4 from 'react-native-vector-icons/MaterialIcons'
 import { useSelector,useDispatch } from 'react-redux'
 import { setHotels } from '../../../../../redux/hotels/actions'
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
 const HotelCreationForm = ({setHotelCreateForm}) => {
   const {user}=useSelector(state=>state.userReducer)
@@ -19,7 +20,13 @@ const HotelCreationForm = ({setHotelCreateForm}) => {
     setLoading(true)
   await actors.hotelActor?.createHotel(hotelData).then(async(res)=>{
     setLoading(false)
-    alert('Your hotel has been created')
+    // alert('Your hotel has been created')
+    Dialog.show({
+      type:ALERT_TYPE.SUCCESS,
+      title:'SUCCESS',
+      textBody:'Your hotel has been created',
+      button:'OK',
+    })
    
     await actors.hotelActor?.getHotelId().then(async(res)=>{
       console.log(res)

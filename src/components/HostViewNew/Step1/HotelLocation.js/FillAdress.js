@@ -11,6 +11,7 @@ import React, {useEffect, useState} from 'react';
 import {SIZES, COLORS} from '../../../../constants/themes';
 import Icon from 'react-native-vector-icons/Entypo';
 import {Dropdown} from 'react-native-element-dropdown';
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification';
 
 const data = [
   {label: 'India', value: 'India'},
@@ -116,7 +117,13 @@ const FillAdress = ({self, setLocation, location}) => {
               console.log(location);
               self(false);
             } else {
-              alert('Please do not leave any fields empty!');
+              // alert('Please do not leave any fields empty!');
+              Dialog.show({
+                type:ALERT_TYPE.WARNING,
+                title:'WARNING',
+                textBody:'Please do not leave any fields empty!',
+                button:'OK',
+              })
                 
             }
           }}>

@@ -26,6 +26,7 @@ import MainChat from '../SupportChat/MainChat'
 import Privacy from '../Privacy/Privacy'
 import Terms from '../TermAndConditions/Terms'
 import Faq from '../Faq/Faq'
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
 const MainProfile = ({navigation}) => {
 
@@ -90,7 +91,13 @@ const makeHost=async()=>{
     console.log(res)
     
     setLoading(false)
-    alert('You are a host now!')
+    // alert('You are a host now!')
+    Dialog.show({
+      type:ALERT_TYPE.SUCCESS,
+      title:'SUCCESS',
+      textBody:'You are a host now!',
+      button:'OK',
+    })
     await actors.userActor?.getUserInfo().then((res)=>{
       console.log(res[0])
       dispatch(setUser(res[0]))
@@ -98,13 +105,25 @@ const makeHost=async()=>{
       getHotelList()
     }).catch((err)=>{
       setLoading(false)
-      alert(err)
+      // alert(err)
+      Dialog.show({
+        type:ALERT_TYPE.DANGER,
+        title:'ERROR',
+        textBody:err,
+        button:'OK',
+      })
       console.log(err)
     })
 
   }).catch((err)=>{
     setLoading(false)
-    alert(err)
+    // alert(err)
+    Dialog.show({
+      type:ALERT_TYPE.DANGER,
+      title:'ERROR',
+      textBody:err,
+      button:'OK',
+    })
     console.log(err)
   })
 }

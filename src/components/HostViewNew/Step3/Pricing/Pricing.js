@@ -18,6 +18,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setListing} from '../../../../redux/NewListing/actions';
 import MethodOption from './MethodOption';
 import GetWalletId from './GetWalletId';
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification';
 
 const methods = [
   {
@@ -90,17 +91,29 @@ const Pricing = ({setHostModal, pos}) => {
 
   const checkEmpty = () => {
     if (price == 0) {
-        Alert.alert(
-          'No price selected',
-          'You cannot add a listing for free! Please add a price for it',
-        );
+        // Alert.alert(
+        //   'No price selected',
+        //   'You cannot add a listing for free! Please add a price for it',
+        // );
+        Dialog.show({
+          type:ALERT_TYPE.WARNING,
+          title:'No price selected',
+          textBody:'You cannot add a listing for free! Please add a price for it',
+          button:'OK',
+        })
       
       return false;
     } else if (paymentMethods.length == 0) {
-      Alert.alert(
-        'No payment method selected',
-        'Add atleast one payment method through which you are willing to accept payments',
-      );
+      // Alert.alert(
+      //   'No payment method selected',
+      //   'Add atleast one payment method through which you are willing to accept payments',
+      // );
+      Dialog.show({
+        type:ALERT_TYPE.WARNING,
+        title:'No payment method selected',
+        textBody:'Add atleast one payment method through which you are willing to accept payments',
+        button:'OK',
+      })
         
     } else {
       dispatch(

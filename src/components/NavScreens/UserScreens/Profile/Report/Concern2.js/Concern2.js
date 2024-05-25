@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Entypo'
 import BottomBtn from '../BottomBtn'
 import AddressFileds from './AddressFileds'
 import { useSelector } from 'react-redux'
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
 const Concern2 = ({setConcernForm,setReportPage,setReport,report}) => {
     const [userDetails,setUserDetails]=useState({
@@ -32,7 +33,13 @@ const Concern2 = ({setConcernForm,setReportPage,setReport,report}) => {
         ).then((res)=>{
           console.log("res raising ticket : ",res)
           setLoading(false)
-          alert('Your issue ticket have been raised!')
+          // alert('Your issue ticket have been raised!')
+          Dialog.show({
+            type:ALERT_TYPE.SUCCESS,
+            title:'TICKET CREATED',
+            textBody:'Your issue ticket have been raised!',
+            button:'OK',
+          })
           setConcernForm(0)
           setReportPage(false)
         }).catch((err)=>{

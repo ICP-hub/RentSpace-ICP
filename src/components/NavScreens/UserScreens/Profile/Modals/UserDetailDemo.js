@@ -22,6 +22,7 @@ import { createActor as createHotelActor } from '../../../../../declarations/hot
 import { createActor } from '../../../../../declarations/backend'
 import { setActor } from '../../../../../redux/actor/actions'
 import MainProfile from '../MainProfile/MainProfile'
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
 const UserDetailDemo = ({navigation,setShowDetails}) => {
 
@@ -69,7 +70,13 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
       console.log(res)
       
       setLoading(false)
-      alert('You are a host now!')
+      // alert('You are a host now!')
+      Dialog.show({
+        type:ALERT_TYPE.SUCCESS,
+        title:'SUCCESS',
+        textBody:'You are a host now!',
+        button:'OK',
+      })
       setCreateHotel(true)
       await actors.userActor?.getUserInfo().then((res)=>{
         console.log(res[0])
@@ -78,13 +85,25 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
         getHotelList()
       }).catch((err)=>{
         setLoading(false)
-        alert(err)
+        // alert(err)
+        Dialog.show({
+          type:ALERT_TYPE.DANGER,
+          title:'ERROR',
+          textBody:err,
+          button:'OK',
+        })
         console.log(err)
       })
 
     }).catch((err)=>{
       setLoading(false)
-      alert(err)
+      // alert(err)
+      Dialog.show({
+        type:ALERT_TYPE.DANGER,
+        title:'ERROR',
+        textBody:err,
+        button:'OK',
+      })
       console.log(err)
     })
   }

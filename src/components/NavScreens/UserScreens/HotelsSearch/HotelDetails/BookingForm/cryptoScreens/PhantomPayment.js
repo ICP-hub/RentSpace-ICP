@@ -2,6 +2,7 @@ import { StyleSheet, Text, View,ActivityIndicator,TouchableOpacity, Alert } from
 import {React,useState} from 'react'
 import { COLORS,SIZES } from '../../../../../../../constants/themes'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
 const PhantomPayment = ({loading,accountId,total,connect,sendNewTransaction,connected,cryptoPrice}) => {
 
@@ -10,8 +11,13 @@ const PhantomPayment = ({loading,accountId,total,connect,sendNewTransaction,conn
         if(connected){
             sendNewTransaction(total*cryptoPrice)
         }else{
-            Alert.alert("Connection Required","Please connect with phantom wallet first to continue the payment")
-
+            // Alert.alert("Connection Required","Please connect with phantom wallet first to continue the payment")
+            Dialog.show({
+              type:ALERT_TYPE.DANGER,
+              title:'Connection Required',
+              textBody:'Please connect with phantom wallet first to continue the payment',
+              button:'OK',
+            })
         }
     }
     

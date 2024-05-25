@@ -11,6 +11,7 @@ import {User} from '../../declarations/User/index.js';
 import { useSelector,useDispatch } from 'react-redux';
 import { setUser } from '../../redux/users/actions';
 import DatePicker from 'react-native-date-picker';
+import { Dialog, ALERT_TYPE } from 'react-native-alert-notification';
 
 const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
 
@@ -45,7 +46,13 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
     await actors.userActor?.createUser(userObj).then(async(res)=>{
       console.log(res)
       setLoading(false)
-      Alert.alert('Registration successful',`Welcome ${fname}! You are successfully registered `)
+      // Alert.alert('Registration successful',`Welcome ${fname}! You are successfully registered `)
+      Dialog.show({
+        type:ALERT_TYPE.SUCCESS,
+        title:'Registration successful',
+        textBody:`Welcome ${fname}! You are successfully registered `,
+        button:'OK',
+      })
       
       await actors.userActor?.getUserInfo().then((res)=>{
         console.log(res[0]),
@@ -70,7 +77,13 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
             if(user?.fname!=null){
               closeModal();
             }else{
-              Alert.alert('Cannot skip','Please Register first to continue further')
+              // Alert.alert('Cannot skip','Please Register first to continue further')
+              Dialog.show({
+                type:ALERT_TYPE.WARNING,
+                title:'CANNOT SKIP',
+                textBody:'Please Register first to continue further',
+                button:'OK',
+              })
               
             }
             
