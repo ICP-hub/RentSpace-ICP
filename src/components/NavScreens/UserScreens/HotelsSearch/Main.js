@@ -287,6 +287,7 @@ const Main = ({navigation}) => {
           <BottomSheetLogin
             handleLogin={handleLogin}
             delegationValidation={delegationValidation}
+            navigation={navigation}
           />
         </BottomSheetModal>
         <BottomSheetModal
