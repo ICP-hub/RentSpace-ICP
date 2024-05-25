@@ -5,6 +5,7 @@ import SaveBtn from '../../Reusables/SaveBtn'
 import BottomBtn from '../../Reusables/BottomBtn'
 import { useDispatch, useSelector } from 'react-redux'
 import { setListing } from '../../../../redux/NewListing/actions'
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
 const HotelDesc = ({setHostModal,pos}) => {
 
@@ -17,7 +18,13 @@ const HotelDesc = ({setHostModal,pos}) => {
   const {listing}=useSelector(state=>state.listingReducer)
   const descChange=(value)=>{
     if(value.length>500){
-      alert('Description cannot be longer than 500 characters')
+      // alert('Description cannot be longer than 500 characters')
+      Dialog.show({
+        type:ALERT_TYPE.WARNING,
+        title:'WARNING',
+        textBody:'Description cannot be longer than 500 characters',
+        button:'OK',
+      })
      
     }else{
       setLen(value.length)
@@ -26,7 +33,13 @@ const HotelDesc = ({setHostModal,pos}) => {
   }
   const checkEmpty=()=>{
     if(desc==''){
-      alert("Please do not leave description empty")
+      // alert("Please do not leave description empty")
+      Dialog.show({
+        type:ALERT_TYPE.WARNING,
+        title:'WARNING',
+        textBody:"Please do not leave description empty",
+        button:'OK',
+      })
       
       return false
     }else{

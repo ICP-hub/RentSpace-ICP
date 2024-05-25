@@ -10,6 +10,7 @@ import {setListing} from '../../../../redux/NewListing/actions';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {setFiles} from '../../../../redux/files/actions';
 import RNFS from 'react-native-fs';
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification';
 
 const AddPhotos = ({setHostModal, pos}) => {
 
@@ -21,12 +22,24 @@ const AddPhotos = ({setHostModal, pos}) => {
   const checkEmpty = () => {
     console.log(video, hotelImgs);
     if (hotelImgs == null) {
-      Alert.alert('No image selected', 'Please add atleast one image');
+      // Alert.alert('No image selected', 'Please add atleast one image');
+      Dialog.show({
+        type:ALERT_TYPE.WARNING,
+        title:'No image selected',
+        textBody:'Please add atleast one image',
+        button:'OK',
+      })
       
       console.log('no images');
       return false;
     } else if (video == null) {
-      Alert.alert('No video selected', 'Please add a Video');
+      // Alert.alert('No video selected', 'Please add a Video');
+      Dialog.show({
+        type:ALERT_TYPE.WARNING,
+        title:'No video selected',
+        textBody:'Please add a Video',
+        button:'OK',
+      })
       
       console.log('no video');
       return false;
@@ -63,10 +76,16 @@ const AddPhotos = ({setHostModal, pos}) => {
           .catch(err => {
             {
               console.log(err);
-              Alert.alert(
-                'Unsupported format!',
-                'The file format you are selected is not a correct video format',
-              );
+              // Alert.alert(
+              //   'Unsupported format!',
+              //   'The file format you are selected is not a correct video format',
+              // );
+              Dialog.show({
+                type:ALERT_TYPE.WARNING,
+                title:'Unsupported format',
+                textBody:'The file format you are selected is not a correct video format',
+                button:'OK',
+              })
               
             }
           });

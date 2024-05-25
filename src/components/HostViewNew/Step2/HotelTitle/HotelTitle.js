@@ -5,6 +5,7 @@ import SaveBtn from '../../Reusables/SaveBtn'
 import BottomBtn from '../../Reusables/BottomBtn'
 import { useDispatch, useSelector } from 'react-redux'
 import { setListing } from '../../../../redux/NewListing/actions'
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
 const HotelTitle = ({setHostModal,pos}) => {
 
@@ -15,7 +16,13 @@ const HotelTitle = ({setHostModal,pos}) => {
 
     const checkEmpty=()=>{
         if(title==''){
-            alert("You cannot leave title empty")
+            // alert("You cannot leave title empty")
+            Dialog.show({
+                type:ALERT_TYPE.WARNING,
+                title:'WARNING',
+                textBody:'You cannot leave title empty',
+                button:'OK',
+              })
             
             return false
         }else{
@@ -29,7 +36,13 @@ const HotelTitle = ({setHostModal,pos}) => {
             setTitle(value)
             setLen(value.length)
         }else{
-            alert('Title must be within 32 characters!')
+            // alert('Title must be within 32 characters!')
+            Dialog.show({
+                type:ALERT_TYPE.WARNING,
+                title:'WARNING',
+                textBody:'Title must be within 32 characters!',
+                button:'OK',
+              })
             
         }
     }

@@ -1,6 +1,7 @@
 import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, { useState } from 'react';
 import {COLORS, SIZES} from '../../../constants/themes';
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification';
 
 const SaveBtn = ({setHostModal}) => {
 
@@ -11,7 +12,13 @@ const SaveBtn = ({setHostModal}) => {
         style={styles.btn}
         onPress={() => {
           // setHostModal(0)
-          alert('Please complete your listing first!');
+          // alert('Please complete your listing first!');
+          Dialog.show({
+            type:ALERT_TYPE.WARNING,
+            title:'WARNING',
+            textBody:'Please complete your listing first!',
+            button:'OK',
+          })
           
         }}>
         <Text style={styles.btnText}>Save & exit</Text>

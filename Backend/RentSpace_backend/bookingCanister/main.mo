@@ -60,10 +60,6 @@ shared ({caller = owner}) actor class () = this {
             case (null) {throw Error.reject("No Hotel Found")};
         };
 
-        // if (bookingDuration.bookedAt < hotelAvailableFrom or hotelAvailableTill < bookingDuration.bookedTill) {
-        //     throw Error.reject("Invalid Time Durations");
-        // };
-
         let hotelBookingDurationData = Trie.get(hotelIdBookedDurations, Utils.textKey hotelId, Text.equal);
         switch (hotelBookingDurationData) {
             case (?value) {
@@ -71,11 +67,6 @@ shared ({caller = owner}) actor class () = this {
                 switch (Trie.get(hotelIdDurationData, Utils.textKey hotelId, Text.equal)) {
                     case (null) {
                         let durationData = Trie.toArray<Types.BookingId, Types.BookingDuration, Types.BookingDuration>(value, func(k, v) = v);
-                        // for (item in durationData.vals()) {
-                        //     if (item.bookedAt < bookingDuration.bookedAt and bookingDuration.bookedTill < item.bookedTill) {
-                        //         throw Error.reject("Already Booked Hotel At this time duration");
-                        //     };
-                        // };
                         let bookingDurationTrie = Trie.put(hotelIdDurationData, Utils.textKey bookingId, Text.equal, bookingDuration).0;
                         hotelIdBookedDurations := Trie.put(hotelIdBookedDurations, Utils.textKey hotelId, Text.equal, bookingDurationTrie).0;
                     };

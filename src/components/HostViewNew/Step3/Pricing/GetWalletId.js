@@ -11,6 +11,7 @@ import {
 import React, {useState} from 'react';
 import {COLORS, SIZES} from '../../../../constants/themes';
 import {Connection, PublicKey, clusterApiUrl} from '@solana/web3.js';
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification';
 
 const connection = new Connection(clusterApiUrl('devnet'));
 
@@ -42,7 +43,13 @@ const GetWalletId = ({
             setLoading(false);
             setPhantomAccIDValidated(true);
             setWalletIDModal(false);
-            Alert.alert("Verified !","We have verified your phantom account ID")
+            // Alert.alert("Verified !","We have verified your phantom account ID")
+            Dialog.show({
+              type:ALERT_TYPE.SUCCESS,
+              title:'Verified',
+              textBody:"We have verified your phantom account ID",
+              button:'OK',
+            })
             
           } else {
             setRespText('Account do not exists');

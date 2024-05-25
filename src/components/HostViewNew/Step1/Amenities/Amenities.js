@@ -20,6 +20,7 @@ import Icon5 from 'react-native-vector-icons/MaterialIcons';
 import AmenityCard from '../../../NavScreens/UserScreens/HotelsSearch/Filters/Amenities/AmenityCard';
 import {useDispatch, useSelector} from 'react-redux';
 import {setListing} from '../../../../redux/NewListing/actions';
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification';
 
 const amenitiesList = [
   {name: 'wifi', icon: <Icon name="wifi" size={28} color={COLORS.black} />},
@@ -75,7 +76,13 @@ const Amenities = ({setHostModal, pos}) => {
 
   const emptyCheck = () => {
     if (amenities.length == 0) {
-      Alert.alert('No aminities slected!', 'Select atleast one aminity');
+      // Alert.alert('No aminities slected!', 'Select atleast one aminity');
+      Dialog.show({
+        type:ALERT_TYPE.WARNING,
+        title:'No aminities selected!',
+        textBody:'Select atleast one aminity',
+        button:'OK',
+      })
 
       return false;
     } else {

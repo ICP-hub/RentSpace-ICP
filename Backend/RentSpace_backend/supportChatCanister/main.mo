@@ -273,7 +273,7 @@ shared ({caller = owner}) actor class () {
     };
 
     public shared ({caller = user}) func removeResolvedTicketRaised(ticketId : Text, userId : Text) : async Result {
-        assert (Principal.isAnonymous(user));
+        assert (Principal.isAnonymous(user) == false);
         try {
 
             var resultMessage = "";

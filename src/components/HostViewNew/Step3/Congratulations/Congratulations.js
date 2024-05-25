@@ -11,6 +11,7 @@ import axios, { formToJSON } from 'axios'
 import { FileSystem } from 'react-native-file-access'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { storage } from '../../../../../firebaseConfig'
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
 const Congratulations = ({setHostModal,pos}) => {
   const [loading,setLoading]=useState(false)
@@ -189,7 +190,13 @@ const Congratulations = ({setHostModal,pos}) => {
       }).catch((err)=>{
         setLoading(false)
         console.log("hotel creation api err : ",err)
-        alert(err)
+        // alert(err)
+        Dialog.show({
+          type:ALERT_TYPE.DANGER,
+          title:'ERROR',
+          textBody:err,
+          button:'OK',
+        })
         // setHostModal(false)
       })
     }).catch((err)=>{console.log(err)})

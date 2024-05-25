@@ -1,3 +1,5 @@
+import { Dialog , ALERT_TYPE} from "react-native-alert-notification"
+
 async function signUp(fname,lname,DOB,email,actors,setLoading,openComm,closeModal,dispatch){
     console.log(actors?.userActor.createUser)
     setLoading(true)
@@ -13,7 +15,13 @@ async function signUp(fname,lname,DOB,email,actors,setLoading,openComm,closeModa
     await actors.userActor?.createUser(userObj).then(async(res)=>{
       console.log(res)
       setLoading(false)
-      alert(`Welcome ${fname}! You are successfully registered `)
+      // alert(`Welcome ${fname}! You are successfully registered `)
+      Dialog.show({
+        type:ALERT_TYPE.WARNING,
+        title:'WARNING',
+        textBody:message,
+        button:'OK',
+      })
       await actors.userActor?.getUserInfo().then((res)=>{
         console.log(res[0]),
         dispatch(setUser(res[0]))
