@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   },
 
   cardView: {
-    backgroundColor: 'blue',
+    backgroundColor: COLORS.black,
     width: '100%',
     height: '85%',
     borderRadius: 12,

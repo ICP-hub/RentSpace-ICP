@@ -8,7 +8,7 @@ import SecurityCheck from './Step3/SecurityCheck/SecurityCheck'
 import ReviewListing from './Step3/ReviewListing/ReviewListing'
 import Congratulations from './Step3/Congratulations/Congratulations'
 
-const Step3Manager = ({hostModal,setHostModal}) => {
+const Step3Manager = ({hostModal,setHostModal,getHotelDetails}) => {
   let component="<></>"
   
   switch(hostModal){
@@ -31,7 +31,7 @@ const Step3Manager = ({hostModal,setHostModal}) => {
         component=<ReviewListing setHostModal={setHostModal} pos={22}/>
         break
     case(23):
-        component=<Congratulations setHostModal={setHostModal} pos={23}/>
+        component=<Congratulations setHostModal={setHostModal} pos={23} getHotelDetails={getHotelDetails}/>
         break       
     default:
         component=<Text style={{color:'black'}}>Component not created</Text>
