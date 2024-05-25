@@ -32,7 +32,8 @@ const AllChats = ({navigation}) => {
     const firstUpdate = useRef(true);
     const [showDrawer,setShowDrawer]=useState(false)
     // const {newChat}=route.params
-    const baseUrl="https://rentspace.kaifoundry.com"
+    // const baseUrl="https://rentspace.kaifoundry.com"
+    const baseUrl="http://localhost:5000"
     const chatLogin=async()=>{
         setLoading(true)
         setChats([])
