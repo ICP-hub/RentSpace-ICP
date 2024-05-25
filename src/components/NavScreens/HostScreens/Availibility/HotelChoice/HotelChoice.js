@@ -18,6 +18,7 @@ import CalendarScreen from '../CalendarScreen/CalendarScreen';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setChatToken } from '../../../../../redux/chatToken/actions';
+import ChatDrawer from '../../ChatPage/ChatDrawer/ChatDrawer';
 
 const HotelChoice = ({navigation}) => {
 
@@ -25,6 +26,7 @@ const HotelChoice = ({navigation}) => {
   // const {actors} = useSelector(state => state.actorReducer);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedHotel, setSelectedHotel] = useState({});
+  const [showDrawer, setShowDrawer] = useState(false);
   const {authData}=useSelector(state=>state.authDataReducer)
   const {principle}=useSelector(state=>state.principleReducer)
   const dispatch=useDispatch()
@@ -142,7 +144,11 @@ const HotelChoice = ({navigation}) => {
         <Text style={{color:COLORS.mainPurple, fontSize:20,marginLeft:"25%", marginTop:"50%"}}>No hotels available</Text>
       )}
 
-      <BottomNavHost navigation={navigation} />
+      <BottomNavHost
+        navigation={navigation} 
+        setShowDrawer={setShowDrawer}
+        showDrawer={showDrawer}
+      />
 
       <Modal
         visible={modalVisible}
@@ -153,6 +159,14 @@ const HotelChoice = ({navigation}) => {
           getHotelDetails={getHotelDetails}
         />
       </Modal>
+      <Modal animationType="fade" visible={showDrawer} transparent>
+        <ChatDrawer
+          navigation={navigation}
+          showDrawer={showDrawer}
+          setShowDrawer={setShowDrawer}
+        />
+      </Modal>
+
     </View>
     
   );

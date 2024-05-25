@@ -80,8 +80,8 @@ const Filters = ({setShowFilters,query, setQuery}) => {
         <Text style={styles.title}>Filters</Text>
       </View>
       <ScrollView style={styles.scrollPart}>
-        <TypeOfPlace />
-        <Line />
+        {/* <TypeOfPlace />
+        <Line /> */}
         <PriceRange maxPrice={maxPrice} setMaxPrice={setMaxPrice} />
         <Line />
         <PropertyTypes
@@ -99,7 +99,11 @@ const Filters = ({setShowFilters,query, setQuery}) => {
       </ScrollView>
       <View style={styles.footer}>
         <View style={styles.placeHolder} />
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>{
+          setMaxPrice(0)
+          setPropertyType('')
+          setAmenities([])
+        }}>
           <Text style={styles.link}>Clear all</Text>
         </TouchableOpacity>
         <TouchableOpacity

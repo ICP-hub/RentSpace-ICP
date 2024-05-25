@@ -25,7 +25,8 @@ const ReelCard = ({item,reelIndex}) => {
     const {actors}=useSelector(state=>state.actorReducer)
     const [reelComments,setReelComments]=useState([])
     const [loading,setLoading]=useState(false)
-    const baseURL="https://rentspace.kaifoundry.com"
+    // const baseURL="https://rentspace.kaifoundry.com"
+    const baseURL="http://localhost:5000"
     const openComments=()=>{
         btmSheetComments.current.present()
     }
@@ -136,7 +137,7 @@ const ReelCard = ({item,reelIndex}) => {
       <View style={styles.reel}>
 
           <Video
-              source={{ uri: item?.videoUrls[0]?.url }}
+              source={{ uri: item?.videoUrls }}
               resizeMode="cover"
               pause={false}
               style={styles.bg}
@@ -206,6 +207,7 @@ const styles = StyleSheet.create({
         position:'absolute',
         bottom:'7%',
         right:'3%',
+        zIndex:10
     },
     infoCont:{
         display:'flex',

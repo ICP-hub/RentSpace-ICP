@@ -29,15 +29,22 @@ const ShowBookings = ({bookingList,setShowReservations,getReservations}) => {
       </TouchableOpacity>
     </View>
     {/* <Text style={styles.title}>Your Bookings</Text> */}
-    <FlatList 
-      refreshing={refreshing}
-      onRefresh={loadData}
-      contentContainerStyle={styles.list} 
-      style={styles.Flist} 
-      data={bookingList} 
-      renderItem={(item)=>(
-      <BookingCard item={item.item}/>
-    )}/>
+    {
+      bookingList.length>0?
+      <FlatList 
+        refreshing={refreshing}
+        onRefresh={loadData}
+        contentContainerStyle={styles.list} 
+        style={styles.Flist} 
+        data={bookingList} 
+        renderItem={(item)=>(
+        <BookingCard item={item.item}/>
+      )}/>
+      :
+      <Text style={styles.emptyText}>No bookings to show</Text>
+
+    }
+    
     </View>
   )
 }
@@ -90,5 +97,10 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         justifyContent:'center',
+      },
+      emptyText:{
+        color:COLORS.black,
+        fontSize:SIZES.small,
+        marginTop:80
       }
 })

@@ -278,7 +278,7 @@ const RootComponent: React.FC = () => {
 
   let resp;
 
-  const handleLogin = async () => {
+  const handleLogin = async (setLoader) => {
     const newDel = await getFromAsyncStore('delegation');
     const newPri = await getFromAsyncStore('prikey');
     const newpub = await getFromAsyncStore('pubkey');
@@ -339,12 +339,14 @@ const RootComponent: React.FC = () => {
           }, 1000);
         } catch (error) {
           console.log(error);
+          setLoader(false)
           // alert(error);
         }
       })
       .catch(err => {
         console.log(err);
         // alert(err);
+        setLoader(false)
       });
   };
   const handleDeepLink = async event => {
@@ -563,6 +565,7 @@ const RootComponent: React.FC = () => {
     } catch (err) {
       console.log(err);
       //alert(err)
+      setLoader(false)
       Dialog.show({
         type:ALERT_TYPE.DANGER,
         title:'WARNING',

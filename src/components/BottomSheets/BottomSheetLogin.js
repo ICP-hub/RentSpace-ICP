@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 // const {height:SCREEN_HEIGHT}=Dimensions.get('window')
 
 
-const BottomSheetLogin = ({handleLogin,delegationValidation}) => {
+const BottomSheetLogin = ({handleLogin,delegationValidation,navigation}) => {
 
 
   const [loader,setLoader]=useState(false)
@@ -50,10 +50,10 @@ const getnew=async()=>{
   
 
   const loginMethods=[
-    {title:"Astrox",logo:images.astroX},
-    {title:"Bitfinity",logo:images.bitfinity},
+    // {title:"Astrox",logo:images.astroX},
+    // {title:"Bitfinity",logo:images.bitfinity},
     {title:"Internet Identity",logo:images.internetIden},
-    {title:"Plug",logo:images.plug}
+    // {title:"Plug",logo:images.plug}
   ]
     
   return (
@@ -61,7 +61,7 @@ const getnew=async()=>{
       <Text style={styles.heading}>LOGIN / SIGN UP</Text>
       <FlatList style={styles.btnList} data={loginMethods} renderItem={({item})=>(
         <TouchableOpacity style={styles.loginBtn} onPress={()=>{
-          handleLogin()
+          handleLogin(setLoader)
           setLoader(true)
         }}>
           <Image source={item.logo} style={styles.logo}/>
@@ -69,11 +69,14 @@ const getnew=async()=>{
           <Image source={images.next} style={styles.nextIcon} />
         </TouchableOpacity>
       )}/>
-      {/* <TouchableOpacity style={styles.testBtn} onPress={()=>console.log(loader)}>
-      <Image source={images.profileSample} style={styles.logo}/>
-          <Text style={styles.loginBtnText}>{loader+" "}</Text>
-          <Image source={images.next} style={styles.nextIcon} />
-        </TouchableOpacity> */}
+      <TouchableOpacity style={styles.backBtn} onPress={()=>{
+        // console.log(loader)
+        navigation.navigate("reels")
+      }} >
+        <Text style={styles.backText}>
+          {"<-  "} Go back to the reels
+        </Text>
+       </TouchableOpacity>
       <ActivityIndicator animating={loader} size={40} style={styles.loader}/>
     </View>
   )
@@ -145,5 +148,13 @@ const styles = StyleSheet.create({
         borderColor:COLORS.mainPurple,
         borderRadius:10,
         marginBottom:10,
+    },
+    backText:{
+      color:COLORS.mainPurple,
+      fontWeight:'bold',
+      fontSize:SIZES.preMedium
+    },
+    backBtn:{
+      marginTop:50
     }
 })

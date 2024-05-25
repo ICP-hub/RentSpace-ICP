@@ -192,6 +192,7 @@ const Main = ({navigation}) => {
           console.log('no hotels found');
           console.log(res);
           setQueryHotels([]);
+          setRateHawkHotel([])
         } else {
           setQueryHotels([...res?.data?.hotels]);
           setRateHawkHotel([...res?.data?.externalHotels]);
@@ -286,6 +287,7 @@ const Main = ({navigation}) => {
           <BottomSheetLogin
             handleLogin={handleLogin}
             delegationValidation={delegationValidation}
+            navigation={navigation}
           />
         </BottomSheetModal>
         <BottomSheetModal

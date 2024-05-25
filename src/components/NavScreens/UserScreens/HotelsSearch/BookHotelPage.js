@@ -40,6 +40,7 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
   const sampleDes = '2972 Westheimer Rd. Santa Ana, Illinois 85486 ';
   const [bookingList, setBookingList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+
   // const [bottom,setBottom]=useState(70)
 
   async function getReservations(setRefreshing) {
@@ -50,6 +51,10 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
         console.log('getid resp : ', res);
 
         console.log('all bookings1: ', res[0]);
+        if(res.length<=0){
+          setRefreshing(false)
+          return
+        }
         res.map(async r => {
           setRefreshing(true);
           console.log('booking-->', r);
@@ -123,7 +128,7 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
   const refresh = () => {
     // console.log(queryHotels);
     getQueryHotelDetails()
-    getReservations();
+    getReservations(setRefreshing);
   };
 
   // useEffect(()=>{
@@ -187,7 +192,7 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
 
         </ScrollView>
 
-        <Modal animationType="slide" visible={showReservation}>
+        <Modal animationType="slide" visible={showReservation} onRequestClose={()=>setShowReservations(false)}>
           <ShowBookings
             getReservations={getReservations}
             bookingList={bookingList}

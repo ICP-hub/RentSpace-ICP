@@ -13,7 +13,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { storage } from '../../../../../firebaseConfig'
 import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
-const Congratulations = ({setHostModal,pos}) => {
+const Congratulations = ({setHostModal,pos,getHotelDetails}) => {
   const [loading,setLoading]=useState(false)
   const [token,setToken]=useState("")
   const {listing}=useSelector(state=>state.listingReducer)
@@ -179,7 +179,7 @@ const Congratulations = ({setHostModal,pos}) => {
         setHostModal(false)
         
         console.log("hotel creation api response videos : ",res.data)
-        
+        getHotelDetails()
         await actors.hotelActor?.getHotelId().then(async(res)=>{
           console.log(res)
           dispatch(setHotels(res))

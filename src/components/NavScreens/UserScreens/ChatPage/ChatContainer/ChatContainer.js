@@ -29,18 +29,20 @@ const ChatContainer = ({navigation}) => {
     const route=useRoute()
     const firstUpdate = useRef(true);
     const {newChat}=route.params
-    const baseUrl="https://rentspace.kaifoundry.com"
+    // const baseUrl="https://rentspace.kaifoundry.com"
+    const baseUrl="http://localhost:5000"
     const chatLogin=async()=>{
         setChatUsers([])
         setLoading(true)
         setChats([])
-        console.log(`authData : ${authData}\n principal : ${authData.principal}\n publicKey : ${authData.publicKey}`)
+        console.log(`authData : ${authData.delegation}\n principal : ${authData.privateKey}\n publicKey : ${authData.publicKey}`)
         console.log({
-            principal:authData.principal,
-            publicKey:authData.publicKey
+            "x-private":authData.privateKey,
+          "x-public":authData.publicKey,
+          "x-delegation":authData.delegation,
          })
          await axios.post(`${baseUrl}/api/v1/login/user`,{
-            principal:authData.principal,
+            principal:principle,
             publicKey:authData.publicKey
          },{headers:{
             "x-private":authData.privateKey,
@@ -171,7 +173,7 @@ const ChatContainer = ({navigation}) => {
                 }}/>
                     <BottomNav navigation={navigation}/>
                     <Modal animationType='slide' visible={openChat}>
-                        <Chat item={chatItem} setOpenChat={setOpenChat}/>
+                        <Chat item={chatItem} setOpenChat={setOpenChat} token={token}/>
                     </Modal>
                 </View>
             )
