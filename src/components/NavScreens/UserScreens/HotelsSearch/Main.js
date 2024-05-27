@@ -88,8 +88,10 @@ const Main = ({navigation}) => {
     maxPrice: 1000,
     pageSize: 15,
     amenities: [],
-    propertyType: "Hotel",
-    name:'hotel',
+    propertyType: 'Hotel',
+    name: 'hotel',
+    latitude: 0,
+    longitude: 0,
   });
 
   const [searchText, setSearchText] = useState('');
@@ -98,14 +100,21 @@ const Main = ({navigation}) => {
   const getCurrentLocation = async () => {
     Geolocation.getCurrentPosition(loc => {
       const coordinates = loc.coords;
-      console.log('coordinates : ' + coordinates.latitude + ' ' + coordinates.longitude);
+      console.log(
+        'coordinates : ' + coordinates.latitude + ' ' + coordinates.longitude,
+      );
       axios
         .get(
           `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${coordinates.latitude}&longitude=${coordinates.longitude}`,
         )
         .then(res => {
           console.log('City : ' + res.data.city);
-          setQuery({...query, location: res.data.city});
+          setQuery({
+            ...query,
+            location: res.data.city,
+            latitude: coordinates.latitude,
+            longitude: coordinates.longitude,
+          });
         })
         .catch(err => console.log(err));
     });
@@ -138,8 +147,7 @@ const Main = ({navigation}) => {
     console.log("filter query'");
     filterQuery();
 
-    console.log(query.location)
-    
+    console.log(query.location);
   }, [query]);
 
   // const getAsyncData=async()=>{
@@ -152,10 +160,6 @@ const Main = ({navigation}) => {
   const clearAsyncStore = async () => {
     await AsyncStorage.clear();
   };
-
-
-
-
 
   //Refs for managing bottomsheets
   // const btmSheetLoginRef = useRef(null);
@@ -177,7 +181,7 @@ const Main = ({navigation}) => {
   };
 
   const filterQuery = async () => {
-    let finalquery = `maxPrice=${query.maxPrice}&pageSize=${query.pageSize}&amenities=${query.amenities}&propertyType=${query.propertyType}&location=${query.location}&name=${query.name}`;
+    let finalquery = `maxPrice=${query.maxPrice}&pageSize=${query.pageSize}&amenities=${query.amenities}&propertyType=${query.propertyType}&location=${query.location}&name=${query.name}&latitude=${query.latitude}&longitude=${query.longitude}`;
 
     console.log('filter query func', finalquery);
     await axios
@@ -192,7 +196,7 @@ const Main = ({navigation}) => {
           console.log('no hotels found');
           console.log(res);
           setQueryHotels([]);
-          setRateHawkHotel([])
+          setRateHawkHotel([]);
         } else {
           setQueryHotels([...res?.data?.hotels]);
           setRateHawkHotel([...res?.data?.externalHotels]);
@@ -256,7 +260,11 @@ const Main = ({navigation}) => {
         </Modal>
 
         <Modal visible={showFilters} animationType="slide" transparent>
-          <Filters query={query} setQuery={setQuery} setShowFilters={setShowFilters} />
+          <Filters
+            query={query}
+            setQuery={setQuery}
+            setShowFilters={setShowFilters}
+          />
         </Modal>
 
         {/* navigation Bar */}

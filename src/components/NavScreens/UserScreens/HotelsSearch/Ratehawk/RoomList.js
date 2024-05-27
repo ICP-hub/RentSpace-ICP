@@ -10,16 +10,18 @@ import {COLORS} from '../../../../../constants/themes';
 import Line from '../Filters/ReUsables/Line';
 import axios from 'axios';
 
-const RoomList = ({hotelId}) => {
-  console.log(hotelId);
+const RoomList = ({hotelId,checkInDate,checkOutDate}) => {
+  console.log('Hotel ID : ', hotelId);
+  console.log('CheckIn Date : ', checkInDate);
+  console.log('CheckOut Date : ', checkOutDate);
 
   const [roomsList, setRoomsList] = useState([]);
 
   const fetchHash = async hotelId => {
     const postData = {
       hotelId: hotelId,
-      checkInDate: '2024-05-25',
-      checkOutDate: '2024-05-28',
+      checkInDate: checkInDate,
+      checkOutDate: checkOutDate,
       language: 'en',
       adults: 2,
       children: [],
@@ -201,7 +203,7 @@ const RoomList = ({hotelId}) => {
         <View style={styles.marginView}>
           {roomsList.map((room, index) => {
             return (
-              <View style={styles.card}>
+              <View style={styles.card} key={index}>
                 <View style={styles.innerCard}>
                   <View style={styles.cardUp}>
                     <Text style={styles.roomType}>{room.room_name}</Text>

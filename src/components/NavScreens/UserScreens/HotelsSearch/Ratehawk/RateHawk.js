@@ -6,15 +6,14 @@ import Icon from 'react-native-vector-icons/MaterialIcons'; //0
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons'; //1
 import Icon3 from 'react-native-vector-icons/Foundation'; //2
 import axios from 'axios';
-import RoomList from './RoomList';
+import CheckInOut from './CheckInOut';
 
 const RateHawk = ({hotelId, item, setOpen, navigation}) => {
-  // console.log(hotelId);
 
   const [hotelDetails, setHotelDetails] = useState({});
   const [description, setDescription] = useState('');
 
-  const [roomsPage, setRoomsPage] = useState(false);
+  const [calenderPage, setcalenderPage] = useState(false);
   
 
 
@@ -127,7 +126,7 @@ const RateHawk = ({hotelId, item, setOpen, navigation}) => {
         <TouchableOpacity
           style={styles.reserveBtn}
           onPress={()=>{
-            setRoomsPage(true);
+            setcalenderPage(true);
           }}>
           <Text
             style={{
@@ -140,8 +139,9 @@ const RateHawk = ({hotelId, item, setOpen, navigation}) => {
         </TouchableOpacity>
       </ScrollView>
 
-      <Modal visible={roomsPage} transparent={true} onRequestClose={()=>setRoomsPage(false)}>
-        <RoomList hotelId={hotelId}/>
+      <Modal visible={calenderPage}  onRequestClose={()=>setcalenderPage(false)}>
+        {/* <RoomList hotelId={hotelId}/> */}
+        <CheckInOut hotelId={hotelId} />
       </Modal>
 
 
