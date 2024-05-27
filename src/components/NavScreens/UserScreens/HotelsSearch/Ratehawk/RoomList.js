@@ -1,4 +1,5 @@
 import {
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,6 +10,7 @@ import {useState, useEffect} from 'react';
 import {COLORS} from '../../../../../constants/themes';
 import Line from '../Filters/ReUsables/Line';
 import axios from 'axios';
+import RateHawkBookingPage from './RateHawkBookingPage'
 
 const RoomList = ({hotelId,checkInDate,checkOutDate}) => {
   console.log('Hotel ID : ', hotelId);
@@ -16,6 +18,7 @@ const RoomList = ({hotelId,checkInDate,checkOutDate}) => {
   console.log('CheckOut Date : ', checkOutDate);
 
   const [roomsList, setRoomsList] = useState([]);
+  const [showBookingForm,setShowBookingForm]=useState(false)
 
   const fetchHash = async hotelId => {
     const postData = {
@@ -255,7 +258,8 @@ const RoomList = ({hotelId,checkInDate,checkOutDate}) => {
                 <Text style={styles.price}>$100.00/Night</Text>
                 <TouchableOpacity
                   style={styles.bookBtn}
-                  onPress={() => testorderBookingForm()}
+                  // onPress={() => testorderBookingForm()}
+                  onPress={()=>setShowBookingForm(true)}
                   >
                   <Text style={styles.bookBtnText}>Book Now</Text>
                 </TouchableOpacity>
@@ -264,10 +268,9 @@ const RoomList = ({hotelId,checkInDate,checkOutDate}) => {
           </View>
         </View>
       </ScrollView>
-
-      
-
-
+      <Modal visible={showBookingForm}>
+        <RateHawkBookingPage showSelf={setShowBookingForm}/>
+      </Modal>
     </View>
   );
 };

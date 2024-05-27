@@ -478,7 +478,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
           </TouchableOpacity>
       </View>
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollPart}>
-        <Header/>
+        <Header hotelname={item?.hotelTitle} hotelAddress={item?.hotelLocation}/>
         <View style={styles.line}/>
         <TripDetails/>
         <View style={styles.line}/>
