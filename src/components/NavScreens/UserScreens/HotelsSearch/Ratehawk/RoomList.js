@@ -256,7 +256,8 @@ const RoomList = ({hotelId}) => {
                 <Text style={styles.price}>$100.00/Night</Text>
                 <TouchableOpacity
                   style={styles.bookBtn}
-                  onPress={() => testorderBookingForm()}
+                  // onPress={() => testorderBookingForm()}
+                  onPress={()=>setShowBookingForm(true)}
                   >
                   <Text style={styles.bookBtnText}>Book Now</Text>
                 </TouchableOpacity>
