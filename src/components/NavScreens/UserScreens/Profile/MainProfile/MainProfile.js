@@ -178,11 +178,11 @@ const makeHost=async()=>{
       onClick:()=>{setFAQPage(true)},
       icon:<Icon3 color={COLORS.black} name='notebook' size={20}/>
     },
-    {
-      text:"Feedback",
-      onClick:()=>{setFeedbackPage(true)},
-      icon:<Icon3 color={COLORS.black} name='pencil' size={20}/>
-    },
+    // {
+    //   text:"Feedback",
+    //   onClick:()=>{setFeedbackPage(true)},
+    //   icon:<Icon3 color={COLORS.black} name='pencil' size={20}/>
+    // },
     // {
     //   text:"How RentSpace works",
     //   onClick:()=>{},
@@ -244,16 +244,16 @@ const makeHost=async()=>{
             </TouchableOpacity>
           </View>
         </ScrollView>
-        <Modal visible={showDetails} animationType='slide'>
+        <Modal visible={showDetails} animationType='slide' onRequestClose={()=>setShowDetails(false)}>
           <UserDetailDemo navigation={navigation} setShowDetails={setShowDetails}/>
         </Modal>
-        <Modal visible={reportPage} animationType='slide'>
+        <Modal visible={reportPage} animationType='slide' onRequestClose={()=>setReportPage(false)}>
           <Report setReportPage={setReportPage}/>
         </Modal>
-        <Modal visible={feedbackPage} animationType='slide'>
+        <Modal visible={feedbackPage} animationType='slide' onRequestClose={()=>setFeedbackPage(false)}>
           <Feedback setFeedbackPage={setFeedbackPage}/>
         </Modal>
-        <Modal visible={supportChatPage} animationType='slide'>
+        <Modal visible={supportChatPage} animationType='slide' onRequestClose={()=>setSupportChatPage(false)}>
           <MainChat setSupportChatPage={setSupportChatPage}/>
         </Modal>
         {/* new UI below */}

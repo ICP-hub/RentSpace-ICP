@@ -121,7 +121,7 @@ const Privacy = ({setPrivacyPage}) => {
           ))}
         </View>
 
-        <View style={styles.checkBoxContainer}>
+        {/* <View style={styles.checkBoxContainer}>
           <TouchableOpacity
             style={checkBox ? styles.checkBoxActive : styles.checkBox}
             onPress={() => setCheckBox(!checkBox)}>
@@ -143,7 +143,7 @@ const Privacy = ({setPrivacyPage}) => {
           style={styles.button}
           onPress={() => setPrivacyPage(false)}>
           <Text style={styles.btnText}>I agree</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ScrollView>
     </View>
   );
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     width: '100%',
-    height: '100%',
+    marginBottom:60
   },
   contentContainer: {
     display: 'flex',

@@ -12,6 +12,7 @@ import { useSelector,useDispatch } from 'react-redux'
 import { setUser } from '../../../../../redux/users/actions'
 import { updatingUser } from '../../../../../redux/actor/actions'
 import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
+import DatePicker from 'react-native-date-picker'
 
 const UpdateProfile = ({setEditProfile}) => {
 
@@ -19,10 +20,15 @@ const UpdateProfile = ({setEditProfile}) => {
     const {actors}=useSelector(state=>state.actorReducer)
     const dispatch=useDispatch()
     const [loading,setLoading]=useState(false)
-    const [updatedUser,setUpdatedUser]=useState(user)
-    const [showCalendar, setShowCalendar] = useState(false);
+    const [updatedUser,setUpdatedUser]=useState({
+      ...user,
+      userGovId:user?.userGovId=="nothing"?"Not Provided":user?.userGovId,
+      userProfile:"img"
+    })
     const [selected, setSelected] = useState('');
     const [userImg,setUserImg]=useState(images.profile2)
+    const [showCalendar, setShowCalendar] = useState(false);
+    const [date,setDate]=useState(new Date())
 
     const update=async()=>{
         setLoading(true)
@@ -33,7 +39,6 @@ const UpdateProfile = ({setEditProfile}) => {
           hostStatus:user?.hostStatus,
           verificationStatus:false,
           agreementStatus:user?.agreementStatus,
-          userGovId:"233134",
           userProfile:"img"
         })
         console.log("2",updatedUser)
@@ -77,7 +82,7 @@ const UpdateProfile = ({setEditProfile}) => {
         ...updatedUser,
         userProfile:result.assets[0].base64
       })
-      console.log(result.assets[0].base64)
+      // console.log(result.assets[0].base64)
     }
 
   return (
@@ -138,7 +143,7 @@ const UpdateProfile = ({setEditProfile}) => {
         style={styles.inputs} 
         placeholder='Govt Id No.' 
         placeholderTextColor={COLORS.inputBorder}
-        value={"233134"}
+        value={updatedUser?.userGovId}
         onChangeText={value=>{setUpdatedUser({...updatedUser,userGovId:value})}}
         />
       {/* <TextInput 
@@ -164,25 +169,23 @@ const UpdateProfile = ({setEditProfile}) => {
         <Text style={styles.submitText}>cancel</Text>
       </TouchableOpacity>
       </View>
-      <Modal visible={showCalendar} animationType="slide" transparent>
-        <View>
-          <Calendar
-            onDayPress={day => {
-              setSelected(day.dateString);
-              setUpdatedUser({...updatedUser,dob:`${day.day}/${day.month}/${day.year}`});
-              setShowCalendar(false);
-            }}
-            style={styles.calendar}
-            markedDates={{
-              [selected]: {
-                selected: true,
-                disableTouchEvent: true,
-                selectedDotColor: COLORS.inputBorder,
-              },
-            }}
-          />
-        </View>
-      </Modal>
+      <DatePicker
+        modal
+        mode='date'
+        open={showCalendar}
+        date={date}
+        onConfirm={(date) => {
+          console.log(date)
+          setShowCalendar(false)
+          setDate(date)
+          setUpdatedUser({...updatedUser,dob:`${(date.getDate()<10)?"0"+date.getDate():date.getDate()}/${(date.getMonth()+1<10)?"0"+(date.getMonth()+1):date.getMonth()+1}/${date.getFullYear()}`});
+        }}
+        onCancel={() => {
+          setShowCalendar(false)
+        }}
+        maximumDate={new Date()}
+      />
+
       <ActivityIndicator animating={loading} size={40} style={styles.loader}/>
     </ScrollView>
   )
