@@ -33,6 +33,7 @@ import sampleReel from '../assets/video/sampleReel.mp4'
 import newProfile from '../assets/images/newProfile.png'
 import logo from '../assets/logos/whiteLogo.png'
 import check from '../assets/images/check.png'
+import sampleProfile2 from '../assets/images/sampleProfile2.png'
 // import saple
 
 export default {
@@ -70,5 +71,6 @@ export default {
     sampleReel,
     newProfile,
     logo,
-    check
+    check,
+    sampleProfile2
 }

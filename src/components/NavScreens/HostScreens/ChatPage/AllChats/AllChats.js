@@ -165,7 +165,7 @@ const AllChats = ({navigation}) => {
                         <ChatCard item={item?.item} setOpenChat={setOpenChat} openChat={openChat} setChat={setChatItem}/>
                 )}/>
                     <BottomNavHost navigation={navigation} showDrawer={showDrawer} setShowDrawer={setShowDrawer}/>
-                    <Modal animationType='slide' visible={openChat}>
+                    <Modal animationType='slide' visible={openChat} onRequestClose={()=>setOpenChat(false)}>
                         <Chat item={chatItem} setOpenChat={setOpenChat}/>
                     </Modal>
                     <Modal animationType='fade' visible={showDrawer} transparent>

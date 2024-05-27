@@ -24,10 +24,10 @@ const UpdateProfile = ({setEditProfile}) => {
     const [loading,setLoading]=useState(false)
     const [updatedUser,setUpdatedUser]=useState({
       ...user,
-      userGovId:user?.userGovId=="nothing"?"Not Provided":user?.userGovId,
+      userGovId:user?.userGovId=="nothing"||user?.userGovId==""?"Not Provided":user?.userGovId,
       userProfile:"img"
     })
-    const [userImg,setUserImg]=useState(user?.userProfile==null?images.profile2:{uri:user?.userProfile})
+    const [userImg,setUserImg]=useState((user?.userProfile==""||user?.userProfile=="img")?images.sampleProfile2:{uri:user?.userProfile})
     const [showCalendar, setShowCalendar] = useState(false);
     const [date,setDate]=useState(new Date())
 
@@ -63,6 +63,44 @@ const UpdateProfile = ({setEditProfile}) => {
     const update=async()=>{
         setLoading(true)
         // console.log("1",newBase64)
+        if(userImg.uri==undefined){
+          setUpdatedUser({
+            ...updatedUser,
+            userType:user?.userType,
+            hostStatus:user?.hostStatus,
+            verificationStatus:false,
+            agreementStatus:user?.agreementStatus,
+            userProfile:res
+          })
+          console.log("2",updatedUser)
+          
+          await actors.userActor?.updateUserInfo({...updatedUser,userProfile:res})
+          .then(async(res)=>{
+            console.log("3")
+              console.log("update res : ",res[0])
+              // alert(`Your profile is updated ${updatedUser?.firstName} !`)
+              Dialog.show({
+                type:ALERT_TYPE.SUCCESS,
+                title:'SUCCESS',
+                textBody:`Your profile is updated ${updatedUser?.firstName} !`,
+                button:'OK',
+              })
+              await actors.userActor?.getUserInfo()
+              .then(async(res)=>{
+                  setLoading(false)
+                  dispatch(setUser(res[0]))
+                  console.log("response user",res[0])
+                  setEditProfile(false)
+              }).catch((err)=>{
+                console.log(err)
+                setLoading(false)
+              })
+          }).catch((err)=>{
+            setLoading(false)
+            console.log(err)
+          })
+          return
+        }
         await uploadImage(userImg.uri).then(async(res)=>{
           console.log(res)
           setUpdatedUser({

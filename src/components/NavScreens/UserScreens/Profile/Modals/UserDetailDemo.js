@@ -115,7 +115,7 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
       
       <View style={styles.header}>
         <Text style={styles.title}>My Profile</Text>
-        <Image source={user?.userProfile==null?images.profile2:{uri:user.userProfile}} style={styles.profileLogo}/>
+        <Image source={(user?.userProfile==""||user?.userProfile=="img")?images.sampleProfile2:{uri:user.userProfile}} style={styles.profileLogo}/>
         <Text style={styles.headerName}>{user?.firstName +" "+ user?.lastName}</Text>
         <Text style={styles.headerText}>{user?.userEmail}</Text>
         <Text style={styles.headerText}>{user?.dob}</Text>

@@ -1,4 +1,4 @@
-import { Dimensions, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, Image, Modal, NativeModules, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import Line from './Line'
 import Icon from 'react-native-vector-icons/Entypo'
@@ -44,16 +44,17 @@ const MainProfile = ({navigation}) => {
   const [termsPage,setTermsPage]=useState(false)
 
   const logout=()=>{
-    dispatch(setActor({
-        backendActor:backend,
-        userActor:User,
-        hotelActor:hotel
-    }))
-    dispatch(setUser({}))
-    dispatch(setHotels([]))
-    dispatch(setPrinciple(''))
-    navigation.navigate('Launch')
-}
+    // dispatch(setActor({
+    //     backendActor:backend,
+    //     userActor:User,
+    //     hotelActor:hotel
+    // }))
+    // dispatch(setUser({}))
+    // dispatch(setHotels([]))
+    // dispatch(setPrinciple(''))
+    // navigation.navigate('Launch')
+    NativeModules.DevSettings.reload()
+  }
 
 const getHotelList=async()=>{
   await actors.hotelActor.getHotelId().then((res)=>{
@@ -224,7 +225,7 @@ const makeHost=async()=>{
           </View>
           <View style={styles.imgCont}>
             <View style={styles.imgView}>
-              <Image source={user?.userProfile==null?images.newProfile:{uri:user.userProfile}} style={styles.img}/>
+              <Image source={(user?.userProfile==""||user?.userProfile=="img")?images.newProfile:{uri:user.userProfile}} style={styles.img}/>
             </View>  
             <Text style={styles.name}>{user?.firstName+" "+user?.lastName}</Text>
           
