@@ -47,6 +47,7 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
   }
 
   useEffect(()=>{
+    console.log(user?.userProfile)
     getHotelList()
   },[])
 
@@ -114,7 +115,7 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
       
       <View style={styles.header}>
         <Text style={styles.title}>My Profile</Text>
-        <Image source={images.profile2} style={styles.profileLogo}/>
+        <Image source={user?.userProfile==null?images.profile2:{uri:user.userProfile}} style={styles.profileLogo}/>
         <Text style={styles.headerName}>{user?.firstName +" "+ user?.lastName}</Text>
         <Text style={styles.headerText}>{user?.userEmail}</Text>
         <Text style={styles.headerText}>{user?.dob}</Text>
@@ -178,7 +179,7 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
           
       </View>
       {/*Modals */}
-      <Modal animationType='slide' visible={editProfile}>
+      <Modal animationType='slide' visible={editProfile} onRequestClose={()=>setEditProfile(false)}>
         <UpdateProfile setEditProfile={setEditProfile} />
       </Modal>
       {/* <BottomNav navigation={navigation}/> */}

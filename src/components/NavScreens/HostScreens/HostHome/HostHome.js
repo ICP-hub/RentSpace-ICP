@@ -77,6 +77,10 @@ const HostHome = ({navigation}) => {
     let bookingList=[]
     
     setRefreshing(true)
+    if(hotels?.length==0){
+      setRefreshing(false)
+      return
+    }
     hotels.map(async(h)=>{
       await actors?.bookingActor?.gethotelXBookingId(h).then((res)=>{
         // console.log(res)

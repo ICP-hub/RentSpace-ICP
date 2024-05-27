@@ -224,7 +224,7 @@ const makeHost=async()=>{
           </View>
           <View style={styles.imgCont}>
             <View style={styles.imgView}>
-              <Image source={images.newProfile} style={styles.img}/>
+              <Image source={user?.userProfile==null?images.newProfile:{uri:user.userProfile}} style={styles.img}/>
             </View>  
             <Text style={styles.name}>{user?.firstName+" "+user?.lastName}</Text>
           

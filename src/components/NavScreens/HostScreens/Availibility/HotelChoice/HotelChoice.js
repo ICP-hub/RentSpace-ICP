@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import {React, useEffect, useState} from 'react';
-import {COLORS} from '../../../../../constants/themes';
+import {COLORS, SIZES} from '../../../../../constants/themes';
 import BottomNavHost from '../../../../Navigation/BottomNavHost';
 import Icon from 'react-native-vector-icons/AntDesign';
 import CalendarScreen from '../CalendarScreen/CalendarScreen';
@@ -141,7 +141,7 @@ const HotelChoice = ({navigation}) => {
         })}
       </ScrollView>
       ) : (
-        <Text style={{color:COLORS.mainPurple, fontSize:20,marginLeft:"25%", marginTop:"50%"}}>No hotels available</Text>
+        <Text style={styles.emptyText}>Sorry! No hotels to show</Text>
       )}
 
       <BottomNavHost
@@ -184,12 +184,13 @@ const styles = StyleSheet.create({
   },
 
   mainText: {
-    fontSize: 25,
-    fontWeight: 'bold',
+    fontSize: SIZES.xLarge+2,
+    fontWeight: '500',
     width: '100%',
     textAlign: 'left',
     color: COLORS.black,
     padding: 20,
+    marginTop:10
   },
 
   listContainer: {
@@ -228,7 +229,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: '100%',
     width: '100%',
-    // backgroundColor: 'rgba(0, 0, 0, 0.5)',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -236,7 +236,6 @@ const styles = StyleSheet.create({
 
   editContainer: {
     maxWidth: '100%',
-    // backgroundColor: 'red',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -282,6 +281,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     zIndex: 1,
   },
+  emptyText:{
+    color:COLORS.black,
+    position:'absolute',
+    fontSize:SIZES.preMedium,
+    top:'20%',
+    width:'100%',
+    textAlign:'center'
+  }
 
   // modalVisible: {
   //   display: 'block',
