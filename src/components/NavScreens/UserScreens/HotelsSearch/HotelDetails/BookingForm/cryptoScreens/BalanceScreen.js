@@ -30,7 +30,7 @@ const BalanceScreen = ({self,paymentMethod,walletID,balance,receiver,total,trans
           </View>
           <View style={styles.dataContRow}>
             <Text style={styles.dataHead}>Current Balance</Text>
-            <Text style={styles.dataText}>{balance} {paymentMethod}</Text>
+            <Text style={styles.dataText}>{balance/100000000} {paymentMethod}</Text>
           </View>
           <View style={styles.dataContRow}>
             <Text style={styles.dataHead}>Receiver</Text>

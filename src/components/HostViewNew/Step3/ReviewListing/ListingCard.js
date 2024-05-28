@@ -3,11 +3,16 @@ import React from 'react'
 import { images } from '../../../../constants'
 import { COLORS, SIZES } from '../../../../constants/themes'
 import Icon from 'react-native-vector-icons/AntDesign'
+import { useSelector } from 'react-redux'
 
 const ListingCard = ({listing}) => {
+    
+    const {files}=useSelector(state=>state.filesReducer)
+
   return (
     <View style={styles.card}>
-      <Image source={images.hotelImg1} style={styles.img}/>
+      {/* <Image source={images.hotelImg1} style={styles.img}/> */}
+      <Image style={styles.img} source={{uri:files[1].uri}}/>
       <View style={styles.textCont}>
         <View style={styles.textSubCont}>
             <Text style={styles.boldText}>{listing?.hotelTitle}</Text>

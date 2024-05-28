@@ -47,6 +47,7 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
   }
 
   useEffect(()=>{
+    console.log(user?.userProfile)
     getHotelList()
   },[])
 
@@ -57,12 +58,12 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
       ,userType:'Host',
       hostStatus:true,
       userProfile:(user?.userProfile)!=""?user?.userProfile:"img",
-      userGovId:((user?.userGovId==""||user?.userGovId==null)?"nothing":user?.userGovId)})
+      userGovId:((user?.userGovId==""||user?.userGovId==null)?"Not Provided":user?.userGovId)})
     await actors.userActor?.updateUserInfo({...user
       ,userType:'Host',
       hostStatus:true,
       userProfile:(user?.userProfile)!=""?user?.userProfile:"img",
-      userGovId:((user?.userGovId==""||user?.userGovId==null)?"nothing":user?.userGovId
+      userGovId:((user?.userGovId==""||user?.userGovId==null)?"Not Provided":user?.userGovId
       
       ),
       agreementStatus:user?.agreementStatus
@@ -114,7 +115,7 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
       
       <View style={styles.header}>
         <Text style={styles.title}>My Profile</Text>
-        <Image source={images.profile2} style={styles.profileLogo}/>
+        <Image source={(user?.userProfile==""||user?.userProfile=="img")?images.sampleProfile2:{uri:user.userProfile}} style={styles.profileLogo}/>
         <Text style={styles.headerName}>{user?.firstName +" "+ user?.lastName}</Text>
         <Text style={styles.headerText}>{user?.userEmail}</Text>
         <Text style={styles.headerText}>{user?.dob}</Text>
@@ -125,22 +126,22 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
           <Icon3 name='manage-accounts' size={20} color={'black'} style={{marginRight:8}}/>
             <Text style={styles.propertyText}>Host Status</Text>
           </View>
-          <Text style={styles.valueText}>{user?.hostStatus?"Host":"User"}</Text>
+          <Text style={styles.valueText}>{user?.hostStatus?"True":"False"}</Text>
         </View>
         <View style={styles.dataRow}>
           <View style={styles.propertyCont}>
             <Icon name='idcard' size={20} color={'black'} style={{marginRight:8}}/>
             <Text style={styles.propertyText}>Government ID</Text>
           </View>
-          <Text style={styles.valueText}>{user?.userGovId?user?.userGovId:"Not Provided"}</Text>
+          <Text style={styles.valueText}>{(user?.userGovId=="nothing"||user?.userGovId=="Not Provided")?"Not Provided":user?.userGovId}</Text>
         </View>
-        <View style={styles.dataRow}>
+        {/* <View style={styles.dataRow}>
           <View style={styles.propertyCont}>
           <Icon3 name='verified' size={20} color={'black'} style={{marginRight:8}}/>
             <Text style={styles.propertyText}>Verified</Text>
           </View>
           <Text style={styles.valueText}>{user?.verificationStatus?"Yes":"No"}</Text>
-        </View>
+        </View> */}
         <View style={styles.dataRow}>
           <View style={styles.propertyCont}>
           <Icon2 name='user' size={20} color={'black'} style={{marginRight:8}}/>
@@ -178,7 +179,7 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
           
       </View>
       {/*Modals */}
-      <Modal animationType='slide' visible={editProfile}>
+      <Modal animationType='slide' visible={editProfile} onRequestClose={()=>setEditProfile(false)}>
         <UpdateProfile setEditProfile={setEditProfile} />
       </Modal>
       {/* <BottomNav navigation={navigation}/> */}

@@ -13,12 +13,13 @@ import {React, useState} from 'react';
 // import { images } from '../../../../constants'
 import {COLORS, SIZES} from '../../../../constants/themes';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon2 from 'react-native-vector-icons/AntDesign'
 import Update from '../UpdatePage/Update';
 import { images } from '../../../../constants';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
-const CustomAlert = ({showAlert, setShowAlert,item}) => {
+const CustomAlert = ({showAlert, setShowAlert,item,getHotelDetails}) => {
   // const [loading,setLoading]=useState(false)
   const baseUrl="http://localhost:5000"
   const {authData}=useSelector(state=>state.authDataReducer)
@@ -35,6 +36,7 @@ const CustomAlert = ({showAlert, setShowAlert,item}) => {
     }).then((res)=>{
       console.log(res)
       setShowAlert(false);
+      getHotelDetails()
     }).catch((err)=>{
       console.log(err)
     })
@@ -95,7 +97,7 @@ const ListingCard = ({item, getHotelDetails}) => {
   const imgX = item.imagesUrls;
 
   return (
-    <Pressable style={styles.card} onPress={openUpdateModal}>
+    <View style={styles.card} >
       <View style={styles.cardView}>
         <Text style={styles.status}>{"verified"}</Text>
         <Image source={{uri:imgX}} style={styles.img} />
@@ -105,18 +107,22 @@ const ListingCard = ({item, getHotelDetails}) => {
           <Text style={styles.text}>{item?.hotelName}</Text>
           <Text style={styles.address}>{item?.location}</Text>
         </View>
-
-        <TouchableOpacity onPress={deleteListing}>
-          <Icon name="delete" color={COLORS.black} size={20} />
-        </TouchableOpacity>
-        <CustomAlert showAlert={showAlert} setShowAlert={setShowAlert} item={item} />
+        <View style={styles.iconCont}>
+          <TouchableOpacity onPress={openUpdateModal}>
+            <Icon2 style={{marginRight:15}} name="edit" size={20} color={COLORS.black} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={deleteListing}>
+            <Icon name="delete" color={COLORS.black} size={20} />
+          </TouchableOpacity>
+        </View>
+        <CustomAlert getHotelDetails={getHotelDetails} showAlert={showAlert} setShowAlert={setShowAlert} item={item} />
       </View>
 
       <Modal visible={openUpdate} onRequestClose={() => setOpenUpdate(false)} >
         <Update item={item} setOpenUpdate={setOpenUpdate} getHotelDetails={getHotelDetails} />
       </Modal>
 
-    </Pressable>
+    </View>
   );
 };
 
@@ -137,6 +143,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingVertical: '5%',
     marginLeft: '5%',
+  },
+  iconCont:{
+    display:'flex',
+    flexDirection:'row'
   },
 
   cardView: {

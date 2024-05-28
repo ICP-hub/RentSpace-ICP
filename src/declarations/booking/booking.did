@@ -3,6 +3,7 @@ type _anon_class_17_1 =
    addOwner: (AdminId) -> (text);
    bookHotel: (HotelId, BookingInfo, variant {
                                        ckbtc;
+                                       cketh;
                                        icp;
                                        solana: text;
                                      }, nat) -> (text);

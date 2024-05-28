@@ -128,7 +128,7 @@ const Terms = ({setTermsPage}) => {
           ))}
         </View>
 
-        <View style={styles.checkBoxContainer}>
+        {/* <View style={styles.checkBoxContainer}>
           <TouchableOpacity
             style={checkBox ? styles.checkBoxActive : styles.checkBox}
             onPress={() => setCheckBox(!checkBox)}>
@@ -144,13 +144,13 @@ const Terms = ({setTermsPage}) => {
             By using our App, you acknowledge that you have read, understood,
             and agree to be bound by this Privacy Policy.
           </Text>
-        </View>
+        </View> */}
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.button}
           onPress={() => setTermsPage(false)}>
           <Text style={styles.btnText}>I agree</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ScrollView>
     </View>
   );
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     width: '100%',
-    height: '100%',
+    marginBottom:60
   },
   contentContainer: {
     display: 'flex',

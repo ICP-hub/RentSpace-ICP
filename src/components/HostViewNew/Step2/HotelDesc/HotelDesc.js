@@ -60,7 +60,7 @@ const HotelDesc = ({setHostModal,pos}) => {
         multiline={true}
       />
       <Text style={styles.smallText}>{len}/500</Text>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={2} nextFunc={checkEmpty}/>
+      <BottomBtn back={2} setHostModal={setHostModal} pos={pos} step={2} nextFunc={checkEmpty}/>
       
     </View>
   )

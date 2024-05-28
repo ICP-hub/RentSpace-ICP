@@ -16,10 +16,10 @@ const ChatMessage = ({item}) => {
         (item?.fromPrincipal==principle)?
         <>
           <Text style={styles.text}>{item?.message}</Text>
-          <Image source={images.hotelImg1} style={styles.img}/>
+          <Image source={images.sampleProfile2} style={styles.img}/>
         </>:
         <>
-          <Image source={images.hotelImg1} style={styles.img}/>
+          <Image source={images.sampleProfile2} style={styles.img}/>
           <Text style={styles.text}>{item?.message}</Text>
         </>
       }

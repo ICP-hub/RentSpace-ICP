@@ -1,4 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
+import { COLORS } from '../../../../../constants/themes';
 
 const SubmitUpdates = () => {
   return (
@@ -38,9 +39,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginVertical: 10,
+    color:COLORS.black
   },
   uploadText2: {
     fontSize: 14,
     marginVertical: 5,
+    color:COLORS.black
   },
 });

@@ -60,14 +60,14 @@ const Concern1 = ({setConcernForm,setReport,report}) => {
             ))
         }
 
-        <Text style={styles.sectionHeading}>
+        {/* <Text style={styles.sectionHeading}>
             Do you have the link to the RentSpace listing for this home?
         </Text>
         {
             linkOptions.map((item,index)=>(
                 <LinkOption key={index} item={item} setLinkOp={setLinkOp} linkOp={linkOp}/>
             ))
-        }
+        } */}
       </ScrollView>
       <BottomBtn step={1} nextText={"Next"} setConcernForm={setConcernForm} onClickNext={()=>setConcernForm(2)}/>
     </View>

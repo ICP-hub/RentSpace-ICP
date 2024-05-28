@@ -111,7 +111,14 @@ const FillAdress = ({self, setLocation, location}) => {
         <TouchableOpacity
           style={styles.btn}
           onPress={() => {
-            if (address.city != '') {
+            if (
+              address.city != ''||
+              address.country != ''||
+              address.postcode !=''||
+              address.region != ''||
+              address.streetAdd !=''||
+              address.suiteBuilding !=''
+            ) {
               let temp = location;
               setLocation(`${temp}#${address.city}`);
               console.log(location);
@@ -120,7 +127,7 @@ const FillAdress = ({self, setLocation, location}) => {
               // alert('Please do not leave any fields empty!');
               Dialog.show({
                 type:ALERT_TYPE.WARNING,
-                title:'WARNING',
+                title:'Fields found empty',
                 textBody:'Please do not leave any fields empty!',
                 button:'OK',
               })

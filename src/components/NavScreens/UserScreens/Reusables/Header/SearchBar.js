@@ -25,8 +25,8 @@ const SearchBar = ({filterAction,searchText,setSearchText,query,setQuery}) => {
       </View>
       <TouchableOpacity 
         style={styles.filterCont} 
-        // onPress={filterAction}
-        onPress={()=>setShowBookingForm(true)}  
+        onPress={filterAction}
+        // onPress={()=>setShowBookingForm(true)}  
       >
         <Icon name="filter" size={25} color={COLORS.black}/>
       </TouchableOpacity>

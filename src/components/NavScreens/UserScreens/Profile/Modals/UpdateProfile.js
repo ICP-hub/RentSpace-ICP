@@ -12,6 +12,9 @@ import { useSelector,useDispatch } from 'react-redux'
 import { setUser } from '../../../../../redux/users/actions'
 import { updatingUser } from '../../../../../redux/actor/actions'
 import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
+import DatePicker from 'react-native-date-picker'
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
+import { storage } from '../../../../../../firebaseConfig'
 
 const UpdateProfile = ({setEditProfile}) => {
 
@@ -19,48 +22,123 @@ const UpdateProfile = ({setEditProfile}) => {
     const {actors}=useSelector(state=>state.actorReducer)
     const dispatch=useDispatch()
     const [loading,setLoading]=useState(false)
-    const [updatedUser,setUpdatedUser]=useState(user)
+    const [updatedUser,setUpdatedUser]=useState({
+      ...user,
+      userGovId:user?.userGovId=="nothing"||user?.userGovId==""?"Not Provided":user?.userGovId,
+      userProfile:"img"
+    })
+    const [userImg,setUserImg]=useState((user?.userProfile==""||user?.userProfile=="img")?images.sampleProfile2:{uri:user?.userProfile})
     const [showCalendar, setShowCalendar] = useState(false);
-    const [selected, setSelected] = useState('');
-    const [userImg,setUserImg]=useState(images.profile2)
+    const [date,setDate]=useState(new Date())
+
+    // upload function to upload image to firebase
+  async function uploadImage(uri){
+    return new Promise(async(resolve,reject)=>{
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const storageRef = ref(storage, 'hotelImage/' + new Date().getTime());
+      const uploadTask = uploadBytesResumable(storageRef, blob);
+  
+      uploadTask.on(
+        'state_changed',
+        snapshot => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+        },
+        error => {
+          console.log('Error => ', error);
+          reject(new Error("Some error occured while trying to upload images"))
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
+            resolve(downloadURL)
+          });
+        },
+      );
+    })
+    
+  };
 
     const update=async()=>{
         setLoading(true)
         // console.log("1",newBase64)
-        setUpdatedUser({
-          ...updatedUser,
-          userType:user?.userType,
-          hostStatus:user?.hostStatus,
-          verificationStatus:false,
-          agreementStatus:user?.agreementStatus,
-          userGovId:"233134",
-          userProfile:"img"
-        })
-        console.log("2",updatedUser)
-        
-        await actors.userActor?.updateUserInfo(updatedUser)
-        .then(async(res)=>{
-          console.log("3")
-            console.log("update res : ",res[0])
-            // alert(`Your profile is updated ${updatedUser?.firstName} !`)
-            Dialog.show({
-              type:ALERT_TYPE.SUCCESS,
-              title:'SUCCESS',
-              textBody:`Your profile is updated ${updatedUser?.firstName} !`,
-              button:'OK',
-            })
-            await actors.userActor?.getUserInfo()
-            .then(async(res)=>{
+        if(userImg.uri==undefined){
+          setUpdatedUser({
+            ...updatedUser,
+            userType:user?.userType,
+            hostStatus:user?.hostStatus,
+            verificationStatus:false,
+            agreementStatus:user?.agreementStatus,
+            userProfile:res
+          })
+          console.log("2",updatedUser)
+          
+          await actors.userActor?.updateUserInfo({...updatedUser,userProfile:res})
+          .then(async(res)=>{
+            console.log("3")
+              console.log("update res : ",res[0])
+              // alert(`Your profile is updated ${updatedUser?.firstName} !`)
+              Dialog.show({
+                type:ALERT_TYPE.SUCCESS,
+                title:'SUCCESS',
+                textBody:`Your profile is updated ${updatedUser?.firstName} !`,
+                button:'OK',
+              })
+              await actors.userActor?.getUserInfo()
+              .then(async(res)=>{
+                  setLoading(false)
+                  dispatch(setUser(res[0]))
+                  console.log("response user",res[0])
+                  setEditProfile(false)
+              }).catch((err)=>{
+                console.log(err)
                 setLoading(false)
-                dispatch(setUser(res[0]))
-                console.log("response user",res[0])
-                setEditProfile(false)
-            }).catch((err)=>{
-              console.log(err)
-              setLoading(false)
-            })
+              })
+          }).catch((err)=>{
+            setLoading(false)
+            console.log(err)
+          })
+          return
+        }
+        await uploadImage(userImg.uri).then(async(res)=>{
+          console.log(res)
+          setUpdatedUser({
+            ...updatedUser,
+            userType:user?.userType,
+            hostStatus:user?.hostStatus,
+            verificationStatus:false,
+            agreementStatus:user?.agreementStatus,
+            userProfile:res
+          })
+          console.log("2",updatedUser)
+          
+          await actors.userActor?.updateUserInfo({...updatedUser,userProfile:res})
+          .then(async(res)=>{
+            console.log("3")
+              console.log("update res : ",res[0])
+              // alert(`Your profile is updated ${updatedUser?.firstName} !`)
+              Dialog.show({
+                type:ALERT_TYPE.SUCCESS,
+                title:'SUCCESS',
+                textBody:`Your profile is updated ${updatedUser?.firstName} !`,
+                button:'OK',
+              })
+              await actors.userActor?.getUserInfo()
+              .then(async(res)=>{
+                  setLoading(false)
+                  dispatch(setUser(res[0]))
+                  console.log("response user",res[0])
+                  setEditProfile(false)
+              }).catch((err)=>{
+                console.log(err)
+                setLoading(false)
+              })
+          }).catch((err)=>{
+            setLoading(false)
+            console.log(err)
+          })
         }).catch((err)=>{
-          setLoading(false)
           console.log(err)
         })
     }
@@ -69,15 +147,16 @@ const UpdateProfile = ({setEditProfile}) => {
       (res)=>{
         //console.log(res)
         setUserImg(res.assets[0])
-        console.log(res.assets[0].base64)
+        console.log(res.assets[0].uri)
       })
       .catch((err)=>{console.log(err)})
-      console.log(result)
-      setUpdatedUser({
-        ...updatedUser,
-        userProfile:result.assets[0].base64
-      })
-      console.log(result.assets[0].base64)
+      console.log(result.assets[0].uri)
+      // setUpdatedUser({
+      //   ...updatedUser,
+      //   userProfile:result.assets[0].uri
+      // })
+      setUserImg(result.assets[0])
+      // console.log(result.assets[0].base64)
     }
 
   return (
@@ -138,7 +217,7 @@ const UpdateProfile = ({setEditProfile}) => {
         style={styles.inputs} 
         placeholder='Govt Id No.' 
         placeholderTextColor={COLORS.inputBorder}
-        value={"233134"}
+        value={updatedUser?.userGovId}
         onChangeText={value=>{setUpdatedUser({...updatedUser,userGovId:value})}}
         />
       {/* <TextInput 
@@ -164,25 +243,23 @@ const UpdateProfile = ({setEditProfile}) => {
         <Text style={styles.submitText}>cancel</Text>
       </TouchableOpacity>
       </View>
-      <Modal visible={showCalendar} animationType="slide" transparent>
-        <View>
-          <Calendar
-            onDayPress={day => {
-              setSelected(day.dateString);
-              setUpdatedUser({...updatedUser,dob:`${day.day}/${day.month}/${day.year}`});
-              setShowCalendar(false);
-            }}
-            style={styles.calendar}
-            markedDates={{
-              [selected]: {
-                selected: true,
-                disableTouchEvent: true,
-                selectedDotColor: COLORS.inputBorder,
-              },
-            }}
-          />
-        </View>
-      </Modal>
+      <DatePicker
+        modal
+        mode='date'
+        open={showCalendar}
+        date={date}
+        onConfirm={(date) => {
+          console.log(date)
+          setShowCalendar(false)
+          setDate(date)
+          setUpdatedUser({...updatedUser,dob:`${(date.getDate()<10)?"0"+date.getDate():date.getDate()}/${(date.getMonth()+1<10)?"0"+(date.getMonth()+1):date.getMonth()+1}/${date.getFullYear()}`});
+        }}
+        onCancel={() => {
+          setShowCalendar(false)
+        }}
+        maximumDate={new Date()}
+      />
+
       <ActivityIndicator animating={loading} size={40} style={styles.loader}/>
     </ScrollView>
   )
@@ -220,7 +297,8 @@ const styles = StyleSheet.create({
       img:{
         width:80,
         height:80,
-        marginBottom:5
+        marginBottom:5,
+        borderRadius:50
       },
       iconPlus:{
         position:'absolute',

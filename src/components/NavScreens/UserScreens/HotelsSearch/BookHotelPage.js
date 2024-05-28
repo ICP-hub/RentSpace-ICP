@@ -9,6 +9,7 @@ import {
   Modal,
   Pressable,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import {images} from '../../../../constants';
@@ -44,6 +45,7 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
   // const [bottom,setBottom]=useState(70)
 
   async function getReservations(setRefreshing) {
+    setRefreshing(true);
     setBookingList([]);
     await actors?.bookingActor
       .getBookingId()
@@ -199,13 +201,26 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
             setShowReservations={setShowReservations}
           />
         </Modal>
+        <ActivityIndicator animating={refreshing} size={40} style={styles.loader}/>  
+
       </>
     );
   } else {
     return (
       <>
         {/* <HotelCard name={sampleName} des={sampleDes} rating={4} /> */}
-        <Text style={styles.empty}>Sorry nothing to show</Text>        
+        <View style={styles.btnCont}>
+          <TouchableOpacity style={[styles.btn]} onPress={refresh}>
+            <Icon2 name="reload-circle-sharp" size={20} color={COLORS.black} />
+            <Text style={styles.btnText}>Reload Data</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btn} onPress={dispatchBookingData}>
+            <Icon name="address-book" size={20} color={COLORS.black} />
+            <Text style={styles.btnText}>Show my bookings</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.empty}>Sorry nothing to show</Text>      
+        <ActivityIndicator animating={refreshing} size={40} style={styles.loader}/>  
       </>
     );
   }
@@ -214,6 +229,11 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
 export default BookHotelPage;
 
 const styles = StyleSheet.create({
+  loader:{
+    position:'absolute',
+    top:'40%',
+    marginHorizontal:'50%'
+  },
   hotelPage: {
     display: 'flex',
     flexDirection: 'column',

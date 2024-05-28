@@ -172,7 +172,7 @@ const ChatContainer = ({navigation}) => {
                         
                 }}/>
                     <BottomNav navigation={navigation}/>
-                    <Modal animationType='slide' visible={openChat}>
+                    <Modal animationType='slide' visible={openChat} onRequestClose={()=>setOpenChat(false)}>
                         <Chat item={chatItem} setOpenChat={setOpenChat} token={token}/>
                     </Modal>
                 </View>

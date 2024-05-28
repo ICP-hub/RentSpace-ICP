@@ -8,9 +8,10 @@ import { useSelector } from 'react-redux'
 import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
 const Concern2 = ({setConcernForm,setReportPage,setReport,report}) => {
+    const {user}=useSelector(state=>state.userReducer)
     const [userDetails,setUserDetails]=useState({
-        name:"",
-        email:""
+        name:user.firstName+" "+user.lastName,
+        email:user.userEmail
     })
     const [address,setAddress]=useState({
         region:"",
@@ -20,9 +21,28 @@ const Concern2 = ({setConcernForm,setReportPage,setReport,report}) => {
         country:"",
         postcode:""
     })
+
     const {actors}=useSelector(state=>state.actorReducer)
     const [loading,setLoading]=useState(false)
     const submitReport=async()=>{
+        if(
+          report.hostMessage==""||
+          report.adminMessage==""||
+          report.address.region==""||
+          report.address.streetAddress==""||
+          report.address.building==""||
+          report.address.city==""||
+          report.address.country==""||
+          report.address.postalCode==""
+        ){
+          Dialog.show({
+            type:ALERT_TYPE.WARNING,
+            title:'FIELDS LEFT EMPTY',
+            textBody:'Please do not leave fields empty!',
+            button:'OK',
+          })
+          return
+        }
         setLoading(true)
         console.log(actors?.supportActor)
         await actors?.supportActor?.raiseNewTicket(
@@ -36,7 +56,7 @@ const Concern2 = ({setConcernForm,setReportPage,setReport,report}) => {
           // alert('Your issue ticket have been raised!')
           Dialog.show({
             type:ALERT_TYPE.SUCCESS,
-            title:'TICKET CREATED',
+            title:'TICKET RAISED',
             textBody:'Your issue ticket have been raised!',
             button:'OK',
           })

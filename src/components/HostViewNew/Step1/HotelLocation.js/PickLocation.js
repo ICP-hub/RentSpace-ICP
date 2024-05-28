@@ -48,7 +48,7 @@ const PickLocation = ({setShowAddressForm,setShowLocationPicker,coords,setCoords
         </TouchableOpacity>
         <Text style={styles.headerText}>Enter your address</Text>
       </View>
-      <View style={styles.searchBar}>
+      {/* <View style={styles.searchBar}>
       <Icon2 name='location' size={20} color={COLORS.black} style={styles.icon}/>
       <TextInput 
         value={searchText} 
@@ -57,7 +57,7 @@ const PickLocation = ({setShowAddressForm,setShowLocationPicker,coords,setCoords
         onChangeText={value=>setSearchText(value)}
         style={styles.inputText}
         />
-      </View>
+      </View> */}
       <TouchableOpacity style={styles.locationButton} onPress={pickCurrentLocation}>
         <Icon3 name='location-arrow' color={COLORS.black} size={15}/>
         <Text style={styles.chooseLocation}>Use my current location</Text>
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'flex-start',
         alignItems:'flex-end',
-        marginBottom:30
+        marginVertical:30
     },
     btn:{
         display:'flex',

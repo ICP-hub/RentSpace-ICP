@@ -17,12 +17,14 @@ const Step3Manager = ({hostModal,setHostModal,getHotelDetails}) => {
         break
     case(18):
         component=<FirstReservation setHostModal={setHostModal} pos={18}/>
+        setHostModal(19)
         break
     case(19):
         component=<Pricing setHostModal={setHostModal} pos={19}/>
         break   
     case(20):
         component=<Discount setHostModal={setHostModal} pos={20}/>
+        setHostModal(22)
         break   
     case(21):
         component=<SecurityCheck setHostModal={setHostModal} pos={21}/>

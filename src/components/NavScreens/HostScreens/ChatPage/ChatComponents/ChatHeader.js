@@ -11,13 +11,13 @@ const ChatHeader = ({name,status,setOpenChat}) => {
       </TouchableOpacity>
       <View style={styles.textCont}>
         <Text style={styles.name}>{name}</Text>
-        <Text style={styles.status}>
+        {/* <Text style={styles.status}>
             {
                 status?
                 "Äctive Now":
                 "Last seen on Monday"
             }
-        </Text>
+        </Text> */}
       </View>
     </View>
   )

@@ -56,6 +56,7 @@ export const idlFactory = ({ IDL }) => {
             'icp' : IDL.Null,
             'solana' : IDL.Text,
             'ckbtc' : IDL.Null,
+            'cketh' : IDL.Null,
           }),
           IDL.Nat,
         ],

@@ -3,15 +3,19 @@ import React from 'react'
 import { COLORS, SIZES } from '../../../../../constants/themes'
 import Chat from '../ChatComponents/Chat'
 import { images } from '../../../../../constants'
+import { useEffect } from 'react'
 
 const ChatCard = ({item,setOpenChat,openChat,setChat}) => {
+  useEffect(()=>{
+    console.log(item)
+  },[])
   return (
     <>
     <TouchableOpacity style={styles.card} onPress={()=>{
       setOpenChat(true)
       setChat(item)
       }}>
-        <Image source={images.profileSample} style={styles.img}/>
+        <Image source={(item?.userProfile==""||item?.userProfile=="img")?images.sampleProfile2:{uri:item?.userProfile}} style={styles.img}/>
       <Text style={styles.title}>{item?.firstName}</Text>
       <Text style={styles.time}>Mon</Text>
     </TouchableOpacity>
@@ -55,6 +59,6 @@ const styles = StyleSheet.create({
       height:50,
       borderRadius:10,
       marginLeft:14,
-      objectFit:'contain'
+      objectFit:'cover'
     }
 })

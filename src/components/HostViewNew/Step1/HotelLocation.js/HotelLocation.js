@@ -51,7 +51,7 @@ const HotelLocation = ({setHostModal,pos}) => {
         <Text style={styles.inputText}>Enter Your Address</Text>
       </TouchableOpacity>
       <Image source={images.map2} style={styles.map}/>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={1} nextFunc={checkEmpty}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={1} nextFunc={checkEmpty} back={2}/>
       <Modal transparent animationType='slide' visible={showLocationPicker}>
         <PickLocation setShowAddressForm={setShowAddressForm} setShowLocationPicker={setShowLocationPicker} coords={coords} setCoords={setCoords} setLocation={setLocation} location={location}/>
       </Modal>

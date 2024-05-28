@@ -54,7 +54,8 @@ export interface _anon_class_17_1 {
       BookingInfo,
       { 'icp' : null } |
         { 'solana' : string } |
-        { 'ckbtc' : null },
+        { 'ckbtc' : null } |
+        { 'cketh' : null },
       bigint,
     ],
     string

@@ -1,5 +1,5 @@
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { FlatList, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useState } from 'react'
 import { COLORS, SIZES } from '../../../../constants/themes'
 import Line from '../../../HostViewNew/Reusables/Line'
 import MenuItem from './MenuItem'
@@ -8,6 +8,7 @@ import Icon2 from 'react-native-vector-icons/Feather'
 import Icon3 from 'react-native-vector-icons/Ionicons'
 import Icon4 from 'react-native-vector-icons/MaterialIcons'
 import Icon5 from 'react-native-vector-icons/MaterialCommunityIcons'
+import Icon6 from 'react-native-vector-icons/Fontisto'
 import { useDispatch } from 'react-redux'
 import { setActor } from '../../../../redux/actor/actions'
 import { backend } from '../../../../declarations/backend'
@@ -16,8 +17,14 @@ import { hotel } from '../../../../declarations/hotel'
 import { setUser } from '../../../../redux/users/actions'
 import { setHotels } from '../../../../redux/hotels/actions'
 import { setPrinciple } from '../../../../redux/principle/actions'
+import Terms from '../../UserScreens/Profile/TermAndConditions/Terms'
+import Privacy from '../../UserScreens/Profile/Privacy/Privacy'
 
 const MenuPage = ({navigation}) => {
+
+    const [showTerms,setShowTerms]=useState(false)
+    const [showPrivacy,setShowPrivacy]=useState(false)
+
     const hostingItems=[
         {
             title:'Reservations',
@@ -25,22 +32,22 @@ const MenuPage = ({navigation}) => {
             onClick:()=>{navigation.navigate('hostHome')}
         },
         {
-            title:'Earnings',
-            icon:<Icon3 name='cash-outline' size={25} color={COLORS.black}/>,
-            onClick:()=>{}
+            title:'View Spaces',
+            icon:<Icon name='home' size={25} color={COLORS.black}/>,
+            onClick:()=>{navigation.navigate('hostListing')}
         },
         {
-            title:'Insights',
-            icon:<Icon name='linechart' size={25} color={COLORS.black}/>,
-            onClick:()=>{}
+            title:'Update Space Availabilities',
+            icon:<Icon6 name='date' size={25} color={COLORS.black}/>,
+            onClick:()=>{navigation.navigate('hotelAvailable')}
         },
+        // {
+        //     title:'Guidebooks',
+        //     icon:<Icon name='book' size={25} color={COLORS.black}/>,
+        //     onClick:()=>{}
+        // },
         {
-            title:'Guidebooks',
-            icon:<Icon name='book' size={25} color={COLORS.black}/>,
-            onClick:()=>{}
-        },
-        {
-            title:'Create a new listing',
+            title:'List a new Space',
             icon:<Icon5 name='home-plus-outline' size={25} color={COLORS.black}/>,
             onClick:()=>{navigation.navigate('hostListing')}
         }
@@ -49,43 +56,48 @@ const MenuPage = ({navigation}) => {
         {
             title:"Profile",
             icon:<Icon name='user' size={25} color={COLORS.black}/>,
-            onClick:()=>{}
+            onClick:()=>{navigation.navigate('profile')}
         },
         {
-            title:"Settings",
-            icon:<Icon name='setting' size={25} color={COLORS.black}/>,
-            onClick:()=>{}
+            title:'Book Hotels',
+            icon:<Icon name='home' size={25} color={COLORS.black}/>,
+            onClick:()=>{navigation.navigate('Launch')}
         },
         {
-            title:"Visit the help center",
-            icon:<Icon name='questioncircleo' size={25} color={COLORS.black}/>,
-            onClick:()=>{}
+            title:"Terms and Conditions",
+            icon:<Icon2 name='book-open' size={25} color={COLORS.black}/>,
+            onClick:()=>{setShowTerms(true)}
         },
         {
-            title:"Get help with a safety issue",
-            icon:<Icon2 name='clipboard' size={25} color={COLORS.black}/>,
-            onClick:()=>{}
+            title:"Privacy",
+            icon:<Icon2 name='lock' size={25} color={COLORS.black}/>,
+            onClick:()=>{setShowPrivacy(true)}
         },
-        {
-            title:"Explore hosting resources",
-            icon:<Icon3 name='document-text-outline' size={25} color={COLORS.black}/>,
-            onClick:()=>{}
-        },
-        {
-            title:"Contact with Hosts near you",
-            icon:<Icon4 name='groups' size={25} color={COLORS.black}/>,
-            onClick:()=>{}
-        },
-        {
-            title:"Give us feedback",
-            icon:<Icon name='edit' size={23} color={COLORS.black}/>,
-            onClick:()=>{}
-        },
-        {
-            title:"Refer a Host",
-            icon:<Icon4 name='group' size={25} color={COLORS.black}/>,
-            onClick:()=>{}
-        },
+        // {
+        //     title:"Get help with a safety issue",
+        //     icon:<Icon2 name='clipboard' size={25} color={COLORS.black}/>,
+        //     onClick:()=>{}
+        // },
+        // {
+        //     title:"Explore hosting resources",
+        //     icon:<Icon3 name='document-text-outline' size={25} color={COLORS.black}/>,
+        //     onClick:()=>{}
+        // },
+        // {
+        //     title:"Contact with Hosts near you",
+        //     icon:<Icon4 name='groups' size={25} color={COLORS.black}/>,
+        //     onClick:()=>{}
+        // },
+        // {
+        //     title:"Give us feedback",
+        //     icon:<Icon name='edit' size={23} color={COLORS.black}/>,
+        //     onClick:()=>{}
+        // },
+        // {
+        //     title:"Refer a Host",
+        //     icon:<Icon4 name='group' size={25} color={COLORS.black}/>,
+        //     onClick:()=>{}
+        // },
     ]
     const dispatch=useDispatch()
     const logout=()=>{
@@ -103,7 +115,7 @@ const MenuPage = ({navigation}) => {
   return (
     <ScrollView contentContainerStyle={styles.view}>
       <Text style={styles.title}>Menu</Text>
-      <Text style={styles.Btext}>Get Early Access</Text>
+      {/* <Text style={styles.Btext}>Get Early Access</Text> */}
       <Text style={styles.subtitle}>Hosting</Text> 
       {
         hostingItems.map((item,index)=>(
@@ -117,12 +129,18 @@ const MenuPage = ({navigation}) => {
             <MenuItem item={item} key={index}/>
         ))
       }
-      <TouchableOpacity style={[styles.btn,{marginTop:25}]} onPress={()=>navigation.navigate('Launch')}>
+      <TouchableOpacity style={[styles.btn,{marginTop:45}]} onPress={()=>navigation.navigate('Launch')}>
         <Text style={[styles.btnText,{color:COLORS.black}]}>Switch to travelling</Text>
       </TouchableOpacity>
       <TouchableOpacity style={[styles.btn,{backgroundColor:COLORS.hostTitle}]} onPress={logout}>
         <Text style={[styles.btnText,{color:'white'}]}>Logout</Text>
       </TouchableOpacity>
+      <Modal visible={showTerms} onRequestClose={()=>setShowTerms(false)}>
+        <Terms setTermsPage={setShowTerms}/>
+      </Modal>
+      <Modal visible={showPrivacy} onRequestClose={()=>setShowPrivacy(false)}>
+        <Privacy setPrivacyPage={setShowPrivacy}/>
+      </Modal>
     </ScrollView>
   )
 }
@@ -140,7 +158,8 @@ const styles = StyleSheet.create({
         fontSize:SIZES.medxLarge,
         color:'black',
         fontWeight:'500',
-        marginLeft:'7.5%'
+        marginLeft:'7.5%',
+        marginBottom:40
     },
     Btext:{
         fontSize:SIZES.medium,

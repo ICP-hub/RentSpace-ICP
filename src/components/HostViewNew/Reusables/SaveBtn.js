@@ -37,13 +37,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 12,
-    width: '30%',
     marginLeft: '7.5%',
     borderColor: COLORS.mainPurple,
     borderWidth: 1.2,
     marginTop: 20,
     borderRadius: 15,
     marginBottom: 20,
+    paddingHorizontal:14
   },
   btnText: {
     color: COLORS.black,
