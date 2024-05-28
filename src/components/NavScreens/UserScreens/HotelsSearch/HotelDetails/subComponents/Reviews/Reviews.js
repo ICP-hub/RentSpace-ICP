@@ -20,8 +20,8 @@ const itemSample = {
   rating: 4,
 };
 
-const Reviews = () => {
-  // console.log("reviews : ",reviews)
+const Reviews = ({hotelReviews}) => {
+  console.log("reviews : ",hotelReviews)
   const [showReview, setShowReviews] = useState(false);
   return (
     <View style={styles.reviewCont}>
@@ -29,16 +29,16 @@ const Reviews = () => {
         <Icon name="star" size={16} color={COLORS.mainPurple} />
         <Text style={styles.reviewText}>4.92 • 432 reviews</Text>
       </View>
-      {reviews.map(r => {
+      {/* {reviews.map(r => {
         console.log('review element : ', r);
-      })}
+      })} */}
       {reviews?.length == 0 ? (
         <Text style={styles.empty}>No Reviews to show yet</Text>
       ) : (
         // <ReviewCard item={itemSample}/>
         <FlatList
           contentContainerStyle={styles.list}
-          data={reviews}
+          data={hotelReviews}
           renderItem={item => <ReviewCard item={item?.item} />}
           horizontal
         />

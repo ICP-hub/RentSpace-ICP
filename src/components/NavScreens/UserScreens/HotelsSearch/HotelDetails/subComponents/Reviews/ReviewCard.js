@@ -7,7 +7,7 @@ import { images } from '../../../../../../../constants'
 const months=["January","Febraury","March","April","May","June","July","August","September","October","November","December"]
 
 const ReviewCard = ({item}) => {
-  const rating=4
+  // const rating=4
   let ratingArr=new Array(item?.rating)
   ratingArr.fill(1)
   // console.log((ratingArr))

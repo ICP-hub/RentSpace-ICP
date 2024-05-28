@@ -27,6 +27,10 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
         let Revs=[]
         await actors?.reviewActor.getReviewIdsFromHotelId(item?.id).then(async(res)=>{
             console.log("review ids: ",res)
+            if(res==[]){
+                setHotelReviews([])
+                return
+            }
             res.map(async(r)=>{
                 await actors?.reviewActor.getReviewInfo(r).then((res)=>{
                     console.log(res) 
@@ -78,7 +82,7 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
         <HotelFacilityCard hostData={host}/>
       </View>
       <View style={styles.hrLine}></View>
-      <Reviews reviews={hotelReviews}/>  
+      <Reviews hotelReviews={hotelReviews}/>  
         <TouchableOpacity style={styles.btn} onPress={()=>{
             navigation.navigate('UserChat',{newChat:host?.id})
             setOpen(false)
