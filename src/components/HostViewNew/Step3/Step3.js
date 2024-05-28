@@ -11,11 +11,11 @@ const Step3 = ({setHostModal,pos}) => {
       <SaveBtn setHostModal={setHostModal}/>
       <BottomBtn setHostModal={setHostModal} pos={pos} step={3} nextFunc={()=>{return true}}/>
       <View style={styles.imageCont}>
-        <Image source={images.hostHome} style={styles.bigImg}/>
-        <View style={styles.smallImgCont}>
+        <Image source={images.step3} style={styles.bigImg}/>
+        {/* <View style={styles.smallImgCont}>
             <Image source={images.hostMirror} style={styles.smallImg}/>
             <Image source={images.hostDoor} style={[styles.smallImg,{marginLeft:40}]}/>
-        </View>
+        </View> */}
       </View>
       <Text style={styles.subTitle}>Step 3</Text>
       <Text style={styles.title}>Finish up and publish</Text>
@@ -52,9 +52,10 @@ const styles = StyleSheet.create({
         height:'100%'
     },
     bigImg:{
-        width:'60%',
-        height:190,
-        marginTop:20
+        width:'85%',
+        height:210,
+        // marginTop:20
+        marginLeft:'7%'
     },
     smallImg:{
        width:95,

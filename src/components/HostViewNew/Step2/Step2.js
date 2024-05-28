@@ -9,13 +9,13 @@ const Step2 = ({setHostModal,pos}) => {
   return (
     <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal}/>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={2} nextFunc={()=>{return true}}/>
+      <BottomBtn back={2} setHostModal={setHostModal} pos={pos} step={2} nextFunc={()=>{return true}}/>
       <View style={styles.imageCont}>
-        <Image source={images.hostHouseDesign} style={styles.bigImg}/>
-        <View style={styles.smallImgCont}>
+        <Image source={images.step2} style={styles.bigImg}/>
+        {/* <View style={styles.smallImgCont}>
             <Image source={images.hostMirror} style={styles.smallImg}/>
             <Image source={images.hostDoor} style={[styles.smallImg,{marginLeft:40}]}/>
-        </View>
+        </View> */}
       </View>
       <Text style={styles.subTitle}>Step 2</Text>
       <Text style={styles.title}>Make your place stand out</Text>
@@ -52,9 +52,11 @@ const styles = StyleSheet.create({
         height:'100%'
     },
     bigImg:{
-        width:'60%',
-        height:190,
-        marginTop:20
+        width:'85%',
+        height:210,
+        marginTop:0,
+        marginLeft:'7.5%',
+        objectFit:'fill'
     },
     smallImg:{
        width:95,

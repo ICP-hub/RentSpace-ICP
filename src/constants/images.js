@@ -34,6 +34,9 @@ import newProfile from '../assets/images/newProfile.png'
 import logo from '../assets/logos/whiteLogo.png'
 import check from '../assets/images/check.png'
 import sampleProfile2 from '../assets/images/sampleProfile2.png'
+import step1 from '../assets/images/hostViewNew/step1.png'
+import step2 from '../assets/images/hostViewNew/step2.png'
+import step3 from '../assets/images/hostViewNew/step3.png'
 // import saple
 
 export default {
@@ -72,5 +75,8 @@ export default {
     newProfile,
     logo,
     check,
-    sampleProfile2
+    sampleProfile2,
+    step1,
+    step2,
+    step3
 }

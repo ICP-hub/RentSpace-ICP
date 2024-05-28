@@ -1,8 +1,10 @@
 import { Image, Keyboard, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { COLORS, SIZES } from '../../../../../constants/themes'
 import { images } from '../../../../../constants'
 import ReplyCard from './ReplyCard'
+import { Principal } from '@dfinity/principal'
+import { useSelector } from 'react-redux'
 
 const CommentCard = ({item,setParent,comRef}) => {
 
@@ -12,10 +14,23 @@ const CommentCard = ({item,setParent,comRef}) => {
         comRef.current.focus()
         console.log(item?.id)
     }
+    const {actors}=useSelector(state=>state.actorReducer)
+    const [cardUser,setCardUser]=useState({})
+    const getUser=async()=>{
+        await actors?.userActor.getUserInfoByPrincipal(Principal.fromText(item?.userId)).then((res)=>{
+          console.log(res)
+          setCardUser(res[0])
+        }).catch((err)=>{
+          console.log(err)
+        })
+      }
+      useEffect(()=>{
+        getUser()
+      },[])
 
   return (
     <View style={styles.card}>
-      <Image source={images.profileSample} style={styles.img}/>
+      <Image source={(cardUser?.userProfile==""||cardUser?.userProfile=="img"||cardUser=={})?images.sampleProfile2:{uri:cardUser?.userProfile}} style={styles.img}/>
       <View style={styles.textCont}>
         <Text style={styles.headText}>{item.user}  •  {item.date}</Text>
         <Text style={styles.normalText}>

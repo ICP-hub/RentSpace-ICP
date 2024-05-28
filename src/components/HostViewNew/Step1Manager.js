@@ -19,12 +19,14 @@ const Step1Manager = ({hostModal,setHostModal}) => {
             break
         case(6):
             component=<HotelType setHostModal={setHostModal} pos={6}/>
+            setHostModal(7)
             break
         case(7):
             component=<HotelLocation setHostModal={setHostModal} pos={7}/>
             break
         case(8):
             component=<BasicDetails setHostModal={setHostModal} pos={8}/>
+            setHostModal(9)
             break
         default:
             component=<Text style={{color:'black'}}>Component not created yet</Text>

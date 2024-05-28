@@ -1,8 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect } from 'react'
 import { COLORS,SIZES } from '../../../constants/themes'
+import { useSelector } from 'react-redux'
 
 const UploadTemp = ({setHostModal,pos}) => {
+
+  const {files}=useSelector(state=>state.filesReducer)
 
     useEffect(()=>{
         setTimeout(()=>{setHostModal(pos+1)},500)
@@ -13,7 +16,7 @@ const UploadTemp = ({setHostModal,pos}) => {
       <Text style={styles.title}>
       Magically arranging your photos to show off your space
       </Text>
-      <Text style={styles.text}>0 of 5 uploaded</Text>
+      <Text style={styles.text}>0 of {files.length-1} Arranged</Text>
     </View>
   )
 }

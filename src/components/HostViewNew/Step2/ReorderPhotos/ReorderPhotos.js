@@ -24,10 +24,10 @@ const ReorderPhotos = ({setHostModal,pos}) => {
                     Ta-da! How does this look?
                 </Text>
                 <Text style={styles.text}>
-                    Drag to reorder
+                    {/* Drag to reorder */}
                 </Text>
             </View>
-            <TouchableOpacity style={styles.Addbtn}>
+            <TouchableOpacity style={styles.Addbtn} onPress={()=>setHostModal(11)}>
             <Icon name='plus' size={20} color={COLORS.black}/>
                 <Text style={styles.AddbtnText}>Add more</Text>
             </TouchableOpacity>

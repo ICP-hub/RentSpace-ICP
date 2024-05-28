@@ -1,12 +1,27 @@
 import { StyleSheet, Text, View,Image } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { COLORS, SIZES } from '../../../../../constants/themes'
 import { images } from '../../../../../constants'
+import { useSelector } from 'react-redux'
+import {Principal} from '@dfinity/principal'
 
 const ReplyCard = ({item}) => {
+  const {actors}=useSelector(state=>state.actorReducer)
+  const [cardUser,setCardUser]=useState({})
+  const getUser=async()=>{
+    await actors?.userActor.getUserInfoByPrincipal(Principal.fromText(item?.userId)).then((res)=>{
+      console.log(res)
+      setCardUser(res[0])
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
+  useEffect(()=>{
+    getUser()
+  },[])
   return (
     <View style={styles.card}>
-      <Image source={images.profileSample} style={styles.img}/>
+      <Image source={(cardUser?.userProfile==""||cardUser?.userProfile=="img"||cardUser=={})?images.sampleProfile2:{uri:cardUser?.userProfile}} style={styles.img}/>
       <View style={styles.textCont}>
         <Text style={styles.headText}>{item.user}  •  {item.date}</Text>
         <Text style={styles.normalText}>

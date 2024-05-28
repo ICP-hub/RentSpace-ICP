@@ -169,17 +169,18 @@ const Pricing = ({setHostModal, pos}) => {
             </View>
             <View style={styles.pricingRow}>
               <Text style={styles.pricingNormal}>Guest service fee</Text>
-              <Text style={styles.pricingNormal}>${99}</Text>
+              <Text style={styles.pricingNormal}>${0}</Text>
             </View>
             <View style={styles.DarkLine} />
             <View style={styles.pricingRow}>
               <Text style={styles.pricingBold}>Guest price before taxes</Text>
-              <Text style={styles.pricingBold}>${Number(price) + 99}</Text>
+              <Text style={styles.pricingBold}>${Number(price) + 0}</Text>
             </View>
           </View>
           <View style={styles.earningCard}>
             <Text style={styles.earningText}>You earn</Text>
-            <Text style={styles.bigText}>${price < 200 ? 0 : price - 200}</Text>
+            {/* <Text style={styles.bigText}>${price < 200 ? 0 : price - 200}</Text> */}
+            <Text style={styles.bigText}>${price}</Text>
           </View>
         </View>
       </ScrollView>
@@ -189,6 +190,7 @@ const Pricing = ({setHostModal, pos}) => {
         pos={pos}
         step={3}
         nextFunc={chechSol}
+        back={2}
       />
       <Modal
         transparent

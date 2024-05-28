@@ -33,6 +33,7 @@ const Step2Manager = ({hostModal,setHostModal}) => {
             break
         case(15):
             component=<HotelTag setHostModal={setHostModal} pos={15}/>
+            setHostModal(16)
             break
         case(16):
             component=<HotelDesc setHostModal={setHostModal} pos={16}/>

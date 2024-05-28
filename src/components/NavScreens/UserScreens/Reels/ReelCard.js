@@ -119,7 +119,7 @@ const ReelCard = ({item,reelIndex}) => {
     setLikeDisabled(true)
     await axios.patch(`${baseURL}/api/v1/updateLikesOnHotel`,{user:principle,hotelId:item?.hotelId}).then((res)=>{
         console.log("updated like : ",res.data)
-        console.log(item?.likedBy.includes(principle))
+        console.log("includes principal : ", item?.likedBy.includes(principle))
         setLikeDisabled(false)
     }).catch((err)=>{
         setLikeDisabled(false)
