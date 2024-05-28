@@ -12,7 +12,7 @@ import {COLORS, SIZES} from '../../../../../constants/themes';
 import {Calendar} from 'react-native-calendars';
 import RoomList from './RoomList';
 
-const CheckInOut = ({hotelId}) => {
+const CheckInOut = ({hotelId, hotelName, hotelAddress}) => {
   const date = new Date();
   const day = date.getDate();
   const month = date.getMonth() + 1;
@@ -31,10 +31,10 @@ const CheckInOut = ({hotelId}) => {
     marked: false,
   });
 
-//   useEffect(() => {
-//     console.log('CheckIn Date: ', checkInDate.date);
-//     console.log('CheckOut Date: ', checkOutDate.date);
-//   }, [checkInDate, checkOutDate]);
+  //   useEffect(() => {
+  //     console.log('CheckIn Date: ', checkInDate.date);
+  //     console.log('CheckOut Date: ', checkOutDate.date);
+  //   }, [checkInDate, checkOutDate]);
 
   return (
     <View style={styles.conatiner}>
@@ -74,15 +74,22 @@ const CheckInOut = ({hotelId}) => {
               selectedColor: COLORS.mainPurple,
             },
           }}
-        
         />
 
-        <TouchableOpacity style={styles.reserveBtn} onPress={()=>setRoomsPage(true)} >
+        <TouchableOpacity
+          style={styles.reserveBtn}
+          onPress={() => setRoomsPage(true)}>
           <Text style={styles.btnText}>Select Room</Text>
         </TouchableOpacity>
       </ScrollView>
       <Modal visible={roomsPage} onRequestClose={() => setRoomsPage(false)}>
-        <RoomList hotelId={hotelId} checkInDate={checkInDate.date} checkOutDate={checkOutDate.date} />
+        <RoomList
+          hotelId={hotelId}
+          checkInDate={checkInDate.date}
+          checkOutDate={checkOutDate.date}
+          hotelName={hotelName}
+          hotelAddress={hotelAddress}
+        />
       </Modal>
     </View>
   );

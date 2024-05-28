@@ -141,7 +141,7 @@ const RateHawk = ({hotelId, item, setOpen, navigation}) => {
 
       <Modal visible={calenderPage}  onRequestClose={()=>setcalenderPage(false)}>
         {/* <RoomList hotelId={hotelId}/> */}
-        <CheckInOut hotelId={hotelId} />
+        <CheckInOut hotelId={hotelId} hotelName={hotelDetails.name} hotelAddress={hotelDetails.address}  />
       </Modal>
 
 
