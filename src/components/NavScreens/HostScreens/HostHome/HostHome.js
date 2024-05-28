@@ -51,6 +51,9 @@ const HostHome = ({navigation}) => {
   const getFilteredArray=(type,arr)=>{
     return arr.filter(item=>item.status==type)
   }
+  const getHotelDetails=async()=>{
+    console.log("from home page")
+  }
 
   const getStatus=(bookingRes)=>{
     let checkInDate=new Date(bookingRes[0].date)
@@ -214,7 +217,7 @@ const HostHome = ({navigation}) => {
         <Step2Manager hostModal={hostModal} setHostModal={setHostModal}/>
       </Modal>
       <Modal animationType='slide' visible={(hostModal>16 && hostModal<=23)?true:false}>
-        <Step3Manager hostModal={hostModal} setHostModal={setHostModal}/>
+        <Step3Manager hostModal={hostModal} setHostModal={setHostModal} getHotelDetails={getHotelDetails}/>
       </Modal>
       <ActivityIndicator animating={refreshing} style={styles.loader} size={40}/>
     </View>

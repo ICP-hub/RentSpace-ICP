@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   Modal,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import BottomNavHost from '../../../Navigation/BottomNavHost';
@@ -30,6 +31,7 @@ const Listings = ({navigation}) => {
   const [newHotel, setNewHotel] = useState({});
   const [showDrawer, setShowDrawer] = useState(false);
   const {authData}=useSelector(state => state.authDataReducer)
+  const [loading,setLoading]=useState(false)
   const dispatch=useDispatch()
 
   const [listings, setListings] = useState([]);
@@ -69,9 +71,12 @@ const Listings = ({navigation}) => {
   // Geting hotel details from the server
 
   function getHotelDetails() {
+    setLoading(true)
     axios
       .get(`http://localhost:5000/api/v1/hotel/getAllHotels?userPrincipal=${principle}`)
       .then(res => {
+        setLoading(false)
+
         console.log("res",res);
         if(res.data.hotels.length != undefined && res.data.hotels.length != 0){
           setListings(res.data.hotels);
@@ -81,6 +86,8 @@ const Listings = ({navigation}) => {
       })
       .catch(error => {
         console.log(error);
+        setLoading(false)
+
       });
   }
 
@@ -93,8 +100,9 @@ const Listings = ({navigation}) => {
       <View style={styles.header}>
         <Text style={styles.title}>Your listings</Text>
         <View style={styles.iconCont}>
-          <TouchableOpacity style={styles.icon}>
-            <Icon name="collage" size={30} color={COLORS.black} />
+          <TouchableOpacity style={styles.icon} onPress={getHotelDetails}>
+            {/* <Icon name="collage" size={30} color={COLORS.black} /> */}
+            <Icon name="reload" size={30} color={COLORS.black} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.icon} onPress={() => setHostModal(4)}>
             <Icon2 name="plus" size={30} color={COLORS.black} />
@@ -148,6 +156,8 @@ const Listings = ({navigation}) => {
         visible={hostModal > 16 && hostModal <= 23 ? true : false}>
         <Step3Manager hostModal={hostModal} setHostModal={setHostModal} getHotelDetails={getHotelDetails}/>
       </Modal>
+      <ActivityIndicator animating={loading} style={styles.loader} size={40}/>
+
     </View>
   );
 };
@@ -155,6 +165,11 @@ const Listings = ({navigation}) => {
 export default Listings;
 
 const styles = StyleSheet.create({
+  loader:{
+    position:'absolute',
+    top:'40%',
+    marginHorizontal:'auto'
+  },
   view: {
     display: 'flex',
     flexDirection: 'column',

@@ -31,6 +31,7 @@ import { ids } from '../../../../../../../DevelopmentConfig'
 import { Principal } from '@dfinity/principal'
 import { toHex } from '@dfinity/agent'
 import { fromHexString } from '@dfinity/candid'
+import { ALERT_TYPE, Dialog } from 'react-native-alert-notification'
 
 const onConnectRedirectLink ="rentspace://onConnect";
 const connection = new Connection(clusterApiUrl("devnet"));
@@ -93,6 +94,16 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
     }
     console.log(paymentOpt,paymentMethod)
     await actors?.bookingActor?.bookHotel(item?.id,obj,paymentOpt,amnt).then((resp)=>{
+      if(resp=="Not found!"){
+        setLoading(false)
+        Dialog.show({
+          type:ALERT_TYPE.WARNING,
+          title:'Some error occcured',
+          textBody:`Some error occured while booking the hotel `,
+          button:'OK',
+        })
+        return
+      }
       console.log(resp)
       notify()
       setLoading(false)
@@ -104,6 +115,12 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
     }).catch((err)=>{
       console.log(err)
       setLoading(false)
+      Dialog.show({
+        type:ALERT_TYPE.WARNING,
+        title:'Some error occcured',
+        textBody:`Some error occured while booking the hotel `,
+        button:'OK',
+      })
     })
   }
 
@@ -184,6 +201,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
   async function settingToken(){
     let canID=""
     let newActor;
+    console.log(paymentMethod)
     if(paymentMethod=="ckBTC"){
       newActor=(actors?.ckbtcTokenActor)
       setTokenActor(actors?.ckbtcTokenActor)

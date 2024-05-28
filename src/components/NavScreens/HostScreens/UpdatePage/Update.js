@@ -236,7 +236,7 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
           />
         </View>
         {/* fourth-section */}
-        <View style={styles.sectionHeader}>
+        {/* <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Basic details of your space</Text>
         </View>
         <View style={styles.sectionContent}>
@@ -290,7 +290,7 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
               </View>
             </View>
           </View>
-        </View>
+        </View> */}
         {/* fifth-section */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Title of your place</Text>
@@ -304,7 +304,7 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
           />
         </View>
         {/* sixth-section */}
-        <View style={styles.sectionHeader}>
+        {/* <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>It Describes your place </Text>
         </View>
         <View style={styles.sectionContent}>
@@ -377,7 +377,7 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
               </Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </View> */}
         {/* seventh-section */}
         <View style={styles.buttonSection}>
           <TouchableOpacity onPress={goToNextPage}>

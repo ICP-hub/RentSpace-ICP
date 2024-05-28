@@ -23,8 +23,9 @@ shared ({caller = owner}) actor class () = this {
     stable var hotelIdBookedDurations = Trie.empty<Types.HotelId, Trie.Trie<Types.BookingId, Types.BookingDuration>>();
 
     stable var admin : [Types.AdminId] = [];
-    stable let icpLedger = "ryjl3-tyaaa-aaaaa-aaaba-cai";
-    stable let ckbtcLedger = "r7inp-6aaaa-aaaaa-aaabq-cai";
+    let icpLedger = "ryjl3-tyaaa-aaaaa-aaaba-cai";
+    let ckbtcLedger = "mxzaz-hqaaa-aaaar-qaada-cai";
+    let ckethLedger = "ss2fx-dyaaa-aaaar-qacoq-cai";
     let hotelActor = actor (hotelCanisterId) : actor {
         checkHotelExist : shared query (Text) -> async Bool;
         getHotelAvailabilty : query (Text) -> async ?{
@@ -84,7 +85,7 @@ shared ({caller = owner}) actor class () = this {
 
     };
 
-    public shared ({caller = user}) func bookHotel(hotelId : Types.HotelId, bookingInfo : Types.BookingInfo, paymentOption : {#icp; #ckbtc; #solana : Text}, amount : Nat) : async Text {
+    public shared ({caller = user}) func bookHotel(hotelId : Types.HotelId, bookingInfo : Types.BookingInfo, paymentOption : {#icp; #ckbtc; #cketh; #solana : Text}, amount : Nat) : async Text {
         let userIdentity = Principal.toText(user);
         if (Principal.isAnonymous(user) == true) {
             Debug.trap("Error! You are already a user");
@@ -125,6 +126,29 @@ shared ({caller = owner}) actor class () = this {
             };
             case (#ckbtc) {
                 let response : Icrc.Result_2 = await icrc2_transferFrom(ckbtcLedger, user, hotelOwnerId, amount);
+
+                switch (response) {
+                    case (#Ok(value)) {
+                        let bookingData : Types.BookingInfo = {
+                            userId = userIdentity;
+                            date = bookingDate;
+                            bookingDuration = bookingInfo.bookingDuration;
+                            checkInDate = bookingInfo.checkInDate;
+                            hotelId = hotelId;
+                            cancelStatus = false;
+                            refundStatus = false;
+                            paymentStatus = true;
+                            paymentId = Nat.toText(value);
+                        };
+                        await bookingDuration(hotelId, bookingId, bookingInfo.bookingDuration);
+                        bookingDataMap := Trie.put(bookingDataMap, Utils.textKey bookingId, Text.equal, bookingData).0;
+                        return " Sucessfully booked hotel";
+                    };
+                    case (#Err(error)) {return "Not found!"};
+                };
+            };
+            case (#cketh){
+                let response : Icrc.Result_2 = await icrc2_transferFrom(ckethLedger, user, hotelOwnerId, amount);
 
                 switch (response) {
                     case (#Ok(value)) {

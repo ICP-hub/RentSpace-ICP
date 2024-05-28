@@ -485,16 +485,16 @@ const RootComponent: React.FC = () => {
         blsVerify: () => true,
         canisterId: ids.ICPtokenCan,
       });
-      // let actorCkBTCToken=Actor.createActor(idlFactory, {
-      //   agent,
-      //   blsVerify:()=>true,
-      //   canisterId:ids.ckBTCtokenCan
-      // })
-      // let actorCkETHToken=Actor.createActor(idlFactory, {
-      //   agent,
-      //   blsVerify:()=>true,
-      //   canisterId:ids.ckETHtokenCan
-      // })
+      let actorCkBTCToken=Actor.createActor(idlFactory, {
+        agent,
+        blsVerify:()=>true,
+        canisterId:ids.ckBTCtokenCan
+      })
+      let actorCkETHToken=Actor.createActor(idlFactory, {
+        agent,
+        blsVerify:()=>true,
+        canisterId:ids.ckETHtokenCan
+      })
       let actorReview = createReviewActor(ids.reviewCan, {agent});
       let actorComment = createCommentActor(ids.commentCan, {agent});
       let actorSupport = createSupportActor(ids.supportCan, {agent});
@@ -505,8 +505,8 @@ const RootComponent: React.FC = () => {
           hotelActor: actorHotel,
           bookingActor: actorBooking,
           icpTokenActor: actorICPToken,
-          ckbtcTokenActor: actorICPToken,
-          ckETHtokenActor: actorICPToken,
+          ckbtcTokenActor: actorCkBTCToken,
+          ckETHtokenActor: actorCkETHToken,
           reviewActor: actorReview,
           commentActor: actorComment,
           supportActor: actorSupport,

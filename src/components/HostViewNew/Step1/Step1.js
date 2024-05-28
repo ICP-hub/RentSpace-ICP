@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         width:'85%',
         height:200,
         marginLeft:'7.5%',
-        objectFit:'contain'
+        objectFit:'fill'
     },
     smallImg:{
        width:95,

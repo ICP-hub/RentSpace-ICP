@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Dimensions,
   Image,
   Modal,
@@ -213,12 +214,12 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Update Page</Text>
         <View style={styles.headerIcons}>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Icon name="collage" size={25} color={COLORS.black} />
           </TouchableOpacity>
           <TouchableOpacity>
             <Icon2 name="plus" size={25} color={COLORS.black} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
       <ScrollView
@@ -409,7 +410,7 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
         </View>
 
         {/* sec6 */}
-        <View style={styles.sectionHeader}>
+        {/* <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Discounts</Text>
         </View>
         <View style={styles.payContainer}>
@@ -461,10 +462,10 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
               </Text>
             </View>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         {/* sec7 */}
-        <View style={styles.sectionHeader}>
+        {/* <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Your Place Have</Text>
         </View>
         <TouchableOpacity
@@ -523,7 +524,7 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
               checkOption.animal ? styles.optionIcon : styles.optionIconActive
             }
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         {/* sec8 */}
         <TouchableOpacity style={styles.saveBtn} onPress={saveAndExit}>
@@ -538,9 +539,10 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
       </Modal>
 
       {/* Submit Modal */}
-      <Modal visible={submit} transparent>
+      {/* <Modal visible={submit} transparent>
         <SubmitUpdates />
-      </Modal>
+      </Modal> */}
+      <ActivityIndicator animating={submit} style={styles.loader} size={40}/>
     </View>
   );
 };
@@ -548,6 +550,11 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
 export default UpdateModal;
 
 const styles = StyleSheet.create({
+  loader:{
+    position:'absolute',
+    top:'40%',
+    marginHorizontal:'50%',
+  },
   container: {
     display: 'flex',
     flexDirection: 'column',
