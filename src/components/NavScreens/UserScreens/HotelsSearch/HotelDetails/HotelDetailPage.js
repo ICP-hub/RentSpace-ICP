@@ -18,6 +18,7 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
     const btmBtn=useRef(null)
     const [hotelReviews,setHotelReviews]=useState([])
     const [bookingForm,setBookingForm]=useState(false)
+    const [hotelRating,setHotelRating]=useState(5)
     const {actors}=useSelector(state=>state.actorReducer)
     const [host,setHost]=useState({})
 
@@ -50,11 +51,23 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
             console.log(err)
         })
     }
+    const calculateRating=()=>{
+        let total=0
+        for(let i=0;i<hotelReviews.length;i++){
+            total+=parseInt(hotelReviews[i].rating)
+        }
+        console.log(parseFloat(total/hotelReviews.length))
+        setHotelRating(parseFloat(total/hotelReviews.length))
+    }
     useEffect(()=>{
         btmBtn.current.present()
         getAllReviews()
         getHostDetails()
     },[])
+
+    useEffect(()=>{
+        calculateRating()
+    },[hotelReviews])
   return (
     <BottomSheetModalProvider>
     <ScrollView>
@@ -74,7 +87,7 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
         <View style={styles.hotelReviewCont}>
             <Icon2 name='star' size={12} color={COLORS.inputBorder} style={{marginRight:5}}/>
             
-            <Text style={styles.hotelReviewText}>4.92 • 432 reviews • {item?.hotelLocation}</Text>
+            <Text style={styles.hotelReviewText}>{hotelRating} • {hotelReviews.length} {hotelReviews.length==1?"review":"reviews"} • {item?.hotelLocation}</Text>
         </View>
       </View>
       <HostBand hostData={host}/>
@@ -82,7 +95,7 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
         <HotelFacilityCard hostData={host}/>
       </View>
       <View style={styles.hrLine}></View>
-      <Reviews hotelReviews={hotelReviews}/>  
+      <Reviews hotelReviews={hotelReviews} hotelRating={hotelRating}/>  
         <TouchableOpacity style={styles.btn} onPress={()=>{
             navigation.navigate('UserChat',{newChat:host?.id})
             setOpen(false)

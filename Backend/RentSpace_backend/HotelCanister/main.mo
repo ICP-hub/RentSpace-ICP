@@ -9,7 +9,7 @@ import Utils "../utils";
 
 shared ({caller = owner}) actor class () {
     // stable let userCanisterId = "wenzb-uyaaa-aaaan-qlwsa-cai";
-     let userCanisterId = "be2us-64aaa-aaaaa-qaabq-cai";
+     let userCanisterId = "xlygc-qqaaa-aaaao-a3odq-cai";
     stable var hotelDataMap = Trie.empty<Types.HotelId, Types.HotelInfo>();
     stable var hotelIdMap = Trie.empty<Types.UserId, List.List<Types.HotelId>>();
     stable var hotelRegisterFrequencyMap = Trie.empty<Types.Year, Types.AnnualData>();

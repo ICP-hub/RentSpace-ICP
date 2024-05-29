@@ -34,6 +34,7 @@ local.properties
 *.keystore
 !debug.keystore
 android/app/src/main/res
+/canister_ids.json
 # node.js
 #
 node_modules/

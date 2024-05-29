@@ -25,7 +25,7 @@ const ReservationCard = ({item}) => {
           <Text style={styles.normalText}>1 days</Text>
           </View>
         <View style={styles.textRow}>
-          <Text style={styles.title}>Customer Name</Text>
+          <Text style={styles.title}>Owner Name</Text>
           <Text style={styles.normalText}>{item?.customerData?.firstName}</Text>
         </View>
       </View>

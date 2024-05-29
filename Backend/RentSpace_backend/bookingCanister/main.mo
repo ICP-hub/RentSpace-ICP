@@ -15,7 +15,7 @@ import Types "Types";
 import Utils "../utils";
 
 shared ({caller = owner}) actor class () = this {
-    var hotelCanisterId = "b77ix-eeaaa-aaaaa-qaada-cai";
+    var hotelCanisterId = "wbxey-saaaa-aaaao-a3oeq-cai";
     stable var bookingDataMap = Trie.empty<Types.BookingId, Types.BookingInfo>();
     stable var userXBookingIdMap = Trie.empty<Types.UserId, List.List<Types.BookingId>>();
     stable var hotelXBookingIdMap = Trie.empty<Types.HotelId, List.List<Types.BookingId>>();

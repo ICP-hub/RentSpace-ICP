@@ -4,21 +4,21 @@ import { COLORS,SIZES } from '../../../../../../../constants/themes'
 import PriceCard from './PriceCard'
 
 const months=["Jan","Feb","Mar","Apr","May","June","July","Aug","Sep","Oct","Nov","Dec"]
-const PriceDetails = ({basePrice,nights,fullPayment,checkIn}) => {
+const PriceDetails = ({basePrice,nights,fullPayment,checkIn,days}) => {
 
-    const [finalPrice,setFinalPrice]=useState(((basePrice)*0.15)+((basePrice)*0.10)+(basePrice))
+    const [finalPrice,setFinalPrice]=useState(((basePrice)*0.15*days)+((basePrice)*0.10*days)+(basePrice*days))
     const prices=[
         {
-            label:`$${basePrice} x 1`,
-            price:basePrice
+            label:`$${basePrice} x ${days}`,
+            price:basePrice*days
         },
         {
             label:'RentSpace service fee',
-            price:(basePrice)*0.15
+            price:(basePrice)*0.15*days
         },
         {
             label:'Taxes',
-            price:finalPrice*0.10
+            price:finalPrice*0.10*days
         }
     ]
   return (

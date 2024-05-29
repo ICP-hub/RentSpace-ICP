@@ -20,14 +20,14 @@ const itemSample = {
   rating: 4,
 };
 
-const Reviews = ({hotelReviews}) => {
+const Reviews = ({hotelReviews,hotelRating}) => {
   console.log("reviews : ",hotelReviews)
   const [showReview, setShowReviews] = useState(false);
   return (
     <View style={styles.reviewCont}>
       <View style={styles.headerCont}>
         <Icon name="star" size={16} color={COLORS.mainPurple} />
-        <Text style={styles.reviewText}>4.92 • 432 reviews</Text>
+        <Text style={styles.reviewText}>{hotelRating} • {hotelReviews.length} {hotelReviews.length==1?"review":"reviews"}</Text>
       </View>
       {/* {reviews.map(r => {
         console.log('review element : ', r);
@@ -52,7 +52,7 @@ const Reviews = ({hotelReviews}) => {
         <Text style={styles.btnText}>Show all reviews</Text>
       </TouchableOpacity>
       <Modal animationType="slide" visible={showReview}>
-        <AllReviews setShowReviews={setShowReviews} reviews={reviews} />
+        <AllReviews setShowReviews={setShowReviews} reviews={hotelReviews} />
       </Modal>
     </View>
   );
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingVertical: 10,
     zIndex: 10,
-    marginBottom: 70,
+    marginBottom: 0,
   },
   btnText: {
     fontSize: SIZES.large,

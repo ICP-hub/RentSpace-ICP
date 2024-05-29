@@ -17,6 +17,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
     const [loading,setLoading]=useState(false)
     const [paymentScreen,setPaymentScreen]=useState(false)
     const [bookingAnimation,showBookingAnimation]=useState(false)
+    const [days,setDays]=useState(1)
     const [booking,setBooking]=useState({
         userId:principle,
         checkInDate:'',
@@ -85,11 +86,12 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
       <View style={styles.textCont}>
             <View style={styles.textContHorz}>
                 <TextInput
-                    value={"1"}
+                    value={days}
                     placeholder='1'
                     style={styles.boldLargeText}
                     onChangeText={value=>{
-                        // setBooking({...booking,bookingDuration:value.toString()})
+                        // setBooking({...booking,bookingDuration:{...bookingDuration,bookedTill:}})
+                        setDays(parseInt(value))
                         console.log("something")
                       }}
                     keyboardType='numeric'
@@ -129,7 +131,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
                 checkInDate:`${(day.day<10)?"0"+day.day:day.day}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`,
                 bookingDuration:{
                   bookedAt:`${(day.day<10)?"0"+day.day:day.day}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`,
-                  bookedTill:`${((day.day+1)<10)?"0"+(day.day+1):(day.day+1)}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`
+                  bookedTill:`${((day.day+days)<10)?"0"+(day.day+days):(day.day+days)}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`
               }
               })
             }}
@@ -167,6 +169,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
             showBookingAnimation={showBookingAnimation}
             bookingAnimation={bookingAnimation}
             setOpen={setOpen}
+            days={days}
         />
       </Modal>
       

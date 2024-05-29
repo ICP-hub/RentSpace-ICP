@@ -38,7 +38,7 @@ const connection = new Connection(clusterApiUrl("devnet"));
 const onSignAndSendTransactionRedirectLink="rentspace://onSignAndSendTransaction"
 const SOLANA_DEVNET_USDC_PUBLIC_KEY="4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
 
-const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoading,showBookingAnimation,bookingAnimation,setOpen}) => {
+const BookingFormComp = ({days,setBookingForm,setBooking,booking,loading,item,setLoading,showBookingAnimation,bookingAnimation,setOpen}) => {
 
 
   const {user}=useSelector(state=>state.userReducer)
@@ -53,7 +53,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
   const [paymentType,setPaymentType]=useState('cypto')
   const [balanceScreen,setBalanceScreen]=useState(false)
   const [total,setTotal]=useState(
-    ((item?.hotelPrice)*0.15)+((item?.hotelPrice)*0.10)+(item?.hotelPrice)
+    ((days*item?.hotelPrice)*0.15)+((days*item?.hotelPrice)*0.10)+(days*item?.hotelPrice)
   )
   const [cryptoPrice,setCryptoPrice]=useState()
 
@@ -491,7 +491,9 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
   return (
     <View style={styles.page}>
       <View style={styles.backIconCont}>
-          <TouchableOpacity onPress={()=>{setBookingForm(false)}}>
+          {/* <TouchableOpacity onPress={()=>{setBookingForm(false)}}>
+           */}
+           <TouchableOpacity onPress={()=>console.log(((days*item?.hotelPrice)*0.15)+((days*item?.hotelPrice)*0.10)+(days*item?.hotelPrice),days,total)}>
             <Icon color={COLORS.black} name='chevron-left' size={25}/>
           </TouchableOpacity>
       </View>
@@ -502,7 +504,7 @@ const BookingFormComp = ({setBookingForm,setBooking,booking,loading,item,setLoad
         <View style={styles.line}/>
         <ChoosePayment fullPayment={fullPayment} setFullPayment={setFullPayment} price={total}/>
         <View style={styles.line}/>
-        <PriceDetails basePrice={item?.hotelPrice} nights={booking?.bookingDuration} fullPayment={fullPayment} checkIn={booking?.date}/>
+        <PriceDetails basePrice={item?.hotelPrice} nights={booking?.bookingDuration} fullPayment={fullPayment} checkIn={booking?.date} days={days}/>
         <View style={styles.line}/>
         <PaymentMethods method={paymentMethod} setMethod={setPaymentMethod} connect={connect} item={item}/>
         <View style={styles.line}/>

@@ -7,7 +7,7 @@ const HostBand = ({hostData}) => {
   return (
     <View style={styles.band}>
       <View style={styles.subCont}>
-        <Image source={images.profileSample} style={styles.img}/>
+        <Image source={(hostData?.userProfile==""||hostData?.userProfile=="img")?images.sampleProfile2:{uri:hostData?.userProfile}} style={styles.img}/>
         <View style={styles.TextCont}>
             <Text style={styles.Title}>Entire place hosted by {hostData?.firstName}!</Text>
             <Text style={styles.simpleText}>8 guests · 2 bedrooms · 3 beds · 2 bathrooms</Text>

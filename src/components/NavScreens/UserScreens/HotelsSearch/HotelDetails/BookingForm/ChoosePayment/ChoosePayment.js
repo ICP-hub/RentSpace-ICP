@@ -23,7 +23,7 @@ const ChoosePayment = ({fullPayment,setFullPayment,price}) => {
     <View style={styles.sec}>
       <Text style={styles.heading}>Choose how to pay</Text>
       <Option  item={items[0]} fullPayment={fullPayment} setFullPayment={setFullPayment}/>
-      <Option item={items[1]} fullPayment={fullPayment} setFullPayment={setFullPayment}/>
+      {/* <Option item={items[1]} fullPayment={fullPayment} setFullPayment={setFullPayment}/> */}
     </View>
   )
 }
