@@ -55,8 +55,8 @@ global.Buffer = require('buffer').Buffer;
 const Main = ({navigation}) => {
   // const [loading,setLoading]=useState(false)
 
-  // const baseQueryUrl=`https://rentspace.kaifoundry.com/api/v1/hotel/filters?`
-  const baseQueryUrl = `http://localhost:5000/api/v1/hotel/filters?`;
+  const baseQueryUrl=`https://rentspace.kaifoundry.com/api/v1/hotel/filters?`
+  // const baseQueryUrl = `http://localhost:5000/api/v1/hotel/filters?`;
 
   const route = useRoute();
   const dispatch = useDispatch();

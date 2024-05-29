@@ -28,6 +28,9 @@ import { useSelector } from 'react-redux';
 const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
   // console.log(item);
 
+  const baseUrl="https://rentspace.kaifoundry.com"
+  // const baseUrl="http://localhost:5000"
+
   let img = item.imagesUrls;
   let vdo = item.videoUrls;
 
@@ -183,7 +186,7 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
     setSubmit(true);
 
     await axios
-      .put('http://localhost:5000/api/v1/hotel/updateHotel', finalData,{
+      .put(`${baseUrl}/api/v1/hotel/updateHotel`, finalData,{
         headers:{
         "x-private":authData.privateKey,
         "x-public":authData.publicKey,

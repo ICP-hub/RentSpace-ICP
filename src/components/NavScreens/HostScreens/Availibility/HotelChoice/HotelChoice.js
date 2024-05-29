@@ -30,8 +30,8 @@ const HotelChoice = ({navigation}) => {
   const {authData}=useSelector(state=>state.authDataReducer)
   const {principle}=useSelector(state=>state.principleReducer)
   const dispatch=useDispatch()
-  // const baseUrl="https://rentspace.kaifoundry.com"
-  const baseUrl="http://localhost:5000"
+  const baseUrl="https://rentspace.kaifoundry.com"
+  // const baseUrl="http://localhost:5000"
 
   const [hotelList, setHotelList] = useState([]);
 
@@ -67,7 +67,7 @@ const HotelChoice = ({navigation}) => {
 
     // console.log(principle)
     // const userPrincipal = '2yv67-vdt7m-6ajix-goswt-coftj-5d2db-he4fl-t5knf-qii2a-3pajs-cqe'; // for testing only
-    axios.get(`http://localhost:5000/api/v1/hotel/getAllHotels?userPrincipal=${principle}`) // for testing only
+    axios.get(`${baseUrl}/api/v1/hotel/getAllHotels?userPrincipal=${principle}`) // for testing only
       // .get('http://localhost:5000/api/v1/hotel/getAllHotels')  // when userPrincipal is passed in header
       .then(res => {
         // console.log(res.data.hotels);

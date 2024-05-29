@@ -13,8 +13,8 @@ import Geolocation from '@react-native-community/geolocation'
 
 const Reels = ({navigation}) => {
   const btmSheetComments=useRef(null)
-  // const baseURL='https://rentspace.kaifoundry.com'
-  const baseURL="http://localhost:5000"
+  const baseURL='https://rentspace.kaifoundry.com'
+  // const baseURL="http://localhost:5000"
   const [reels,setReels]=useState([])
   const openComments=()=>{
     btmSheetComments.current.present()

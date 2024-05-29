@@ -23,8 +23,8 @@ const RateHawk = ({hotelId, item, setOpen, navigation}) => {
   const [loading, setLoading] = useState(true);
   const [calenderPage, setcalenderPage] = useState(false);
 
-  const baseUrl = 'http://localhost:5000/api/v1/hotel/RateHawk/getHotelInfo';
-
+  // const baseUrl = 'http://localhost:5000/api/v1/hotel/RateHawk/getHotelInfo';
+  const baseUrl='https://rentspace.kaifoundry.com/api/v1/hotel/RateHawk/getHotelInfo'
   const serachData = {
     hotelId,
     language: 'en',

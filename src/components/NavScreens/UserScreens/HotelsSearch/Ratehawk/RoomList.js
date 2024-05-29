@@ -29,6 +29,8 @@ const RoomList = ({
   const [roomsList, setRoomsList] = useState([]);
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [loading, setLoading] = useState(true);
+  const baseUrl='https://rentspace.kaifoundry.com/api/v1'
+  // const baseUrl='http://localhost:5000/api/v1'
 
   const fetchHash = async () => {
     const postData = {
@@ -43,7 +45,7 @@ const RoomList = ({
     console.log('Post Data : ', postData);
 
     await axios
-      .post('http://localhost:5000/api/v1/hotel/RateHawk/bookHotel', postData)
+      .post(`${baseUrl}/hotel/RateHawk/bookHotel`, postData)
       .then(response => {
         console.log(response?.data?.data?.data?.hotels[0]?.rates[0].book_hash);
         setRoomsList(response?.data?.data?.data?.hotels[0]?.rates);

@@ -20,8 +20,8 @@ const Congratulations = ({setHostModal,pos,getHotelDetails}) => {
   const {actors}=useSelector(state=>state.actorReducer)
   const {authData}=useSelector(state=>state.authDataReducer)
   const dispatch=useDispatch()
-  // const baseUrl="https://rentspace.kaifoundry.com"
-  const baseUrl="http://localhost:5000"
+  const baseUrl="https://rentspace.kaifoundry.com"
+  // const baseUrl="http://localhost:5000"
   const {files}=useSelector(state=>state.filesReducer)
   const {user}=useSelector(state=>state.userReducer)
   const [imageList,setImageList]=useState([])

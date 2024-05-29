@@ -14,8 +14,8 @@ const Chat = ({item,setOpenChat}) => {
   const {principle}=useSelector(state=>state.principleReducer)
   const [message,setMessage]=useState("")
   const [socket,setSocket]=useState(null)
-  // const baseUrl="https://rentspace.kaifoundry.com"
-  const baseUrl="http://localhost:5000"
+  const baseUrl="https://rentspace.kaifoundry.com"
+  // const baseUrl="http://localhost:5000"
 
   const pin="bzyut-cxk7l-tkb6p-6kxev-4k2lf-fajro-7biwv-yxlii-ingdb-flzdj-jae"
   // const checkSendMessage=()=>{

@@ -16,7 +16,9 @@ import {COLORS} from '../../../../../constants/themes';
 import { useSelector } from 'react-redux';
 
 const CalendarScreen = ({item, setModalVisible, getHotelDetails}) => {
-  console.log(item.availableFrom)
+  // console.log(item.availableFrom)
+  const baseUrl="https://rentspace.kaifoundry.com"
+  // const baseUrl="http://localhost:5000"
   const [startDate, setStartDate] = useState({
     // date: today,
     date: item.availableFrom.slice(0, 10),
@@ -56,7 +58,7 @@ const CalendarScreen = ({item, setModalVisible, getHotelDetails}) => {
 
     await axios
       .put(
-        'http://localhost:5000/api/v1/hotel/updateHotelAvailbility',
+        `${baseUrl}/api/v1/hotel/updateHotelAvailbility`,
         updateDates,
         {
           headers:{

@@ -293,10 +293,10 @@ const RootComponent: React.FC = () => {
         try {
           Linking.addEventListener('url', handleDeepLink);
           setTimeout(async () => {
-            // const url = `https://sldpd-dyaaa-aaaag-acifq-cai.icp0.io?publicKey=${toHex(res.getPublicKey().toDer())}`;
-            const url = `http://127.0.0.1:4943/?canisterId=bkyz2-fmaaa-aaaaa-qaaaq-cai&publicKey=${toHex(
-              res.getPublicKey().toDer(),
-            )}`;
+            const url = `https://xmzaw-5iaaa-aaaao-a3oda-cai.icp0.io?publicKey=${toHex(res.getPublicKey().toDer())}`;
+            // const url = `http://127.0.0.1:4943/?canisterId=bkyz2-fmaaa-aaaaa-qaaaq-cai&publicKey=${toHex(
+            //   res.getPublicKey().toDer(),
+            // )}`;
             if (await InAppBrowser.isAvailable()) {
               const result = await InAppBrowser.open(url, {
                 // iOS Properties
@@ -449,9 +449,9 @@ const RootComponent: React.FC = () => {
       await getSignObject().then(async () => {
         console.log('getting sign obj : ', signObj);
         store.dispatch(setAuthData(signObj));
-        const baseUrl="http://localhost:5000"
+        // const baseUrl="http://localhost:5000"
         // alert('implementing chat register')
-        // const baseUrl = 'https://rentspace.kaifoundry.com';
+        const baseUrl = 'https://rentspace.kaifoundry.com';
         await axios
           .post(
             `${baseUrl}/api/v1/register/user`,

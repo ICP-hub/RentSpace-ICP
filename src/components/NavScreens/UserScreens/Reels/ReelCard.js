@@ -43,8 +43,8 @@ const ReelCard = ({item, reelIndex}) => {
   const {actors} = useSelector(state => state.actorReducer);
   const [reelComments, setReelComments] = useState([]);
   const [loading, setLoading] = useState(false);
-  // const baseURL="https://rentspace.kaifoundry.com"
-  const baseURL = 'http://localhost:5000';
+  const baseURL="https://rentspace.kaifoundry.com"
+  // const baseURL = 'http://localhost:5000';
   const openComments = () => {
     btmSheetComments.current.present();
   };

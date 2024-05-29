@@ -21,7 +21,9 @@ import { useSelector } from 'react-redux';
 
 const CustomAlert = ({showAlert, setShowAlert,item,getHotelDetails}) => {
   // const [loading,setLoading]=useState(false)
-  const baseUrl="http://localhost:5000"
+  // const baseUrl="http://localhost:5000"
+  const baseUrl="https://rentspace.kaifoundry.com"
+
   const {authData}=useSelector(state=>state.authDataReducer)
   const handleYes = async() => {
     console.log(item.hotelId)

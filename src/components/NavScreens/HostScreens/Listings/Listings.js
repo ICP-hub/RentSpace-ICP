@@ -37,8 +37,8 @@ const Listings = ({navigation}) => {
   const [listings, setListings] = useState([]);
   const {principle}=useSelector(state=>state.principleReducer)
 
-  // const baseUrl="https://rentspace.kaifoundry.com"
-  const baseUrl="http://localhost:5000"
+  const baseUrl="https://rentspace.kaifoundry.com"
+  // const baseUrl="http://localhost:5000"
 
   // async function getHotelDetails() {
   //   setHotelList([]);
@@ -73,7 +73,7 @@ const Listings = ({navigation}) => {
   function getHotelDetails() {
     setLoading(true)
     axios
-      .get(`http://localhost:5000/api/v1/hotel/getAllHotels?userPrincipal=${principle}`)
+      .get(`${baseUrl}/api/v1/hotel/getAllHotels?userPrincipal=${principle}`)
       .then(res => {
         setLoading(false)
 

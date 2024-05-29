@@ -29,8 +29,8 @@ const ChatContainer = ({navigation}) => {
     const route=useRoute()
     const firstUpdate = useRef(true);
     const {newChat}=route.params
-    // const baseUrl="https://rentspace.kaifoundry.com"
-    const baseUrl="http://localhost:5000"
+    const baseUrl="https://rentspace.kaifoundry.com"
+    // const baseUrl="http://localhost:5000"
     const chatLogin=async()=>{
         setChatUsers([])
         setLoading(true)
