@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Modal,
   ScrollView,
   StyleSheet,
@@ -27,8 +28,9 @@ const RoomList = ({
 
   const [roomsList, setRoomsList] = useState([]);
   const [showBookingForm, setShowBookingForm] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const fetchHash = async() => {
+  const fetchHash = async () => {
     const postData = {
       hotelId: hotelId,
       checkInDate: checkInDate,
@@ -38,13 +40,14 @@ const RoomList = ({
       children: [],
     };
 
-    console.log("Post Data : ", postData);
+    console.log('Post Data : ', postData);
 
     await axios
       .post('http://localhost:5000/api/v1/hotel/RateHawk/bookHotel', postData)
       .then(response => {
         console.log(response?.data?.data?.data?.hotels[0]?.rates[0].book_hash);
         setRoomsList(response?.data?.data?.data?.hotels[0]?.rates);
+        setLoading(false);
       })
       .catch(error => {
         console.error(error.message);
@@ -55,8 +58,6 @@ const RoomList = ({
     fetchHash();
   }, []);
 
-  
-
   return (
     <View style={styles.container}>
       <View style={styles.marginView}>
@@ -64,77 +65,93 @@ const RoomList = ({
       </View>
       <Line />
 
-      <ScrollView>
-        <View style={styles.marginView}>
-          <Text style={styles.hotelName}>{hotelName}</Text>
-          <Text style={styles.hotelAdd}>{hotelAddress}</Text>
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator
+            animating={true}
+            size={40}
+            color={COLORS.mainPurple}
+            style={styles.loader}
+          />
         </View>
-        <View style={styles.marginView}>
-          {roomsList.map((room, index) => {
-            return (
-              <View style={styles.card} key={index}>
-                <View style={styles.innerCard}>
-                  <View style={styles.cardUp}>
-                    <Text style={styles.roomType}>{room.room_name}</Text>
-                    <Text style={styles.occupancy}>2 Person</Text>
-                  </View>
-                  <View
-                    style={{
-                      width: '100%',
-                      backgroundColor: COLORS.mainGrey,
-                      height: 0.5,
-                    }}
-                  />
-                  <View style={styles.cardDown}>
-                    <Text style={styles.price}>
-                      €
-                      {parseFloat(
-                        Number(
-                          room.payment_options.payment_types[0].show_amount,
-                        ) * 1.08,
-                      ).toFixed(2)}
-                      /Night
-                    </Text>
-                    <TouchableOpacity
-                      style={styles.bookBtn}
-                      onPress={() => console.log(room.book_hash)}>
-                      <Text style={styles.bookBtnText}>Book Now</Text>
-                    </TouchableOpacity>
+      ) : (
+        <ScrollView>
+          <View style={styles.marginView}>
+            <Text style={styles.hotelName}>{hotelName}</Text>
+            <Text style={styles.hotelAdd}>{hotelAddress}</Text>
+          </View>
+          <View style={styles.marginView}>
+            {roomsList.map((room, index) => {
+              return (
+                <View style={styles.card} key={index}>
+                  <View style={styles.innerCard}>
+                    <View style={styles.cardUp}>
+                      <Text style={styles.roomType}>{room.room_name}</Text>
+                      <Text style={styles.occupancy}>2 Person</Text>
+                    </View>
+                    <View
+                      style={{
+                        width: '100%',
+                        backgroundColor: COLORS.mainGrey,
+                        height: 0.5,
+                      }}
+                    />
+                    <View style={styles.cardDown}>
+                      <Text style={styles.price}>
+                        €
+                        {parseFloat(
+                          Number(
+                            room.payment_options.payment_types[0].show_amount,
+                          ) * 1.08,
+                        ).toFixed(2)}
+                        /Night
+                      </Text>
+                      <TouchableOpacity
+                        style={styles.bookBtn}
+                        onPress={() => console.log(room.book_hash)}>
+                        <Text style={styles.bookBtnText}>Book Now</Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
-              </View>
-            );
-          })}
+              );
+            })}
 
-          {/* only for integration testing */}
-          <View style={styles.card}>
-            <View style={styles.innerCard}>
-              <View style={styles.cardUp}>
-                <Text style={styles.roomType}>Testing Room</Text>
-                <Text style={styles.occupancy}>2 Person</Text>
-              </View>
-              <View
-                style={{
-                  width: '100%',
-                  backgroundColor: COLORS.mainGrey,
-                  height: 0.5,
-                }}
-              />
-              <View style={styles.cardDown}>
-                <Text style={styles.price}>$100.00/Night</Text>
-                <TouchableOpacity
-                  style={styles.bookBtn}
-                  // onPress={() => testorderBookingForm()}
-                  onPress={() => setShowBookingForm(true)}>
-                  <Text style={styles.bookBtnText}>Book Now</Text>
-                </TouchableOpacity>
+            {/* only for integration testing */}
+            <View style={styles.card}>
+              <View style={styles.innerCard}>
+                <View style={styles.cardUp}>
+                  <Text style={styles.roomType}>Testing Room</Text>
+                  <Text style={styles.occupancy}>2 Person</Text>
+                </View>
+                <View
+                  style={{
+                    width: '100%',
+                    backgroundColor: COLORS.mainGrey,
+                    height: 0.5,
+                  }}
+                />
+                <View style={styles.cardDown}>
+                  <Text style={styles.price}>$100.00/Night</Text>
+                  <TouchableOpacity
+                    style={styles.bookBtn}
+                    // onPress={() => testorderBookingForm()}
+                    onPress={() => setShowBookingForm(true)}>
+                    <Text style={styles.bookBtnText}>Book Now</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )}
+
       <Modal visible={showBookingForm}>
-        <RateHawkBookingPage showSelf={setShowBookingForm} hotelName={hotelName} hotelAddress={hotelAddress} />
+        <RateHawkBookingPage
+          showSelf={setShowBookingForm}
+          hotelName={hotelName}
+          hotelAddress={hotelAddress}
+        />
       </Modal>
     </View>
   );
@@ -143,6 +160,23 @@ const RoomList = ({
 export default RoomList;
 
 const styles = StyleSheet.create({
+
+  loaderContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+  },
+
+  loader: {
+    position: 'absolute',
+    top: '40%',
+    marginHorizontal: '50%',
+  },
+
+
   container: {
     backgroundColor: COLORS.mainGrey,
     width: '100%',

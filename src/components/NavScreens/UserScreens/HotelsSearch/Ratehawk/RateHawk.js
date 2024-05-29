@@ -1,4 +1,13 @@
-import {Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, Modal} from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Modal,
+  ActivityIndicator,
+} from 'react-native';
 import {useEffect, useState} from 'react';
 import Icon1 from 'react-native-vector-icons/AntDesign';
 import {COLORS, SIZES} from '../../../../../constants/themes';
@@ -9,13 +18,10 @@ import axios from 'axios';
 import CheckInOut from './CheckInOut';
 
 const RateHawk = ({hotelId, item, setOpen, navigation}) => {
-
   const [hotelDetails, setHotelDetails] = useState({});
   const [description, setDescription] = useState('');
-
+  const [loading, setLoading] = useState(true);
   const [calenderPage, setcalenderPage] = useState(false);
-  
-
 
   const baseUrl = 'http://localhost:5000/api/v1/hotel/RateHawk/getHotelInfo';
 
@@ -30,6 +36,7 @@ const RateHawk = ({hotelId, item, setOpen, navigation}) => {
       .then(response => {
         console.log(response.data);
         setHotelDetails(response.data.data.data);
+        setLoading(false);
       })
       .catch(error => {
         console.error(error);
@@ -59,99 +66,141 @@ const RateHawk = ({hotelId, item, setOpen, navigation}) => {
     uri: 'https://firebasestorage.googleapis.com/v0/b/rentspace-e58b7.appspot.com/o/hotelImage%2F1715757730736?alt=media&token=76fd4072-38ae-437c-b3fe-4b1f857ec4d8',
   };
 
-  return (
-    <View style={styles.container}>
-      <Icon1
-        name="left"
-        size={25}
-        style={{padding: 10, backgroundColor: COLORS.mainGrey}}
-        onPress={() => setOpen(false)}
-      />
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.imageContainer}>
-          <Image style={styles.hotelImage} source={defaultImg} />
-        </View>
-        <View style={styles.hotelInfo}>
-          <Text style={styles.hotelName}>
-            {/* Charm Ville - Villa with Nature! FarmVilla n Hosur */}
-            {hotelDetails.name}
-          </Text>
-          <View style={styles.ratingContainer}>
-            <Icon1 name="star" size={17} style={{color: COLORS.mainPurple}} />
-            <Text style={styles.ratingText}>4.92</Text>
-            <Text style={styles.ratingText}>• 432 reviews</Text>
+  if (loading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator
+          animating={true}
+          size={40}
+          color={COLORS.mainPurple}
+          style={styles.loader}
+        />
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        <Icon1
+          name="left"
+          size={25}
+          style={{padding: 10, backgroundColor: COLORS.mainGrey}}
+          onPress={() => setOpen(false)}
+        />
+        <ScrollView style={styles.scrollView}>
+          <View style={styles.imageContainer}>
+            <Image style={styles.hotelImage} source={defaultImg} />
           </View>
-          <Text style={styles.ratingText2}>{hotelDetails.address}</Text>
-        </View>
-        <View style={styles.verificationTag}>
-          <Icon name="verified" size={15} style={{color: COLORS.mainPurple}} />
-          <Text style={styles.verificationTagText}>Verified By Ratehawk</Text>
-        </View>
-        <View style={styles.descriptionContainer}>
-          <Text style={styles.descriptionTitle}>Description</Text>
-          <Text style={styles.description}>{description}</Text>
-          <Text style={styles.showMoreBtn}>Show more</Text>
-        </View>
-        <View style={styles.descriptionContainer}>
-          <Text style={styles.descriptionTitle}>Amenities</Text>
-          <View style={styles.amenitiesContainer}>
-            {amenitiesList.map((item, index) => {
-              const IconComponent =
-                item.class === 0 ? Icon : item.class === 1 ? Icon2 : Icon3;
-              return (
-                <TouchableOpacity
-                  style={styles.amenities}
-                  key={index}
-                  onPress={() => updateAmenities(item)}>
-                  <IconComponent name={item.icon} style={styles.amenityIcon} />
-                  <Text style={styles.amenityText}>{item.name}</Text>
-                </TouchableOpacity>
-              );
-            })}
+          <View style={styles.hotelInfo}>
+            <Text style={styles.hotelName}>
+              {/* Charm Ville - Villa with Nature! FarmVilla n Hosur */}
+              {hotelDetails.name}
+            </Text>
+            <View style={styles.ratingContainer}>
+              <Icon1 name="star" size={17} style={{color: COLORS.mainPurple}} />
+              <Text style={styles.ratingText}>4.92</Text>
+              <Text style={styles.ratingText}>• 432 reviews</Text>
+            </View>
+            <Text style={styles.ratingText2}>{hotelDetails.address}</Text>
           </View>
-        </View>
+          <View style={styles.verificationTag}>
+            <Icon
+              name="verified"
+              size={15}
+              style={{color: COLORS.mainPurple}}
+            />
+            <Text style={styles.verificationTagText}>Verified By Ratehawk</Text>
+          </View>
+          <View style={styles.descriptionContainer}>
+            <Text style={styles.descriptionTitle}>Description</Text>
+            <Text style={styles.description}>{description}</Text>
+            <Text style={styles.showMoreBtn}>Show more</Text>
+          </View>
+          <View style={styles.descriptionContainer}>
+            <Text style={styles.descriptionTitle}>Amenities</Text>
+            <View style={styles.amenitiesContainer}>
+              {amenitiesList.map((item, index) => {
+                const IconComponent =
+                  item.class === 0 ? Icon : item.class === 1 ? Icon2 : Icon3;
+                return (
+                  <TouchableOpacity
+                    style={styles.amenities}
+                    key={index}
+                    onPress={() => updateAmenities(item)}>
+                    <IconComponent
+                      name={item.icon}
+                      style={styles.amenityIcon}
+                    />
+                    <Text style={styles.amenityText}>{item.name}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </View>
 
-        <View style={styles.bottomLink}>
-          <View style={styles.bottomLinkHead}>
-            <Text style={styles.bottomLinkText}>Staying rules</Text>
+          <View style={styles.bottomLink}>
+            <View style={styles.bottomLinkHead}>
+              <Text style={styles.bottomLinkText}>Staying rules</Text>
+            </View>
+            <Text style={[styles.bottomLinkSubText2, {marginVertical: 2}]}>
+              Check In : {hotelDetails.check_in_time}
+            </Text>
+            <Text style={[styles.bottomLinkSubText2, {marginVertical: 2}]}>
+              Check Out : {hotelDetails.check_out_time}
+            </Text>
           </View>
-          <Text style={[styles.bottomLinkSubText2, {marginVertical: 2}]}>
-            Check In : {hotelDetails.check_in_time}
-          </Text>
-          <Text style={[styles.bottomLinkSubText2, {marginVertical: 2}]}>
-            Check Out : {hotelDetails.check_out_time}
-          </Text>
-        </View>
 
-        <TouchableOpacity
-          style={styles.reserveBtn}
-          onPress={()=>{
-            setcalenderPage(true);
-          }}>
-          <Text
-            style={{
-              color: COLORS.white,
-              fontSize: SIZES.medium,
-              fontWeight: 'bold',
+          <TouchableOpacity
+            style={styles.reserveBtn}
+            onPress={() => {
+              setcalenderPage(true);
             }}>
-            Select Room
-          </Text>
-        </TouchableOpacity>
-      </ScrollView>
+            <Text
+              style={{
+                color: COLORS.white,
+                fontSize: SIZES.medium,
+                fontWeight: 'bold',
+              }}>
+              Select Room
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
 
-      <Modal visible={calenderPage}  onRequestClose={()=>setcalenderPage(false)}>
-        {/* <RoomList hotelId={hotelId}/> */}
-        <CheckInOut hotelId={hotelId} hotelName={hotelDetails.name} hotelAddress={hotelDetails.address}  />
-      </Modal>
+        <Modal
+          visible={calenderPage}
+          onRequestClose={() => setcalenderPage(false)}>
+          {/* <RoomList hotelId={hotelId}/> */}
+          <CheckInOut
+            hotelId={hotelId}
+            hotelName={hotelDetails.name}
+            hotelAddress={hotelDetails.address}
+          />
+        </Modal>
 
+        {/* <ActivityIndicator animating={true} size={40} color={COLORS.mainPurple} style={styles.loader}/> */}
+      </View>
+    );
+  }
 
-    </View>
-  );
 };
 
 export default RateHawk;
 
 const styles = StyleSheet.create({
+  loaderContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+  },
+
+  loader: {
+    position: 'absolute',
+    top: '40%',
+    marginHorizontal: '50%',
+  },
+
   container: {
     backgroundColor: COLORS.mainGrey,
     width: '100%',

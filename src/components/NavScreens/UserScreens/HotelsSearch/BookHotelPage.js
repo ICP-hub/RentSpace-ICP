@@ -25,7 +25,6 @@ import RateHawk from './Ratehawk/RateHawk';
 import RateHawkCard from './HotelDetails/cards/RateHawkCard';
 
 const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
-  
   const [hotelProfile, setHotelProfile] = useState(false);
 
   const firstRender = useRef(true);
@@ -53,9 +52,9 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
         console.log('getid resp : ', res);
 
         console.log('all bookings1: ', res[0]);
-        if(res.length<=0){
-          setRefreshing(false)
-          return
+        if (res.length <= 0) {
+          setRefreshing(false);
+          return;
         }
         res.map(async r => {
           setRefreshing(true);
@@ -129,7 +128,7 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
   }
   const refresh = () => {
     // console.log(queryHotels);
-    getQueryHotelDetails()
+    getQueryHotelDetails();
     getReservations(setRefreshing);
   };
 
@@ -141,7 +140,7 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
   //         setBottom(70)
   //     })
   // })
-  
+
   useEffect(() => {
     if (firstRender.current) {
       console.log(firstRender.current);
@@ -166,49 +165,35 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
           </TouchableOpacity>
         </View>
 
-        <ScrollView 
-          style={{width: '100%', marginBottom: 65}}
-        >
+        <ScrollView style={{width: '100%', marginBottom: 65}}>
           {hotelsList.map((item, index) => {
             return (
-              <HotelCard
-                key={index}
-                item={item}
-                navigation={navigation}
-              />
+              <HotelCard key={index} item={item} navigation={navigation} />
             );
           })}
 
           {rateHawkHotel.map((item, index) => {
             return (
-              <RateHawkCard
-                key={index}
-                item={item}
-                navigation={navigation}
-              />
+              <RateHawkCard key={index} item={item} navigation={navigation} />
             );
           })}
-
-
-
-
         </ScrollView>
 
-        <Modal animationType="slide" visible={showReservation} onRequestClose={()=>setShowReservations(false)}>
+        <Modal
+          animationType="slide"
+          visible={showReservation}
+          onRequestClose={() => setShowReservations(false)}>
           <ShowBookings
             getReservations={getReservations}
             bookingList={bookingList}
             setShowReservations={setShowReservations}
           />
         </Modal>
-        <ActivityIndicator animating={refreshing} size={40} style={styles.loader}/>  
-
       </>
     );
   } else {
     return (
       <>
-        {/* <HotelCard name={sampleName} des={sampleDes} rating={4} /> */}
         <View style={styles.btnCont}>
           <TouchableOpacity style={[styles.btn]} onPress={refresh}>
             <Icon2 name="reload-circle-sharp" size={20} color={COLORS.black} />
@@ -219,8 +204,8 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
             <Text style={styles.btnText}>Show my bookings</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.empty}>Sorry nothing to show</Text>      
-        <ActivityIndicator animating={refreshing} size={40} style={styles.loader}/>  
+        <Text style={styles.empty}>Please hold on while we fetch the best hotel options for you.{"\n"}If no results appear, try adjusting your search criteria.</Text>
+        <ActivityIndicator animating={true} size={40} color={COLORS.mainPurple} style={styles.loader} />
       </>
     );
   }
@@ -229,10 +214,10 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
 export default BookHotelPage;
 
 const styles = StyleSheet.create({
-  loader:{
-    position:'absolute',
-    top:'40%',
-    marginHorizontal:'50%'
+  loader: {
+    position: 'absolute',
+    top: '45%',
+    marginHorizontal: '50%',
   },
   hotelPage: {
     display: 'flex',
@@ -315,15 +300,17 @@ const styles = StyleSheet.create({
   },
   empty: {
     width: '90%',
-    height: 200,
-    fontSize: SIZES.preMedium,
+    height: 180,
+    fontSize: SIZES.largeMed,
     color: COLORS.textLightGrey,
-    fontWeight: '300',
+    fontWeight: '500',
     backgroundColor: COLORS.lighterGrey,
     borderRadius: 20,
     marginTop: 40,
     marginLeft: '5%',
     textAlign: 'center',
     paddingTop: 20,
+    paddingHorizontal: 20
+
   },
 });

@@ -46,7 +46,7 @@ const RateHawkCard = ({item, navigation}) => {
         </View>
       </View>
 
-      <Modal animationType="slide" visible={open}>
+      <Modal animationType="slide" visible={open} onRequestClose={()=>setOpen(false)}>
         <RateHawk
           hotelId={item.id}
           item={item}
