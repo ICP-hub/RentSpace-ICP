@@ -18,6 +18,7 @@ import Comments from './Comments/Comments';
 import {useSelector} from 'react-redux';
 import {Principal} from '@dfinity/principal';
 import axios from 'axios';
+import {nodeBackend} from '../../../../../DevelopmentConfig';
 
 const months = [
   'January',
@@ -34,17 +35,26 @@ const months = [
   'December',
 ];
 
-const ReelCard = ({item, reelIndex}) => {
+const ReelCard = ({item, reelIndex, coord1}) => {
   const [likeDisabled, setLikeDisabled] = useState(false);
   const {user} = useSelector(state => state.userReducer);
   const {principle} = useSelector(state => state.principleReducer);
-  const [liked, setLiked] = useState(item?.likedBy.includes(principle));
+  const [liked, setLiked] = useState(
+    item?.likedBy.includes(principle) ? true : false,
+  );
   const btmSheetComments = useRef(null);
   const {actors} = useSelector(state => state.actorReducer);
   const [reelComments, setReelComments] = useState([]);
   const [loading, setLoading] = useState(false);
-  const baseURL="https://rentspace.kaifoundry.com"
+  const [reelLikes, setReelLikes] = useState(item?.likedBy.length);
+  const [pauseReel, setPauseReel] = useState(true);
+
+  const coord2 = {latitude: item.latitude, longitude: item.longitude};
+
+  // const baseURL="https://rentspace.kaifoundry.com"
   // const baseURL = 'http://localhost:5000';
+  const baseURL = nodeBackend;
+
   const openComments = () => {
     btmSheetComments.current.present();
   };
@@ -58,6 +68,7 @@ const ReelCard = ({item, reelIndex}) => {
     return tempArr;
   };
 
+  // rewrite it after new motoko backend written
   const getComments = async () => {
     setLoading(true);
 
@@ -144,20 +155,52 @@ const ReelCard = ({item, reelIndex}) => {
     setLiked(!liked);
     setLikeDisabled(true);
     await axios
-      .patch(`${baseURL}/api/v1/updateLikesOnHotel`, {
-        user: principle,
-        hotelId: item?.hotelId,
+      .put(`${baseURL}/api/v1/property/updateLikes`, {
+        userPrincipal: principle,
+        propertyId: item?.propertyId,
       })
       .then(res => {
-        console.log('updated like : ', res.data);
-        console.log('includes principal : ', item?.likedBy.includes(principle));
+        console.log(res.data);
         setLikeDisabled(false);
+        setReelLikes(res.data.likes);
       })
       .catch(err => {
         setLikeDisabled(false);
         console.log(err);
       });
   };
+
+  function toRadians(degrees) {
+    return degrees * (Math.PI / 180);
+  }
+
+  function haversineDistance(coord1, coord2) {
+    const R = 6371; // Radius of the Earth in kilometers
+    const lat1 = toRadians(coord1.latitude);
+    const lon1 = toRadians(coord1.longitude);
+    const lat2 = toRadians(coord2.latitude);
+    const lon2 = toRadians(coord2.longitude);
+
+    const dlat = lat2 - lat1;
+    const dlon = lon2 - lon1;
+
+    const a =
+      Math.sin(dlat / 2) * Math.sin(dlat / 2) +
+      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlon / 2) * Math.sin(dlon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const distance = R * c;
+    return distance;
+  }
+
+  const distance = haversineDistance(coord1, coord2);
+
+  function changeDateFormat(date) {
+    const d = new Date(date);
+    const month = d.toLocaleString('default', {month: 'short'});
+    return `${d.getDate()} ${month}`;
+  }
 
   useEffect(() => {
     setLiked(item?.likedBy.includes(principle));
@@ -166,11 +209,15 @@ const ReelCard = ({item, reelIndex}) => {
   return (
     <View style={styles.reel}>
       <Video
-        source={{uri: item?.videoUrls}}
+        source={{uri: item?.videoList[0]}}
         resizeMode="cover"
         pause={false}
         style={styles.bg}
         repeat={true}
+        playbackRate={1.0}
+        volume={1.0}
+        muted={false}
+        ignoreSilentSwitch="ignore"
       />
       <View style={styles.iconCont}>
         <TouchableOpacity
@@ -182,6 +229,7 @@ const ReelCard = ({item, reelIndex}) => {
           ) : (
             <Icon name="hearto" color={COLORS.white} size={25} />
           )}
+          <Text>{reelLikes}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           disabled={user?.firstName == undefined}
@@ -209,9 +257,14 @@ const ReelCard = ({item, reelIndex}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.infoCont}>
-        <Text style={styles.infoTitle}>{item?.hotelName}</Text>
-        <Text style={styles.infoText}>499 kilometers away</Text>
-        <Text style={styles.infoText}>1-6 Dec</Text>
+        <Text style={styles.infoTitle}>{item?.propertyName}</Text>
+        <Text style={styles.infoText}>
+          {distance.toFixed(2)} kilometers away
+        </Text>
+        <Text style={styles.infoText}>
+          {changeDateFormat(item?.availableFrom)} -{' '}
+          {changeDateFormat(item?.availableTill)}
+        </Text>
         <Text style={styles.infoText}>
           <Text style={{fontWeight: 'bold'}}>${item?.price}</Text> night
         </Text>

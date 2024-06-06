@@ -75,11 +75,12 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
       <TouchableOpacity style={styles.backIcon} onPress={()=>{setOpen(false)}}>
         <Icon name="angle-left" size={30} color={COLORS.textLightGrey} />    
       </TouchableOpacity> 
-      <Image source={(item?.details?.imagesUrls==""?images.hotel:{uri:item?.details?.imagesUrls})} style={styles.hotelImg}/>
+      {/* <Image source={(item?.details?.imagesUrls==""?images.hotel:{uri:item?.details?.imagesUrls})} style={styles.hotelImg}/> */}
+      <Image source={{uri:item.imageList[0]}} style={styles.hotelImg} />
       {/* <Image source={images.hotel} style={styles.hotelImg}/> */}
       <View style={styles.hotelTitleReviewCont}>
         <View style={styles.hotelTitleCont}>
-            <Text style={styles.hotelTitle}>{item?.hotelTitle}</Text>
+            <Text style={styles.hotelTitle}>{item?.propertyName}</Text>
             <TouchableOpacity style={styles.likeCont}>
                 <Icon2 name="hearto" size={20} color={COLORS.textLightGrey} />
             </TouchableOpacity>    
@@ -87,7 +88,7 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
         <View style={styles.hotelReviewCont}>
             <Icon2 name='star' size={12} color={COLORS.inputBorder} style={{marginRight:5}}/>
             
-            <Text style={styles.hotelReviewText}>{hotelRating} • {hotelReviews.length} {hotelReviews.length==1?"review":"reviews"} • {item?.hotelLocation}</Text>
+            <Text style={styles.hotelReviewText}>{hotelRating} • {hotelReviews.length} {hotelReviews.length==1?"review":"reviews"} • {item?.location}</Text>
         </View>
       </View>
       <HostBand hostData={host}/>

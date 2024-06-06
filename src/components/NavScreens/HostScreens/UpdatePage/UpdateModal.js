@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useState,useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import {COLORS} from '../../../../constants/themes';
@@ -23,28 +23,26 @@ import {storage} from '../../../../../firebaseConfig';
 import axios from 'axios';
 import UploadModal from './Popups/UploadModal';
 import SubmitUpdates from './Popups/SubmitUpdates';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
+import {nodeBackend} from '../../../../../DevelopmentConfig';
+import {ALERT_TYPE, Dialog, Toast} from 'react-native-alert-notification';
 
 const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
-  // console.log(item);
+  // console.log(item.videoList);
 
-  const baseUrl="https://rentspace.kaifoundry.com"
+  // const baseUrl="https://rentspace.kaifoundry.com"
   // const baseUrl="http://localhost:5000"
-
-  let img = item.imagesUrls;
-  let vdo = item.videoUrls;
+  const baseUrl = nodeBackend;
 
   const [upload, setUpload] = useState(false);
   const [submit, setSubmit] = useState(false);
   const [pauseReel, setPauseReel] = useState(true);
   const [videoControlOpacity, setVideoControlOpacity] = useState(true);
-  const [hotelImg, setHotelImg] = useState(item.imagesUrls);
-  const [hotelVdo, setHotelVdo] = useState(item.videoUrls);
-  const {authData}=useSelector(state => state.authDataReducer)
+  const [hotelImg, setHotelImg] = useState(item.imageList[0]);
+  const [hotelVdo, setHotelVdo] = useState(item.videoList[0]);
+  const {authData} = useSelector(state => state.authDataReducer);
 
   const [transferred, setTransferred] = useState(0);
-
- 
 
   const [checkOption, setCheckOption] = useState({
     camera: true,
@@ -68,15 +66,15 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
   });
 
   const [finalData, setFinalData] = useState({
-    hotelId: passData.hotelId,
-    hotelName: passData.title,
+    propertyId: item.propertyId,
+    propertyName: passData.title,
     location: passData.location,
     amenities: passData.propertyAmenities,
     propertyType: passData.propertyName,
-    hotelDes: '',
+    propertyDescription: '',
     price: '',
-    imagesUrls: '',
-    videoUrls: '',
+    imageList: item.imageList,
+    videoList: item.videoList,
     paymentMethods: [],
   });
 
@@ -89,11 +87,12 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
     }, 1500);
   };
 
-    const chooseHotelImg = async () => {
+  const chooseHotelImg = async () => {
     await launchImageLibrary(
-      { mediaType: 'photo', includeBase64: true },
+      {mediaType: 'photo', includeBase64: true},
       response => {
-        if (response && !response.didCancel) { // Check if response is valid and not cancelled
+        if (response && !response.didCancel) {
+          // Check if response is valid and not cancelled
           setHotelImg(response.assets[0].uri);
           console.log('Image => ', response.assets[0].uri);
           setUpload(true);
@@ -107,9 +106,10 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
 
   const chooseHotelvdo = async () => {
     await launchImageLibrary(
-      { mediaType: 'video', includeBase64: true },
+      {mediaType: 'video', includeBase64: true},
       response => {
-        if (response && !response.didCancel) { // Check if response is valid and not cancelled
+        if (response && !response.didCancel) {
+          // Check if response is valid and not cancelled
           setHotelVdo(response.assets[0].uri);
           console.log('Video => ', response.assets[0].uri);
           setUpload(true);
@@ -142,7 +142,11 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
           console.log('File available at', downloadURL);
-          setFinalData({...finalData, imagesUrls: downloadURL});
+
+          const temp = [downloadURL, ...finalData.imageList];
+          console.log('Temp => ', temp);
+
+          setFinalData({...finalData, imageList: temp});
           setUpload(false);
         });
       },
@@ -170,47 +174,59 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
           console.log('File available at', downloadURL);
-          setFinalData({...finalData, videoUrls: downloadURL});
+
+          const temp = [downloadURL, ...finalData.videoList];
+
+          console.log('TEMP => ', temp);
+
+          setFinalData({...finalData, videoList: temp});
           setUpload(false);
         });
       },
     );
   };
 
-
-
   // save and exit function to save data and exit modal
   const saveAndExit = async () => {
     console.log('Save And Exit');
 
-    setSubmit(true);
+    console.log('Final Data => ', finalData);
 
-    await axios
-      .put(`${baseUrl}/api/v1/hotel/updateHotel`, finalData,{
-        headers:{
-        "x-private":authData.privateKey,
-        "x-public":authData.publicKey,
-        "x-delegation":authData.delegation,
-      }})
-      .then(res => {
-        console.log(res.data);
-      })
-      .catch(err => {
-        console.log(err);
+    if (finalData.paymentMethods.length == 0) {
+      // alert("Please Select Payment Methods")
+      Dialog.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'Please Select Payment Methods',
+        textBody: 'You must select atleast one payment method to proceed!',
+        button: 'OK',
       });
+    } else {
+      setSubmit(true);
 
-    setTimeout(() => {
-      setSubmit(false);
-    }, 5000);
+      await axios
+        .put(`${baseUrl}/api/v1/property/update`, finalData, {
+          headers: {
+            'x-private': authData.privateKey,
+            'x-public': authData.publicKey,
+            'x-delegation': authData.delegation,
+          },
+        })
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
 
-    getHotelDetails();
-    exitModal(false);
-    console.log(finalData);
+      setTimeout(() => {
+        setSubmit(false);
+      }, 5000);
+
+      getHotelDetails();
+      exitModal(false);
+      console.log(finalData);
+    }
   };
-
-
-
-
 
   return (
     <View style={styles.container}>
@@ -238,7 +254,8 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
         <TextInput
           style={[styles.textInput, {height: 100, textAlignVertical: 'top'}]}
           multiline={true}
-          placeholder={item.hotelDescription}
+          placeholder={item?.propertyDescription}
+          placeholderTextColor={COLORS.black}
           onChangeText={text => setFinalData({...finalData, hotelDes: text})}
         />
 
@@ -277,7 +294,6 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
             posterResizeMode="cover"
             poster={hotelImg}
             style={styles.backgroundVideo}
-            
           />
           <TouchableOpacity
             onPress={videoControl}
@@ -316,6 +332,7 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
           style={styles.textInput}
           inputMode="numeric"
           placeholder={`$${item.price}/Night`}
+          placeholderTextColor={COLORS.black}
           onChangeText={text =>
             setFinalData({...finalData, price: parseFloat(text)})
           }
@@ -545,7 +562,7 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
       {/* <Modal visible={submit} transparent>
         <SubmitUpdates />
       </Modal> */}
-      <ActivityIndicator animating={submit} style={styles.loader} size={40}/>
+      <ActivityIndicator animating={submit} style={styles.loader} size={40} />
     </View>
   );
 };
@@ -553,10 +570,10 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
 export default UpdateModal;
 
 const styles = StyleSheet.create({
-  loader:{
-    position:'absolute',
-    top:'40%',
-    marginHorizontal:'50%',
+  loader: {
+    position: 'absolute',
+    top: '40%',
+    marginHorizontal: '50%',
   },
   container: {
     display: 'flex',

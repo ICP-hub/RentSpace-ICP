@@ -107,24 +107,28 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
       setHotelsList([]);
       return;
     }
+    console.log('queryHotelsLength : ', queryHotels.length)
     for (let i = 0; i < queryHotels?.length; i++) {
-      // console.log('Hotel ID : ', queryHotels[i].hotelId);
-      await actors.hotelActor
-        ?.getHotel(queryHotels[i].hotelId)
-        .then(res => {
-          newArr.push({
-            ...res[0],
-            id: queryHotels[i].hotelId,
-            details: queryHotels[i],
-          });
-          setRefreshing(false);
-          setHotelsList([...newArr]);
-        })
-        .catch(err => {
-          console.log(err);
-          setRefreshing(false);
-        });
+      console.log(`Property ${i} ID : `, queryHotels[i].propertyId);
+      // await actors.hotelActor
+      //   ?.getHotel(queryHotels[i].hotelId)
+      //   .then(res => {
+      //     newArr.push({
+      //       ...res[0],
+      //       id: queryHotels[i].hotelId,
+      //       details: queryHotels[i],
+      //     });
+      //     setRefreshing(false);
+      //     setHotelsList([...newArr]);
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //     setRefreshing(false);
+      //   });
+      setRefreshing(false);
+      setHotelsList([...queryHotels]);
     }
+    // console.log(queryHotels)
   }
   const refresh = () => {
     // console.log(queryHotels);

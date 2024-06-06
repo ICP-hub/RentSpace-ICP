@@ -18,24 +18,29 @@ import Update from '../UpdatePage/Update';
 import { images } from '../../../../constants';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { nodeBackend } from '../../../../../DevelopmentConfig';
 
 const CustomAlert = ({showAlert, setShowAlert,item,getHotelDetails}) => {
   // const [loading,setLoading]=useState(false)
   // const baseUrl="http://localhost:5000"
-  const baseUrl="https://rentspace.kaifoundry.com"
+  // const baseUrl="https://rentspace.kaifoundry.com"
+  baseUrl=nodeBackend
+
 
   const {authData}=useSelector(state=>state.authDataReducer)
   const handleYes = async() => {
-    console.log(item.hotelId)
-    console.log(authData.privateKey,authData.publicKey,authData.delegation)
-    await axios.delete(`${baseUrl}/api/v1/hotel/deleteHotel?hotelId=${encodeURIComponent(item.hotelId)}`,{
-      headers:{
-        "x-private":authData.privateKey,
-        "x-public":authData.publicKey,
-        "x-delegation":authData.delegation,
-        "Content-Type":"multipart/form-data"
-      }
-    }).then((res)=>{
+    console.log(item.propertyId)
+    // console.log(authData.privateKey,authData.publicKey,authData.delegation)
+    await axios.delete(`${baseUrl}/api/v1/property/delete?propertyId=${item.propertyId}`
+    // ,{
+    //   headers:{
+    //     "x-private":authData.privateKey,
+    //     "x-public":authData.publicKey,
+    //     "x-delegation":authData.delegation,
+    //     "Content-Type":"multipart/form-data"
+    //   }
+    // }
+  ).then((res)=>{
       console.log(res)
       setShowAlert(false);
       getHotelDetails()
@@ -96,17 +101,15 @@ const ListingCard = ({item, getHotelDetails}) => {
     setOpenUpdate(true);
   };
 
-  const imgX = item.imagesUrls;
-
   return (
     <View style={styles.card} >
       <View style={styles.cardView}>
         <Text style={styles.status}>{"verified"}</Text>
-        <Image source={{uri:imgX}} style={styles.img} />
+        <Image source={{uri:item.imageList[0]}} style={styles.img} />
       </View>
       <View style={styles.textCont}>
         <View>
-          <Text style={styles.text}>{item?.hotelName}</Text>
+          <Text style={styles.text}>{item?.propertyName}</Text>
           <Text style={styles.address}>{item?.location}</Text>
         </View>
         <View style={styles.iconCont}>

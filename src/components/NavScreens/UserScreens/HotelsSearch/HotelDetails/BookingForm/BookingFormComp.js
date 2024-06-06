@@ -493,7 +493,7 @@ const BookingFormComp = ({days,setBookingForm,setBooking,booking,loading,item,se
       <View style={styles.backIconCont}>
           {/* <TouchableOpacity onPress={()=>{setBookingForm(false)}}>
            */}
-           <TouchableOpacity onPress={()=>console.log(((days*item?.hotelPrice)*0.15)+((days*item?.hotelPrice)*0.10)+(days*item?.hotelPrice),days,total)}>
+           <TouchableOpacity onPress={()=>setBookingForm(false)}>
             <Icon color={COLORS.black} name='chevron-left' size={25}/>
           </TouchableOpacity>
       </View>

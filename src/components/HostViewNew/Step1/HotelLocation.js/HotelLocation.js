@@ -26,7 +26,7 @@ const HotelLocation = ({setHostModal,pos}) => {
   const dispatch=useDispatch()
   const checkEmpty=()=>{
     if(location!="Ludhiana"){
-      dispatch(setListing({...listing,hotelLocation:location}))
+      dispatch(setListing({...listing,hotelLocation:location,latitude:coords.latitude,longitude:coords.longitude}))
       return true
     }else{
       // alert('Please select a location before moving forward!')

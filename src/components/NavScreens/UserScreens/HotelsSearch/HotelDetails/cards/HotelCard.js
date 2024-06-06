@@ -14,14 +14,11 @@ import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import HotelDetailPage from '../HotelDetailPage';
 
 const HotelCard = ({item, navigation}) => {
-  // console.log(item?.details?.imagesUrls)
-
   // console.log(item)
 
   const [open, setOpen] = useState(false);
 
-  // const defaultImg =  "https://firebasestorage.googleapis.com/v0/b/rentspace-e58b7.appspot.com/o/hotelImage%2F1715757730736?alt=media&token=76fd4072-38ae-437c-b3fe-4b1f857ec4d8"
-  // const imageurls = item?.details?.imagesUrls === '' || item?.details?.imagesUrls === null || item?.details?.imagesUrls === undefined ? defaultImg : {uri: item?.details?.imagesUrls};
+  const defaultImg = 'https://firebasestorage.googleapis.com/v0/b/rentspace-e58b7.appspot.com/o/hotelImage%2F1715757730736?alt=media&token=76fd4072-38ae-437c-b3fe-4b1f857ec4d8';
 
   return (
     <View style={styles.cardCont}>
@@ -33,12 +30,13 @@ const HotelCard = ({item, navigation}) => {
         <Icon2 name="page-next" size={30} color="white" />
       </TouchableOpacity>
 
-      {/* <Image source={(item?.details?.imagesUrls==""?images.hotel:{uri:item?.details?.imagesUrls})} style={styles.img}/> */}
-      <Image source={{uri : item.details.imagesUrls }} style={styles.img} />
-      {/* <Image source={images.hotelImg3} style={styles.img}/> */}
+      <Image
+        source={{uri: item.imageList[0] ? item.imageList[0] : defaultImg}}
+        style={styles.img}
+      />
       <View style={styles.dataCont}>
-        <Text style={styles.title}>{item.details.hotelName}</Text>
-        <Text style={styles.simpleText}>{item.details.hotelDescription}</Text>
+        <Text style={styles.title}>{item.propertyName}</Text>
+        <Text style={styles.simpleText}>{item.propertyDescription}</Text>
         <View style={styles.ratingCont}>
           <Icon name="star" size={15} color="white" />
           <Icon name="star" size={15} color="white" />
@@ -46,7 +44,7 @@ const HotelCard = ({item, navigation}) => {
           <Icon name="star" size={15} color="white" />
         </View>
       </View>
-      
+
       <Modal animationType="slide" visible={open}>
         <HotelDetailPage
           item={item}

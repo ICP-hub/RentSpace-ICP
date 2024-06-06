@@ -156,7 +156,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
             </Text>
         </TouchableOpacity>
       </View>
-      <Modal animationType='slide' visible={paymentScreen}>
+      <Modal animationType='slide' visible={paymentScreen} >
         {/* <PaymentScreen setBooking={setBooking} booking={booking} item={item} self={setPaymentScreen}/> */}
         <BookingFormComp 
             setBookingForm={setPaymentScreen}

@@ -99,7 +99,7 @@ const AddPhotos = ({setHostModal, pos}) => {
   return (
     <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal} />
-      <Text style={styles.title}>Add some photos of your house</Text>
+      <Text style={styles.title}>Add some photos of your property</Text>
       <Text style={styles.text}>
         Our comprehensive verification system checks details such as name,
         address, government ID and more to confirm the identity of guests who

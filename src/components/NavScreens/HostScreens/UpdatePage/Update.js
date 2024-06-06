@@ -298,7 +298,7 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
         <View style={styles.sectionContent}>
           <TextInput
             style={styles.textInput}
-            placeholder={item?.hotelName}
+            placeholder={item?.propertyName}
             placeholderTextColor={COLORS.textLightGrey}
             onChangeText={text => setPassData({...passData, title: text})}
           />

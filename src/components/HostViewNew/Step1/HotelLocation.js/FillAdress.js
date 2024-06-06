@@ -83,6 +83,7 @@ const FillAdress = ({self, setLocation, location}) => {
           value={address?.city}
           onChangeText={value => {
             setAddress({...address, city: value});
+            setLocation(value);
           }}
           placeholder="City"
           placeholderTextColor={COLORS.black}
@@ -120,7 +121,7 @@ const FillAdress = ({self, setLocation, location}) => {
               address.suiteBuilding !=''
             ) {
               let temp = location;
-              setLocation(`${temp}#${address.city}`);
+              setLocation(`${temp}`);
               console.log(location);
               self(false);
             } else {

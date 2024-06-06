@@ -51,7 +51,7 @@ const HotelTitle = ({setHostModal,pos}) => {
     <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal}/>  
       <Text style={styles.title}>
-        Now, let’s give your house a title
+        Now, let’s give your Property a title
       </Text>
       <Text style={styles.text}>
        Our comprehensive verification system checks details such as name.
