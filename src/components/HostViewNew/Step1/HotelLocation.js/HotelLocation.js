@@ -23,6 +23,7 @@ const HotelLocation = ({setHostModal,pos}) => {
   const [showLocationPicker,setShowLocationPicker]=useState(false)
   const [showAddressForm,setShowAddressForm]=useState(false)
   const {listing}=useSelector(state=>state.listingReducer)
+  // console.log(listing);
   const dispatch=useDispatch()
   const checkEmpty=()=>{
     if(location!="Ludhiana"){

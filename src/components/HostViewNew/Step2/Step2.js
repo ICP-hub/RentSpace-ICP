@@ -4,8 +4,11 @@ import { COLORS,SIZES } from '../../../constants/themes'
 import { images } from '../../../constants'
 import SaveBtn from '../Reusables/SaveBtn'
 import BottomBtn from '../Reusables/BottomBtn'
+import { useSelector } from 'react-redux'
 
 const Step2 = ({setHostModal,pos}) => {
+    const {listing}=useSelector(state=>state.listingReducer)
+  console.log(listing);
   return (
     <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal}/>

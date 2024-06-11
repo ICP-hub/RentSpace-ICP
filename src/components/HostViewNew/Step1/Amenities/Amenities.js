@@ -130,7 +130,8 @@ const Amenities = ({setHostModal, pos}) => {
       </View>
       <BottomBtn
         setHostModal={setHostModal}
-        pos={pos}
+        // pos={pos}
+        pos={propertyType == 'Hotel' || propertyType == 'Resort' ? 5 : 6}
         step={1}
         nextFunc={emptyCheck}
       />

@@ -3,7 +3,7 @@ import {COLORS} from '../../../../../constants/themes';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/Fontisto';
 
-const PropertyPopup = ({propertyType, setPropertyType}) => {
+const PropertyPopup = ({propertyType, setPropertyType, passData, setPassData}) => {
 
   const propertiesList = [
     {name: 'House', icon: 'house'},
@@ -17,6 +17,7 @@ const PropertyPopup = ({propertyType, setPropertyType}) => {
   const updateProperty = (item) => {
     // setPropertyType({...propertyType,  status:false, name: item.name, icon: item.icon, class: item.class});
     setPropertyType({...propertyType,  status:false, name: item.name, icon: item.icon});
+    setPassData({...passData, propertyName: item.name});
   };
 
   return (

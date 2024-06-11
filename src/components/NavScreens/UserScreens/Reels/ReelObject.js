@@ -14,11 +14,9 @@ import ReelCard from './ReelCard'
 
 
 
-const ReelObject = ({fetchReels,openComments,reels,coord1}) => {
+const ReelObject = ({fetchReels,openComments,reels}) => {
   const [refreshing,setRefreshing]=useState(false)
   const [reelIndex,setReelIndex]=useState(null)
-
-  // console.log(coord1);
 
   const refresh=()=>{
     setRefreshing(true)
@@ -44,14 +42,14 @@ const ReelObject = ({fetchReels,openComments,reels,coord1}) => {
         style={{flex:1}}
         data={reels}
         renderItem={(item)=>(
-            <ReelCard reelIndex={reelIndex} coord1={coord1} item={item.item} openComments={openComments}/>
+            <ReelCard reelIndex={reelIndex} item={item.item} openComments={openComments}/>
         )}
         vertical={true}
         refreshing={refreshing}
         onRefresh={refresh}
         onChangeIndex={itemChanged}
         keyExtractor={(item)=>item.hotelId}
-        />    
+        />                 
   )
 }
 

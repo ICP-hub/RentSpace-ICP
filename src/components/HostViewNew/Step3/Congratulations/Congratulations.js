@@ -26,7 +26,7 @@ const Congratulations = ({setHostModal, pos, getHotelDetails}) => {
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState('');
   const {listing} = useSelector(state => state.listingReducer);
-  // console.log("Listing at congra : ", listing)
+  console.log("Listing at congra : ", listing)
   const {actors} = useSelector(state => state.actorReducer);
   const {authData} = useSelector(state => state.authDataReducer);
   const {principle} = useSelector(state => state.principleReducer);
@@ -158,7 +158,7 @@ const Congratulations = ({setHostModal, pos, getHotelDetails}) => {
         imageList: uploadedFiles.slice(1),
         videoList: [uploadedFiles[0]],
         maxOccupancy: '200',
-        rooms: [],
+        rooms: listing.rooms ? listing.rooms : [],
         location: listing?.hotelLocation,
         latitude: listing?.latitude,
         longitude: listing?.longitude,

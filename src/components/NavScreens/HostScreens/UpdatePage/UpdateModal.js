@@ -30,6 +30,8 @@ import {ALERT_TYPE, Dialog, Toast} from 'react-native-alert-notification';
 const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
   // console.log(item.videoList);
 
+  // console.log("Pass Data => ", passData);
+
   // const baseUrl="https://rentspace.kaifoundry.com"
   // const baseUrl="http://localhost:5000"
   const baseUrl = nodeBackend;
@@ -72,7 +74,9 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
     amenities: passData.propertyAmenities,
     propertyType: passData.propertyName,
     propertyDescription: '',
-    price: '',
+    price: "0000",
+    maxOccupancy: passData.maxOccupancy,
+    rooms: passData.rooms,
     imageList: item.imageList,
     videoList: item.videoList,
     paymentMethods: [],
@@ -256,7 +260,7 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
           multiline={true}
           placeholder={item?.propertyDescription}
           placeholderTextColor={COLORS.black}
-          onChangeText={text => setFinalData({...finalData, hotelDes: text})}
+          onChangeText={text => setFinalData({...finalData, propertyDescription: text})}
         />
 
         {/* sec2 */}
