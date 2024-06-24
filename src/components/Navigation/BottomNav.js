@@ -45,17 +45,17 @@ const BottomNav = ({navigation}) => {
               button:'OK',
             })
           }}>
-          <Icon name="filter" size={25} color={COLORS.mainPurple} />
+          <Icon name="filter" size={25} color={COLORS.black} />
         </TouchableOpacity>
         {/* <TouchableOpacity style={styles.iconNav} onPress={()=>{alert(message)}}>
-                    <Icon name="search1" size={25} color={COLORS.mainPurple}/>
+                    <Icon name="search1" size={25} color={COLORS.black}/>
                 </TouchableOpacity > */}
         <TouchableOpacity
           style={styles.iconNav}
           onPress={() => {
             navigation.navigate('reels');
           }}>
-          <Icon name="hearto" size={25} color={COLORS.mainPurple} />
+          <Icon name="hearto" size={25} color={COLORS.black} />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.iconNav}
@@ -68,14 +68,14 @@ const BottomNav = ({navigation}) => {
               button:'OK',
             })
           }}>
-          <Icon2 name="comment" size={20} color={COLORS.mainPurple} />
+          <Icon2 name="comment" size={20} color={COLORS.black} />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.iconNav}
           onPress={() => {
             navigation.navigate('Launch');
           }}>
-          <Icon name="user" size={25} color={COLORS.mainPurple} />
+          <Icon name="user" size={25} color={COLORS.black} />
         </TouchableOpacity>
       </View> 
     );
@@ -87,31 +87,31 @@ const BottomNav = ({navigation}) => {
           onPress={() => {
             navigation.navigate('Launch');
           }}>
-          <Icon name="filter" size={25} color={COLORS.mainPurple} />
+          <Icon name="filter" size={25} color={COLORS.black} />
         </TouchableOpacity>
         {/* <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('mapSearch')}}>
-                    <Icon name="search1" size={25} color={COLORS.mainPurple}/>
+                    <Icon name="search1" size={25} color={COLORS.black}/>
                 </TouchableOpacity > */}
         <TouchableOpacity
           style={styles.iconNav}
           onPress={() => {
             navigation.navigate('reels');
           }}>
-          <Icon name="hearto" size={25} color={COLORS.mainPurple} />
+          <Icon name="hearto" size={25} color={COLORS.black} />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.iconNav}
           onPress={() => {
             navigation.navigate('UserChat');
           }}>
-          <Icon2 name="comment" size={20} color={COLORS.mainPurple} />
+          <Icon2 name="comment" size={20} color={COLORS.black} />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.iconNav}
           onPress={() => {
             navigation.navigate('profile');
           }}>
-          <Icon name="user" size={25} color={COLORS.mainPurple} />
+          <Icon name="user" size={25} color={COLORS.black} />
         </TouchableOpacity>
       </View>
     );

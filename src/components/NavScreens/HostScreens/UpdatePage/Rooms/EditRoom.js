@@ -100,7 +100,7 @@ const EditRoom = ({closeModal, passIndex, room, updateRooms,setRoomPopup}) => {
           style={styles.fleid}
           onChangeText={text => setRooms({...rooms, roomName: text})}
         />
-        <Text style={styles.fleidTitle}>Room Dec</Text>
+        <Text style={styles.fleidTitle}>Room Description </Text>
         <TextInput
           value={rooms.roomDes}
           multiline={true}
@@ -111,9 +111,11 @@ const EditRoom = ({closeModal, passIndex, room, updateRooms,setRoomPopup}) => {
         />
         <Text style={styles.fleidTitle}>Room Type</Text>
         <TextInput
+          value={rooms.roomType}
           placeholder={rooms.roomType}
           placeholderTextColor={COLORS.textLightGrey}
           style={styles.fleid}
+          onChangeText={text => setRooms({...rooms, roomType: text})}
         />
         <Text style={styles.fleidTitle}>Total No.Of Similar Rooms</Text>
         <View style={styles.fleid2}>
@@ -218,7 +220,7 @@ const styles = StyleSheet.create({
     height: 40,
     color: COLORS.black,
     borderWidth: 1,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginVertical: 5,
@@ -228,7 +230,7 @@ const styles = StyleSheet.create({
     height: 40,
     color: COLORS.black,
     borderWidth: 1,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginVertical: 5,
@@ -242,14 +244,14 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderRadius: 5,
     padding: 5,
-    color: COLORS.mainPurple,
+    color: COLORS.black,
   },
 
   progressBar: {
     width: '50%',
     marginLeft: 25,
     height: 3,
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     // marginTop: 90,
   },
 
@@ -262,7 +264,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 5,
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     color: COLORS.white,
     fontSize: 20,
     fontWeight: 'bold',

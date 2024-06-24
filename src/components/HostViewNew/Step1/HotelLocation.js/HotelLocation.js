@@ -74,11 +74,11 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG,
     },
     title:{
         width:'88%',
-        color:COLORS.mainPurple,
+        color:COLORS.black,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:8,

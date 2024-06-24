@@ -1,12 +1,21 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { COLORS,SIZES } from '../../../../../../../constants/themes'
 import PriceCard from './PriceCard'
 
 const months=["Jan","Feb","Mar","Apr","May","June","July","Aug","Sep","Oct","Nov","Dec"]
-const PriceDetails = ({basePrice,nights,fullPayment,checkIn,days}) => {
+const PriceDetails = ({basePrice,nights,fullPayment,checkIn,days,roomData,setRoomData}) => {
 
-    const [finalPrice,setFinalPrice]=useState(((basePrice)*0.15*days)+((basePrice)*0.10*days)+(basePrice*days))
+    // const [finalPrice,setFinalPrice]=useState(((basePrice)*0.15*days)+((basePrice)*0.10*days)+(basePrice*days))
+
+    const [finalPrice,setFinalPrice]=useState(0)
+
+    useEffect(() => {
+      console.log("Selected Rooms: ", roomData);
+      const total = roomData.reduce((sum, room) => sum + room.bill, 0);
+      setFinalPrice(total);
+    }, [roomData]);
+
     const prices=[
         {
             label:`$${basePrice} x ${days}`,
@@ -24,10 +33,16 @@ const PriceDetails = ({basePrice,nights,fullPayment,checkIn,days}) => {
   return (
     <View style={styles.sec}>
       <Text style={styles.title}>PriceDetails</Text>
-      {
+      {/* {
         prices.map((item,index)=>(
             <PriceCard item={item} key={index}/>
         ))
+      } */}
+      {
+        roomData.map((item,index)=>(
+          <PriceCard item={item} key={index}/>
+        ))
+
       }
       <View style={styles.line}/>
       <View style={styles.textCont}>

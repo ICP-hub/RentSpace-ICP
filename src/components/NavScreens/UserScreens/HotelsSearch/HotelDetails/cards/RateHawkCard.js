@@ -23,6 +23,11 @@ const RateHawkCard = ({item, navigation}) => {
     uri: 'https://firebasestorage.googleapis.com/v0/b/rentspace-e58b7.appspot.com/o/hotelImage%2F1715757730736?alt=media&token=76fd4072-38ae-437c-b3fe-4b1f857ec4d8',
   };
 
+  const imageUrl = item.images[0];
+
+  const size = '1024x768';
+  const updatedUrl = {uri : imageUrl.replace('{size}', size)};
+
   return (
     <View style={styles.cardCont}>
       <TouchableOpacity
@@ -30,19 +35,19 @@ const RateHawkCard = ({item, navigation}) => {
         onPress={() => {
           setOpen(true);
         }}>
-        <Icon2 name="page-next" size={30} color="white" />
+        <Icon2 name="page-next" size={30} color={COLORS.black} />
       </TouchableOpacity>
 
-      <Image source={defaultImg} style={styles.img} />
+      <Image source={updatedUrl} style={styles.img} />
 
       <View style={styles.dataCont}>
         <Text style={styles.title}>{item.name}</Text>
-        <Text style={styles.simpleText}>RateHawk Hotel</Text>
+        <Text style={styles.simpleText}>{item.address}</Text>
         <View style={styles.ratingCont}>
-          <Icon name="star" size={15} color="white" />
-          <Icon name="star" size={15} color="white" />
-          <Icon name="star" size={15} color="white" />
-          <Icon name="star" size={15} color="white" />
+          <Icon name="star" size={15} color={COLORS.black} />
+          <Icon name="star" size={15} color={COLORS.black} />
+          <Icon name="star" size={15} color={COLORS.black} />
+          <Icon name="star" size={15} color={COLORS.black} />
         </View>
       </View>
 
@@ -67,11 +72,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '95%',
-    paddingVertical: 40,
-    backgroundColor: COLORS.darkerPurple,
+    paddingVertical: 20,
+    backgroundColor: COLORS.white,
     marginLeft: 10,
     borderRadius: 20,
     marginVertical: 10,
+    elevation: 5,
   },
   img: {
     width: 110,
@@ -89,13 +95,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: SIZES.medium,
-    color: 'white',
+    color: COLORS.black,
     fontWeight: 'bold',
   },
   simpleText: {
     opacity: 0.6,
     fontSize: SIZES.small,
-    color: 'white',
+    color: COLORS.black,
   },
   ratingCont: {
     display: 'flex',

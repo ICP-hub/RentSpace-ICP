@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         backgroundColor:'white',
         width:'100%',
         paddingVertical:10,
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG
     },
     btn:{
         position:'absolute',

@@ -132,7 +132,7 @@ const MenuPage = ({navigation}) => {
       <TouchableOpacity style={[styles.btn,{marginTop:45}]} onPress={()=>navigation.navigate('Launch')}>
         <Text style={[styles.btnText,{color:COLORS.black}]}>Switch to travelling</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.btn,{backgroundColor:COLORS.hostTitle}]} onPress={logout}>
+      <TouchableOpacity style={[styles.btn,{backgroundColor:COLORS.black}]} onPress={logout}>
         <Text style={[styles.btnText,{color:'white'}]}>Logout</Text>
       </TouchableOpacity>
       <Modal visible={showTerms} onRequestClose={()=>setShowTerms(false)}>
@@ -152,7 +152,8 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'column',
         alignItems:'flex-start',
-        paddingVertical:30
+        paddingVertical:30,
+        backgroundColor: COLORS.newBG
     },
     title:{
         fontSize:SIZES.medxLarge,
@@ -190,7 +191,7 @@ const styles = StyleSheet.create({
         marginLeft:'5%',
         borderRadius:12,
         paddingVertical:16,
-        borderColor:COLORS.hostTitle,
+        borderColor:COLORS.black,
         borderWidth:1,
         marginTop:10
     },

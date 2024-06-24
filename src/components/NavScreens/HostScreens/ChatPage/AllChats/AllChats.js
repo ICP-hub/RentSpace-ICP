@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         height:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG
     },
     header:{
         display:'flex',
@@ -249,7 +249,9 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'column',
         alignItems:'center',
-        backgroundColor:COLORS.lighterGrey,
+        backgroundColor:COLORS.white,
+        borderWidth:1,
+        borderColor:COLORS.black,
         width:'90%',
         borderRadius:20,
         minHeight:220,

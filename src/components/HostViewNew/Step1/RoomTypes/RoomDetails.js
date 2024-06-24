@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     height: '100%',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
   },
   header: {
     width: '100%',
@@ -228,7 +228,6 @@ const styles = StyleSheet.create({
   formContainer: {
     width: '100%',
     padding: 25,
-    // backgroundColor:'red'
   },
 
   fleidTitle: {
@@ -243,7 +242,7 @@ const styles = StyleSheet.create({
     height: 40,
     color: COLORS.black,
     borderWidth: 1,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginVertical: 5,
@@ -253,7 +252,7 @@ const styles = StyleSheet.create({
     height: 40,
     color: COLORS.black,
     borderWidth: 1,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginVertical: 5,
@@ -267,14 +266,14 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderRadius: 5,
     padding: 5,
-    color: COLORS.mainPurple,
+    color: COLORS.black,
   },
 
   progressBar: {
     width: '50%',
     marginLeft: 25,
     height: 3,
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     // marginTop: 90,
   },
 
@@ -293,7 +292,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 5,
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     color: COLORS.white,
     fontSize: 20,
     fontWeight: 'bold',

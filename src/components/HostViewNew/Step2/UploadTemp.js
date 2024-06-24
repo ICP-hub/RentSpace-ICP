@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     },
     title:{
         width:'88%',
-        color:COLORS.mainPurple,
+        color:COLORS.black,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:30,

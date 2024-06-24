@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'flex-start',
     width:'100%',
-    backgroundColor:COLORS.mainLightGrey,
+    // backgroundColor:COLORS.mainLightGrey,
     paddingTop:15,
     marginTop:30
   },

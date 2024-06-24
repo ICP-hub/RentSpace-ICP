@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     width:'23%',
     padding:2,
     borderRadius:4,
-    borderBottomColor:COLORS.hostTitle,
+    borderBottomColor:COLORS.black,
     
   },
   text:{

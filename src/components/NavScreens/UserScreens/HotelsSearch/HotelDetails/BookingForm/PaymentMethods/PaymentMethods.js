@@ -35,9 +35,8 @@ const PaymentMethods = ({setMethod,method,connect,item}) => {
       icon:<Icon name='credit-card' color={COLORS.black} size={25}/>
     },
   ]
-  // const [method,setMethod]=useState(methods[0]?.label)
   useEffect(()=>{
-    console.log(item?.details?.paymentMethods.includes("ICP"))
+    console.log(item?.paymentMethods.includes("ICP"))
   },[])
   
   return (
@@ -46,11 +45,12 @@ const PaymentMethods = ({setMethod,method,connect,item}) => {
       <View style={styles.methodCont}>
         {
           methods.map((m,index)=>(
-            (item?.details?.paymentMethods.includes(m?.label))?
+            (item?.paymentMethods.includes(m?.label))?
             <Option item={m} key={index} setMethod={setMethod} method={method} connect={connect}/>
             :<></>
           ))
         }
+        
       </View>
     </View>
   )

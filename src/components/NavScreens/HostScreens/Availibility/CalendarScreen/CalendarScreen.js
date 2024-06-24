@@ -103,7 +103,7 @@ const CalendarScreen = ({item, setModalVisible, getHotelDetails}) => {
           markedDates={{
             [startDate.date]: {
               selected: startDate.marked,
-              selectedColor: COLORS.mainPurple,
+              selectedColor: COLORS.black,
             },
           }}
         />
@@ -115,7 +115,7 @@ const CalendarScreen = ({item, setModalVisible, getHotelDetails}) => {
           markedDates={{
             [endDate.date]: {
               selected: endDate.marked,
-              selectedColor: COLORS.mainPurple,
+              selectedColor: COLORS.black,
             },
           }}
           disabledByDefault={secondCalenderDisplay}
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     color: COLORS.white,
     padding: 10,
     borderRadius: 10,

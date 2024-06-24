@@ -3,7 +3,7 @@ import React from 'react'
 import Heading from '../ReUsables/Heading'
 import AmenityCard from './AmenityCard'
 
-const Amenities = ({amenitiesList,amenities,setAmenities}) => {
+const Amenities = ({amenitiesList,amenities,setAmenities,iconActive,setIconActive}) => {
   return (
     <View style={styles.sec}>
       <Heading text={"Amenities"}/>
@@ -11,7 +11,8 @@ const Amenities = ({amenitiesList,amenities,setAmenities}) => {
       {
         amenitiesList.map((item,index)=>{
           return(
-              <AmenityCard item={item} key={index} amenities={amenities} setAmenities={setAmenities}/>
+              <AmenityCard item={item} key={index} amenities={amenities} setAmenities={setAmenities} iconActive={iconActive}
+              setIconActive={setIconActive} />
           )
         })
       }

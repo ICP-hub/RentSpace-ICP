@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 12,
     marginLeft: '7.5%',
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderWidth: 1.2,
     marginTop: 20,
     borderRadius: 15,

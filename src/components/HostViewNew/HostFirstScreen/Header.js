@@ -21,8 +21,8 @@ const Header = () => {
             value={slider}
             step={1}
             onValueChange={value=>setSlider(value)}
-            minimumTrackTintColor={COLORS.hostTitle}
-            thumbTintColor={COLORS.mainPurple}
+            minimumTrackTintColor={COLORS.black}
+            thumbTintColor={COLORS.black}
             maximumTrackTintColor={COLORS.white}
             trackStyle={styles.sliderTrack}
         />
@@ -42,14 +42,14 @@ const styles = StyleSheet.create({
         width:'90%',
     },
     title:{
-        color:COLORS.mainPurple,
+        color:COLORS.black,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:5,
         marginTop:10,
     },
     subTitle:{
-      color:COLORS.mainPurple,
+      color:COLORS.black,
       fontSize:SIZES.large,
       fontWeight:'800',
       marginBottom:14
@@ -59,14 +59,14 @@ const styles = StyleSheet.create({
       flexDirection:'column',
       alignItems:'center',
       justifyContent:'center',
-      borderColor:COLORS.mainPurple,
+      borderColor:COLORS.black,
       borderWidth:1,
       borderRadius:10,
       width:'40%',
       paddingVertical:10
     },
     price:{
-        color:COLORS.mainPurple,
+        color:COLORS.black,
         fontSize:SIZES.xxLarge,
         fontWeight:'bold',
     },

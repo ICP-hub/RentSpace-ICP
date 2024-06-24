@@ -129,7 +129,6 @@ shared ({caller = owner}) actor class () {
         };
         allData[pageNo];
     };
-
     public query func checkHotelExist(hotelId : Text) : async Bool {
         // Checking if the user exists in the user data map
         Utils.checkKeyExist<Types.HotelInfo>(hotelId, hotelDataMap);

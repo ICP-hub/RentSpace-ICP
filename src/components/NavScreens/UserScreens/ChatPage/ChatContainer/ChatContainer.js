@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         height:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG
     },
     header:{
         display:'flex',

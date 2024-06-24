@@ -150,7 +150,7 @@ const RoomFinal = ({newRoom, setNewRoom, rooms, setRooms, setOpenNext,closeModal
             <View style={styles.imgUphead}>
               <Text style={styles.fleidTitle}>Upload Photos</Text>
               <TouchableOpacity onPress={() => selectImage()}>
-                <Text style={{color: COLORS.mainPurple}}>+ Add More</Text>
+                <Text style={{color: COLORS.black}}>+ Add More</Text>
               </TouchableOpacity>
             </View>
             {imgList.map((img, index) => {
@@ -167,7 +167,7 @@ const RoomFinal = ({newRoom, setNewRoom, rooms, setRooms, setOpenNext,closeModal
                     <Icon2
                       name="delete"
                       size={20}
-                      color={COLORS.mainPurple}
+                      color={COLORS.black}
                       style={styles.deleteIcon}
                     />
                   </TouchableOpacity>
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 5,
     borderWidth: 1,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
   },
 
   deleteButton:{
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
     height: 40,
     color: COLORS.black,
     borderWidth: 1,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginVertical: 5,
@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
     height: 40,
     color: COLORS.black,
     borderWidth: 1,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginVertical: 5,
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     borderRadius: 5,
     paddingVertical: 5,
     paddingHorizontal: 15,
@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
   },
 
   createBTN: {
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     color: COLORS.white,
     fontSize: 16,
     fontWeight: 'bold',
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
     width: '85%',
     marginLeft: 25,
     height: 3,
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     // marginTop: 90,
   },
 

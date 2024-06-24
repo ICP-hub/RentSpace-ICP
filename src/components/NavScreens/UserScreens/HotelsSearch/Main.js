@@ -91,7 +91,7 @@ const Main = ({navigation}) => {
     maxPrice: 1000,
     pageSize: 15,
     amenities: [],
-    propertyType: 'Hotel',
+    propertyType: '',
     name: '',
     latitude: 0,
     longitude: 0,
@@ -206,6 +206,7 @@ const Main = ({navigation}) => {
           // console.log(res.data);
           console.log('External hotels : ' + res.data.externalHotels);
           console.log('Internal hotels : ' + res.data.hotels);
+          // console.log('External hotels ID :' + res.data.externalHotelsIDs);
         }
       })
       .catch(err => console.log(err));
@@ -346,7 +347,7 @@ const styles = StyleSheet.create({
   view: {
     width: '100%',
     height: '100%',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.newBG,
   },
   loader: {
     position: 'absolute',

@@ -86,7 +86,7 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
             </TouchableOpacity>    
         </View>
         <View style={styles.hotelReviewCont}>
-            <Icon2 name='star' size={12} color={COLORS.inputBorder} style={{marginRight:5}}/>
+            <Icon2 name='star' size={12} color={COLORS.black} style={{marginRight:5}}/>
             
             <Text style={styles.hotelReviewText}>{hotelRating} • {hotelReviews.length} {hotelReviews.length==1?"review":"reviews"} • {item?.location}</Text>
         </View>
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         paddingVertical:15,
-        backgroundColor:COLORS.mainPurple
+        backgroundColor:COLORS.black
     },
     btnText:{
         fontSize:SIZES.preMedium,

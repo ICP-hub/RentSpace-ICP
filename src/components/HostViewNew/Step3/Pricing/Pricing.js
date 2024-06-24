@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     width: '100%',
     height: '100%',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
   },
   subView: {
     display: 'flex',
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
   },
   title: {
     width: '85%',
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     fontSize: SIZES.xxLarge,
     fontWeight: '500',
     marginBottom: 5,
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     fontWeight: '300',
   },
   bigText: {
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     fontSize: SIZES.xxLarge,
     fontWeight: '500',
     marginBottom: 5,

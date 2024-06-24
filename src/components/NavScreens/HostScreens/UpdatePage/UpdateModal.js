@@ -359,7 +359,7 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
               style={
                 payOption.ethereum ? styles.payItemActive : styles.payItem
               }>
-              <Icon4 name="ethereum" color={COLORS.black} size={30} />
+              <Icon4 name="ethereum" color={payOption.ethereum ? COLORS.white : COLORS.black} size={30} />
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -374,7 +374,7 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
               style={
                 payOption.applePay ? styles.payItemActive : styles.payItem
               }>
-              <Icon4 name="apple-pay" color={COLORS.black} size={30} />
+              <Icon4 name="apple-pay" color={payOption.applePay ? COLORS.white : COLORS.black} size={30} />
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -389,7 +389,7 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
               style={
                 payOption.googlePay ? styles.payItemActive : styles.payItem
               }>
-              <Icon4 name="google-pay" color={COLORS.black} size={30} />
+              <Icon4 name="google-pay" color={payOption.googlePay ? COLORS.white : COLORS.black} size={30} />
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -401,7 +401,7 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
               }));
             }}>
             <View style={payOption.btc ? styles.payItemActive : styles.payItem}>
-              <Icon4 name="btc" color={COLORS.black} size={30} />
+              <Icon4 name="btc" color={payOption.btc ? COLORS.white : COLORS.black} size={30} />
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -413,7 +413,7 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
               }));
             }}>
             <View style={payOption.icp ? styles.payItemActive : styles.payItem}>
-              <Text style={styles.payItemText}>ICP</Text>
+              <Text style={payOption.icp ? styles.payItemTextActive : styles.payItemText}>ICP</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -428,7 +428,7 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
               style={
                 payOption.creditCard ? styles.payItemActive : styles.payItem
               }>
-              <Icon4 name="credit-card" color={COLORS.black} size={30} />
+              <Icon4 name="credit-card" color={payOption.creditCard ? COLORS.white : COLORS.black} size={30} />
             </View>
           </TouchableOpacity>
         </View>
@@ -582,7 +582,7 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
     paddingTop: 10,
     width: '100%',
     height: '100%',
@@ -636,7 +636,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
   },
 
   imageContainer: {
@@ -664,9 +664,9 @@ const styles = StyleSheet.create({
   btn: {
     width: 150,
     height: 50,
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderRadius: 10,
     textAlign: 'center',
     paddingTop: 15,
@@ -725,7 +725,7 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 14,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -735,11 +735,11 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 14,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: COLORS.mainPurple,
-    backgroundColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
+    backgroundColor: COLORS.black,
   },
 
   payItemText: {
@@ -759,7 +759,7 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 14,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     marginVertical: 5,
     paddingHorizontal: 15,
     display: 'flex',
@@ -777,7 +777,7 @@ const styles = StyleSheet.create({
   optionTextActive: {
     fontSize: 16,
     fontWeight: '500',
-    color: COLORS.mainPurple,
+    color: COLORS.black,
   },
 
   optionIcon: {
@@ -786,7 +786,7 @@ const styles = StyleSheet.create({
 
   optionIconActive: {
     display: 'flex',
-    color: COLORS.mainPurple,
+    color: COLORS.black,
   },
 
   saveBtn: {
@@ -794,8 +794,8 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 14,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
-    backgroundColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
+    backgroundColor: COLORS.black,
     marginVertical: 10,
     paddingHorizontal: 15,
     justifyContent: 'center',

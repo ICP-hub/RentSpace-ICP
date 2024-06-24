@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     width: '100%',
     height: '100%',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
   },
   header: {
     width: '100%',
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     color: COLORS.black,
   },
   createBtn: {
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     color: COLORS.white,
     fontSize: 16,
     fontWeight: 'bold',
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 16,
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     color: COLORS.white,
     fontWeight: 'bold',
     paddingVertical: 5,

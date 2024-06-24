@@ -26,7 +26,7 @@ const Reviews = ({hotelReviews,hotelRating}) => {
   return (
     <View style={styles.reviewCont}>
       <View style={styles.headerCont}>
-        <Icon name="star" size={16} color={COLORS.mainPurple} />
+        <Icon name="star" size={16} color={COLORS.black} />
         <Text style={styles.reviewText}>{hotelRating} • {hotelReviews.length} {hotelReviews.length==1?"review":"reviews"}</Text>
       </View>
       {/* {reviews.map(r => {
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '80%',
     borderWidth: 1.2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderRadius: 12,
     paddingVertical: 10,
     zIndex: 10,
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontSize: SIZES.large,
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     fontWeight: '600',
   },
   list: {

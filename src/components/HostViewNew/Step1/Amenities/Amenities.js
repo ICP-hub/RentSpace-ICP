@@ -20,28 +20,28 @@ import Icon5 from 'react-native-vector-icons/MaterialIcons';
 import AmenityCard from '../../../NavScreens/UserScreens/HotelsSearch/Filters/Amenities/AmenityCard';
 import {useDispatch, useSelector} from 'react-redux';
 import {setListing} from '../../../../redux/NewListing/actions';
-import { Dialog,ALERT_TYPE } from 'react-native-alert-notification';
+import {Dialog, ALERT_TYPE} from 'react-native-alert-notification';
 
 const amenitiesList = [
-  {name: 'wifi', icon: <Icon name="wifi" size={28} color={COLORS.black} />},
-  {name: 'gym', icon: <Icon2 name="dumbbell" size={28} color={COLORS.black} />},
-  {name: 'tv', icon: <Icon name="tv" size={28} color={COLORS.black} />},
+  {name: 'wifi', icon: <Icon name="wifi" size={28} />},
+  {name: 'gym', icon: <Icon2 name="dumbbell" size={28} />},
+  {name: 'tv', icon: <Icon name="tv" size={28} />},
   {
     name: 'laundry',
-    icon: <Icon3 name="washing-machine" size={28} color={COLORS.black} />,
+    icon: <Icon3 name="washing-machine" size={28} />,
   },
-  {name: 'parking', icon: <Icon4 name="car" size={28} color={COLORS.black} />},
+  {name: 'parking', icon: <Icon4 name="car" size={28} />},
   {
     name: 'medication',
-    icon: <Icon2 name="briefcase-medical" size={28} color={COLORS.black} />,
+    icon: <Icon2 name="briefcase-medical" size={28} />,
   },
   {
     name: 'gaming',
-    icon: <Icon name="gamepad" size={28} color={COLORS.black} />,
+    icon: <Icon name="gamepad" size={28} />,
   },
   {
     name: 'dining',
-    icon: <Icon5 name="local-dining" size={28} color={COLORS.black} />,
+    icon: <Icon5 name="local-dining" size={28} />,
   },
 ];
 const propertyTypesList = [
@@ -78,11 +78,11 @@ const Amenities = ({setHostModal, pos}) => {
     if (amenities.length == 0) {
       // Alert.alert('No aminities slected!', 'Select atleast one aminity');
       Dialog.show({
-        type:ALERT_TYPE.WARNING,
-        title:'No aminities selected!',
-        textBody:'Select atleast one aminity',
-        button:'OK',
-      })
+        type: ALERT_TYPE.WARNING,
+        title: 'No aminities selected!',
+        textBody: 'Select atleast one aminity',
+        button: 'OK',
+      });
 
       return false;
     } else {
@@ -131,7 +131,8 @@ const Amenities = ({setHostModal, pos}) => {
       <BottomBtn
         setHostModal={setHostModal}
         // pos={pos}
-        pos={propertyType == 'Hotel' || propertyType == 'Resort' ? 5 : 6}
+        // pos={propertyType == 'Hotel' || propertyType == 'Resort' ? 5 : 6}
+        pos={5}
         step={1}
         nextFunc={emptyCheck}
       />
@@ -148,11 +149,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     width: '100%',
     height: '100%',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
   },
   title: {
     width: '88%',
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     fontSize: SIZES.xxLarge,
     fontWeight: '500',
     marginLeft: '8%',
@@ -177,6 +178,6 @@ const styles = StyleSheet.create({
     padding: 1.5,
     width: '23%',
     borderRadius: 4,
-    borderBottomColor: COLORS.hostTitle,
+    borderBottomColor: COLORS.black,
   },
 });

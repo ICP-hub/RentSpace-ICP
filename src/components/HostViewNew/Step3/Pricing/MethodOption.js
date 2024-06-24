@@ -36,9 +36,9 @@ export default MethodOption
 const styles = StyleSheet.create({
     card:{
         width:'30%',
-        backgroundColor:COLORS.mainGrey,
+        backgroundColor:COLORS.newBG,
         height:50,
-        borderColor:COLORS.white,
+        borderColor:COLORS.black,
         borderWidth:1.2,
         borderRadius:8,
         display:'flex',
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         width:'30%',
         backgroundColor:COLORS.white,
         height:50,
-        borderColor:COLORS.mainPurple,
+        borderColor:COLORS.white,
         // borderWidth:1.2,
         elevation:2,
         borderRadius:8,

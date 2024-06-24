@@ -169,7 +169,7 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
           </TouchableOpacity>
         </View>
 
-        <ScrollView style={{width: '100%', marginBottom: 65}}>
+        <ScrollView style={{width: '100%', marginBottom: 65, backgroundColor:'#F5F5F5'}}>
           {hotelsList.map((item, index) => {
             return (
               <HotelCard key={index} item={item} navigation={navigation} />
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     paddingHorizontal: '8%',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
     paddingBottom: 10,
   },
   btn: {
@@ -308,7 +308,8 @@ const styles = StyleSheet.create({
     fontSize: SIZES.largeMed,
     color: COLORS.textLightGrey,
     fontWeight: '500',
-    backgroundColor: COLORS.lighterGrey,
+    backgroundColor: COLORS.white,
+    borderWidth:1,
     borderRadius: 20,
     marginTop: 40,
     marginLeft: '5%',

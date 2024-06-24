@@ -178,9 +178,9 @@ const ReelCard = ({item, reelIndex}) => {
           disabled={likeDisabled || user?.firstName == undefined}
           onPress={updateLike}>
           {liked ? (
-            <Icon name="heart" color={COLORS.mainPurple} size={25} />
+            <Icon name="heart" color={'red'} size={25} />
           ) : (
-            <Icon name="hearto" color={COLORS.white} size={25} />
+            <Icon name="hearto" color={COLORS.black} size={25} />
           )}
         </TouchableOpacity>
         <TouchableOpacity
@@ -190,7 +190,7 @@ const ReelCard = ({item, reelIndex}) => {
             getComments();
             console.log('liked by ', item?.likedBy.includes(principle));
           }}>
-          <Icon name="plus" color={COLORS.white} size={25} />
+          <Icon name="plus" color={COLORS.black} size={25} />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.icon}
@@ -198,7 +198,7 @@ const ReelCard = ({item, reelIndex}) => {
           disabled={user?.firstName == undefined}>
           <Icon2
             name="chatbubble-ellipses-outline"
-            color={COLORS.white}
+            color={COLORS.black}
             size={25}
           />
         </TouchableOpacity>
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
   reel: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
   },
   iconCont: {
     display: 'flex',
@@ -261,13 +261,13 @@ const styles = StyleSheet.create({
     zIndex: 5,
   },
   infoTitle: {
-    color: 'white',
+    color: COLORS.black,
     fontSize: SIZES.large - 1,
     fontWeight: '500',
     marginBottom: 10,
   },
   infoText: {
-    color: 'white',
+    color: COLORS.black,
     fontSize: SIZES.preMedium,
     fontWeight: '300',
     marginBottom: 1,
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     borderRadius: 30,
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     marginVertical: 15,
     zIndex: 5,
   },

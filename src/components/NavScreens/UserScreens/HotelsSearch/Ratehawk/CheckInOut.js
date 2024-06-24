@@ -13,6 +13,8 @@ import {Calendar} from 'react-native-calendars';
 import RoomList from './RoomList';
 
 const CheckInOut = ({hotelId, hotelName, hotelAddress}) => {
+
+  console.log('Hotel ID: ', hotelId);
   const date = new Date();
   const day = date.getDate();
   const month = date.getMonth() + 1;
@@ -53,7 +55,7 @@ const CheckInOut = ({hotelId, hotelName, hotelAddress}) => {
           markedDates={{
             [checkInDate.date]: {
               selected: checkInDate.marked,
-              selectedColor: COLORS.mainPurple,
+              selectedColor: COLORS.black,
             },
           }}
         />
@@ -71,7 +73,7 @@ const CheckInOut = ({hotelId, hotelName, hotelAddress}) => {
           markedDates={{
             [checkOutDate.date]: {
               selected: checkOutDate.marked,
-              selectedColor: COLORS.mainPurple,
+              selectedColor: COLORS.black,
             },
           }}
         />
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
   conatiner: {
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
     width: '100%',
     height: '100%',
   },
@@ -123,10 +125,12 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 25,
     marginHorizontal: 12,
+    elevation: 5,
   },
 
   reserveBtn: {
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
+    elevation: 5,
     width: '90%',
     padding: 15,
     borderRadius: 10,

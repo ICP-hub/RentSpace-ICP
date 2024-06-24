@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
         width:'90%',
         paddingVertical:12,
         borderRadius:12,
-        backgroundColor:COLORS.mainPurple,
+        backgroundColor:COLORS.black,
         marginTop:15
     },
     btnText:{

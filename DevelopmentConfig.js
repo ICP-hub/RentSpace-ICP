@@ -9,12 +9,12 @@ export const ids = {
   userCan: production
     ? // "tassb-3qaaa-aaaan-qloxq-cai":
       'xlygc-qqaaa-aaaao-a3odq-cai'
-    : 'be2us-64aaa-aaaaa-qaabq-cai',
+    : 'a3shf-5eaaa-aaaaa-qaafa-cai',
 
   hotelCan: production
     ? 'wbxey-saaaa-aaaao-a3oeq-cai'
     : // "5mldq-waaaa-aaaan-qlqta-cai":
-      'b77ix-eeaaa-aaaaa-qaada-cai',
+      'aovwi-4maaa-aaaaa-qaagq-cai',
 
   backendCan: production
     ? // "thtuv-wiaaa-aaaan-qloxa-cai":
@@ -22,10 +22,10 @@ export const ids = {
     : 'be2us-64aaa-aaaaa-qaabq-cai',
   reviewCan: production
     ? 'w2sy5-iyaaa-aaaao-a3oga-cai'
-    : 'bd3sg-teaaa-aaaaa-qaaba-cai',
+    : 'asrmz-lmaaa-aaaaa-qaaeq-cai',
   bookingCan: production
     ? 'wiupe-eiaaa-aaaao-a3ofa-cai'
-    : 'br5f7-7uaaa-aaaaa-qaaca-cai',
+    : 'a4tbr-q4aaa-aaaaa-qaafq-cai',
   ICPtokenCan: production
     ? 'ryjl3-tyaaa-aaaaa-aaaba-cai'
     : 'ryjl3-tyaaa-aaaaa-aaaba-cai', //bw4dl-smaaa-aaaaa-qaacq-cai
@@ -37,10 +37,10 @@ export const ids = {
     : 'ss2fx-dyaaa-aaaar-qacoq-cai',
   commentCan: production
     ? 'wpvjq-jqaaa-aaaao-a3ofq-cai'
-    : 'bw4dl-smaaa-aaaaa-qaacq-cai',
+    : 'ajuq4-ruaaa-aaaaa-qaaga-cai',
   supportCan: production
     ? 'wgwcm-7yaaa-aaaao-a3oea-cai'
-    : 'by6od-j4aaa-aaaaa-qaadq-cai',
+    : 'ahw5u-keaaa-aaaaa-qaaha-cai',
 };
 
 // {

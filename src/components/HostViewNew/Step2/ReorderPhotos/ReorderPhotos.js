@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'row',
         paddingVertical:10,
-        borderColor:COLORS.mainPurple,
+        borderColor:COLORS.black,
         borderWidth:1,
         borderRadius:25,
         alignItems:'center',

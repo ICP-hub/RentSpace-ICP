@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     },
     btn:{
         width:'43%',
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.black,
         borderRadius:8,
         paddingVertical:10,
         display:'flex',

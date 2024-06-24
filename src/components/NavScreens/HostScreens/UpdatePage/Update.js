@@ -148,14 +148,14 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
     hotelId: item.propertyId,
     location: '',
     title: '',
-    propertyName: item.propertyType, 
+    propertyName: item.propertyType,
     propertyAmenities: [],
     rooms: [],
   });
 
   useEffect(() => {
     console.log('Room initial : ', rooms.length);
-    console.log("passdata title : ",passData);
+    console.log('passdata title : ', passData);
   }, [rooms, passData]);
 
   const goToNextPage = () => {
@@ -183,12 +183,12 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Update Page</Text>
         <View style={styles.headerIcons}>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Icon name="collage" size={25} color={COLORS.black} />
           </TouchableOpacity>
           <TouchableOpacity>
             <Icon2 name="plus" size={25} color={COLORS.black} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
       <ScrollView
@@ -335,9 +335,9 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
           />
         </View>
 
-        {/* Room Type edit */}
+        {/* Room Type edit only for Resort and Hotel */}
 
-        {propertyType.name === 'Resort' || propertyType.name === 'Hotel' ? (
+        {/* {propertyType.name === 'Resort' || propertyType.name === 'Hotel' ? (
           <>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Edit Room Types</Text>
@@ -351,7 +351,21 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
               </Text>
             </View>
           </>
-        ) : null}
+        ) : null} */}
+
+        {/* Room Type edit only for All properties*/}
+
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Edit Room Types</Text>
+          <TouchableOpacity onPress={() => setRoomPopup(true)}>
+            <Icon name="pencil" size={20} color={COLORS.black} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.sectionContent}>
+          <Text style={[styles.sectionItemText, {marginLeft: 5}]}>
+            Currently there are {rooms.length} room types.{' '}
+          </Text>
+        </View>
 
         {/* sixth-section */}
         {/* <View style={styles.sectionHeader}>
@@ -494,7 +508,7 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
     paddingTop: 10,
     width: '100%',
     height: '100%',
@@ -558,7 +572,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     paddingHorizontal: 15,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     backgroundColor: COLORS.white,
     marginHorizontal: 20,
     borderRadius: 10,
@@ -574,7 +588,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 14,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderWidth: 2,
     color: COLORS.black,
   },
@@ -593,14 +607,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
   },
 
   spaceOptionsContainer: {
     display: 'flex',
     flexDirection: 'column',
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     width: '100%',
     minHeight: 200,
     height: 'fit-content',
@@ -639,7 +653,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 10,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     width: '100%',
     height: 'fit-content',
     borderRadius: 10,
@@ -659,9 +673,9 @@ const styles = StyleSheet.create({
   },
 
   optionsContainerItemActive: {
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     color: COLORS.white,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
   },
 
   buttonSection: {
@@ -673,7 +687,7 @@ const styles = StyleSheet.create({
   },
 
   buttonSectionBtn: {
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     color: COLORS.white,
     borderRadius: 10,
     width: 135,

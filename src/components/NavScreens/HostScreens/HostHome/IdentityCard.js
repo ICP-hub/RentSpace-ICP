@@ -10,15 +10,15 @@ const IdentityCard = ({setIdprocess}) => {
     <View style={styles.card}>
       <View style={styles.textCont}>
         <Text style={styles.textBold}>Verify your identity</Text>
-        <Text style={[styles.textNormal,{color:COLORS.black,opacity:1}]}>required to publish</Text>
-        <Text style={styles.textNormal}>Listing</Text>
+        <Text style={[styles.textNormal,{color:'red',opacity:1}]}>required to publish</Text>
+        <Text style={styles.textNormal}>Listing Name</Text>
         <TouchableOpacity onPress={()=>setIdprocess(1)}>
         <Text style={styles.textUnderline}>Get started</Text>
         </TouchableOpacity>
         
       </View>
       <View style={styles.iconCont}>
-        <Icon name='exclamationcircleo' color={COLORS.black} size={23}/>
+        <Icon name='exclamationcircleo' color={'red'} size={23}/>
       </View>
       
     </View>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         marginVertical:3
     },
     textNormal:{
-        fontSize:SIZES.preMedium,
+        fontSize:SIZES.preMedium+1,
         color:COLORS.textLightGrey,
         opacity:0.5,
         marginVertical:3

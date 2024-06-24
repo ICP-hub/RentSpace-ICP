@@ -121,14 +121,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
   },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
     color: 'black',
     width: '100%',
-    // backgroundColor: 'red',
     textAlign: 'center',
     paddingVertical: 15,
   },
@@ -170,7 +169,7 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 16,
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     color: COLORS.white,
     fontWeight: 'bold',
     paddingVertical: 5,
@@ -198,7 +197,7 @@ const styles = StyleSheet.create({
   addBtn: {
     fontSize: 20,
     color: COLORS.white,
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     textAlign: 'center',
     paddingVertical: 10,
     fontWeight: 'bold',

@@ -252,7 +252,7 @@ const makeHost=async()=>{
           <Report setReportPage={setReportPage}/>
         </Modal>
         <Modal visible={feedbackPage} animationType='slide' onRequestClose={()=>setFeedbackPage(false)}>
-          <Feedback setFeedbackPage={setFeedbackPage}/>
+          <Feedback setFeedbackPage={setFeedbackPage}/> 
         </Modal>
         <Modal visible={supportChatPage} animationType='slide' onRequestClose={()=>setSupportChatPage(false)}>
           <MainChat setSupportChatPage={setSupportChatPage}/>
@@ -263,7 +263,7 @@ const makeHost=async()=>{
         </Modal>
 
         <Modal visible={FAQPage} animationType='slide' onRequestClose={()=>setFAQPage(false)}>
-          <Faq setFAQPage={setFAQPage}/>
+          <Faq setFAQPage={setFAQPage}/> 
         </Modal>
 
         <Modal visible={termsPage} animationType='slide' onRequestClose={()=>setTermsPage(false)}>
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         width:'100%',
-        backgroundColor:COLORS.mainGrey,
+        backgroundColor:COLORS.newBG,
         minHeight:'100%'
     },
     header:{

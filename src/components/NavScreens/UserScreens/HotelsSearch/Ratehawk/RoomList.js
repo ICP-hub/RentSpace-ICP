@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Image,
   Modal,
   ScrollView,
   StyleSheet,
@@ -29,7 +30,10 @@ const RoomList = ({
   const [roomsList, setRoomsList] = useState([]);
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [loading, setLoading] = useState(true);
-  const baseUrl='https://rentspace.kaifoundry.com/api/v1'
+
+  const [noRoomAvailable, setNoRoomAvailable] = useState(false);
+
+  const baseUrl = 'https://rentspace.kaifoundry.com/api/v1';
   // const baseUrl='http://localhost:5000/api/v1'
 
   const fetchHash = async () => {
@@ -47,9 +51,20 @@ const RoomList = ({
     await axios
       .post(`${baseUrl}/hotel/RateHawk/bookHotel`, postData)
       .then(response => {
-        console.log(response?.data?.data?.data?.hotels[0]?.rates[0].book_hash);
-        setRoomsList(response?.data?.data?.data?.hotels[0]?.rates);
-        setLoading(false);
+        if (
+          response?.data?.data?.data?.hotels[0]?.rates[0].book_hash ===
+          undefined
+        ) {
+          console.log('No Room Available');
+          setLoading(false);
+          setNoRoomAvailable(true);
+        } else {
+          console.log(
+            response?.data?.data?.data?.hotels[0]?.rates[0].book_hash,
+          );
+          setRoomsList(response?.data?.data?.data?.hotels[0]?.rates);
+          setLoading(false);
+        }
       })
       .catch(error => {
         console.error(error.message);
@@ -86,6 +101,7 @@ const RoomList = ({
             {roomsList.map((room, index) => {
               return (
                 <View style={styles.card} key={index}>
+                  <Image source={{uri: room.images[0]}} style={styles.img} />
                   <View style={styles.innerCard}>
                     <View style={styles.cardUp}>
                       <Text style={styles.roomType}>{room.room_name}</Text>
@@ -120,6 +136,9 @@ const RoomList = ({
             })}
 
             {/* only for integration testing */}
+            <Text style={[styles.hotelName, {marginVertical: 10}]}>
+              {noRoomAvailable ? 'No Room Available' : null}
+            </Text>
             <View style={styles.card}>
               <View style={styles.innerCard}>
                 <View style={styles.cardUp}>
@@ -162,7 +181,6 @@ const RoomList = ({
 export default RoomList;
 
 const styles = StyleSheet.create({
-
   loaderContainer: {
     display: 'flex',
     flexDirection: 'column',
@@ -178,9 +196,8 @@ const styles = StyleSheet.create({
     marginHorizontal: '50%',
   },
 
-
   container: {
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
     width: '100%',
     height: '100%',
     display: 'flex',
@@ -221,6 +238,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderRadius: 10,
     marginBottom: 15,
+    elevation: 5,
   },
 
   innerCard: {

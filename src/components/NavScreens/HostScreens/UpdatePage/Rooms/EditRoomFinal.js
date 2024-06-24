@@ -117,7 +117,7 @@ const EditRoomFinal = ({passIndex, room, item, updateRooms, closeModal, setRoomP
         <View style={styles.imgUphead}>
           <Text style={styles.fleidTitle}>Upload Photos</Text>
           <TouchableOpacity onPress={() => selectImage()}>
-            <Text style={{color: COLORS.mainPurple}}>+ Add More</Text>
+            <Text style={{color: COLORS.black}}>+ Add More</Text>
           </TouchableOpacity>
         </View>
 
@@ -129,7 +129,7 @@ const EditRoomFinal = ({passIndex, room, item, updateRooms, closeModal, setRoomP
                 <Icon2
                   name="delete"
                   size={20}
-                  color={COLORS.mainPurple}
+                  color={COLORS.black}
                   style={styles.deleteIcon}
                 />
               </TouchableOpacity>
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 5,
     borderWidth: 1,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
   },
 
   deleteIcon: {
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     height: 40,
     color: COLORS.black,
     borderWidth: 1,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginVertical: 5,
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 5,
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     color: COLORS.white,
     fontSize: 20,
     fontWeight: 'bold',
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     marginLeft: 25,
     marginRight: 25,
     height: 3,
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     marginBottom: 25,
   },
 });

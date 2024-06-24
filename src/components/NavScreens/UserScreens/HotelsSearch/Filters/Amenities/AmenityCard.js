@@ -20,7 +20,7 @@ const AmenityCard = ({item, amenities, setAmenities}) => {
     <TouchableOpacity
       style={amenities.includes(item?.name) ? styles.cardActive : styles.card}
       onPress={putItem}>
-      {item?.icon}
+      <Text style={amenities.includes(item?.name) ? styles.iconActive : styles.icon}>{item?.icon}</Text>
     </TouchableOpacity>
   );
 };
@@ -42,8 +42,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     width: '25%',
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     borderRadius: 10,
-
   },
+  icon: {
+    fontSize: 30,
+    color: COLORS.black,
+  },
+  iconActive: {
+    fontSize: 30,
+    color: COLORS.white,
+  },
+
+
 });

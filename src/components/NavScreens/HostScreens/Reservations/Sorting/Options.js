@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'space-between',
         alignItems:'center',
-        borderColor:COLORS.hostTitle,
+        borderColor:COLORS.black,
         borderWidth:1,
         borderRadius:12,
         width:'90%',
@@ -43,13 +43,13 @@ const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'center',
         borderWidth:1,
-        borderColor:COLORS.hostTitle,
+        borderColor:COLORS.black,
         borderRadius:20,
         marginRight:'3%'
     },
     radioSelected:{
         borderRadius:20,
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.black,
         width:15,
         height:15
     }

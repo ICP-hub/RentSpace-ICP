@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
     height: '100%',
     width: '100%',
   },
