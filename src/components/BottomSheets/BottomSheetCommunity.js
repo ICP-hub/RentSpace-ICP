@@ -27,13 +27,23 @@ const BottomSheetCommunity = ({selfMod, openNotiModal}) => {
     });
     setLoading(true);
     await actors?.userActor
-      .updateUserInfo({
+      .updateUserDetails({
         ...user,
         agreementStatus: true,
-        userGovId: '123',
+        userGovId: '',
         userProfile: 'img1',
       })
       .then(res => {
+        if(res?.ok==undefined){
+          setLoading(false)
+          Dialog.show({
+            type:ALERT_TYPE.SUCCESS,
+            title:'Error occured',
+            textBody:res?.err,
+            button:'OK',
+          })
+          return
+        }
         setLoading(false);
         // Alert.alert('Guidelines Accepted','Thanks for accepting our guidelines!');
         Dialog.show({

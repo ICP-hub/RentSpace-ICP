@@ -68,7 +68,7 @@ const getHotelList=async()=>{
 }
 
 useEffect(()=>{
-  getHotelList()
+  // getHotelList()
   console.log(user)
 },[])
 
@@ -76,19 +76,28 @@ const makeHost=async()=>{
   setLoading(true)
   console.log("You are host now")
   console.log({...user
-    ,userType:'Host',
-    hostStatus:true,
-    userProfile:(user?.userProfile)!=""?user?.userProfile:"img",
-    userGovId:((user?.userGovId==""||user?.userGovId==null)?"nothing":user?.userGovId)})
+    ,userRole:'Host',
+    isHost:true,
+    userImage:(user?.userImage)!=""?user?.userImage:"img",
+    userGovID:((user?.userGovID==""||user?.userGovID==null)?"nothing":user?.userGovID)})
   await actors.userActor?.updateUserInfo({...user
-    ,userType:'Host',
-    hostStatus:true,
-    userProfile:(user?.userProfile)!=""?user?.userProfile:"img",
-    userGovId:((user?.userGovId==""||user?.userGovId==null)?"nothing":user?.userGovId
+    ,userRole:'Host',
+    isHost:true,
+    userImage:(user?.userImage)!=""?user?.userImage:"img",
+    userGovID:((user?.userGovID==""||user?.userGovID==null)?"nothing":user?.userGovID
     
     ),
     agreementStatus:user?.agreementStatus
   }).then(async(res)=>{
+    if(res?.ok==undefined){
+      Dialog.show({
+        type:ALERT_TYPE.DANGER,
+        title:'Error',
+        textBody:res?.err,
+        button:'OK',
+      })
+      return
+    }
     console.log(res)
     
     setLoading(false)
@@ -100,8 +109,8 @@ const makeHost=async()=>{
       button:'OK',
     })
     await actors.userActor?.getUserInfo().then((res)=>{
-      console.log(res[0])
-      dispatch(setUser(res[0]))
+      console.log(res?.ok)
+      dispatch(setUser(res?.ok))
     }).then(()=>{
       getHotelList()
     }).catch((err)=>{
@@ -154,7 +163,7 @@ const makeHost=async()=>{
     },
   ]
   
-  const hostingList=(user?.hostStatus==true)?[
+  const hostingList=(user?.isHost==true)?[
     {
       text:"Switch to Hosting",
       onClick:()=>{navigation.navigate('hostHome')},
@@ -225,7 +234,7 @@ const makeHost=async()=>{
           </View>
           <View style={styles.imgCont}>
             <View style={styles.imgView}>
-              <Image source={(user?.userProfile==""||user?.userProfile=="img")?images.newProfile:{uri:user.userProfile}} style={styles.img}/>
+              <Image source={(user?.userImage==""||user?.userImage=="img")?images.newProfile:{uri:user.userImage}} style={styles.img}/>
             </View>  
             <Text style={styles.name}>{user?.firstName+" "+user?.lastName}</Text>
           

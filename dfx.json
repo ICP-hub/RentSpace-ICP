@@ -5,27 +5,27 @@
       "id": "rdmx6-jaaaa-aaaaa-aaadq-cai"
     },
     "User": {
-      "main": "Backend/RentSpace_backend/UserCanister/main.mo",
+      "main": "Backend/controllers/userCanister.mo",
       "type": "motoko"
     },
-    "Review": {
-      "main": "Backend/RentSpace_backend/Review/main.mo",
+    "Comment":{
+      "main": "Backend/controllers/commentCanister.mo",
       "type": "motoko"
     },
-    "hotel": {
-      "main": "Backend/RentSpace_backend/HotelCanister/main.mo",
+    "Review":{
+      "main": "Backend/controllers/reviewCanister.mo",
       "type": "motoko"
     },
-    "booking": {
-      "main": "Backend/RentSpace_backend/bookingCanister/main.mo",
+    "Support":{
+      "main": "Backend/controllers/supportCanister.mo",
       "type": "motoko"
     },
-    "comment": {
-      "main": "Backend/RentSpace_backend/commentCanister/main.mo",
+    "Booking":{
+      "main": "Backend/controllers/bookingCanister.mo",
       "type": "motoko"
     },
-    "supportChat": {
-      "main": "Backend/RentSpace_backend/supportChatCanister/main.mo",
+    "Hotel": {
+      "main": "Backend/controllers/hotelCanister.mo",
       "type": "motoko"
     },
     "LoginWeb": {

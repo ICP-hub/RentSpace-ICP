@@ -47,23 +47,23 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
   }
 
   useEffect(()=>{
-    console.log(user?.userProfile)
-    getHotelList()
+    console.log(user?.userImage)
+    // getHotelList()
   },[])
 
   const makeHost=async()=>{
     setLoading(true)
     console.log("You are host now")
     console.log({...user
-      ,userType:'Host',
-      hostStatus:true,
-      userProfile:(user?.userProfile)!=""?user?.userProfile:"img",
-      userGovId:((user?.userGovId==""||user?.userGovId==null)?"Not Provided":user?.userGovId)})
+      ,userRole:'Host',
+      isHost:true,
+      userImage:(user?.userImage)!=""?user?.userImage:"img",
+      userGovID:((user?.userGovID==""||user?.userGovID==null)?"Not Provided":user?.userGovID)})
     await actors.userActor?.updateUserInfo({...user
-      ,userType:'Host',
-      hostStatus:true,
-      userProfile:(user?.userProfile)!=""?user?.userProfile:"img",
-      userGovId:((user?.userGovId==""||user?.userGovId==null)?"Not Provided":user?.userGovId
+      ,userRole:'Host',
+      isHost:true,
+      userImage:(user?.userImage)!=""?user?.userImage:"img",
+      userGovID:((user?.userGovID==""||user?.userGovID==null)?"Not Provided":user?.userGovID
       
       ),
       agreementStatus:user?.agreementStatus
@@ -115,7 +115,7 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
       
       <View style={styles.header}>
         <Text style={styles.title}>My Profile</Text>
-        <Image source={(user?.userProfile==""||user?.userProfile=="img")?images.sampleProfile2:{uri:user.userProfile}} style={styles.profileLogo}/>
+        <Image source={(user?.userImage==""||user?.userImage=="img")?images.sampleProfile2:{uri:user.userImage}} style={styles.profileLogo}/>
         <Text style={styles.headerName}>{user?.firstName +" "+ user?.lastName}</Text>
         <Text style={styles.headerText}>{user?.userEmail}</Text>
         <Text style={styles.headerText}>{user?.dob}</Text>
@@ -126,14 +126,14 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
           <Icon3 name='manage-accounts' size={20} color={'black'} style={{marginRight:8}}/>
             <Text style={styles.propertyText}>Host Status</Text>
           </View>
-          <Text style={styles.valueText}>{user?.hostStatus?"True":"False"}</Text>
+          <Text style={styles.valueText}>{user?.isHost?"True":"False"}</Text>
         </View>
         <View style={styles.dataRow}>
           <View style={styles.propertyCont}>
             <Icon name='idcard' size={20} color={'black'} style={{marginRight:8}}/>
             <Text style={styles.propertyText}>Government ID</Text>
           </View>
-          <Text style={styles.valueText}>{(user?.userGovId=="nothing"||user?.userGovId=="Not Provided")?"Not Provided":user?.userGovId}</Text>
+          <Text style={styles.valueText}>{(user?.userGovID==""||user?.userGovID=="Not Provided")?"Not Provided":user?.userGovID}</Text>
         </View>
         {/* <View style={styles.dataRow}>
           <View style={styles.propertyCont}>
@@ -147,7 +147,7 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
           <Icon2 name='user' size={20} color={'black'} style={{marginRight:8}}/>
             <Text style={styles.propertyText}>User Type</Text>
           </View>
-          <Text style={styles.valueText}>{user?.userType}</Text>
+          <Text style={styles.valueText}>{user?.userRole}</Text>
         </View>
         <ActivityIndicator size={40} animating={loading}/>
         
@@ -161,7 +161,7 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
           </View>
         
         {/* {
-          (user?.userType!='Host')? 
+          (user?.userRole!='Host')? 
           <TouchableOpacity style={styles.updateBtn} onPress={()=>{
             makeHost()
             

@@ -45,12 +45,26 @@ const Concern2 = ({setConcernForm,setReportPage,setReport,report}) => {
         }
         setLoading(true)
         console.log(actors?.supportActor)
-        await actors?.supportActor?.raiseNewTicket(
-          report?.reason,
-          report?.hostMessage,
-          report?.adminMessage,
+        await actors?.supportActor?.createTicket(
+          {
+            messageToHost:report?.hostMessage,
+            messageToAdmin:report?.adminMessage,
+            reason:report?.reason,
+            address:report?.address
+          },
           report?.address
         ).then((res)=>{
+          if(res?.ok==undefined){
+            setLoading(false)
+            // alert('Your issue ticket have been raised!')
+            Dialog.show({
+              type:ALERT_TYPE.DANGER,
+              title:'TICKET NOT RAISED',
+              textBody:res?.err,
+              button:'OK',
+            })
+            return
+          }
           console.log("res raising ticket : ",res)
           setLoading(false)
           // alert('Your issue ticket have been raised!')

@@ -11,32 +11,41 @@ type UserInfo =
    createdAt: text;
    dob: text;
    firstName: text;
-   hostStatus: bool;
+   govIDLink: text;
+   isHost: bool;
+   isVerified: bool;
    lastName: text;
    userEmail: text;
-   userGovId: text;
-   userProfile: text;
-   userType: text;
-   verificationStatus: bool;
+   userGovID: text;
+   userID: principal;
+   userImage: text;
+   userRole: text;
  };
-type UserId = text;
 type User = 
  service {
-   addOwner: (AdminId) -> (text);
    checkUserExist: (text) -> (bool) query;
-   createUser: (User__1) -> ();
-   getAllAdmin: () -> (vec AdminId) query;
-   getAnnualRegisterByYear: (text) -> (opt AnnualData) query;
-   getNoOfPages: (nat) -> (nat) query;
-   getOwner: () -> (text) query;
-   getUserInfo: () -> (opt UserInfo) query;
-   getUserInfoByPrincipal: (principal) -> (opt UserInfo) query;
-   scanUsers: (nat, nat) -> (vec record {
-                                   UserId;
-                                   UserInfo;
-                                 }) query;
-   updateUserInfo: (UserInfo) -> (opt UserInfo);
-   whoami: () -> (text) query;
+   deleteUser: () -> (Result);
+   getAnnualRegisterByYear: (text) -> (Result_2);
+   getUserByPrincipal: (principal) -> (Result_1);
+   getuserDetails: () -> (Result_1);
+   registerUser: (User__1) -> (Result);
+   updateUserDetails: (UserInfo) -> (Result);
+   whoami: () -> (text);
+ };
+type Result_2 = 
+ variant {
+   err: text;
+   ok: AnnualData;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: UserInfo;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: text;
  };
 type AnnualData = 
  record {
@@ -53,5 +62,4 @@ type AnnualData =
    oct: nat;
    sep: nat;
  };
-type AdminId = text;
 service : () -> User
