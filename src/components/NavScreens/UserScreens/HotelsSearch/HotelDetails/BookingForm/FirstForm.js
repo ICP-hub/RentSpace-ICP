@@ -6,6 +6,7 @@ import { Calendar } from 'react-native-calendars'
 import { useSelector } from 'react-redux'
 import BookingFormComp from './BookingFormComp'
 import CheckAnim from './CheckAnim'
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
 const FirstForm = ({setBookingForm,item,setOpen}) => {
     const [selected,setSelected]=useState('')
@@ -16,6 +17,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
     const [loading,setLoading]=useState(false)
     const [paymentScreen,setPaymentScreen]=useState(false)
     const [bookingAnimation,showBookingAnimation]=useState(false)
+    const [days,setDays]=useState(1)
     const [booking,setBooking]=useState({
         userId:principle,
         checkInDate:'',
@@ -48,11 +50,23 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
           }).catch((err)=>{
             console.log(booking,item?.id)
             console.log(err)
-            alert(err)
+            // alert(err)
+            Dialog.show({
+              type:ALERT_TYPE.DANGER,
+              title:"ERROR",
+              textBody:err,
+              button:'OK',
+            })
             setLoading(false)
           })
         }else{
-          alert("You need to complete the payment first!")
+          // alert("You need to complete the payment first!")
+          Dialog.show({
+            type:ALERT_TYPE.WARNING,
+            title:'WARNING',
+            textBody:'You need to complete the payment first',
+            button:'OK',
+          })
         }
     }
 
@@ -72,11 +86,12 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
       <View style={styles.textCont}>
             <View style={styles.textContHorz}>
                 <TextInput
-                    value={"1"}
+                    value={days}
                     placeholder='1'
                     style={styles.boldLargeText}
                     onChangeText={value=>{
-                        // setBooking({...booking,bookingDuration:value.toString()})
+                        // setBooking({...booking,bookingDuration:{...bookingDuration,bookedTill:}})
+                        setDays(parseInt(value))
                         console.log("something")
                       }}
                     keyboardType='numeric'
@@ -116,7 +131,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
                 checkInDate:`${(day.day<10)?"0"+day.day:day.day}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`,
                 bookingDuration:{
                   bookedAt:`${(day.day<10)?"0"+day.day:day.day}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`,
-                  bookedTill:`${((day.day+1)<10)?"0"+(day.day+1):(day.day+1)}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`
+                  bookedTill:`${((day.day+days)<10)?"0"+(day.day+days):(day.day+days)}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`
               }
               })
             }}
@@ -141,7 +156,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
             </Text>
         </TouchableOpacity>
       </View>
-      <Modal animationType='slide' visible={paymentScreen}>
+      <Modal animationType='slide' visible={paymentScreen} >
         {/* <PaymentScreen setBooking={setBooking} booking={booking} item={item} self={setPaymentScreen}/> */}
         <BookingFormComp 
             setBookingForm={setPaymentScreen}
@@ -154,6 +169,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
             showBookingAnimation={showBookingAnimation}
             bookingAnimation={bookingAnimation}
             setOpen={setOpen}
+            days={days}
         />
       </Modal>
       
@@ -240,7 +256,7 @@ const styles = StyleSheet.create({
     },
     btn:{
         width:'43%',
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.black,
         borderRadius:8,
         paddingVertical:10,
         display:'flex',

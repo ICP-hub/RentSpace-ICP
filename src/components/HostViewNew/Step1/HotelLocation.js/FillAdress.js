@@ -11,7 +11,7 @@ import React, {useEffect, useState} from 'react';
 import {SIZES, COLORS} from '../../../../constants/themes';
 import Icon from 'react-native-vector-icons/Entypo';
 import {Dropdown} from 'react-native-element-dropdown';
-import CustomPopAlert from '../../../NavScreens/CustomPopAlert';
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification';
 
 const data = [
   {label: 'India', value: 'India'},
@@ -22,12 +22,7 @@ const data = [
 ];
 
 const FillAdress = ({self, setLocation, location}) => {
-  const [showAlertPop, setShowAlertPop] = useState({
-    show: false,
-    title: '',
-    message: '',
-    color: '',
-  });
+ 
 
   const [address, setAddress] = useState({
     region: '',
@@ -88,6 +83,7 @@ const FillAdress = ({self, setLocation, location}) => {
           value={address?.city}
           onChangeText={value => {
             setAddress({...address, city: value});
+            setLocation(value);
           }}
           placeholder="City"
           placeholderTextColor={COLORS.black}
@@ -116,33 +112,34 @@ const FillAdress = ({self, setLocation, location}) => {
         <TouchableOpacity
           style={styles.btn}
           onPress={() => {
-            if (address.city != '') {
+            if (
+              address.city != ''||
+              address.country != ''||
+              address.postcode !=''||
+              address.region != ''||
+              address.streetAdd !=''||
+              address.suiteBuilding !=''
+            ) {
               let temp = location;
-              setLocation(`${temp}#${address.city}`);
+              setLocation(`${temp}`);
               console.log(location);
               self(false);
             } else {
-            //   alert('Please do not leave any fields empty!');
-                setShowAlertPop({
-                    show: true,
-                    title: 'Please do not leave any fields empty!',
-                    message: '',
-                    color: 'black',
-                });
+              // alert('Please do not leave any fields empty!');
+              Dialog.show({
+                type:ALERT_TYPE.WARNING,
+                title:'Fields found empty',
+                textBody:'Please do not leave any fields empty!',
+                button:'OK',
+              })
+                
             }
           }}>
           <Text style={styles.btnText}>Looks Good</Text>
         </TouchableOpacity>
       </View>
 
-      <Modal visible={showAlertPop.show} transparent>
-        <CustomPopAlert
-          title={showAlertPop.title}
-          message={showAlertPop.message}
-          color={showAlertPop.color}
-          onCloseRequest={setShowAlertPop}
-        />
-      </Modal>
+      
     </View>
   );
 };
@@ -158,14 +155,14 @@ const styles = StyleSheet.create({
     height: '94%',
     position: 'absolute',
     top: '6%',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.newBG,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     elevation: 10,
   },
   title: {
     width: '85%',
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     fontSize: SIZES.xxLarge,
     fontWeight: '500',
     marginBottom: 8,
@@ -249,7 +246,7 @@ const styles = StyleSheet.create({
     width: '90%',
     paddingVertical: 12,
     borderRadius: 12,
-    backgroundColor: COLORS.hostTitle,
+    backgroundColor: COLORS.black,
     marginTop: 15,
   },
   btnText: {

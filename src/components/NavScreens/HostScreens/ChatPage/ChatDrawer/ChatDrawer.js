@@ -1,11 +1,13 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import BottomNavHost from '../../../../Navigation/BottomNavHost'
 import { COLORS, SIZES } from '../../../../../constants/themes'
 import Icon from 'react-native-vector-icons/Entypo'
+import MainChat from '../../../UserScreens/Profile/SupportChat/MainChat'
 
 const ChatDrawer = ({navigation,showDrawer,setShowDrawer}) => {
   const [color,setColor]=useState({color:'black',bg:'white'})
+  const [showSupportChat,setShowSupportChat]=useState(false)
   return (
     <>
     <View style={styles.view}>
@@ -26,15 +28,15 @@ const ChatDrawer = ({navigation,showDrawer,setShowDrawer}) => {
         }>
           <Text style={[styles.contents,{color:color.color}]}>All messages</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.contentBtn}>
+        <TouchableOpacity style={styles.contentBtn} onPress={()=>setShowSupportChat(true)}>
           <Text style={styles.contents}>Rentspace support</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.contentBtn}>
+        {/* <TouchableOpacity style={styles.contentBtn}>
           <Text style={styles.contents}>Archive</Text>
-        </TouchableOpacity> 
+        </TouchableOpacity>  */}
       </View>
       <View style={styles.line}/>
-      <Text style={styles.subHeading}>Settings</Text>
+      {/* <Text style={styles.subHeading}>Settings</Text>
       <View style={styles.contentCont}>
         <TouchableOpacity style={styles.contentBtn}>
           <Text style={styles.contents}>Quick replies</Text>
@@ -42,7 +44,10 @@ const ChatDrawer = ({navigation,showDrawer,setShowDrawer}) => {
         <TouchableOpacity style={styles.contentBtn}>
           <Text style={styles.contents}>Scheduled messages</Text>
         </TouchableOpacity> 
-      </View>
+      </View> */}
+      <Modal visible={showSupportChat} onRequestClose={()=>setShowSupportChat(false)}>
+        <MainChat setSupportChatPage={setShowSupportChat}/>
+      </Modal>
     </View>
     <BottomNavHost navigation={navigation} showDrawer={showDrawer} setShowDrawer={setShowDrawer}/>
     <View style={styles.transparent}/>

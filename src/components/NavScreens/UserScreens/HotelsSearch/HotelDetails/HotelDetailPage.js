@@ -18,6 +18,7 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
     const btmBtn=useRef(null)
     const [hotelReviews,setHotelReviews]=useState([])
     const [bookingForm,setBookingForm]=useState(false)
+    const [hotelRating,setHotelRating]=useState(5)
     const {actors}=useSelector(state=>state.actorReducer)
     const [host,setHost]=useState({})
 
@@ -27,6 +28,10 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
         let Revs=[]
         await actors?.reviewActor.getReviewIdsFromHotelId(item?.id).then(async(res)=>{
             console.log("review ids: ",res)
+            if(res==[]){
+                setHotelReviews([])
+                return
+            }
             res.map(async(r)=>{
                 await actors?.reviewActor.getReviewInfo(r).then((res)=>{
                     console.log(res) 
@@ -46,11 +51,23 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
             console.log(err)
         })
     }
+    const calculateRating=()=>{
+        let total=0
+        for(let i=0;i<hotelReviews.length;i++){
+            total+=parseInt(hotelReviews[i].rating)
+        }
+        console.log(parseFloat(total/hotelReviews.length))
+        setHotelRating(parseFloat(total/hotelReviews.length))
+    }
     useEffect(()=>{
         btmBtn.current.present()
         getAllReviews()
         getHostDetails()
     },[])
+
+    useEffect(()=>{
+        calculateRating()
+    },[hotelReviews])
   return (
     <BottomSheetModalProvider>
     <ScrollView>
@@ -58,19 +75,20 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
       <TouchableOpacity style={styles.backIcon} onPress={()=>{setOpen(false)}}>
         <Icon name="angle-left" size={30} color={COLORS.textLightGrey} />    
       </TouchableOpacity> 
-      <Image source={(item?.details?.imagesUrls==""?images.hotel:{uri:item?.details?.imagesUrls})} style={styles.hotelImg}/>
+      {/* <Image source={(item?.details?.imagesUrls==""?images.hotel:{uri:item?.details?.imagesUrls})} style={styles.hotelImg}/> */}
+      <Image source={{uri:item.imageList[0]}} style={styles.hotelImg} />
       {/* <Image source={images.hotel} style={styles.hotelImg}/> */}
       <View style={styles.hotelTitleReviewCont}>
         <View style={styles.hotelTitleCont}>
-            <Text style={styles.hotelTitle}>{item?.hotelTitle}</Text>
+            <Text style={styles.hotelTitle}>{item?.propertyName}</Text>
             <TouchableOpacity style={styles.likeCont}>
                 <Icon2 name="hearto" size={20} color={COLORS.textLightGrey} />
             </TouchableOpacity>    
         </View>
         <View style={styles.hotelReviewCont}>
-            <Icon2 name='star' size={12} color={COLORS.inputBorder} style={{marginRight:5}}/>
+            <Icon2 name='star' size={12} color={COLORS.black} style={{marginRight:5}}/>
             
-            <Text style={styles.hotelReviewText}>4.92 • 432 reviews • {item?.hotelLocation}</Text>
+            <Text style={styles.hotelReviewText}>{hotelRating} • {hotelReviews.length} {hotelReviews.length==1?"review":"reviews"} • {item?.location}</Text>
         </View>
       </View>
       <HostBand hostData={host}/>
@@ -78,7 +96,7 @@ const HotelDetailPage = ({item,setOpen,navigation}) => {
         <HotelFacilityCard hostData={host}/>
       </View>
       <View style={styles.hrLine}></View>
-      <Reviews reviews={hotelReviews}/>  
+      <Reviews hotelReviews={hotelReviews} hotelRating={hotelRating}/>  
         <TouchableOpacity style={styles.btn} onPress={()=>{
             navigation.navigate('UserChat',{newChat:host?.id})
             setOpen(false)
@@ -186,7 +204,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         paddingVertical:15,
-        backgroundColor:COLORS.mainPurple
+        backgroundColor:COLORS.black
     },
     btnText:{
         fontSize:SIZES.preMedium,

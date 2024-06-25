@@ -17,11 +17,11 @@ const Step1 = ({setHostModal,pos}) => {
         return true
         }}/>
       <View style={styles.imageCont}>
-        <Image source={images.hostBed} style={styles.bigImg}/>
-        <View style={styles.smallImgCont}>
+        <Image source={images.step1} style={styles.bigImg}/>
+        {/* <View style={styles.smallImgCont}>
             <Image source={images.hostMirror} style={styles.smallImg}/>
             <Image source={images.hostDoor} style={[styles.smallImg,{marginLeft:40}]}/>
-        </View>
+        </View> */}
       </View>
       <Text style={styles.subTitle}>Step 1</Text>
       <Text style={styles.title}>Concisely highlight the key features and location of your property.</Text>
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG
     },
     imageCont:{
         display:'flex',
@@ -58,8 +58,10 @@ const styles = StyleSheet.create({
         height:'100%'
     },
     bigImg:{
-        width:'60%',
-        height:190
+        width:'85%',
+        height:200,
+        marginLeft:'7.5%',
+        objectFit:'fill'
     },
     smallImg:{
        width:95,
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
     },
     title:{
         width:'88%',
-        color:COLORS.mainPurple,
+        color:COLORS.black,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:15,

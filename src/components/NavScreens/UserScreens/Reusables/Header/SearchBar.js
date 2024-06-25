@@ -1,9 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View ,TextInput} from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, TouchableOpacity, View ,TextInput, Modal} from 'react-native'
+import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/AntDesign'
 import { COLORS,SIZES } from '../../../../../constants/themes'
+import RateHawkBookingPage from '../../HotelsSearch/Ratehawk/RateHawkBookingPage'
 
-const SearchBar = ({filterAction,searchText,setSearchText,setQuery}) => {
+const SearchBar = ({filterAction,searchText,setSearchText,query,setQuery}) => {
+  const [showBookingForm,setShowBookingForm]=useState(false)
   return (
     <View style={styles.searchBarCont}>
       <View style={styles.searchBar}>
@@ -14,14 +16,23 @@ const SearchBar = ({filterAction,searchText,setSearchText,setQuery}) => {
           placeholder='Search Places' 
           placeholderTextColor={COLORS.black} 
           onChangeText={value=>{
+            console.log(value)
             setSearchText(value.toString())
-            setQuery(`pageSize=${25}&name=${value.toString()}`)
+            // setQuery(`pageSize=${25}&name=${value.toString()}`)
+            setQuery({...query,name:value.toString(),pageSize:25})
           }}
         />
       </View>
-      <TouchableOpacity style={styles.filterCont} onPress={filterAction}>
+      <TouchableOpacity 
+        style={styles.filterCont} 
+        onPress={filterAction}
+        // onPress={()=>setShowBookingForm(true)}  
+      >
         <Icon name="filter" size={25} color={COLORS.black}/>
       </TouchableOpacity>
+      <Modal visible={showBookingForm}>
+        <RateHawkBookingPage showSelf={setShowBookingForm}/>
+      </Modal>
     </View>
   )
 }
@@ -50,8 +61,9 @@ const styles = StyleSheet.create({
         marginRight:15,
     },
     input:{
-        height:'60%',
-        marginLeft:15,
+        height:50,
+        width:'90%',
+        marginLeft:5,
         color:COLORS.black,
         fontSize:SIZES.small,
         padding:0,

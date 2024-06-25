@@ -2,7 +2,6 @@ import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 import type { IDL } from '@dfinity/candid';
 
-export type AdminId = string;
 export interface AnnualData {
   'aug' : bigint,
   'dec' : bigint,
@@ -17,32 +16,35 @@ export interface AnnualData {
   'july' : bigint,
   'june' : bigint,
 }
+export type Result = { 'ok' : string } |
+  { 'err' : string };
+export type Result_1 = { 'ok' : UserInfo } |
+  { 'err' : string };
+export type Result_2 = { 'ok' : AnnualData } |
+  { 'err' : string };
 export interface User {
-  'addOwner' : ActorMethod<[AdminId], string>,
   'checkUserExist' : ActorMethod<[string], boolean>,
-  'createUser' : ActorMethod<[User__1], undefined>,
-  'getAllAdmin' : ActorMethod<[], Array<AdminId>>,
-  'getAnnualRegisterByYear' : ActorMethod<[string], [] | [AnnualData]>,
-  'getNoOfPages' : ActorMethod<[bigint], bigint>,
-  'getOwner' : ActorMethod<[], string>,
-  'getUserInfo' : ActorMethod<[], [] | [UserInfo]>,
-  'getUserInfoByPrincipal' : ActorMethod<[Principal], [] | [UserInfo]>,
-  'scanUsers' : ActorMethod<[bigint, bigint], Array<[UserId, UserInfo]>>,
-  'updateUserInfo' : ActorMethod<[UserInfo], [] | [UserInfo]>,
+  'deleteUser' : ActorMethod<[], Result>,
+  'getAnnualRegisterByYear' : ActorMethod<[string], Result_2>,
+  'getUserByPrincipal' : ActorMethod<[Principal], Result_1>,
+  'getuserDetails' : ActorMethod<[], Result_1>,
+  'registerUser' : ActorMethod<[User__1], Result>,
+  'updateUserDetails' : ActorMethod<[UserInfo], Result>,
   'whoami' : ActorMethod<[], string>,
 }
-export type UserId = string;
 export interface UserInfo {
   'dob' : string,
-  'userType' : string,
+  'userRole' : string,
   'userEmail' : string,
-  'userGovId' : string,
+  'userGovID' : string,
+  'userID' : Principal,
   'createdAt' : string,
-  'hostStatus' : boolean,
   'agreementStatus' : boolean,
-  'userProfile' : string,
+  'govIDLink' : string,
+  'isHost' : boolean,
+  'userImage' : string,
+  'isVerified' : boolean,
   'lastName' : string,
-  'verificationStatus' : boolean,
   'firstName' : string,
 }
 export interface User__1 {

@@ -20,25 +20,25 @@ const itemSample = {
   rating: 4,
 };
 
-const Reviews = () => {
-  // console.log("reviews : ",reviews)
+const Reviews = ({hotelReviews,hotelRating}) => {
+  console.log("reviews : ",hotelReviews)
   const [showReview, setShowReviews] = useState(false);
   return (
     <View style={styles.reviewCont}>
       <View style={styles.headerCont}>
-        <Icon name="star" size={16} color={COLORS.mainPurple} />
-        <Text style={styles.reviewText}>4.92 • 432 reviews</Text>
+        <Icon name="star" size={16} color={COLORS.black} />
+        <Text style={styles.reviewText}>{hotelRating} • {hotelReviews.length} {hotelReviews.length==1?"review":"reviews"}</Text>
       </View>
-      {reviews.map(r => {
+      {/* {reviews.map(r => {
         console.log('review element : ', r);
-      })}
+      })} */}
       {reviews?.length == 0 ? (
         <Text style={styles.empty}>No Reviews to show yet</Text>
       ) : (
         // <ReviewCard item={itemSample}/>
         <FlatList
           contentContainerStyle={styles.list}
-          data={reviews}
+          data={hotelReviews}
           renderItem={item => <ReviewCard item={item?.item} />}
           horizontal
         />
@@ -52,7 +52,7 @@ const Reviews = () => {
         <Text style={styles.btnText}>Show all reviews</Text>
       </TouchableOpacity>
       <Modal animationType="slide" visible={showReview}>
-        <AllReviews setShowReviews={setShowReviews} reviews={reviews} />
+        <AllReviews setShowReviews={setShowReviews} reviews={hotelReviews} />
       </Modal>
     </View>
   );
@@ -88,15 +88,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '80%',
     borderWidth: 1.2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderRadius: 12,
     paddingVertical: 10,
     zIndex: 10,
-    marginBottom: 70,
+    marginBottom: 0,
   },
   btnText: {
     fontSize: SIZES.large,
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     fontWeight: '600',
   },
   list: {

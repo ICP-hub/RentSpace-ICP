@@ -1,4 +1,12 @@
-import {Alert, Modal, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  Modal,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 import BottomBtn from '../../Reusables/BottomBtn';
 import SaveBtn from '../../Reusables/SaveBtn';
@@ -12,41 +20,39 @@ import Icon5 from 'react-native-vector-icons/MaterialIcons';
 import AmenityCard from '../../../NavScreens/UserScreens/HotelsSearch/Filters/Amenities/AmenityCard';
 import {useDispatch, useSelector} from 'react-redux';
 import {setListing} from '../../../../redux/NewListing/actions';
-import CustomPopAlert from '../../../NavScreens/CustomPopAlert';
-import {title} from 'process';
-import {type} from 'os';
+import {Dialog, ALERT_TYPE} from 'react-native-alert-notification';
 
 const amenitiesList = [
-  {name: 'wifi', icon: <Icon name="wifi" size={28} color={COLORS.black} />},
-  {name: 'gym', icon: <Icon2 name="dumbbell" size={28} color={COLORS.black} />},
-  {name: 'tv', icon: <Icon name="tv" size={28} color={COLORS.black} />},
+  {name: 'wifi', icon: <Icon name="wifi" size={28} />},
+  {name: 'gym', icon: <Icon2 name="dumbbell" size={28} />},
+  {name: 'tv', icon: <Icon name="tv" size={28} />},
   {
     name: 'laundry',
-    icon: <Icon3 name="washing-machine" size={28} color={COLORS.black} />,
+    icon: <Icon3 name="washing-machine" size={28} />,
   },
-  {name: 'parking', icon: <Icon4 name="car" size={28} color={COLORS.black} />},
+  {name: 'parking', icon: <Icon4 name="car" size={28} />},
   {
     name: 'medication',
-    icon: <Icon2 name="briefcase-medical" size={28} color={COLORS.black} />,
+    icon: <Icon2 name="briefcase-medical" size={28} />,
   },
   {
     name: 'gaming',
-    icon: <Icon name="gamepad" size={28} color={COLORS.black} />,
+    icon: <Icon name="gamepad" size={28} />,
   },
   {
     name: 'dining',
-    icon: <Icon5 name="local-dining" size={28} color={COLORS.black} />,
+    icon: <Icon5 name="local-dining" size={28} />,
   },
 ];
 const propertyTypesList = [
   {name: 'House', icon: <Icon name="home" size={24} color={COLORS.black} />},
   {
-    name: 'Guest House',
-    icon: <Icon2 name="warehouse" size={24} color={COLORS.black} />,
+    name: 'Villa',
+    icon: <Icon5 name="villa" size={24} color={COLORS.black} />,
   },
   {
-    name: 'Flat',
-    icon: <Icon3 name="city-variant" size={24} color={COLORS.black} />,
+    name: 'Apartment',
+    icon: <Icon5 name="apartment" size={24} color={COLORS.black} />,
   },
   {
     name: 'Hotel',
@@ -57,8 +63,8 @@ const propertyTypesList = [
     icon: <Icon4 name="holiday-village" size={24} color={COLORS.black} />,
   },
   {
-    name: 'Palace',
-    icon: <Icon name="fort-awesome" size={24} color={COLORS.black} />,
+    name: 'Glamping',
+    icon: <Icon4 name="tent" size={24} color={COLORS.black} />,
   },
 ];
 
@@ -68,24 +74,15 @@ const Amenities = ({setHostModal, pos}) => {
   const {listing} = useSelector(state => state.listingReducer);
   const dispatch = useDispatch();
 
-  const [showAlertPop, setShowAlertPop] = useState({
-    type: '',
-    title: '',
-    message: '',
-    color: '',
-    visibility: false,
-  });
-
   const emptyCheck = () => {
     if (amenities.length == 0) {
       // Alert.alert('No aminities slected!', 'Select atleast one aminity');
-        setShowAlertPop({
-            type: 'default',
-            title: 'No aminities slected!',
-            message: 'Select atleast one aminity',
-            color: COLORS.mainPurple,
-            visibility: true,
-          });
+      Dialog.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'No aminities selected!',
+        textBody: 'Select atleast one aminity',
+        button: 'OK',
+      });
 
       return false;
     } else {
@@ -101,17 +98,21 @@ const Amenities = ({setHostModal, pos}) => {
   };
 
   return (
-    <SafeAreaView style={styles.view}>
+    <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal} />
       <Text style={styles.title}>Property Type</Text>
       <View style={[styles.listCont, {marginBottom: 30}]}>
         {propertyTypesList.map((item, index) => (
-          <PropertiesCard
-            item={item}
-            key={index}
-            propertyType={propertyType}
-            setPropertyType={setPropertyType}
-          />
+          <TouchableOpacity
+            style={
+              propertyType == item?.name
+                ? [styles.card, {borderBottomWidth: 2}]
+                : styles.card
+            }
+            onPress={() => setPropertyType(item?.name)}>
+            {item?.icon}
+            <Text style={styles.text}>{item?.name}</Text>
+          </TouchableOpacity>
         ))}
       </View>
       <Text style={styles.title}>Amenities</Text>
@@ -129,24 +130,13 @@ const Amenities = ({setHostModal, pos}) => {
       </View>
       <BottomBtn
         setHostModal={setHostModal}
-        pos={pos}
+        // pos={pos}
+        // pos={propertyType == 'Hotel' || propertyType == 'Resort' ? 5 : 6}
+        pos={5}
         step={1}
         nextFunc={emptyCheck}
       />
-      <Modal
-      transparent
-      visible={showAlertPop.visibility}
-      onRequestClose={()=>{setShowAlertPop({...showAlertPop,visibility:false})}}
-      >
-        <CustomPopAlert
-          type={showAlertPop.type}
-          title={showAlertPop.title}
-          message={showAlertPop.message}
-          color={showAlertPop.color}
-          onCloseRequest={setShowAlertPop}
-        />
-      </Modal>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -159,11 +149,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     width: '100%',
     height: '100%',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
   },
   title: {
     width: '88%',
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     fontSize: SIZES.xxLarge,
     fontWeight: '500',
     marginLeft: '8%',
@@ -175,8 +165,19 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     width: '85%',
     columnGap: 30,
-    rowGap: 30,
+    rowGap: 20,
     marginLeft: '7.55%',
     marginVertical: 20,
+    paddingLeft: 5,
+  },
+  card: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 1.5,
+    width: '23%',
+    borderRadius: 4,
+    borderBottomColor: COLORS.black,
   },
 });

@@ -106,7 +106,7 @@ const Comments = ({id,comments,getComments,loading,setLoading}) => {
         keyExtractor={(item,index)=>index.toString()}
         />    
       <View style={styles.typeCont}>
-        <Image source={images.profileSample} style={styles.img}/>
+        <Image source={(user?.userProfile==""||user?.userProfile=="img")?images.sampleProfile2:{uri:user?.userProfile}} style={styles.img}/>
         <TextInput 
             value={comment} 
             onChangeText={value=>setComment(value)}

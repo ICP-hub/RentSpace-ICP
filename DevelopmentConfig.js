@@ -3,30 +3,33 @@ const production = false;
 
 export const host = production ? 'https://icp-api.io' : 'http://127.0.0.1:4943';
 
+export const nodeBackend = production ? 'https://rentspace.kaifoundry.com' : 'http://localhost:5000';
+
 export const ids = {
   userCan: production
-    ? // "tassb-3qaaa-aaaan-qloxq-cai":
-      'wenzb-uyaaa-aaaan-qlwsa-cai'
-    : 'be2us-64aaa-aaaaa-qaabq-cai',
+    ? 'xlygc-qqaaa-aaaao-a3odq-cai'
+    // : 'a3shf-5eaaa-aaaaa-qaafa-cai',
+    :"by6od-j4aaa-aaaaa-qaadq-cai",
 
   hotelCan: production
-    ? 'wkpuj-piaaa-aaaan-qlwta-cai'
-    : // "5mldq-waaaa-aaaan-qlqta-cai":
-      'b77ix-eeaaa-aaaaa-qaada-cai',
+    ? 'wbxey-saaaa-aaaao-a3oeq-cai'
+    // : 'aovwi-4maaa-aaaaa-qaagq-cai',
+    :"be2us-64aaa-aaaaa-qaabq-cai",
 
   backendCan: production
-    ? // "thtuv-wiaaa-aaaan-qloxa-cai":
-      '5cjoy-nqaaa-aaaan-qlqsa-cai'
+    ? '5cjoy-nqaaa-aaaan-qlqsa-cai'
     : 'be2us-64aaa-aaaaa-qaabq-cai',
   reviewCan: production
-    ? 'wdm7v-zaaaa-aaaan-qlwsq-cai'
-    : 'bd3sg-teaaa-aaaaa-qaaba-cai',
+    ? 'w2sy5-iyaaa-aaaao-a3oga-cai'
+    // : 'asrmz-lmaaa-aaaaa-qaaeq-cai',
+    :"bw4dl-smaaa-aaaaa-qaacq-cai",
   bookingCan: production
-    ? 'xhbqh-aaaaa-aaaan-qlwuq-cai'
-    : 'br5f7-7uaaa-aaaaa-qaaca-cai',
+    ? 'wiupe-eiaaa-aaaao-a3ofa-cai'
+    // : 'a4tbr-q4aaa-aaaaa-qaafq-cai',
+    :"bkyz2-fmaaa-aaaaa-qaaaq-cai",
   ICPtokenCan: production
     ? 'ryjl3-tyaaa-aaaaa-aaaba-cai'
-    : 'ryjl3-tyaaa-aaaaa-aaaba-cai', //bw4dl-smaaa-aaaaa-qaacq-cai
+    : 'ryjl3-tyaaa-aaaaa-aaaba-cai', 
   ckBTCtokenCan: production
     ? 'mxzaz-hqaaa-aaaar-qaada-cai'
     : 'mxzaz-hqaaa-aaaar-qaada-cai',
@@ -34,11 +37,13 @@ export const ids = {
     ? 'ss2fx-dyaaa-aaaar-qacoq-cai'
     : 'ss2fx-dyaaa-aaaar-qacoq-cai',
   commentCan: production
-    ? 'wnos5-cqaaa-aaaan-qlwtq-cai'
-    : 'bw4dl-smaaa-aaaaa-qaacq-cai',
+    ? 'wpvjq-jqaaa-aaaao-a3ofq-cai'
+    // : 'ajuq4-ruaaa-aaaaa-qaaga-cai',
+    :"bd3sg-teaaa-aaaaa-qaaba-cai",
   supportCan: production
-    ? 'xaawt-nyaaa-aaaan-qlwua-cai'
-    : 'by6od-j4aaa-aaaaa-qaadq-cai',
+    ? 'wgwcm-7yaaa-aaaao-a3oea-cai'
+    // : 'ahw5u-keaaa-aaaaa-qaaha-cai',
+    :"b77ix-eeaaa-aaaaa-qaada-cai",
 };
 
 // {

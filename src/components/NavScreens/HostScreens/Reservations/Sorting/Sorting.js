@@ -71,6 +71,6 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'flex-start',
         height:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG
     },
 })

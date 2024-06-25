@@ -1,4 +1,4 @@
-import { Dimensions, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, Image, Modal, NativeModules, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import Line from './Line'
 import Icon from 'react-native-vector-icons/Entypo'
@@ -26,6 +26,7 @@ import MainChat from '../SupportChat/MainChat'
 import Privacy from '../Privacy/Privacy'
 import Terms from '../TermAndConditions/Terms'
 import Faq from '../Faq/Faq'
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
 const MainProfile = ({navigation}) => {
 
@@ -43,16 +44,17 @@ const MainProfile = ({navigation}) => {
   const [termsPage,setTermsPage]=useState(false)
 
   const logout=()=>{
-    dispatch(setActor({
-        backendActor:backend,
-        userActor:User,
-        hotelActor:hotel
-    }))
-    dispatch(setUser({}))
-    dispatch(setHotels([]))
-    dispatch(setPrinciple(''))
-    navigation.navigate('Launch')
-}
+    // dispatch(setActor({
+    //     backendActor:backend,
+    //     userActor:User,
+    //     hotelActor:hotel
+    // }))
+    // dispatch(setUser({}))
+    // dispatch(setHotels([]))
+    // dispatch(setPrinciple(''))
+    // navigation.navigate('Launch')
+    NativeModules.DevSettings.reload()
+  }
 
 const getHotelList=async()=>{
   await actors.hotelActor.getHotelId().then((res)=>{
@@ -66,7 +68,7 @@ const getHotelList=async()=>{
 }
 
 useEffect(()=>{
-  getHotelList()
+  // getHotelList()
   console.log(user)
 },[])
 
@@ -74,37 +76,64 @@ const makeHost=async()=>{
   setLoading(true)
   console.log("You are host now")
   console.log({...user
-    ,userType:'Host',
-    hostStatus:true,
-    userProfile:(user?.userProfile)!=""?user?.userProfile:"img",
-    userGovId:((user?.userGovId==""||user?.userGovId==null)?"nothing":user?.userGovId)})
+    ,userRole:'Host',
+    isHost:true,
+    userImage:(user?.userImage)!=""?user?.userImage:"img",
+    userGovID:((user?.userGovID==""||user?.userGovID==null)?"nothing":user?.userGovID)})
   await actors.userActor?.updateUserInfo({...user
-    ,userType:'Host',
-    hostStatus:true,
-    userProfile:(user?.userProfile)!=""?user?.userProfile:"img",
-    userGovId:((user?.userGovId==""||user?.userGovId==null)?"nothing":user?.userGovId
+    ,userRole:'Host',
+    isHost:true,
+    userImage:(user?.userImage)!=""?user?.userImage:"img",
+    userGovID:((user?.userGovID==""||user?.userGovID==null)?"nothing":user?.userGovID
     
     ),
     agreementStatus:user?.agreementStatus
   }).then(async(res)=>{
+    if(res?.ok==undefined){
+      Dialog.show({
+        type:ALERT_TYPE.DANGER,
+        title:'Error',
+        textBody:res?.err,
+        button:'OK',
+      })
+      return
+    }
     console.log(res)
     
     setLoading(false)
-    alert('You are a host now!')
+    // alert('You are a host now!')
+    Dialog.show({
+      type:ALERT_TYPE.SUCCESS,
+      title:'SUCCESS',
+      textBody:'You are a host now!',
+      button:'OK',
+    })
     await actors.userActor?.getUserInfo().then((res)=>{
-      console.log(res[0])
-      dispatch(setUser(res[0]))
+      console.log(res?.ok)
+      dispatch(setUser(res?.ok))
     }).then(()=>{
       getHotelList()
     }).catch((err)=>{
       setLoading(false)
-      alert(err)
+      // alert(err)
+      Dialog.show({
+        type:ALERT_TYPE.DANGER,
+        title:'ERROR',
+        textBody:err,
+        button:'OK',
+      })
       console.log(err)
     })
 
   }).catch((err)=>{
     setLoading(false)
-    alert(err)
+    // alert(err)
+    Dialog.show({
+      type:ALERT_TYPE.DANGER,
+      title:'ERROR',
+      textBody:err,
+      button:'OK',
+    })
     console.log(err)
   })
 }
@@ -134,7 +163,7 @@ const makeHost=async()=>{
     },
   ]
   
-  const hostingList=(user?.hostStatus==true)?[
+  const hostingList=(user?.isHost==true)?[
     {
       text:"Switch to Hosting",
       onClick:()=>{navigation.navigate('hostHome')},
@@ -159,11 +188,11 @@ const makeHost=async()=>{
       onClick:()=>{setFAQPage(true)},
       icon:<Icon3 color={COLORS.black} name='notebook' size={20}/>
     },
-    {
-      text:"Feedback",
-      onClick:()=>{setFeedbackPage(true)},
-      icon:<Icon3 color={COLORS.black} name='pencil' size={20}/>
-    },
+    // {
+    //   text:"Feedback",
+    //   onClick:()=>{setFeedbackPage(true)},
+    //   icon:<Icon3 color={COLORS.black} name='pencil' size={20}/>
+    // },
     // {
     //   text:"How RentSpace works",
     //   onClick:()=>{},
@@ -205,7 +234,7 @@ const makeHost=async()=>{
           </View>
           <View style={styles.imgCont}>
             <View style={styles.imgView}>
-              <Image source={images.newProfile} style={styles.img}/>
+              <Image source={(user?.userImage==""||user?.userImage=="img")?images.newProfile:{uri:user.userImage}} style={styles.img}/>
             </View>  
             <Text style={styles.name}>{user?.firstName+" "+user?.lastName}</Text>
           
@@ -225,16 +254,16 @@ const makeHost=async()=>{
             </TouchableOpacity>
           </View>
         </ScrollView>
-        <Modal visible={showDetails} animationType='slide'>
+        <Modal visible={showDetails} animationType='slide' onRequestClose={()=>setShowDetails(false)}>
           <UserDetailDemo navigation={navigation} setShowDetails={setShowDetails}/>
         </Modal>
-        <Modal visible={reportPage} animationType='slide'>
+        <Modal visible={reportPage} animationType='slide' onRequestClose={()=>setReportPage(false)}>
           <Report setReportPage={setReportPage}/>
         </Modal>
-        <Modal visible={feedbackPage} animationType='slide'>
-          <Feedback setFeedbackPage={setFeedbackPage}/>
+        <Modal visible={feedbackPage} animationType='slide' onRequestClose={()=>setFeedbackPage(false)}>
+          <Feedback setFeedbackPage={setFeedbackPage}/> 
         </Modal>
-        <Modal visible={supportChatPage} animationType='slide'>
+        <Modal visible={supportChatPage} animationType='slide' onRequestClose={()=>setSupportChatPage(false)}>
           <MainChat setSupportChatPage={setSupportChatPage}/>
         </Modal>
         {/* new UI below */}
@@ -243,7 +272,7 @@ const makeHost=async()=>{
         </Modal>
 
         <Modal visible={FAQPage} animationType='slide' onRequestClose={()=>setFAQPage(false)}>
-          <Faq setFAQPage={setFAQPage}/>
+          <Faq setFAQPage={setFAQPage}/> 
         </Modal>
 
         <Modal visible={termsPage} animationType='slide' onRequestClose={()=>setTermsPage(false)}>
@@ -262,7 +291,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         width:'100%',
-        backgroundColor:COLORS.mainGrey,
+        backgroundColor:COLORS.newBG,
         minHeight:'100%'
     },
     header:{

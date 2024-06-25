@@ -13,7 +13,8 @@ import Geolocation from '@react-native-community/geolocation'
 
 const Reels = ({navigation}) => {
   const btmSheetComments=useRef(null)
-  const baseURL='https://rentspace.kaifoundry.com/api/v1'
+  const baseURL='https://rentspace.kaifoundry.com'
+  // const baseURL="http://localhost:5000"
   const [reels,setReels]=useState([])
   const openComments=()=>{
     btmSheetComments.current.present()
@@ -28,7 +29,7 @@ const Reels = ({navigation}) => {
       lang=loc.coords.longitude,
       lat=loc.coords.latitude
     },(err)=>console.log(err))
-    await axios.get(`${baseURL}/hotel/reel/video`,{headers:{
+    await axios.get(`${baseURL}/api/v1/hotel/reel/video`,{headers:{
       latitude:`${lat}`,
       longitude:`${lang}`,
       radius:5
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
     view:{
         width:'100%',
         height:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG,
     },
     simpleText:{
         color:'black',

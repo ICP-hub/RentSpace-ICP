@@ -1,18 +1,18 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { SIZES } from '../../../../../../../constants/themes'
+import { COLORS, SIZES } from '../../../../../../../constants/themes'
 import { images } from '../../../../../../../constants'
 
-const Header = () => {
+const Header = ({hotelAddress,hotelname}) => {
   return (
     <View style={styles.sec}>
       <Image style={styles.img} source={images.hotelImg1}/>
       <View style={styles.textCont}>
         <Text style={styles.title}>
-            Charm Ville - Villa with Nature! FarmVilla n Hosur
+            {hotelname}
         </Text>
         <Text style={styles.text}>
-            4.92 • 432 reviews • Ubdu, Bai, Indonesia
+            {hotelAddress}
         </Text>
       </View>
     </View>
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         height:70
     },
     title:{
-        color:'black',
+        color:COLORS.black,
         fontSize:SIZES.medium-1,
         fontWeight:'600'
     },

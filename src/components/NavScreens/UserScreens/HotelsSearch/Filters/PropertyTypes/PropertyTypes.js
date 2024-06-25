@@ -28,15 +28,16 @@ const styles = StyleSheet.create({
         width:'85%',
         marginVertical:20,
         marginLeft:'7.5%'
+        
     },
     listCont:{
       display:'flex',
       flexDirection:'row',
       flexWrap:'wrap',
       width:'90%',
-      columnGap:30,
-      rowGap:30,
+      columnGap:20,
+      rowGap:10,
       marginLeft:'5%',
-      marginTop:30
+      marginTop:30,
     }
 })

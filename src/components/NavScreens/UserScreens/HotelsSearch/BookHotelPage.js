@@ -8,6 +8,8 @@ import {
   FlatList,
   Modal,
   Pressable,
+  ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import {images} from '../../../../constants';
@@ -19,23 +21,10 @@ import {setBookings} from '../../../../redux/UserBookings/actions';
 import ShowBookings from './HotelDetails/ShowBookings/ShowBookings';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/Ionicons';
-import RateHawk from './RateHawk';
-import CustomPopAlert from '../../CustomPopAlert';
+import RateHawk from './Ratehawk/RateHawk';
+import RateHawkCard from './HotelDetails/cards/RateHawkCard';
 
-const BookHotelPage = ({navigation, queryHotels}) => {
-
-  // --------- UI test for CustomPopAlert ---------
-  const [makeVisible, setMakeVisible] = useState(false);
-
-  const testyesFunc =()=>{
-    console.log('yes')
-  }
-  const testnoFunc =()=>{
-    console.log('no')
-  }
-
-  // --------- UI test for CustomPopAlert end ---------
-
+const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
   const [hotelProfile, setHotelProfile] = useState(false);
 
   const firstRender = useRef(true);
@@ -51,9 +40,11 @@ const BookHotelPage = ({navigation, queryHotels}) => {
   const sampleDes = '2972 Westheimer Rd. Santa Ana, Illinois 85486 ';
   const [bookingList, setBookingList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+
   // const [bottom,setBottom]=useState(70)
 
   async function getReservations(setRefreshing) {
+    setRefreshing(true);
     setBookingList([]);
     await actors?.bookingActor
       .getBookingId()
@@ -61,6 +52,10 @@ const BookHotelPage = ({navigation, queryHotels}) => {
         console.log('getid resp : ', res);
 
         console.log('all bookings1: ', res[0]);
+        if (res.length <= 0) {
+          setRefreshing(false);
+          return;
+        }
         res.map(async r => {
           setRefreshing(true);
           console.log('booking-->', r);
@@ -112,29 +107,33 @@ const BookHotelPage = ({navigation, queryHotels}) => {
       setHotelsList([]);
       return;
     }
+    console.log('queryHotelsLength : ', queryHotels.length)
     for (let i = 0; i < queryHotels?.length; i++) {
-      console.log('el', queryHotels[i].hotelId);
-      await actors.hotelActor
-        ?.getHotel(queryHotels[i].hotelId)
-        .then(res => {
-          newArr.push({
-            ...res[0],
-            id: queryHotels[i].hotelId,
-            details: queryHotels[i],
-          });
-          setRefreshing(false);
-          setHotelsList([...newArr]);
-        })
-        .catch(err => {
-          console.log(err);
-          setRefreshing(false);
-        });
+      console.log(`Property ${i} ID : `, queryHotels[i].propertyId);
+      // await actors.hotelActor
+      //   ?.getHotel(queryHotels[i].hotelId)
+      //   .then(res => {
+      //     newArr.push({
+      //       ...res[0],
+      //       id: queryHotels[i].hotelId,
+      //       details: queryHotels[i],
+      //     });
+      //     setRefreshing(false);
+      //     setHotelsList([...newArr]);
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //     setRefreshing(false);
+      //   });
+      setRefreshing(false);
+      setHotelsList([...queryHotels]);
     }
+    // console.log(queryHotels)
   }
   const refresh = () => {
-    console.log(queryHotels);
-    // getQueryHotelDetails()
-    getReservations();
+    // console.log(queryHotels);
+    getQueryHotelDetails();
+    getReservations(setRefreshing);
   };
 
   // useEffect(()=>{
@@ -145,6 +144,7 @@ const BookHotelPage = ({navigation, queryHotels}) => {
   //         setBottom(70)
   //     })
   // })
+
   useEffect(() => {
     if (firstRender.current) {
       console.log(firstRender.current);
@@ -153,10 +153,9 @@ const BookHotelPage = ({navigation, queryHotels}) => {
       getQueryHotelDetails();
       // getReservations()
     }
-    ``;
   }, [queryHotels, principle]);
 
-  if (hotelsList?.length > 0) {
+  if (hotelsList?.length > 0 || rateHawkHotel?.length > 0) {
     return (
       <>
         <View style={styles.btnCont}>
@@ -169,16 +168,25 @@ const BookHotelPage = ({navigation, queryHotels}) => {
             <Text style={styles.btnText}>Show my bookings</Text>
           </TouchableOpacity>
         </View>
-        <FlatList
-          data={hotelsList}
-          style={{marginBottom: 70, backgroundColor: 'white'}}
-          renderItem={item => (
-            <HotelCard item={item.item} navigation={navigation} />
-          )}
-          refreshing={refreshing}
-          onRefresh={refresh}
-        />
-        <Modal animationType="slide" visible={showReservation}>
+
+        <ScrollView style={{width: '100%', marginBottom: 65, backgroundColor:'#F5F5F5'}}>
+          {hotelsList.map((item, index) => {
+            return (
+              <HotelCard key={index} item={item} navigation={navigation} />
+            );
+          })}
+
+          {rateHawkHotel.map((item, index) => {
+            return (
+              <RateHawkCard key={index} item={item} navigation={navigation} />
+            );
+          })}
+        </ScrollView>
+
+        <Modal
+          animationType="slide"
+          visible={showReservation}
+          onRequestClose={() => setShowReservations(false)}>
           <ShowBookings
             getReservations={getReservations}
             bookingList={bookingList}
@@ -190,51 +198,18 @@ const BookHotelPage = ({navigation, queryHotels}) => {
   } else {
     return (
       <>
-        {/* <HotelCard name={sampleName} des={sampleDes} rating={4} /> */}
-        <Text style={styles.empty}>Sorry nothing to show</Text>
-
-        {/* UI test for Rate Hawk  */}
-        <Pressable onPress={() => setHotelProfile(true)}>
-          <Text
-            style={{
-              backgroundColor: 'grey',
-              maxWidth: 'fit-content',
-              marginHorizontal: 50,
-              color: 'white',
-              padding: 10,
-            }}>
-            Make RateHawk visible
-          </Text>
-        </Pressable>
-
-        <TouchableOpacity
-          style={{backgroundColor: 'red', padding: 10, marginTop: 20}}
-          onPress={() => setMakeVisible(true)}>
-          <Text>Alert Visible</Text>
-        </TouchableOpacity>
-
-        <Modal
-          visible={hotelProfile}
-          onRequestClose={() => setHotelProfile(false)}>
-          <RateHawk setHotelProfile={setHotelProfile} />
-        </Modal>
-
-        <Modal
-          transparent
-          visible={makeVisible}
-          onRequestClose={() => setMakeVisible(false)}>
-          <CustomPopAlert
-            type="default"
-            title="Oops! Something went wrong."
-            message="We're sorry, but the mobile app encountered a serious error.
-            Please try again later or contact support for assistance."
-            color={COLORS.mainPurple}
-            onCloseRequest={setMakeVisible}
-            yesRequest={testyesFunc}
-            noRequest={testnoFunc}
-            
-          />
-        </Modal>
+        <View style={styles.btnCont}>
+          <TouchableOpacity style={[styles.btn]} onPress={refresh}>
+            <Icon2 name="reload-circle-sharp" size={20} color={COLORS.black} />
+            <Text style={styles.btnText}>Reload Data</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btn} onPress={dispatchBookingData}>
+            <Icon name="address-book" size={20} color={COLORS.black} />
+            <Text style={styles.btnText}>Show my bookings</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.empty}>Please hold on while we fetch the best hotel options for you.{"\n"}If no results appear, try adjusting your search criteria.</Text>
+        <ActivityIndicator animating={true} size={40} color={COLORS.mainPurple} style={styles.loader} />
       </>
     );
   }
@@ -243,6 +218,11 @@ const BookHotelPage = ({navigation, queryHotels}) => {
 export default BookHotelPage;
 
 const styles = StyleSheet.create({
+  loader: {
+    position: 'absolute',
+    top: '45%',
+    marginHorizontal: '50%',
+  },
   hotelPage: {
     display: 'flex',
     flexDirection: 'column',
@@ -301,7 +281,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     paddingHorizontal: '8%',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
     paddingBottom: 10,
   },
   btn: {
@@ -324,15 +304,18 @@ const styles = StyleSheet.create({
   },
   empty: {
     width: '90%',
-    height: 200,
-    fontSize: SIZES.preMedium,
+    height: 180,
+    fontSize: SIZES.largeMed,
     color: COLORS.textLightGrey,
-    fontWeight: '300',
-    backgroundColor: COLORS.lighterGrey,
+    fontWeight: '500',
+    backgroundColor: COLORS.white,
+    borderWidth:1,
     borderRadius: 20,
     marginTop: 40,
     marginLeft: '5%',
     textAlign: 'center',
     paddingTop: 20,
+    paddingHorizontal: 20
+
   },
 });

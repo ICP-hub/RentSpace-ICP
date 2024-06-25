@@ -3,21 +3,27 @@ import React, { useEffect } from 'react'
 import Icon from 'react-native-vector-icons/AntDesign'
 import { COLORS, SIZES } from '../../../../../../../constants/themes'
 import { images } from '../../../../../../../constants'
+import { useSelector } from 'react-redux'
 
 const months=["January","Febraury","March","April","May","June","July","August","September","October","November","December"]
 
 const ReviewCard = ({item}) => {
-  const rating=4
+  // const rating=4
   let ratingArr=new Array(item?.rating)
+  const {actors}=useSelector(state=>state.actorReducer)
+
   ratingArr.fill(1)
   // console.log((ratingArr))
     // let date=item?.date
     // let month=Number(date.charAt(3)+date.charAt(4))
     // let year=Number(date.charAt(6)+date.charAt(7)+date.charAt(8)+date.charAt(9))
     // console.log(month,year)
+    // const getUserDetails=async()=>{
+    //   await 
+    // }
   return (
     <View style={styles.card}>
-      <Image style={styles.img} source={images.profileSample}/>
+      <Image style={styles.img} source={images.hotelImg1}/>
       <View style={styles.dateCont}>
         {
           ratingArr.map((r,index)=>(
@@ -25,9 +31,9 @@ const ReviewCard = ({item}) => {
           ))
         }
         
-        <Text style={styles.dateText}>{item?.date}</Text>
+        <Text style={styles.dateText}>{item?.title}</Text>
       </View>
-      <Text style={styles.normalText}>{item?.review}</Text>
+      <Text style={styles.normalText}>{item?.des}</Text>
     </View>
   )
 }
@@ -39,7 +45,8 @@ const styles = StyleSheet.create({
     display:'flex',
     flexDirection:'column',
     alignItems:'center',
-    backgroundColor:'hsla(183, 66%, 60%, 1)',
+    // backgroundColor:'hsla(183, 66%, 60%, 1)',
+    backgroundColor:COLORS.white,
     width:300,
     borderRadius:12,
     opacity:1,
@@ -72,7 +79,7 @@ const styles = StyleSheet.create({
     opacity:0.9
   },
   normalText:{
-    color:COLORS.textLightGrey,
+    color:COLORS.black,
     fontSize:SIZES.preMedium-2,
     fontWeight:'300',
     marginVertical:10,

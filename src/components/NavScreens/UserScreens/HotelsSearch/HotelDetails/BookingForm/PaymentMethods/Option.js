@@ -1,8 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { COLORS } from '../../../../../../../constants/themes'
 
 const Option = ({item,setMethod,method,connect}) => {
+  console.log(item);
   return (
     <TouchableOpacity 
         style={(method==item?.label)?styles.selectedCard:styles.card} 
@@ -10,6 +11,7 @@ const Option = ({item,setMethod,method,connect}) => {
           setMethod(item?.label)
           if(item?.label=="SOL"){
             // connect()
+            Alert.alert('Coming Soon','This feature is coming soon');
             
           }
         }}

@@ -25,7 +25,7 @@ import UserDetailDemo from './src/components/NavScreens/UserScreens/Profile/Moda
 // import Map from './src/components/NavScreens/UserScreens/Map/Map';
 import Reels from './src/components/NavScreens/UserScreens/Reels/Reels';
 import {User} from './src/declarations/User';
-import {hotel} from './src/declarations/hotel';
+import {Hotel} from './src/declarations/Hotel'
 import {backend} from './src/declarations/backend';
 import PolyfillCrypto from 'react-native-webview-crypto';
 import {
@@ -49,11 +49,11 @@ import {
 } from 'react-native';
 import {createActor} from './src/declarations/backend';
 import {createActor as createUserActor} from './src/declarations/User';
-import {createActor as createHotelActor} from './src/declarations/hotel';
-import {createActor as createBookingActor} from './src/declarations/booking';
+import {createActor as createHotelActor} from './src/declarations/Hotel/';
+import {createActor as createBookingActor} from './src/declarations/Booking';
 import {createActor as createReviewActor} from './src/declarations/Review';
-import {createActor as createCommentActor} from './src/declarations/comment';
-import {createActor as createSupportActor} from './src/declarations/supportChat';
+import {createActor as createCommentActor} from './src/declarations/Comment';
+import {createActor as createSupportActor} from './src/declarations/Support';
 import store from './src/redux/store';
 import {setActor} from './src/redux/actor/actions';
 import {setPrinciple} from './src/redux/principle/actions';
@@ -67,6 +67,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {host, ids} from './DevelopmentConfig';
 import MainProfile from './src/components/NavScreens/UserScreens/Profile/MainProfile/MainProfile';
 import HotelChoice from './src/components/NavScreens/HostScreens/Availibility/HotelChoice/HotelChoice';
+import {AlertNotificationRoot, ALERT_TYPE,Dialog} from 'react-native-alert-notification'
+import { AlertThemes } from './src/constants/themes';
 
 const Stack = createNativeStackNavigator();
 
@@ -209,9 +211,21 @@ const RootComponent: React.FC = () => {
           if (res[0]?.firstName != null) {
             store.dispatch(setUser(res[0]));
             btmSheetLoginRef.current.dismiss();
-            alert(`welcome back ${res[0]?.firstName}!`);
+            // Alert.alert(`welcome`,`You are welcome again ${res[0]?.firstName}!`);
+            Dialog.show({
+              type:ALERT_TYPE.SUCCESS,
+              title:'WELCOME',
+              textBody:`You are welcome again ${res[0]?.firstName}!`,
+              button:'OK',
+            })
           } else {
-            alert('Now please follow the registeration process!');
+            // Alert.alert('Now please follow the registeration process!');
+            Dialog.show({
+              type:ALERT_TYPE.INFO,
+              title:'INFO',
+              textBody:'Now please follow the registeration process!',
+              button:'OK',
+            })
             btmSheetLoginRef.current.dismiss();
             btmSheetFinishRef.current.present();
           }
@@ -264,7 +278,7 @@ const RootComponent: React.FC = () => {
 
   let resp;
 
-  const handleLogin = async () => {
+  const handleLogin = async (setLoader) => {
     const newDel = await getFromAsyncStore('delegation');
     const newPri = await getFromAsyncStore('prikey');
     const newpub = await getFromAsyncStore('pubkey');
@@ -279,8 +293,9 @@ const RootComponent: React.FC = () => {
         try {
           Linking.addEventListener('url', handleDeepLink);
           setTimeout(async () => {
-            // const url = `https://sldpd-dyaaa-aaaag-acifq-cai.icp0.io?publicKey=${toHex(res.getPublicKey().toDer())}`;
-            const url = `http://127.0.0.1:4943/?canisterId=bkyz2-fmaaa-aaaaa-qaaaq-cai&publicKey=${toHex(
+            // const url = `https://xmzaw-5iaaa-aaaao-a3oda-cai.icp0.io?publicKey=${toHex(res.getPublicKey().toDer())}`;
+            const url = `http://127.0.0.1:4943/?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai&publicKey=${toHex(
+            // const url = `http://127.0.0.1:4943/?canisterId=avqkn-guaaa-aaaaa-qaaea-cai&publicKey=${toHex(
               res.getPublicKey().toDer(),
             )}`;
             if (await InAppBrowser.isAvailable()) {
@@ -325,12 +340,14 @@ const RootComponent: React.FC = () => {
           }, 1000);
         } catch (error) {
           console.log(error);
+          setLoader(false)
           // alert(error);
         }
       })
       .catch(err => {
         console.log(err);
         // alert(err);
+        setLoader(false)
       });
   };
   const handleDeepLink = async event => {
@@ -433,9 +450,9 @@ const RootComponent: React.FC = () => {
       await getSignObject().then(async () => {
         console.log('getting sign obj : ', signObj);
         store.dispatch(setAuthData(signObj));
-        const baseUrl="http://localhost:5000"
+        // const baseUrl="http://localhost:5000"
         // alert('implementing chat register')
-        // const baseUrl = 'https://rentspace.kaifoundry.com';
+        const baseUrl = 'https://rentspace.kaifoundry.com';
         await axios
           .post(
             `${baseUrl}/api/v1/register/user`,
@@ -469,16 +486,16 @@ const RootComponent: React.FC = () => {
         blsVerify: () => true,
         canisterId: ids.ICPtokenCan,
       });
-      // let actorCkBTCToken=Actor.createActor(idlFactory, {
-      //   agent,
-      //   blsVerify:()=>true,
-      //   canisterId:ids.ckBTCtokenCan
-      // })
-      // let actorCkETHToken=Actor.createActor(idlFactory, {
-      //   agent,
-      //   blsVerify:()=>true,
-      //   canisterId:ids.ckETHtokenCan
-      // })
+      let actorCkBTCToken=Actor.createActor(idlFactory, {
+        agent,
+        blsVerify:()=>true,
+        canisterId:ids.ckBTCtokenCan
+      })
+      let actorCkETHToken=Actor.createActor(idlFactory, {
+        agent,
+        blsVerify:()=>true,
+        canisterId:ids.ckETHtokenCan
+      })
       let actorReview = createReviewActor(ids.reviewCan, {agent});
       let actorComment = createCommentActor(ids.commentCan, {agent});
       let actorSupport = createSupportActor(ids.supportCan, {agent});
@@ -489,8 +506,8 @@ const RootComponent: React.FC = () => {
           hotelActor: actorHotel,
           bookingActor: actorBooking,
           icpTokenActor: actorICPToken,
-          ckbtcTokenActor: actorICPToken,
-          ckETHtokenActor: actorICPToken,
+          ckbtcTokenActor: actorCkBTCToken,
+          ckETHtokenActor: actorCkETHToken,
           reviewActor: actorReview,
           commentActor: actorComment,
           supportActor: actorSupport,
@@ -511,14 +528,26 @@ const RootComponent: React.FC = () => {
       console.log('Getting user data');
       setTimeout(async () => {
         await actorUser
-          ?.getUserInfo()
+          ?.getuserDetails()
           .then(res => {
-            if (res[0]?.firstName != null) {
-              store.dispatch(setUser(res[0]));
+            if (res?.ok?.firstName != null) {
+              store.dispatch(setUser(res?.ok));
               btmSheetLoginRef.current.dismiss();
-              alert(`welcome back ${res[0]?.firstName}!`);
+              // Alert.alert(`Welcome`,`You are welcome again ${res[0]?.firstName}!`);
+              Dialog.show({
+                type:ALERT_TYPE.SUCCESS,
+                title:'WELCOME',
+                textBody:`You are welcome again ${res?.ok?.firstName}!`,
+                button:'OK',
+              })
             } else {
-              // alert('Now please follow the registeration process!');
+              // Alert.alert("Continue",'Now please follow the registeration process!');
+              Dialog.show({
+                type:ALERT_TYPE.SUCCESS,
+                title:'CONTINUE',
+                textBody:'Now please follow the registeration process!',
+                button:'OK',
+              })
               btmSheetLoginRef.current.dismiss();
               btmSheetFinishRef.current.present();
             }
@@ -536,7 +565,14 @@ const RootComponent: React.FC = () => {
       // getUserData()
     } catch (err) {
       console.log(err);
-      alert(err);
+      //alert(err)
+      setLoader(false)
+      Dialog.show({
+        type:ALERT_TYPE.DANGER,
+        title:'WARNING',
+        textBody:err,
+        button:'OK',
+      })
     }
   };
 
@@ -544,6 +580,7 @@ const RootComponent: React.FC = () => {
     <>
       <PolyfillCrypto />
       <Provider store={Store}>
+        <AlertNotificationRoot colors={AlertThemes} theme='light'>
         <NavigationContainer linking={linking}>
           <Stack.Navigator initialRouteName="reels">
             <Stack.Screen
@@ -605,10 +642,14 @@ const RootComponent: React.FC = () => {
             />
           </Stack.Navigator>
         </NavigationContainer>
+        </AlertNotificationRoot>
       </Provider>
     </>
   );
 };
+
+
+
 
 AppRegistry.registerComponent(appName, () => RootComponent);
 // AppRegistry.registerComponent(appName, () => App);

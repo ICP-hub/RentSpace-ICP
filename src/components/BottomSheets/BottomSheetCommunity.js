@@ -1,19 +1,20 @@
-import {StyleSheet, Text, View, Image, ActivityIndicator, Modal} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ActivityIndicator,
+  Modal,
+  Alert,
+} from 'react-native';
 import React, {useState} from 'react';
 import {SIZES, COLORS} from '../../constants/themes';
 import {images} from '../../constants';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
-import CustomPopAlert from '../NavScreens/CustomPopAlert';
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification';
 
 const BottomSheetCommunity = ({selfMod, openNotiModal}) => {
-  const [showAlertPop, setShowAlertPop] = useState({
-    show: false,
-    title: '',
-    message: '',
-    color: '',
-  }); // use this
-
   const {user} = useSelector(state => state.userReducer);
   const {actors} = useSelector(state => state.actorReducer);
   const [loading, setLoading] = useState(false);
@@ -26,21 +27,31 @@ const BottomSheetCommunity = ({selfMod, openNotiModal}) => {
     });
     setLoading(true);
     await actors?.userActor
-      .updateUserInfo({
+      .updateUserDetails({
         ...user,
         agreementStatus: true,
-        userGovId: '123',
+        userGovId: '',
         userProfile: 'img1',
       })
       .then(res => {
+        if(res?.ok==undefined){
+          setLoading(false)
+          Dialog.show({
+            type:ALERT_TYPE.SUCCESS,
+            title:'Error occured',
+            textBody:res?.err,
+            button:'OK',
+          })
+          return
+        }
         setLoading(false);
-        // alert('Thanks for accepting our guidelines!')
-        setShowAlertPop({
-          show: true,
-          title: 'Thanks for accepting our guidelines!',
-          message: '',
-          color: 'black',
-        });
+        // Alert.alert('Guidelines Accepted','Thanks for accepting our guidelines!');
+        Dialog.show({
+          type:ALERT_TYPE.SUCCESS,
+          title:'Guidelines Accepted',
+          textBody:'Thanks for accepting our guidelines!',
+          button:'OK',
+        })
 
         selfMod.current.dismiss();
         openNotiModal();
@@ -78,26 +89,17 @@ const BottomSheetCommunity = ({selfMod, openNotiModal}) => {
       <TouchableOpacity
         style={styles.declineBtn}
         onPress={() => {
-          // alert("Please agree to the Community Guideline")
-          setShowAlertPop({
-            show: true,
-            title: 'Please agree to the Community Guideline',
-            message: '',
-            color: 'black',
-          });
+          // Alert.alert('Agreement required','Please agree to the Community Guideline');
+          Dialog.show({
+            type:ALERT_TYPE.WARNING,
+            title:'Agreement required',
+            textBody:'Please agree to the Community Guideline',
+            button:'OK',
+          })
         }}>
         <Text style={styles.declineText}>Decline</Text>
       </TouchableOpacity>
       <ActivityIndicator animating={loading} style={styles.loader} size={40} />
-
-      <Modal visible={showAlertPop.show} transparent>
-        <CustomPopAlert
-          title={showAlertPop.title}
-          message={showAlertPop.message}
-          color={showAlertPop.color}
-          onCloseRequest={setShowAlertPop}
-        />
-      </Modal>
     </View>
   );
 };

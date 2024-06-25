@@ -11,16 +11,11 @@ import {User} from '../../declarations/User/index.js';
 import { useSelector,useDispatch } from 'react-redux';
 import { setUser } from '../../redux/users/actions';
 import DatePicker from 'react-native-date-picker';
-import CustomPopAlert from '../NavScreens/CustomPopAlert';
+import { Dialog, ALERT_TYPE } from 'react-native-alert-notification';
 
 const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
 
-  const [showAlertPop, setShowAlertPop] = useState({
-    show:false,
-    title:'',
-    message:'',
-    color:''   
-}); // use this
+
 
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
@@ -48,23 +43,46 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
     let whoami=await actors?.userActor?.whoami().catch((err)=>{console.log(err)})
     console.log("principal signup page : ",whoami)
     console.log(actors?.userActor)
-    await actors.userActor?.createUser(userObj).then(async(res)=>{
+    await actors.userActor?.registerUser(userObj).then(async(res)=>{
+      if(res?.ok=="User registered successfully"){
+
+      
       console.log(res)
       setLoading(false)
-      // alert(`Welcome ${fname}! You are successfully registered `)
-      setShowAlertPop({
-        show:true,
-        title:`Welcome ${fname}! You are successfully registered `,
-        message:'',
-        color:'black'
+      // Alert.alert('Registration successful',`Welcome ${fname}! You are successfully registered `)
+      Dialog.show({
+        type:ALERT_TYPE.SUCCESS,
+        title:'Registration successful',
+        textBody:`Welcome ${fname}! You are successfully registered `,
+        button:'OK',
       })
-      await actors.userActor?.getUserInfo().then((res)=>{
-        console.log(res[0]),
-        dispatch(setUser(res[0]))
+      
+      await actors.userActor?.getuserDetails().then((res)=>{
+        console.log(res?.ok),
+        dispatch(setUser(res?.ok))
         openComm()
         closeModal()
         console.log(user)
+        
       }).catch((err)=>{console.log("get user info catch : ",err)})
+    }else{
+      console.log(res?.err)
+      Dialog.show({
+        type:ALERT_TYPE.WARNING,
+        // title:res?.err,
+        title:'Trying to register failed',
+        textBody:res?.err,
+        button:'OK',
+      })
+      await actors.userActor?.getuserDetails().then((res)=>{
+        console.log(res?.ok),
+        dispatch(setUser(res?.ok))
+        openComm()
+        closeModal()
+        console.log(user)
+        
+      }).catch((err)=>{console.log("get user info catch : ",err)})
+    }
     }).catch((err)=>{
      
       console.log("err create user : ",err)
@@ -81,13 +99,14 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
             if(user?.fname!=null){
               closeModal();
             }else{
-              // alert('Please Register first to continue further')
-              setShowAlertPop({
-                show:true,
-                title:'Please Register first to continue further',
-                message:'',
-                color:'black'
+              // Alert.alert('Cannot skip','Please Register first to continue further')
+              Dialog.show({
+                type:ALERT_TYPE.WARNING,
+                title:'CANNOT SKIP',
+                textBody:'Please Register first to continue further',
+                button:'OK',
               })
+              
             }
             
           }}>
@@ -168,10 +187,6 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
         }}
         maximumDate={new Date()}
       />
-
-      <Modal visible={showAlertPop.show} transparent>
-        <CustomPopAlert title={showAlertPop.title} message={showAlertPop.message} color={showAlertPop.color} onCloseRequest={setShowAlertPop}/>
-      </Modal>
 
 
     </View>

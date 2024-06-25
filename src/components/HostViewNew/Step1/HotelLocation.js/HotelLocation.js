@@ -9,16 +9,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setListing } from '../../../../redux/NewListing/actions'
 import PickLocation from './PickLocation'
 import FillAdress from './FillAdress'
-import CustomPopAlert from '../../../NavScreens/CustomPopAlert'
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 
 const HotelLocation = ({setHostModal,pos}) => {
-
-  const [showAlertPop, setShowAlertPop] = useState({
-    show: false,
-    title: '',
-    message: '',
-    color: '',
-  });
 
   const [location,setLocation]=useState("Ludhiana")
   const [coords, setCoords] = useState({
@@ -30,19 +23,21 @@ const HotelLocation = ({setHostModal,pos}) => {
   const [showLocationPicker,setShowLocationPicker]=useState(false)
   const [showAddressForm,setShowAddressForm]=useState(false)
   const {listing}=useSelector(state=>state.listingReducer)
+  // console.log(listing);
   const dispatch=useDispatch()
   const checkEmpty=()=>{
     if(location!="Ludhiana"){
-      dispatch(setListing({...listing,hotelLocation:location}))
+      dispatch(setListing({...listing,hotelLocation:location,latitude:coords.latitude,longitude:coords.longitude}))
       return true
     }else{
       // alert('Please select a location before moving forward!')
-      setShowAlertPop({
-        show: true,
-        title: 'Please select a location before moving forward!',
-        message: '',
-        color: 'black',
-      });
+      Dialog.show({
+        type:ALERT_TYPE.WARNING,
+        title:'WARNING',
+        textBody:'Please select a location before moving forward!',
+        button:'OK',
+      })
+      
       return false
     }
   }
@@ -57,7 +52,7 @@ const HotelLocation = ({setHostModal,pos}) => {
         <Text style={styles.inputText}>Enter Your Address</Text>
       </TouchableOpacity>
       <Image source={images.map2} style={styles.map}/>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={1} nextFunc={checkEmpty}/>
+      <BottomBtn setHostModal={setHostModal} pos={pos} step={1} nextFunc={checkEmpty} back={2}/>
       <Modal transparent animationType='slide' visible={showLocationPicker}>
         <PickLocation setShowAddressForm={setShowAddressForm} setShowLocationPicker={setShowLocationPicker} coords={coords} setCoords={setCoords} setLocation={setLocation} location={location}/>
       </Modal>
@@ -65,14 +60,6 @@ const HotelLocation = ({setHostModal,pos}) => {
         <FillAdress self={setShowAddressForm} setLocation={setLocation} location={location}/>
       </Modal>
 
-      <Modal visible={showAlertPop.show} transparent>
-        <CustomPopAlert
-          title={showAlertPop.title}
-          message={showAlertPop.message}
-          color={showAlertPop.color}
-          onCloseRequest={setShowAlertPop}
-        />
-      </Modal>
 
     </View>
   )
@@ -87,11 +74,11 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG,
     },
     title:{
         width:'88%',
-        color:COLORS.mainPurple,
+        color:COLORS.black,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:8,

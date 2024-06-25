@@ -21,7 +21,7 @@ shared ({caller = owner}) actor class () {
         createdAt : Text;
     };
     type Result = Result.Result<Text, (Error.ErrorCode, Text)>;
-    stable var hotelCanisterId = "wkpuj-piaaa-aaaan-qlwta-cai";
+    var hotelCanisterId = "wbxey-saaaa-aaaao-a3oeq-cai";
 
     stable var hotelCommentMap = Trie.empty<Text, [(CommentId, Comment)]>();
     stable var admin : [AdminId] = [];

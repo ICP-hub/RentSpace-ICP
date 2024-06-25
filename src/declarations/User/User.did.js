@@ -1,11 +1,5 @@
 export const idlFactory = ({ IDL }) => {
-  const AdminId = IDL.Text;
-  const User__1 = IDL.Record({
-    'dob' : IDL.Text,
-    'userEmail' : IDL.Text,
-    'lastName' : IDL.Text,
-    'firstName' : IDL.Text,
-  });
+  const Result = IDL.Variant({ 'ok' : IDL.Text, 'err' : IDL.Text });
   const AnnualData = IDL.Record({
     'aug' : IDL.Nat,
     'dec' : IDL.Nat,
@@ -20,45 +14,38 @@ export const idlFactory = ({ IDL }) => {
     'july' : IDL.Nat,
     'june' : IDL.Nat,
   });
+  const Result_2 = IDL.Variant({ 'ok' : AnnualData, 'err' : IDL.Text });
   const UserInfo = IDL.Record({
     'dob' : IDL.Text,
-    'userType' : IDL.Text,
+    'userRole' : IDL.Text,
     'userEmail' : IDL.Text,
-    'userGovId' : IDL.Text,
+    'userGovID' : IDL.Text,
+    'userID' : IDL.Principal,
     'createdAt' : IDL.Text,
-    'hostStatus' : IDL.Bool,
     'agreementStatus' : IDL.Bool,
-    'userProfile' : IDL.Text,
+    'govIDLink' : IDL.Text,
+    'isHost' : IDL.Bool,
+    'userImage' : IDL.Text,
+    'isVerified' : IDL.Bool,
     'lastName' : IDL.Text,
-    'verificationStatus' : IDL.Bool,
     'firstName' : IDL.Text,
   });
-  const UserId = IDL.Text;
+  const Result_1 = IDL.Variant({ 'ok' : UserInfo, 'err' : IDL.Text });
+  const User__1 = IDL.Record({
+    'dob' : IDL.Text,
+    'userEmail' : IDL.Text,
+    'lastName' : IDL.Text,
+    'firstName' : IDL.Text,
+  });
   const User = IDL.Service({
-    'addOwner' : IDL.Func([AdminId], [IDL.Text], []),
     'checkUserExist' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
-    'createUser' : IDL.Func([User__1], [], []),
-    'getAllAdmin' : IDL.Func([], [IDL.Vec(AdminId)], ['query']),
-    'getAnnualRegisterByYear' : IDL.Func(
-        [IDL.Text],
-        [IDL.Opt(AnnualData)],
-        ['query'],
-      ),
-    'getNoOfPages' : IDL.Func([IDL.Nat], [IDL.Nat], ['query']),
-    'getOwner' : IDL.Func([], [IDL.Text], ['query']),
-    'getUserInfo' : IDL.Func([], [IDL.Opt(UserInfo)], ['query']),
-    'getUserInfoByPrincipal' : IDL.Func(
-        [IDL.Principal],
-        [IDL.Opt(UserInfo)],
-        ['query'],
-      ),
-    'scanUsers' : IDL.Func(
-        [IDL.Nat, IDL.Nat],
-        [IDL.Vec(IDL.Tuple(UserId, UserInfo))],
-        ['query'],
-      ),
-    'updateUserInfo' : IDL.Func([UserInfo], [IDL.Opt(UserInfo)], []),
-    'whoami' : IDL.Func([], [IDL.Text], ['query']),
+    'deleteUser' : IDL.Func([], [Result], []),
+    'getAnnualRegisterByYear' : IDL.Func([IDL.Text], [Result_2], []),
+    'getUserByPrincipal' : IDL.Func([IDL.Principal], [Result_1], []),
+    'getuserDetails' : IDL.Func([], [Result_1], []),
+    'registerUser' : IDL.Func([User__1], [Result], []),
+    'updateUserDetails' : IDL.Func([UserInfo], [Result], []),
+    'whoami' : IDL.Func([], [IDL.Text], []),
   });
   return User;
 };

@@ -4,18 +4,21 @@ import { COLORS,SIZES } from '../../../constants/themes'
 import { images } from '../../../constants'
 import SaveBtn from '../Reusables/SaveBtn'
 import BottomBtn from '../Reusables/BottomBtn'
+import { useSelector } from 'react-redux'
 
 const Step2 = ({setHostModal,pos}) => {
+    const {listing}=useSelector(state=>state.listingReducer)
+  console.log(listing);
   return (
     <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal}/>
-      <BottomBtn setHostModal={setHostModal} pos={pos} step={2} nextFunc={()=>{return true}}/>
+      <BottomBtn back={2} setHostModal={setHostModal} pos={pos} step={2} nextFunc={()=>{return true}}/>
       <View style={styles.imageCont}>
-        <Image source={images.hostHouseDesign} style={styles.bigImg}/>
-        <View style={styles.smallImgCont}>
+        <Image source={images.step2} style={styles.bigImg}/>
+        {/* <View style={styles.smallImgCont}>
             <Image source={images.hostMirror} style={styles.smallImg}/>
             <Image source={images.hostDoor} style={[styles.smallImg,{marginLeft:40}]}/>
-        </View>
+        </View> */}
       </View>
       <Text style={styles.subTitle}>Step 2</Text>
       <Text style={styles.title}>Make your place stand out</Text>
@@ -35,7 +38,7 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG
     },
     imageCont:{
         display:'flex',
@@ -52,9 +55,11 @@ const styles = StyleSheet.create({
         height:'100%'
     },
     bigImg:{
-        width:'60%',
-        height:190,
-        marginTop:20
+        width:'85%',
+        height:210,
+        marginTop:0,
+        marginLeft:'7.5%',
+        objectFit:'fill'
     },
     smallImg:{
        width:95,
@@ -62,7 +67,7 @@ const styles = StyleSheet.create({
     },
     title:{
         width:'88%',
-        color:COLORS.mainPurple,
+        color:COLORS.black,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:15,

@@ -33,6 +33,7 @@ const AllChats = ({navigation}) => {
     const [showDrawer,setShowDrawer]=useState(false)
     // const {newChat}=route.params
     const baseUrl="https://rentspace.kaifoundry.com"
+    // const baseUrl="http://localhost:5000"
     const chatLogin=async()=>{
         setLoading(true)
         setChats([])
@@ -164,7 +165,7 @@ const AllChats = ({navigation}) => {
                         <ChatCard item={item?.item} setOpenChat={setOpenChat} openChat={openChat} setChat={setChatItem}/>
                 )}/>
                     <BottomNavHost navigation={navigation} showDrawer={showDrawer} setShowDrawer={setShowDrawer}/>
-                    <Modal animationType='slide' visible={openChat}>
+                    <Modal animationType='slide' visible={openChat} onRequestClose={()=>setOpenChat(false)}>
                         <Chat item={chatItem} setOpenChat={setOpenChat}/>
                     </Modal>
                     <Modal animationType='fade' visible={showDrawer} transparent>
@@ -211,7 +212,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         height:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG
     },
     header:{
         display:'flex',
@@ -248,7 +249,9 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'column',
         alignItems:'center',
-        backgroundColor:COLORS.lighterGrey,
+        backgroundColor:COLORS.white,
+        borderWidth:1,
+        borderColor:COLORS.black,
         width:'90%',
         borderRadius:20,
         minHeight:220,

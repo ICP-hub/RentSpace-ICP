@@ -10,16 +10,9 @@ import {setListing} from '../../../../redux/NewListing/actions';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {setFiles} from '../../../../redux/files/actions';
 import RNFS from 'react-native-fs';
-import CustomPopAlert from '../../../NavScreens/CustomPopAlert';
+import { Dialog,ALERT_TYPE } from 'react-native-alert-notification';
 
 const AddPhotos = ({setHostModal, pos}) => {
-  const [showAlertPop, setShowAlertPop] = useState({
-    type: '',
-    title: '',
-    message: '',
-    color: '',
-    visibility: false,
-  });
 
   const [images, setImages] = useState('img2');
   const [hotelImgs, setHotelImgs] = useState(null);
@@ -30,24 +23,24 @@ const AddPhotos = ({setHostModal, pos}) => {
     console.log(video, hotelImgs);
     if (hotelImgs == null) {
       // Alert.alert('No image selected', 'Please add atleast one image');
-      setShowAlertPop({
-        type: 'default',
-        title: 'No image selected',
-        message: 'Please add atleast one image',
-        color: COLORS.mainPurple,
-        visibility: true,
-      });
+      Dialog.show({
+        type:ALERT_TYPE.WARNING,
+        title:'No image selected',
+        textBody:'Please add atleast one image',
+        button:'OK',
+      })
+      
       console.log('no images');
       return false;
     } else if (video == null) {
       // Alert.alert('No video selected', 'Please add a Video');
-      setShowAlertPop({
-        type: 'default',
-        title: 'No video selected',
-        message: 'Please add a Video',
-        color: COLORS.mainPurple,
-        visibility: true,
-      });
+      Dialog.show({
+        type:ALERT_TYPE.WARNING,
+        title:'No video selected',
+        textBody:'Please add a Video',
+        button:'OK',
+      })
+      
       console.log('no video');
       return false;
     } else {
@@ -87,14 +80,13 @@ const AddPhotos = ({setHostModal, pos}) => {
               //   'Unsupported format!',
               //   'The file format you are selected is not a correct video format',
               // );
-              setShowAlertPop({
-                type: 'default',
-                title: 'Unsupported format!',
-                message:
-                  'The file format you are selected is not a correct video format',
-                color: COLORS.mainPurple,
-                visibility: true,
-              });
+              Dialog.show({
+                type:ALERT_TYPE.WARNING,
+                title:'Unsupported format',
+                textBody:'The file format you are selected is not a correct video format',
+                button:'OK',
+              })
+              
             }
           });
       },
@@ -107,7 +99,7 @@ const AddPhotos = ({setHostModal, pos}) => {
   return (
     <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal} />
-      <Text style={styles.title}>Add some photos of your house</Text>
+      <Text style={styles.title}>Add some photos of your property</Text>
       <Text style={styles.text}>
         Our comprehensive verification system checks details such as name,
         address, government ID and more to confirm the identity of guests who
@@ -130,20 +122,7 @@ const AddPhotos = ({setHostModal, pos}) => {
         back={2}
         nextFunc={checkEmpty}
       />
-      <Modal
-        transparent
-        visible={showAlertPop.visibility}
-        onRequestClose={() => {
-          setShowAlertPop({...showAlertPop, visibility: false});
-        }}>
-        <CustomPopAlert
-          type={showAlertPop.type}
-          title={showAlertPop.title}
-          message={showAlertPop.message}
-          color={showAlertPop.color}
-          onCloseRequest={setShowAlertPop}
-        />
-      </Modal>
+      
     </View>
   );
 };
@@ -161,7 +140,7 @@ const styles = StyleSheet.create({
   },
   title: {
     width: '88%',
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     fontSize: SIZES.xxLarge,
     fontWeight: '500',
     marginBottom: 10,

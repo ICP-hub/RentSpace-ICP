@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   Modal,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import BottomNavHost from '../../../Navigation/BottomNavHost';
@@ -21,6 +22,7 @@ import ChatDrawer from '../ChatPage/ChatDrawer/ChatDrawer';
 import Update from '../UpdatePage/Update';
 import axios from 'axios';
 import { setChatToken } from '../../../../redux/chatToken/actions';
+const {nodeBackend} = require('../../../../../DevelopmentConfig.js')
 
 const Listings = ({navigation}) => {
   const {hotels} = useSelector(state => state.hotelsReducer);
@@ -30,13 +32,18 @@ const Listings = ({navigation}) => {
   const [newHotel, setNewHotel] = useState({});
   const [showDrawer, setShowDrawer] = useState(false);
   const {authData}=useSelector(state => state.authDataReducer)
+  const [loading,setLoading]=useState(false)
   const dispatch=useDispatch()
 
   const [listings, setListings] = useState([]);
   const {principle}=useSelector(state=>state.principleReducer)
 
   // const baseUrl="https://rentspace.kaifoundry.com"
-  const baseUrl="http://localhost:5000"
+  // const baseUrl="http://localhost:5000"
+
+  const baseUrl= nodeBackend
+
+  // console.log("principle",principle)
 
   // async function getHotelDetails() {
   //   setHotelList([]);
@@ -48,38 +55,47 @@ const Listings = ({navigation}) => {
   //     });
   //   }
   // }
-  const ApiLogin=async()=>{
-    // console.log("files",files)
-     await axios.post(`${baseUrl}/api/v1/login/user`,{},{headers:{
-      "x-private":authData.privateKey,
-      "x-public":authData.publicKey,
-      "x-delegation":authData.delegation
-     }}).then((res)=>{
-        console.log('hotel login api : ',res.data.userToken)
-        dispatch(setChatToken(res.data.userToken))
-        // setToken(res.data.userToken)
-     })
-    }
-  useEffect(() => {
-    // getHotelDetails();
-    ApiLogin()
+  // const ApiLogin=async()=>{
+  //   // console.log("files",files)
+  //    await axios.post(`${baseUrl}/api/v1/login/user`,{},{headers:{
+  //     "x-private":authData.privateKey,
+  //     "x-public":authData.publicKey,
+  //     "x-delegation":authData.delegation
+  //    }}).then((res)=>{
+  //       console.log('hotel login api : ',res.data.userToken)
+  //       dispatch(setChatToken(res.data.userToken))
+  //       // setToken(res.data.userToken)
+  //    })
+  //   }
+  // useEffect(() => {
+  //   // getHotelDetails();
+  //   ApiLogin()
 
-  }, []);
+  // }, []);
 
   // Geting hotel details from the server
 
   function getHotelDetails() {
-    // const userPrincipal = "2yv67-vdt7m-6ajix-goswt-coftj-5d2db-he4fl-t5knf-qii2a-3pajs-cqe" // for testing only
+    setLoading(true)
+    console.log("BaseUrl",`${baseUrl}/api/v1/property/all?userPrincipal=${principle}`);
+    console.log("Principle :",principle)
+
     axios
-      .get(`http://localhost:5000/api/v1/hotel/getAllHotels?userPrincipal=${principle}`) // for testing only
-      // .get('http://localhost:5000/api/v1/hotel/getAllHotels')  // when userPrincipal is passed in header
+      .get(`${baseUrl}/api/v1/property/all?userPrincipal=${principle}`)
       .then(res => {
-        // console.log(res.data.hotels);
-        console.log("res",res)
-        setListings(res.data.hotels);
+        setLoading(false)
+
+        // console.log("res",res.data.properties);
+        if(res.data.properties.length != undefined && res.data.properties.length != 0){
+          setListings(res.data.properties);
+        }else{
+          setListings([]);
+        }
       })
       .catch(error => {
         console.log(error);
+        setLoading(false)
+
       });
   }
 
@@ -87,51 +103,14 @@ const Listings = ({navigation}) => {
     getHotelDetails();
   }, []);
 
-  // const listings = [
-  //   {
-  //     hotelTitle: 'Taj Hotel',
-  //     hotelLocation: 'Mumbai, Maharashtra',
-  //     image: images.hotelImg1,
-  //     status: 2,
-  //     rating: 7.5,
-  //   },
-  //   {
-  //     hotelTitle: 'Hotel Ramada',
-  //     hotelLocation: 'Lucknow, UP',
-  //     image: images.hotelImg2,
-  //     status: 0,
-  //     rating: 8.5,
-  //   },
-  //   {
-  //     hotelTitle: 'Hotel Pennsylvania',
-  //     hotelLocation: 'Pennsylvania, Austria',
-  //     image: images.hotelImg3,
-  //     status: 1,
-  //     rating: 9.5,
-  //   },
-  //   {
-  //     hotelTitle: 'Constantinople Inn',
-  //     hotelLocation: 'Istanbul',
-  //     image: images.hotelImg4,
-  //     status: 0,
-  //     rating: 6.5,
-  //   },
-  //   {
-  //     hotelTitle: 'Jaypur Palace',
-  //     hotelLocation: 'Jaypur, Rajasthan',
-  //     image: images.hotelImg5,
-  //     status: 1,
-  //     rating: 7.5,
-  //   },
-  // ];
-
   return (
     <View style={styles.view}>
       <View style={styles.header}>
         <Text style={styles.title}>Your listings</Text>
         <View style={styles.iconCont}>
-          <TouchableOpacity style={styles.icon}>
-            <Icon name="collage" size={30} color={COLORS.black} />
+          <TouchableOpacity style={styles.icon} onPress={getHotelDetails}>
+            {/* <Icon name="collage" size={30} color={COLORS.black} /> */}
+            <Icon name="reload" size={30} color={COLORS.black} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.icon} onPress={() => setHostModal(4)}>
             <Icon2 name="plus" size={30} color={COLORS.black} />
@@ -183,8 +162,10 @@ const Listings = ({navigation}) => {
       <Modal
         animationType="slide"
         visible={hostModal > 16 && hostModal <= 23 ? true : false}>
-        <Step3Manager hostModal={hostModal} setHostModal={setHostModal} />
+        <Step3Manager hostModal={hostModal} setHostModal={setHostModal} getHotelDetails={getHotelDetails}/>
       </Modal>
+      <ActivityIndicator animating={loading} style={styles.loader} size={40}/>
+
     </View>
   );
 };
@@ -192,12 +173,17 @@ const Listings = ({navigation}) => {
 export default Listings;
 
 const styles = StyleSheet.create({
+  loader:{
+    position:'absolute',
+    top:'40%',
+    marginHorizontal:'auto'
+  },
   view: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     height: '100%',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
   },
   header: {
     display: 'flex',

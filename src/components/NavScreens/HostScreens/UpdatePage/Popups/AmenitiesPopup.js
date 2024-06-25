@@ -133,26 +133,26 @@ const styles = StyleSheet.create({
   },
 
   popupItemIcon: {
-    color: COLORS.textLightGrey,
+    color: COLORS.newGray,
     fontSize: 30,
     alignItems: 'baseline',
     justifyContent: 'center',
   },
 
   popupItemText: {
-    color: COLORS.textLightGrey,
+    color: COLORS.newGray,
     fontSize: 14,
     fontWeight: '500',
     textAlign: 'center',
     marginTop: 5,
   },
   popupItemIconActive: {
-    color: COLORS.mainPurple, // Change color to indicate active
+    color: COLORS.black, // Change color to indicate active
     fontSize: 30,
   },
 
   popupItemTextActive: {
-    color: COLORS.mainPurple, // Change color to indicate active
+    color: COLORS.black, // Change color to indicate active
     fontSize: 14,
     fontWeight: '500',
     textAlign: 'center',
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     marginBottom: 20,
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     padding: 10,
     width: 100,
     textAlign: 'center',

@@ -75,7 +75,20 @@ shared ({caller = owner}) actor class Review() {
         validate(reviewData);
         let date = Utils.getDate();
         switch (Trie.get(reviewIdMap, Utils.textKey userIdentity, Text.equal)) {
-            case (null) {};
+            case (null) {
+                // Debug.print(debug_show (""));
+                createReviewId(userIdentity,bookingId);
+                linkReviewIdwithHotelId(bookingId);
+                let review = {
+                    bookingId = reviewData.bookingId;
+                    rating = reviewData.rating;
+                    title = reviewData.title;
+                    des = reviewData.des;
+                    createdAt = date;
+                };
+                reviewDataMap := Trie.put(reviewDataMap, Utils.textKey bookingId, Text.equal, review).0;
+
+            };
             case (?result) {
                 switch (List.find<Types.ReviewId>(result, func x {x == bookingId})) {
                     case (null) {

@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
         width:'100%',
         justifyContent:'space-between',
         height:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG
     },
     subView:{
         display:'flex',
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     },
     title:{
         width:'85%',
-        color:COLORS.hostTitle,
+        color:COLORS.black,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:24,
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         width:'85%',
         marginLeft:'7.5%',
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.black,
         borderRadius:16,
         paddingVertical:15,
         marginBottom:20
