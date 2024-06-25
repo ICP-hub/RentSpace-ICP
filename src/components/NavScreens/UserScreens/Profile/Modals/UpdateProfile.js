@@ -70,6 +70,7 @@ const UpdateProfile = ({setEditProfile}) => {
             isHost:user?.isHost,
             isVerified:false,
             agreementStatus:user?.agreementStatus,
+            // userGovID:user?.userGovId,
           })
           console.log("2",updatedUser)
           
@@ -117,7 +118,8 @@ const UpdateProfile = ({setEditProfile}) => {
             userRole:user?.userRole,
             isHost:user?.isHost,
             agreementStatus:user?.agreementStatus,
-            userImage:res
+            userImage:res,
+            userGovID:user?.userGovId,
           })
           console.log("2",updatedUser)
           
@@ -236,7 +238,7 @@ const UpdateProfile = ({setEditProfile}) => {
         placeholder='Govt Id No.' 
         placeholderTextColor={COLORS.inputBorder}
         value={updatedUser?.userGovId}
-        onChangeText={value=>{setUpdatedUser({...updatedUser,userGovId:value})}}
+        onChangeText={value=>{setUpdatedUser({...updatedUser,userGovID:value})}}
         />
       {/* <TextInput 
         style={styles.inputs} 
