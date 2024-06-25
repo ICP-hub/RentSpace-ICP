@@ -7,28 +7,29 @@ export const nodeBackend = production ? 'https://rentspace.kaifoundry.com' : 'ht
 
 export const ids = {
   userCan: production
-    ? // "tassb-3qaaa-aaaan-qloxq-cai":
-      'xlygc-qqaaa-aaaao-a3odq-cai'
-    : 'a3shf-5eaaa-aaaaa-qaafa-cai',
+    ? 'xlygc-qqaaa-aaaao-a3odq-cai'
+    // : 'a3shf-5eaaa-aaaaa-qaafa-cai',
+    :"by6od-j4aaa-aaaaa-qaadq-cai",
 
   hotelCan: production
     ? 'wbxey-saaaa-aaaao-a3oeq-cai'
-    : // "5mldq-waaaa-aaaan-qlqta-cai":
-      'aovwi-4maaa-aaaaa-qaagq-cai',
+    // : 'aovwi-4maaa-aaaaa-qaagq-cai',
+    :"be2us-64aaa-aaaaa-qaabq-cai",
 
   backendCan: production
-    ? // "thtuv-wiaaa-aaaan-qloxa-cai":
-      '5cjoy-nqaaa-aaaan-qlqsa-cai'
+    ? '5cjoy-nqaaa-aaaan-qlqsa-cai'
     : 'be2us-64aaa-aaaaa-qaabq-cai',
   reviewCan: production
     ? 'w2sy5-iyaaa-aaaao-a3oga-cai'
-    : 'asrmz-lmaaa-aaaaa-qaaeq-cai',
+    // : 'asrmz-lmaaa-aaaaa-qaaeq-cai',
+    :"bw4dl-smaaa-aaaaa-qaacq-cai",
   bookingCan: production
     ? 'wiupe-eiaaa-aaaao-a3ofa-cai'
-    : 'a4tbr-q4aaa-aaaaa-qaafq-cai',
+    // : 'a4tbr-q4aaa-aaaaa-qaafq-cai',
+    :"bkyz2-fmaaa-aaaaa-qaaaq-cai",
   ICPtokenCan: production
     ? 'ryjl3-tyaaa-aaaaa-aaaba-cai'
-    : 'ryjl3-tyaaa-aaaaa-aaaba-cai', //bw4dl-smaaa-aaaaa-qaacq-cai
+    : 'ryjl3-tyaaa-aaaaa-aaaba-cai', 
   ckBTCtokenCan: production
     ? 'mxzaz-hqaaa-aaaar-qaada-cai'
     : 'mxzaz-hqaaa-aaaar-qaada-cai',
@@ -37,10 +38,12 @@ export const ids = {
     : 'ss2fx-dyaaa-aaaar-qacoq-cai',
   commentCan: production
     ? 'wpvjq-jqaaa-aaaao-a3ofq-cai'
-    : 'ajuq4-ruaaa-aaaaa-qaaga-cai',
+    // : 'ajuq4-ruaaa-aaaaa-qaaga-cai',
+    :"bd3sg-teaaa-aaaaa-qaaba-cai",
   supportCan: production
     ? 'wgwcm-7yaaa-aaaao-a3oea-cai'
-    : 'ahw5u-keaaa-aaaaa-qaaha-cai',
+    // : 'ahw5u-keaaa-aaaaa-qaaha-cai',
+    :"b77ix-eeaaa-aaaaa-qaada-cai",
 };
 
 // {

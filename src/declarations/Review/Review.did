@@ -1,28 +1,40 @@
 type Review__1 = 
  record {
-   bookingId: text;
    createdAt: text;
    des: text;
+   hotelId: text;
+   rating: float64;
+   reviewId: text;
+   title: text;
+   userId: text;
+ };
+type ReviewInput = 
+ record {
+   des: text;
+   hotelId: text;
    rating: float64;
    title: text;
  };
-type ReviewId = text;
 type Review = 
  service {
-   addOwner: (AdminId) -> (text);
-   createReview: (text, Review__1) -> () oneway;
-   getAllAdmin: () -> (vec AdminId) query;
-   getHotelId: () -> (vec ReviewId) query;
-   getNoOfPages: (nat) -> (nat) query;
-   getReviewIdsFromHotelId: (HotelId) -> (vec ReviewId) query;
-   getReviewInfo: (text) -> (opt Review__1) query;
-   scanReview: (nat, nat) -> (vec record {
-                                    ReviewId;
-                                    Review__1;
-                                  }) query;
-   updateReviewInfo: (text, Review__1) -> (opt Review__1);
+   createReview: (text, ReviewInput) -> (Result_2);
+   getAllReviewsOnHotel: (text) -> (Result_1);
+   getHotelRating: (text) -> (Result);
    whoami: () -> (text) query;
  };
-type HotelId = text;
-type AdminId = text;
+type Result_2 = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: vec Review__1;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: nat;
+ };
 service : () -> Review

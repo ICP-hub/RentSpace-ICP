@@ -13,7 +13,7 @@ import { useDispatch } from 'react-redux'
 import { setActor } from '../../../../redux/actor/actions'
 import { backend } from '../../../../declarations/backend'
 import { User } from '../../../../declarations/User'
-import { hotel } from '../../../../declarations/hotel'
+import { Hotel } from '../../../../declarations/Hotel'
 import { setUser } from '../../../../redux/users/actions'
 import { setHotels } from '../../../../redux/hotels/actions'
 import { setPrinciple } from '../../../../redux/principle/actions'
@@ -104,7 +104,7 @@ const MenuPage = ({navigation}) => {
         dispatch(setActor({
             backendActor:backend,
             userActor:User,
-            hotelActor:hotel
+            hotelActor:Hotel
         }))
         dispatch(setUser({}))
         dispatch(setHotels([]))

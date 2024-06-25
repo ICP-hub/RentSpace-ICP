@@ -1,19 +1,19 @@
 import { SET_ACTOR, UPDATE_USER} from './actions'
 import { backend } from '../../declarations/backend'
 import { User } from '../../declarations/User'
-import { hotel } from '../../declarations/hotel'
+import { Hotel } from '../../declarations/Hotel'
 import { setUser } from '../users/actions'
 import { useDispatch } from 'react-redux'
 import store from '../store'
-import { booking } from '../../declarations/booking'
+import { Booking } from '../../declarations/Booking'
 
 // const dispatch=useDispatch()
 const initialState={
     actors:{
         backendActor:backend,
         userActor:User,
-        hotelActor:hotel,
-        bookingActor:booking,
+        hotelActor:Hotel,
+        bookingActor:Booking,
         tokenActor:{},
         reviewActor:{}
     }

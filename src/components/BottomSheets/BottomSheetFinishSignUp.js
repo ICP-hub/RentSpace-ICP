@@ -43,7 +43,10 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
     let whoami=await actors?.userActor?.whoami().catch((err)=>{console.log(err)})
     console.log("principal signup page : ",whoami)
     console.log(actors?.userActor)
-    await actors.userActor?.createUser(userObj).then(async(res)=>{
+    await actors.userActor?.registerUser(userObj).then(async(res)=>{
+      if(res?.ok=="User registered successfully"){
+
+      
       console.log(res)
       setLoading(false)
       // Alert.alert('Registration successful',`Welcome ${fname}! You are successfully registered `)
@@ -54,13 +57,32 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
         button:'OK',
       })
       
-      await actors.userActor?.getUserInfo().then((res)=>{
-        console.log(res[0]),
-        dispatch(setUser(res[0]))
+      await actors.userActor?.getuserDetails().then((res)=>{
+        console.log(res?.ok),
+        dispatch(setUser(res?.ok))
         openComm()
         closeModal()
         console.log(user)
+        
       }).catch((err)=>{console.log("get user info catch : ",err)})
+    }else{
+      console.log(res?.err)
+      Dialog.show({
+        type:ALERT_TYPE.WARNING,
+        // title:res?.err,
+        title:'Trying to register failed',
+        textBody:res?.err,
+        button:'OK',
+      })
+      await actors.userActor?.getuserDetails().then((res)=>{
+        console.log(res?.ok),
+        dispatch(setUser(res?.ok))
+        openComm()
+        closeModal()
+        console.log(user)
+        
+      }).catch((err)=>{console.log("get user info catch : ",err)})
+    }
     }).catch((err)=>{
      
       console.log("err create user : ",err)

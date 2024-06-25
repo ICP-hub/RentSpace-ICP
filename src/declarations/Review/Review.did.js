@@ -1,36 +1,26 @@
 export const idlFactory = ({ IDL }) => {
-  const AdminId = IDL.Text;
+  const ReviewInput = IDL.Record({
+    'des' : IDL.Text,
+    'title' : IDL.Text,
+    'hotelId' : IDL.Text,
+    'rating' : IDL.Float64,
+  });
+  const Result_2 = IDL.Variant({ 'ok' : IDL.Text, 'err' : IDL.Text });
   const Review__1 = IDL.Record({
     'des' : IDL.Text,
     'title' : IDL.Text,
-    'bookingId' : IDL.Text,
+    'userId' : IDL.Text,
     'createdAt' : IDL.Text,
+    'hotelId' : IDL.Text,
     'rating' : IDL.Float64,
+    'reviewId' : IDL.Text,
   });
-  const ReviewId = IDL.Text;
-  const HotelId = IDL.Text;
+  const Result_1 = IDL.Variant({ 'ok' : IDL.Vec(Review__1), 'err' : IDL.Text });
+  const Result = IDL.Variant({ 'ok' : IDL.Nat, 'err' : IDL.Text });
   const Review = IDL.Service({
-    'addOwner' : IDL.Func([AdminId], [IDL.Text], []),
-    'createReview' : IDL.Func([IDL.Text, Review__1], [], ['oneway']),
-    'getAllAdmin' : IDL.Func([], [IDL.Vec(AdminId)], ['query']),
-    'getHotelId' : IDL.Func([], [IDL.Vec(ReviewId)], ['query']),
-    'getNoOfPages' : IDL.Func([IDL.Nat], [IDL.Nat], ['query']),
-    'getReviewIdsFromHotelId' : IDL.Func(
-        [HotelId],
-        [IDL.Vec(ReviewId)],
-        ['query'],
-      ),
-    'getReviewInfo' : IDL.Func([IDL.Text], [IDL.Opt(Review__1)], ['query']),
-    'scanReview' : IDL.Func(
-        [IDL.Nat, IDL.Nat],
-        [IDL.Vec(IDL.Tuple(ReviewId, Review__1))],
-        ['query'],
-      ),
-    'updateReviewInfo' : IDL.Func(
-        [IDL.Text, Review__1],
-        [IDL.Opt(Review__1)],
-        [],
-      ),
+    'createReview' : IDL.Func([IDL.Text, ReviewInput], [Result_2], []),
+    'getAllReviewsOnHotel' : IDL.Func([IDL.Text], [Result_1], []),
+    'getHotelRating' : IDL.Func([IDL.Text], [Result], []),
     'whoami' : IDL.Func([], [IDL.Text], ['query']),
   });
   return Review;

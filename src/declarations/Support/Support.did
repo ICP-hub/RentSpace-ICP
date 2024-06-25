@@ -1,0 +1,87 @@
+type TicketInput = 
+ record {
+   address: Address;
+   messageToAdmin: text;
+   messageToHost: text;
+   reason: text;
+ };
+type Ticket = 
+ record {
+   address: Address;
+   createdAt: text;
+   customerId: text;
+   messageToAdmin: text;
+   messageToHost: text;
+   reason: text;
+   resolved: bool;
+   ticketId: text;
+ };
+type SupportMessage = 
+ record {
+   byAdmin: bool;
+   createdAt: text;
+   from: principal;
+   message: text;
+   to: principal;
+ };
+type Support = 
+ service {
+   addAdmin: (principal) -> (Result);
+   checkIsAdmin: (principal) -> (bool) query;
+   createTicket: (TicketInput, Address) -> (Result);
+   getAllAdmins: () -> (Result_5);
+   getAllChats: (nat, nat) -> (Result_4);
+   getAllUnresolvedTickets: (nat, nat) -> (Result_3);
+   getAllUserMessages: (principal) -> (Result_2);
+   getNoOfUnresolvedTickets: () -> (Result_1);
+   getNumberOfChats: () -> (Result_1);
+   resolveTicket: (text) -> (Result);
+   sendMessage: (text, opt principal) -> (Result);
+   whoami: () -> (text);
+ };
+type Result_5 = 
+ variant {
+   err: text;
+   ok: vec principal;
+ };
+type Result_4 = 
+ variant {
+   err: text;
+   ok: vec record {
+             principal;
+             vec SupportMessage;
+           };
+ };
+type Result_3 = 
+ variant {
+   err: text;
+   ok: vec record {
+             text;
+             Ticket;
+           };
+ };
+type Result_2 = 
+ variant {
+   err: text;
+   ok: vec SupportMessage;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: nat;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type Address = 
+ record {
+   building: text;
+   city: text;
+   country: text;
+   postalCode: text;
+   region: text;
+   streetAddress: text;
+ };
+service : () -> Support
