@@ -1,5 +1,5 @@
 //Decides if canister ids used are of production or development
-const production = false;
+const production = true;
 
 export const host = production ? 'https://icp-api.io' : 'http://127.0.0.1:4943';
 
@@ -7,26 +7,26 @@ export const nodeBackend = production ? 'https://rentspace.kaifoundry.com' : 'ht
 
 export const ids = {
   userCan: production
-    ? 'xlygc-qqaaa-aaaao-a3odq-cai'
-    : 'cpmcr-yeaaa-aaaaa-qaala-cai',
-    // :"by6od-j4aaa-aaaaa-qaadq-cai",
+    ? 'ttotv-cyaaa-aaaao-a3o2a-cai'
+    // : 'a3shf-5eaaa-aaaaa-qaafa-cai',
+    :"by6od-j4aaa-aaaaa-qaadq-cai",
 
   hotelCan: production
-    ? 'wbxey-saaaa-aaaao-a3oeq-cai'
-    : 'ctiya-peaaa-aaaaa-qaaja-cai',
-    // :"be2us-64aaa-aaaaa-qaabq-cai",
+    ? 'tilpq-yaaaa-aaaao-a3oyq-cai'
+    // : 'aovwi-4maaa-aaaaa-qaagq-cai',
+    :"be2us-64aaa-aaaaa-qaabq-cai",
 
   backendCan: production
     ? '5cjoy-nqaaa-aaaan-qlqsa-cai'
     : 'be2us-64aaa-aaaaa-qaabq-cai',
   reviewCan: production
-    ? 'w2sy5-iyaaa-aaaao-a3oga-cai'
-    : 'cbopz-duaaa-aaaaa-qaaka-cai',
-    // :"bw4dl-smaaa-aaaaa-qaacq-cai",
+    ? 'tbiem-oiaaa-aaaao-a3oza-cai'
+    // : 'asrmz-lmaaa-aaaaa-qaaeq-cai',
+    :"bw4dl-smaaa-aaaaa-qaacq-cai",
   bookingCan: production
-    ? 'wiupe-eiaaa-aaaao-a3ofa-cai'
-    : 'c5kvi-uuaaa-aaaaa-qaaia-cai',
-    // :"bkyz2-fmaaa-aaaaa-qaaaq-cai",
+    ? 'rsxhm-gqaaa-aaaao-a3oxq-cai'
+    // : 'a4tbr-q4aaa-aaaaa-qaafq-cai',
+    :"bkyz2-fmaaa-aaaaa-qaaaq-cai",
   ICPtokenCan: production
     ? 'ryjl3-tyaaa-aaaaa-aaaba-cai'
     : 'ryjl3-tyaaa-aaaaa-aaaba-cai', 
@@ -37,13 +37,13 @@ export const ids = {
     ? 'ss2fx-dyaaa-aaaar-qacoq-cai'
     : 'ss2fx-dyaaa-aaaar-qacoq-cai',
   commentCan: production
-    ? 'wpvjq-jqaaa-aaaao-a3ofq-cai'
-    : 'c2lt4-zmaaa-aaaaa-qaaiq-cai',
-    // :"bd3sg-teaaa-aaaaa-qaaba-cai",
+    ? 'tpkje-vyaaa-aaaao-a3oya-cai'
+    // : 'ajuq4-ruaaa-aaaaa-qaaga-cai',
+    :"bd3sg-teaaa-aaaaa-qaaba-cai",
   supportCan: production
-    ? 'wgwcm-7yaaa-aaaao-a3oea-cai'
-    : 'cgpjn-omaaa-aaaaa-qaakq-cai',
-    // :"b77ix-eeaaa-aaaaa-qaada-cai",
+    ? 'tgjcy-dqaaa-aaaao-a3ozq-cai'
+    // : 'ahw5u-keaaa-aaaaa-qaaha-cai',
+    :"b77ix-eeaaa-aaaaa-qaada-cai",
 };
 
 // {

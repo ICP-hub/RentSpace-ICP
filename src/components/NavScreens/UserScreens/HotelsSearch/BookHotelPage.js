@@ -43,57 +43,66 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
 
   // const [bottom,setBottom]=useState(70)
 
-  async function getReservations(setRefreshing) {
-    setRefreshing(true);
-    setBookingList([]);
-    await actors?.bookingActor
-      .getBookingId()
-      .then(res => {
-        console.log('getid resp : ', res);
+  // async function getReservations(setRefreshing) {
+  //   setRefreshing(true);
+  //   setBookingList([]);
+  //   await actors?.bookingActor
+  //     .getBookingId()
+  //     .then(res => {
+  //       console.log('getid resp : ', res);
 
-        console.log('all bookings1: ', res[0]);
-        if (res.length <= 0) {
-          setRefreshing(false);
-          return;
-        }
-        res.map(async r => {
-          setRefreshing(true);
-          console.log('booking-->', r);
-          let hotelId = r.split('#')[0] + '#' + r.split('#')[1];
-          console.log(hotelId);
-          await actors?.bookingActor
-            .getBookingDetials(r)
-            .then(async resp => {
-              let hotel = null;
+  //       console.log('all bookings1: ', res[0]);
+  //       if (res.length <= 0) {
+  //         setRefreshing(false);
+  //         return;
+  //       }
+  //       res.map(async r => {
+  //         setRefreshing(true);
+  //         console.log('booking-->', r);
+  //         let hotelId = r.split('#')[0] + '#' + r.split('#')[1];
+  //         console.log(hotelId);
+  //         await actors?.bookingActor
+  //           .getBookingDetials(r)
+  //           .then(async resp => {
+  //             let hotel = null;
 
-              await actors?.hotelActor
-                .getHotel(hotelId)
-                .then(hRes => {
-                  setRefreshing(false);
-                  hotel = {...hRes[0], hotelId: hotelId};
-                })
-                .catch(err => {
-                  console.log(err);
-                  setRefreshing(false);
-                });
-              console.log('booking details : ', resp);
-              console.log({...resp[0], hotel: hotel, bookingId: r});
-              setBookingList(b => [
-                ...b,
-                {...resp[0], hotel: hotel, bookingId: r},
-              ]);
-            })
-            .catch(err => {
-              console.log(err);
-              setRefreshing(false);
-            });
-        });
-      })
-      .catch(err => {
-        console.log('getid err :', err);
-        setRefreshing(false);
-      });
-    console.log('bookingList', bookingList);
+  //             await actors?.hotelActor
+  //               .getHotel(hotelId)
+  //               .then(hRes => {
+  //                 setRefreshing(false);
+  //                 hotel = {...hRes[0], hotelId: hotelId};
+  //               })
+  //               .catch(err => {
+  //                 console.log(err);
+  //                 setRefreshing(false);
+  //               });
+  //             console.log('booking details : ', resp);
+  //             console.log({...resp[0], hotel: hotel, bookingId: r});
+  //             setBookingList(b => [
+  //               ...b,
+  //               {...resp[0], hotel: hotel, bookingId: r},
+  //             ]);
+  //           })
+  //           .catch(err => {
+  //             console.log(err);
+  //             setRefreshing(false);
+  //           });
+  //       });
+  //     })
+  //     .catch(err => {
+  //       console.log('getid err :', err);
+  //       setRefreshing(false);
+  //     });
+  //   console.log('bookingList', bookingList);
+  // }
+
+  async function getReservations(setRefreshing){
+    try{
+      setRefreshing(true)
+    }catch(err){
+      console.log(err)
+      setRefreshing(false)
+    }
   }
   async function dispatchBookingData() {
     setShowReservations(true);
@@ -163,7 +172,7 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
             <Icon2 name="reload-circle-sharp" size={20} color={COLORS.black} />
             <Text style={styles.btnText}>Reload Data</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn} onPress={dispatchBookingData}>
+          <TouchableOpacity style={styles.btn} onPress={()=>setShowReservations(true)}>
             <Icon name="address-book" size={20} color={COLORS.black} />
             <Text style={styles.btnText}>Show my bookings</Text>
           </TouchableOpacity>

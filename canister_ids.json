@@ -1,23 +1,23 @@
 {
+  "Booking": {
+    "ic": "rsxhm-gqaaa-aaaao-a3oxq-cai"
+  },
+  "Comment": {
+    "ic": "tpkje-vyaaa-aaaao-a3oya-cai"
+  },
+  "Hotel": {
+    "ic": "tilpq-yaaaa-aaaao-a3oyq-cai"
+  },
   "LoginWeb": {
     "ic": "xmzaw-5iaaa-aaaao-a3oda-cai"
   },
   "Review": {
-    "ic": "w2sy5-iyaaa-aaaao-a3oga-cai"
+    "ic": "tbiem-oiaaa-aaaao-a3oza-cai"
+  },
+  "Support": {
+    "ic": "tgjcy-dqaaa-aaaao-a3ozq-cai"
   },
   "User": {
-    "ic": "xlygc-qqaaa-aaaao-a3odq-cai"
-  },
-  "booking": {
-    "ic": "wiupe-eiaaa-aaaao-a3ofa-cai"
-  },
-  "comment": {
-    "ic": "wpvjq-jqaaa-aaaao-a3ofq-cai"
-  },
-  "hotel": {
-    "ic": "wbxey-saaaa-aaaao-a3oeq-cai"
-  },
-  "supportChat": {
-    "ic": "wgwcm-7yaaa-aaaao-a3oea-cai"
+    "ic": "ttotv-cyaaa-aaaao-a3o2a-cai"
   }
 }
