@@ -174,6 +174,10 @@ const Congratulations = ({setHostModal, pos, getHotelDetails}) => {
         .post(`${baseUrl}/api/v1/property/register`, data, {
           headers: {
             principal: principle,
+            "x-private":authData.privateKey,
+            "x-public":authData.publicKey,
+            "x-delegation":authData.delegation,
+            // "Content-Type":"multipart/form-data"
           },
         })
         .then(res => {

@@ -15,12 +15,15 @@ import CardDetails from './bookingParts/CardDetails';
 import AdditionalGuests from './bookingParts/AdditionalGuests';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { nodeBackend } from '../../../../../../DevelopmentConfig';
 
 const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
 
   const {user} = useSelector(state => state.userReducer);
-  const baseUrl='https://rentspace.kaifoundry.com/api/v1'
+  // const baseUrl='https://rentspace.kaifoundry.com/api/v1'
   // const baseUrl='http://localhost:5000/api/v1'
+
+  const baseUrl = nodeBackend;
 
 
   const customHotelData = {
@@ -62,7 +65,7 @@ const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
   // testing function for orderBookingForm
   async function testorderBookingForm() {
     postData = {
-      book_hash: 'h-44586dda-b272-5973-a2a4-54b7d52429c3', // change everytime
+      book_hash: 'h-5d1fdbc6-bf82-5c41-a9b1-f5f43a1c8191', // change everytime
       language: 'en',
       user_ip: IP,
     };
@@ -71,7 +74,7 @@ const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
 
     await axios
       .post(
-        `${baseUrl}/hotel/RateHawk/orderBookingForm`,
+        `${baseUrl}/api/v1/hotel/RateHawk/orderBookingForm`,
         postData,
       )
       .then(response => {
@@ -108,7 +111,7 @@ const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
 
     await axios
       .post(
-        `${baseUrl}/hotel/RateHawk/crediCardTokenization`,
+        `${baseUrl}/api/v1/hotel/RateHawk/crediCardTokenization`,
         postData,
       )
       .then(response => {
@@ -116,6 +119,7 @@ const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
         const init_uuid = response.data.init_uuid;
         console.log("PAY_UUID : ",pay_uuid);
         console.log("INIT_UUID : ",init_uuid);
+        console.log("payment_types : ",payment_types);
         testOrderBookingFinish(
           partner_order_id,
           payment_types,
@@ -156,7 +160,7 @@ const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
 
     await axios
       .post(
-        `${baseUrl}/hotel/RateHawk/orderBookFinish`,
+        `${baseUrl}/api/v1/hotel/RateHawk/orderBookFinish`,
         postData,
       )
       .then(response => {
@@ -178,7 +182,7 @@ const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
 
     await axios
       .post(
-        `${baseUrl}/hotel/RateHawk/orderBookFinishStatus`,
+        `${baseUrl}/api/v1/hotel/RateHawk/orderBookFinishStatus`,
         postData,
       )
       .then(response => {

@@ -13,6 +13,7 @@ import {COLORS} from '../../../../../constants/themes';
 import Line from '../Filters/ReUsables/Line';
 import axios from 'axios';
 import RateHawkBookingPage from './RateHawkBookingPage';
+import { nodeBackend } from '../../../../../../DevelopmentConfig';
 
 const RoomList = ({
   hotelId,
@@ -33,8 +34,11 @@ const RoomList = ({
 
   const [noRoomAvailable, setNoRoomAvailable] = useState(false);
 
-  const baseUrl = 'https://rentspace.kaifoundry.com/api/v1';
+  // const baseUrl = 'https://rentspace.kaifoundry.com/api/v1';
   // const baseUrl='http://localhost:5000/api/v1'
+  const baseUrl = nodeBackend;
+
+  console.log('Base URL : ', baseUrl)
 
   const fetchHash = async () => {
     const postData = {
@@ -43,13 +47,13 @@ const RoomList = ({
       checkOutDate: checkOutDate,
       language: 'en',
       adults: 2,
-      children: [],
+      children: [17],
     };
 
     console.log('Post Data : ', postData);
 
     await axios
-      .post(`${baseUrl}/hotel/RateHawk/bookHotel`, postData)
+      .post(`${baseUrl}/api/v1/hotel/RateHawk/bookHotel`, postData)
       .then(response => {
         if (
           response?.data?.data?.data?.hotels[0]?.rates[0].book_hash ===

@@ -29,17 +29,19 @@ const CustomAlert = ({showAlert, setShowAlert,item,getHotelDetails}) => {
 
   const {authData}=useSelector(state=>state.authDataReducer)
   const handleYes = async() => {
-    console.log(item.propertyId)
+    console.log(item.propertyId);
     // console.log(authData.privateKey,authData.publicKey,authData.delegation)
-    await axios.delete(`${baseUrl}/api/v1/property/delete?propertyId=${item.propertyId}`
-    // ,{
-    //   headers:{
-    //     "x-private":authData.privateKey,
-    //     "x-public":authData.publicKey,
-    //     "x-delegation":authData.delegation,
-    //     "Content-Type":"multipart/form-data"
-    //   }
-    // }
+
+
+    await axios.delete(`${baseUrl}/api/v1/property/delete`,{
+      headers:{
+        "x-private":authData.privateKey,
+        "x-public":authData.publicKey,
+        "x-delegation":authData.delegation,
+        // "Content-Type":"multipart/form-data"
+      },
+      data:{propertyId:item.propertyId}
+    }
   ).then((res)=>{
       console.log(res)
       setShowAlert(false);
