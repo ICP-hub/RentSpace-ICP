@@ -738,7 +738,7 @@ const BookingFormComp = ({
 
       {/* Room modal */}
       <Modal visible={roomModal} animationType="slide" onRequestClose={()=>setRoomModal(false)}>
-        <Rooms item={item} totalBill={totalBill} setTotalBill={setTotalBill} roomData={roomData} setRoomData={setRoomData} setRoomModal={setRoomModal} />
+        <Rooms item={item} totalBill={totalBill} setTotalBill={setTotalBill} booking={booking} roomData={roomData} setRoomData={setRoomData} setRoomModal={setRoomModal} />
       </Modal>
     </View>
   );

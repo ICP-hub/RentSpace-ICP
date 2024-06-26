@@ -294,8 +294,8 @@ const RootComponent: React.FC = () => {
           Linking.addEventListener('url', handleDeepLink);
           setTimeout(async () => {
             // const url = `https://xmzaw-5iaaa-aaaao-a3oda-cai.icp0.io?publicKey=${toHex(res.getPublicKey().toDer())}`;
-            // const url = `http://127.0.0.1:4943/?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai&publicKey=${toHex( // for atharva local
-            const url = `http://127.0.0.1:4943/?canisterId=cuj6u-c4aaa-aaaaa-qaajq-cai&publicKey=${toHex( // for rajnish local 
+            const url = `http://127.0.0.1:4943/?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai&publicKey=${toHex( // for atharva local
+            // const url = `http://127.0.0.1:4943/?canisterId=cuj6u-c4aaa-aaaaa-qaajq-cai&publicKey=${toHex( // for rajnish local 
               res.getPublicKey().toDer(),
             )}`;
             if (await InAppBrowser.isAvailable()) {

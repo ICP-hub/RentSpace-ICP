@@ -11,7 +11,7 @@ import {useEffect, useState} from 'react';
 import {COLORS} from '../../../../../../../constants/themes';
 import {Color} from 'react-native-alert-notification/lib/typescript/service';
 
-const Rooms = ({item, setRoomData, setRoomModal}) => {
+const Rooms = ({item, setRoomData, setRoomModal,booking}) => {
   const [rooms, setRooms] = useState(item.rooms);
 
   const [selectedRooms, setSelectedRooms] = useState([]);

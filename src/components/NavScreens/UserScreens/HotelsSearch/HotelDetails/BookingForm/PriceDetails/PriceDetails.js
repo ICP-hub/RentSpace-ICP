@@ -13,7 +13,8 @@ const PriceDetails = ({basePrice,nights,fullPayment,checkIn,days,roomData,setRoo
     useEffect(() => {
       console.log("Selected Rooms: ", roomData);
       const total = roomData.reduce((sum, room) => sum + room.bill, 0);
-      setFinalPrice(total);
+      console.log(nights,"nights")
+      setFinalPrice(total*nights);
     }, [roomData]);
 
     const prices=[
@@ -46,7 +47,7 @@ const PriceDetails = ({basePrice,nights,fullPayment,checkIn,days,roomData,setRoo
       }
       <View style={styles.line}/>
       <View style={styles.textCont}>
-        <Text style={styles.heading}>Total(USD)</Text>
+        <Text style={styles.heading}>Total(USD) with {4} nights</Text>
         <Text style={styles.heading}>${finalPrice}</Text>
       </View>
       

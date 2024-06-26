@@ -99,6 +99,15 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
   async function getReservations(setRefreshing){
     try{
       setRefreshing(true)
+      console.log(actors?.bookingActor?.getAllUserBookings)
+      let bookingRes=await actors?.bookingActor?.getAllUserBookings()
+
+      if(bookingRes?.err!=undefined){
+        setBookingList([])
+        return
+      }
+      console.log(bookingRes?.ok)
+      setBookingList(bookingRes?.ok)
     }catch(err){
       console.log(err)
       setRefreshing(false)
@@ -219,6 +228,16 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
         </View>
         <Text style={styles.empty}>Please hold on while we fetch the best hotel options for you.{"\n"}If no results appear, try adjusting your search criteria.</Text>
         <ActivityIndicator animating={true} size={40} color={COLORS.mainPurple} style={styles.loader} />
+        <Modal
+          animationType="slide"
+          visible={showReservation}
+          onRequestClose={() => setShowReservations(false)}>
+          <ShowBookings
+            getReservations={getReservations}
+            bookingList={bookingList}
+            setShowReservations={setShowReservations}
+          />
+        </Modal>
       </>
     );
   }
