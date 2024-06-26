@@ -5,6 +5,7 @@ import Text "mo:base/Text";
 import Error "mo:base/Error";
 import Buffer "mo:base/Buffer";
 import Time "mo:base/Time";
+import Debug "mo:base/Debug";
 import DateTime "mo:datetime/DateTime";
 import CommentTypes "../types/commentTypes";
 import UtilityFunc "../utils/utilityFunc";
@@ -20,6 +21,9 @@ shared ({caller=owner}) actor class Comment(){
     //creates on comment on a hotel
     public shared({caller}) func createComment(hotelId:Text,comment:CommentTypes.CommentInput):async Result.Result<CommentTypes.Comment,Text>{
         try{
+
+            Debug.print("Creating comment");
+
             //check hotel and user exists
             await UtilityFunc.checkAnonymous(caller);
             let uuid = await UtilityFunc.getUuid();

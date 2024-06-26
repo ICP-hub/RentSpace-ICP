@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setChatToken } from '../../../../../redux/chatToken/actions'
 import { useRoute } from '@react-navigation/native'
 import { Principal } from '@dfinity/principal'
+import { nodeBackend } from '../../../../../../DevelopmentConfig'
 
 const sampleChats=require('../../../HostScreens/ChatPage/AllChats/SampleChat.json')
 
@@ -26,11 +27,13 @@ const ChatContainer = ({navigation}) => {
     const {principle}=useSelector(state=>state.principleReducer)
     const [token,setToken]=useState('')
     const dispatch=useDispatch()
-    const route=useRoute()
+    const route=useRoute() //--------------------------------------------------------
     const firstUpdate = useRef(true);
     const {newChat}=route.params
-    const baseUrl="https://rentspace.kaifoundry.com"
+    // const baseUrl="https://rentspace.kaifoundry.com"
     // const baseUrl="http://localhost:5000"
+    const baseUrl = nodeBackend;
+    
     const chatLogin=async()=>{
         setChatUsers([])
         setLoading(true)
@@ -49,6 +52,7 @@ const ChatContainer = ({navigation}) => {
           "x-public":authData.publicKey,
           "x-delegation":authData.delegation,
          }}).then(async(res)=>{
+            console.log(res.data)
             console.log("chat login resp : ",res.data.userToken)
             setToken(res.data.userToken)
             dispatch(setChatToken(res.data.userToken))
@@ -72,8 +76,9 @@ const ChatContainer = ({navigation}) => {
     }
     const getAllChatUser=async()=>{
         const arr=[]
-        console.log("using function : ",actors?.userActor?.getUserInfoByPrincipal)
+        console.log("using function : ",actors?.userActor?.getUserByPrincipal)
         console.log("getting all users!")
+        console.log("chats : ",chats)
         let fromPrinciples=[]
         let toPrinciples=[]
         chats.map((chat)=>{
@@ -115,20 +120,25 @@ const ChatContainer = ({navigation}) => {
                 setLoading(false)
             })
         })
-        if(newChat!="" && !(fromPrinciples.includes(newChat))){
+        if(newChat!="" && !(fromPrinciples.includes(newChat))){ //---------------------------------------
             console.log(`new user : ${newChat}`)
             console.log("Creating new chat")
-            await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(newChat))
-            .then((res)=>{
-                console.log(res[0])
-                arr.push({...res[0],id:newChat})
-                // setChatUsers(c=>[...c,{...res[0],id:newChat}])
-                setLoading(false)
-                setChatUsers(arr)
-            }).catch((err)=>{
-                console.log("new chatuser fetching er : ",err)
-                setLoading(false)
-            })
+            let resp = await actors?.userActor?.getUserByPrincipal(Principal.fromText(newChat));
+
+            console.log("new chat user resp : ",resp)
+
+
+
+            // .then((res)=>{
+            //     console.log(res[0])
+            //     arr.push({...res[0],id:newChat})
+            //     // setChatUsers(c=>[...c,{...res[0],id:newChat}])
+            //     setLoading(false)
+            //     setChatUsers(arr)
+            // }).catch((err)=>{
+            //     console.log("new chatuser fetching er : ",err)
+            //     setLoading(false)
+            // })
         }
         
         console.log(chatUsers)

@@ -64,7 +64,7 @@ import {createTokenActor} from './src/components/NavScreens/UserScreens/HotelsSe
 import {setAuthData} from './src/redux/authData/actions';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {host, ids} from './DevelopmentConfig';
+import {host, ids, nodeBackend} from './DevelopmentConfig';
 import MainProfile from './src/components/NavScreens/UserScreens/Profile/MainProfile/MainProfile';
 import HotelChoice from './src/components/NavScreens/HostScreens/Availibility/HotelChoice/HotelChoice';
 import {AlertNotificationRoot, ALERT_TYPE,Dialog} from 'react-native-alert-notification'
@@ -452,7 +452,8 @@ const RootComponent: React.FC = () => {
         store.dispatch(setAuthData(signObj));
         // const baseUrl="http://localhost:5000"
         // alert('implementing chat register')
-        const baseUrl = 'https://rentspace.kaifoundry.com';
+        // const baseUrl = 'https://rentspace.kaifoundry.com';
+        const baseUrl = nodeBackend;
         await axios
           .post(
             `${baseUrl}/api/v1/register/user`,

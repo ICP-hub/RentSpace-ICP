@@ -71,10 +71,21 @@ const Comments = ({id,comments,getComments,loading,setLoading}) => {
         setLoading(true)
         Keyboard.dismiss()
         console.log(`adding new comment ${comment} \n with parent : ${parent}`)
-        await actors?.commentActor?.createComment(id,parent,comment)
+        // await actors?.commentActor?.createComment(id,parent,comment)
+        let Finalcomment = {
+          message : comment,
+          parentCommentId : parent
+        }
+
+        console.log("Comment : ",Finalcomment);
+        console.log("ID : ",id);
+        await actors?.commentActor?.createComment(id,{
+          message : comment,
+          parentCommentId : parent
+        })
         .then((res)=>{
           console.log(res)
-          getComments()
+          getComments() 
         }).catch((err)=>{
           console.log(err)
           setLoading(false)

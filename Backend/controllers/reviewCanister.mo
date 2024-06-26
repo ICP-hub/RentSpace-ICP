@@ -61,7 +61,7 @@ shared({caller=owner}) actor class Review(){
             return #err(Error.message(e));
         }
     };
-
+ 
     // returns reviews on a hotel
     public shared ({caller}) func getAllReviewsOnHotel(hotelId:Text):async Result.Result<[ReviewTypes.Review],Text>{
         try{
