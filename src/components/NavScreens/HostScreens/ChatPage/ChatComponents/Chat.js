@@ -7,6 +7,7 @@ import { io } from 'socket.io-client'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 import { COLORS } from '../../../../../constants/themes' 
+import { nodeBackend } from '../../../../../../DevelopmentConfig'
 
 const Chat = ({item,setOpenChat}) => {
   const [messages,setMessages]=useState([])
@@ -14,8 +15,9 @@ const Chat = ({item,setOpenChat}) => {
   const {principle}=useSelector(state=>state.principleReducer)
   const [message,setMessage]=useState("")
   const [socket,setSocket]=useState(null)
-  const baseUrl="https://rentspace.kaifoundry.com"
+  // const baseUrl="https://rentspace.kaifoundry.com"
   // const baseUrl="http://localhost:5000"
+  const baseUrl = nodeBackend;
 
   const pin="bzyut-cxk7l-tkb6p-6kxev-4k2lf-fajro-7biwv-yxlii-ingdb-flzdj-jae"
   // const checkSendMessage=()=>{
@@ -53,7 +55,7 @@ const Chat = ({item,setOpenChat}) => {
       "x-private-token":token
     }}).then((res)=>{
       console.log("chat res particular : ",res.data.messages)
-      setMessages(res.data.messages.reverse())
+      setMessages(res.data.messages)
     }).catch((err)=>{
       console.log(err)
     })

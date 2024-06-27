@@ -159,7 +159,9 @@ const HotelDetailPage = ({item, setOpen, navigation}) => {
           <TouchableOpacity
             style={styles.btn}
             onPress={() => {
-              navigation.navigate('UserChat', {newChat: host?.id});
+              let hostId = item?.propertyId?.split('#')[0];
+              console.log(host?.userID,"hp", hostId );
+              navigation.navigate('UserChat', {newChat: hostId});
               setOpen(false);
             }}>
             <Text style={styles.btnText}>Chat with {host?.firstName}</Text>

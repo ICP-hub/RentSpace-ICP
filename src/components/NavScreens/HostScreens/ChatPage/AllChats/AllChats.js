@@ -13,6 +13,7 @@ import { setChatToken } from '../../../../../redux/chatToken/actions'
 import { useRoute } from '@react-navigation/native'
 import { Principal } from '@dfinity/principal'
 import ChatDrawer from '../ChatDrawer/ChatDrawer'
+import { nodeBackend } from '../../../../../../DevelopmentConfig'
 
 const sampleChats=require('../../../HostScreens/ChatPage/AllChats/SampleChat.json')
 
@@ -32,18 +33,22 @@ const AllChats = ({navigation}) => {
     const firstUpdate = useRef(true);
     const [showDrawer,setShowDrawer]=useState(false)
     // const {newChat}=route.params
-    const baseUrl="https://rentspace.kaifoundry.com"
+    // const baseUrl="https://rentspace.kaifoundry.com"
     // const baseUrl="http://localhost:5000"
+
+    const baseUrl = nodeBackend;
+
     const chatLogin=async()=>{
+        console.log("host chat login")
         setLoading(true)
         setChats([])
-        console.log(`authData : ${authData}\n principal : ${authData.principal}\n publicKey : ${authData.publicKey}`)
+        console.log(`authData : ${authData}\n principal : ${principle}\n publicKey : ${authData.publicKey}`)
         console.log({
-            principal:authData.principal,
+            principal:principle,
             publicKey:authData.publicKey
          })
          await axios.post(`${baseUrl}/api/v1/login/user`,{
-            principal:authData.principal,
+            principal:principle,
             publicKey:authData.publicKey
          },{headers:{
             "x-private":authData.privateKey,
@@ -74,7 +79,7 @@ const AllChats = ({navigation}) => {
     const getAllChatUser=async()=>{
         const arr=[]
 
-        console.log("using function : ",actors?.userActor?.getUserInfoByPrincipal)
+        console.log("using function : ",actors?.userActor?.getUserByPrincipal)
         console.log("getting all users!")
         let fromPrinciples=[]
         let toPrinciples=[]
@@ -103,19 +108,27 @@ const AllChats = ({navigation}) => {
         fromPrinciples.map(async(chat,index)=>{
             console.log(`user ${index} : ${chat}`)
             
-            await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(chat.toString()))
-            .then(async(res)=>{
-                console.log(res[0])
-                // console.log([...chatUsers,{...res[0],id:chat}])
-                console.log({...res[0],id:chat})
-                arr.push({...res[0],id:chat})
-                // setChatUsers(c=>[...c,{...res[0],id:chat}])
-                setLoading(false)
-                setChatUsers(arr)
-            }).catch((err)=>{
-                console.log("chatuser fetching err : ",err)
-                setLoading(false)
-            })
+           let resp = await actors?.userActor?.getUserByPrincipal(Principal.fromText(chat.toString()))
+
+            console.log("resp : ",resp);
+            arr.push({...resp,id:chat})
+            console.log("arr : ",arr)
+            setChatUsers(arr)
+            setLoading(false)
+            
+            // .then(async(res)=>{
+            //     console.log(res[0])
+            //     // console.log([...chatUsers,{...res[0],id:chat}])
+            //     console.log({...res[0],id:chat})
+            //     arr.push({...res[0],id:chat})
+            //     // console.log("final arr : ",arr)
+            //     // setChatUsers(c=>[...c,{...res[0],id:chat}])
+            //     setLoading(false)
+            //     setChatUsers(arr)
+            // }).catch((err)=>{
+            //     console.log("chatuser fetching err : ",err)
+            //     setLoading(false)
+            // })
         })
         
         // if(newChat!="" && !(fromPrinciples.includes(newChat))){
@@ -162,7 +175,7 @@ const AllChats = ({navigation}) => {
                         </View>
                     </View>
                     <FlatList style={styles.list} data={chatUsers} renderItem={(item)=>(
-                        <ChatCard item={item?.item} setOpenChat={setOpenChat} openChat={openChat} setChat={setChatItem}/>
+                        <ChatCard item={item.item} setOpenChat={setOpenChat} openChat={openChat} setChat={setChatItem}/>
                 )}/>
                     <BottomNavHost navigation={navigation} showDrawer={showDrawer} setShowDrawer={setShowDrawer}/>
                     <Modal animationType='slide' visible={openChat} onRequestClose={()=>setOpenChat(false)}>
