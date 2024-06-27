@@ -11,53 +11,53 @@ const AddReview = ({item,setAddReview}) => {
   const [loading,setLoading]=useState(false)
   
 
-  console.log("item : ",item.hotelId)
+  // console.log("item : ",item.hotelId)
 
   const [review,setReview]=useState({
-    bookingId : item?.bookingId,
-    rating : 0,
-    title : "",
-    des : "",
-    createdAt : "to be set"
+    hotelId:item?.hotelId,
+    rating: 1,
+    title: '',
+    des: '',
   })
   
   const addNewReview = async () => {
     setLoading(true)
     console.log("reviewObj : ",review)
-    console.log("reviewActors : ",await actors.reviewActor.getPk())
+    // console.log("reviewActors : ",await actors.reviewActor.getPk())
 
     try {
-      let ReviewInput = {
-        hotelId:
-          'j435d-ase4s-ebukf-tr6fc-5gt5c-mjsqh-awkvq-56gsw-s2vbv-nbohg-gae#c8bf686b-83d3-4790-b507-54523ea42b5b',
-        rating: 4.5,
-        title: 'Great Hotel',
-        des: 'I had a great experience at this hotel',
-      };
+      console.log("review : ",review)
 
       console.log('Review add', actors.reviewActor);
-    console.log('a : ', actors.reviewActor);
-    await actors.reviewActor
-      .createReview(ReviewInput.hotelId, ReviewInput)
-      .then(res => {
-        console.log('review creation response : ', res);
-        // setLoading(false)
-        // alert('Thanks for giving your valueble feedback!')
+
+      let reviewRes=await actors?.reviewActor?.createReview(review?.hotelId,review)
+      console.log('review creation response : ', reviewRes);
+      if(reviewRes?.err!=undefined){
+        setLoading(false)
+        Dialog.show({
+          title: 'Something went wrong',
+          type: ALERT_TYPE.DANGER,
+          textBody: reviewRes?.err,
+        });
+        return
+      }
         Dialog.show({
           title: 'SUCCESS',
           type: ALERT_TYPE.SUCCESS,
           textBody: 'Thanks for giving your valueable feedback',
         });
-        // setAddReview(false)
-      })
-      .catch(err => {
-        console.log('review err :', err);
-        // setLoading(false)
-      });
+        setLoading(false)
+        setAddReview(false)
 
 
     } catch (err) {
       console.log(err);
+      setLoading(false)
+      Dialog.show({
+        title: 'Something went wrong',
+        type: ALERT_TYPE.DANGER,
+        textBody: 'some err occured while adding your review',
+      });
     }
     
 

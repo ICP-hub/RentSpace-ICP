@@ -31,10 +31,14 @@ import ReservationCard from './ReservationCard';
 
 const Reservations = ({
   setShowReservations,
+  navigation,
   reservationList,
+  
   reservationTypes,
   getAllReservations,
   getFilteredArray,
+  showDrawer,
+  setShowDrawer
 }) => {
   const [reservationType, setReservationType] = useState(
     reservationTypes[0].title,
@@ -44,18 +48,23 @@ const Reservations = ({
   const {actors} = useSelector(state => state.actorReducer);
   const [refreshing, setRefreshing] = useState(false);
 
+  const parseDMY = s => {
+    let [d, m, y] = s.split(/\D/);
+    return new Date(y, m-1, d);
+  };
+
   const sortCreatedAt = asc => {
     const tempArr = [...reservations];
     if (asc) {
       tempArr.sort((a, b) => {
-        const date1 = new Date(a?.bookingData?.date);
-        const date2 = new Date(b?.bookingData?.date);
+        const date1 = new Date(a?.bookingData?.createdAt);
+        const date2 = new Date(b?.bookingData?.createdAt);
         return date1.getTime() - date2.getTime();
       });
     } else {
       tempArr.sort((a, b) => {
-        const date1 = new Date(a?.bookingData?.date);
-        const date2 = new Date(b?.bookingData?.date);
+        const date1 = new Date(a?.bookingData?.createdAt);
+        const date2 = new Date(b?.bookingData?.createdAt);
         return date2.getTime() - date1.getTime();
       });
     }
@@ -65,14 +74,14 @@ const Reservations = ({
     const tempArr = [...reservations];
     if (asc) {
       tempArr.sort((a, b) => {
-        const date1 = new Date(a?.bookingData?.date);
-        const date2 = new Date(b?.bookingData?.date);
+        const date1 = new Date(parseDMY(a?.bookingData?.checkInDate));
+        const date2 = new Date(parseDMY(b?.bookingData?.checkInDate));
         return date1.getTime() - date2.getTime();
       });
     } else {
       tempArr.sort((a, b) => {
-        const date1 = new Date(a?.bookingData?.date);
-        const date2 = new Date(b?.bookingData?.date);
+        const date1 = new Date(parseDMY(a?.bookingData?.checkInDate));
+        const date2 = new Date(parseDMY(b?.bookingData?.checkInDate));
         return date2.getTime() - date1.getTime();
       });
     }
@@ -140,7 +149,11 @@ const Reservations = ({
         />
       )}
 
-      <BottomNavHost />
+      <BottomNavHost 
+          navigation={navigation} 
+          showDrawer={showDrawer}
+          setShowDrawer={setShowDrawer}
+      />
       <Modal animationType="slide" visible={sorting}>
         <Sorting
           setSorting={setSorting}

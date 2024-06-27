@@ -79,7 +79,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
       <View style={styles.textCont}>
             <View style={styles.textContHorz}>
                 <TextInput
-                    value={booking.bookingDuration}
+                    value={parseInt(booking.bookingDuration)}
                     placeholder='1'
                     style={styles.boldLargeText}
                     onChangeText={value=>{

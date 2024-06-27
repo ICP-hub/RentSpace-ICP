@@ -237,7 +237,7 @@ const UpdateProfile = ({setEditProfile}) => {
         style={styles.inputs} 
         placeholder='Govt Id No.' 
         placeholderTextColor={COLORS.inputBorder}
-        value={updatedUser?.userGovId}
+        value={updatedUser?.userGovID}
         onChangeText={value=>{setUpdatedUser({...updatedUser,userGovID:value})}}
         />
       {/* <TextInput 

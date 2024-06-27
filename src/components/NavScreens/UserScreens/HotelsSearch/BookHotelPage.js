@@ -103,11 +103,14 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
       let bookingRes=await actors?.bookingActor?.getAllUserBookings()
 
       if(bookingRes?.err!=undefined){
+        setRefreshing(false)
         setBookingList([])
         return
       }
       console.log(bookingRes?.ok)
       setBookingList(bookingRes?.ok)
+      setRefreshing(false)
+      console.log("end of fetching bookings")
     }catch(err){
       console.log(err)
       setRefreshing(false)

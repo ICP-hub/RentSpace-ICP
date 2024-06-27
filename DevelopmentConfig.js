@@ -9,12 +9,12 @@ export const ids = {
   userCan: production
     ? 'ttotv-cyaaa-aaaao-a3o2a-cai'
     // : 'a3shf-5eaaa-aaaaa-qaafa-cai',
-    :"by6od-j4aaa-aaaaa-qaadq-cai",
+    :"avqkn-guaaa-aaaaa-qaaea-cai",
 
   hotelCan: production
     ? 'tilpq-yaaaa-aaaao-a3oyq-cai'
     // : 'aovwi-4maaa-aaaaa-qaagq-cai',
-    :"be2us-64aaa-aaaaa-qaabq-cai",
+    :"br5f7-7uaaa-aaaaa-qaaca-cai",
 
   backendCan: production
     ? '5cjoy-nqaaa-aaaan-qlqsa-cai'
@@ -22,11 +22,11 @@ export const ids = {
   reviewCan: production
     ? 'tbiem-oiaaa-aaaao-a3oza-cai'
     // : 'asrmz-lmaaa-aaaaa-qaaeq-cai',
-    :"bw4dl-smaaa-aaaaa-qaacq-cai",
+    :"b77ix-eeaaa-aaaaa-qaada-cai",
   bookingCan: production
     ? 'rsxhm-gqaaa-aaaao-a3oxq-cai'
     // : 'a4tbr-q4aaa-aaaaa-qaafq-cai',
-    :"bkyz2-fmaaa-aaaaa-qaaaq-cai",
+    :"bd3sg-teaaa-aaaaa-qaaba-cai",
   ICPtokenCan: production
     ? 'ryjl3-tyaaa-aaaaa-aaaba-cai'
     : 'ryjl3-tyaaa-aaaaa-aaaba-cai', 
@@ -39,11 +39,11 @@ export const ids = {
   commentCan: production
     ? 'tpkje-vyaaa-aaaao-a3oya-cai'
     // : 'ajuq4-ruaaa-aaaaa-qaaga-cai',
-    :"bd3sg-teaaa-aaaaa-qaaba-cai",
+    :"be2us-64aaa-aaaaa-qaabq-cai",
   supportCan: production
     ? 'tgjcy-dqaaa-aaaao-a3ozq-cai'
     // : 'ahw5u-keaaa-aaaaa-qaaha-cai',
-    :"b77ix-eeaaa-aaaaa-qaada-cai",
+    :"by6od-j4aaa-aaaaa-qaadq-cai",
 };
 
 // {

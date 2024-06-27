@@ -93,13 +93,11 @@ const BookingFormComp = ({
   const [paymentType, setPaymentType] = useState('cypto');
   const [balanceScreen, setBalanceScreen] = useState(false);
   const [total, setTotal] = useState(
-    days * item?.hotelPrice * 0.15 +
-      days * item?.hotelPrice * 0.1 +
-      days * item?.hotelPrice,
+    0
   );
   const [cryptoPrice, setCryptoPrice] = useState();
 
-  console.log('Item', item);
+  // console.log('Item', item);
   const [roomModal, setRoomModal] = useState(false);
 
   const [roomData, setRoomData] = useState([]);//[{roomID: '1', totalRooms: 0, roomPrice: 0, bill: 0}]);
@@ -123,72 +121,76 @@ const BookingFormComp = ({
 
   //booking flow general functions
   function notifyBookingConfirm() {
+    console.log("hoetl item : ",item?.propertyName)
     PushNotification.localNotification({
       title: 'Booking Successful!',
-      message: `${user?.firstName}, your booking for ${item?.hotelTitle} is successful!`,
+      message: `${user?.firstName}, your booking for ${item?.propertyName} is successful!`,
       channelId: '1',
     });
   }
 
-  const book = async (obj, notify, amnt) => {
-    let paymentOpt = null;
-    if (paymentMethod == 'ckEth') {
-      paymentOpt = {cketh: null};
-    } else if (paymentMethod == 'SOL') {
-      paymentOpt = {solana: 'test'};
-    } else if (paymentMethod == 'ckBTC') {
-      paymentOpt = {ckbtc: null};
-    } else {
-      paymentOpt = {icp: null};
-    }
-    console.log(paymentOpt, paymentMethod);
-    await actors?.bookingActor
-      ?.bookHotel(item?.id, obj, paymentOpt, amnt)
-      .then(resp => {
-        if (resp == 'Not found!') {
-          setLoading(false);
-          Dialog.show({
-            type: ALERT_TYPE.WARNING,
-            title: 'Some error occcured',
-            textBody: `Some error occured while booking the hotel `,
-            button: 'OK',
-          });
-          return;
-        }
-        console.log(resp);
-        notify();
-        setLoading(false);
-        showBookingAnimation(true);
-        setTimeout(() => {
-          setBookingForm(false);
-          setOpen(false);
-        }, 2000);
-      })
-      .catch(err => {
-        console.log(err);
+  const book = async (obj, notify, amnt,id) => {
+    try{
+      let paymentOpt = null;
+      let opt={
+        id:parseInt(id)
+      }
+      if (paymentMethod == 'ckEth') {
+        paymentOpt = {ckETH: opt};
+      } else if (paymentMethod == 'SOL') {
+        paymentOpt = {sol: null};
+      } else if (paymentMethod == 'ckBTC') {
+        paymentOpt = {ckBTC: opt};
+      } else {
+        paymentOpt = {icp: opt};
+      }
+      console.log(paymentOpt, paymentMethod,obj);
+
+      let bookingRes=await actors?.bookingActor?.createBooking(paymentOpt,obj,amnt)
+      console.log("booking response : ",bookingRes)
+      if(bookingRes?.err!=undefined){
         setLoading(false);
         Dialog.show({
           type: ALERT_TYPE.WARNING,
           title: 'Some error occcured',
-          textBody: `Some error occured while booking the hotel `,
+          textBody: bookingRes?.err,
           button: 'OK',
         });
+        return
+      }
+      notify();
+      setLoading(false);
+      showBookingAnimation(true);
+      setTimeout(() => {
+        setBookingForm(false);
+        setOpen(false);
+      }, 2000);
+    }catch(err){
+      console.log(err)
+      setLoading(false)
+      Dialog.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Some error occcured',
+        textBody: `Some error occured while booking the hotel `,
+        button: 'OK',
       });
+    }
+    
   };
 
   const afterPaymentFlow = async (paymentId, amnt) => {
-    setBooking({...booking, paymentStatus: true, paymentId: paymentId});
-    const newObj = {
-      ...booking,
-      paymentId: paymentId,
-      paymentStatus: true,
-      hotelId: item?.id,
-      // bookedAt:"start",
-      // bookedTill:"end"
-    };
+    // setBooking({...booking, paymentStatus: true, paymentId: paymentId});
+    // const newObj = {
+    //   ...booking,
+    //   paymentId: paymentId,
+    //   paymentStatus: true,
+    //   hotelId: item?.id,
+    //   // bookedAt:"start",
+    //   // bookedTill:"end"
+    // };
     // alert("in after payment")
-    console.log(newObj);
-    book(newObj, notifyBookingConfirm, amnt);
+    console.log(booking);
+    book(booking, notifyBookingConfirm, amnt,paymentId);
     setBalanceScreen(false);
   };
   //crypto payment functions except solana
@@ -614,6 +616,7 @@ const BookingFormComp = ({
           days={days}
           roomData={roomData}
           setRoomData={setRoomData}
+          setTotal={setTotal}
         />
         <View style={styles.line} />
         <PaymentMethods

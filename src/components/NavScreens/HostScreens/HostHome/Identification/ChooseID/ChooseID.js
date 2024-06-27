@@ -22,6 +22,8 @@ import {ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
 import {storage} from '../../../../../../../firebaseConfig';
 import {downloadFile} from 'react-native-fs';
 import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../../../../../../redux/users/actions';
 
 const ChooseID = ({setIdprocess, pos}) => {
   const IDoptions = [
@@ -55,6 +57,9 @@ const ChooseID = ({setIdprocess, pos}) => {
   });
   const [upload, setUpload] = useState(false);
   const [transferred, setTransferred] = useState(0);
+  const {user}=useSelector(state=>state.userReducer)
+  const {actors}=useSelector(state=>state.actorReducer)
+  const dispatch=useDispatch()
 
   const selectImage = async () => {
     console.log('Select Image');
@@ -92,17 +97,50 @@ const ChooseID = ({setIdprocess, pos}) => {
         console.log('Error Uploading Image', error);
       },
       () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
-          console.log('File available at', downloadURL);
-          setUploadedDoc({...uploadedDoc, doc: downloadURL});
-          setUpload(false);
-          setIdprocess(0);
-          Dialog.show({
-            type: ALERT_TYPE.SUCCESS,
-            title: 'Document Uploaded Successfully',
-            textBody: 'Your Document has been uploaded successfully',
-            button: 'OK',
-          });
+        getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
+          try{
+            console.log('File available at', downloadURL);
+            setUploadedDoc({...uploadedDoc, doc: downloadURL});
+            console.log("doc uploaded updating user : ",{...user,govIDLink:downloadURL,userGovID:uploadedDoc.idNumber})
+            let userRes=await actors?.userActor?.updateUserDetails({...user,govIDLink:downloadURL,userGovID:uploadedDoc.idNumber})
+            if(userRes?.err!=undefined){
+              Dialog.show({
+                type: ALERT_TYPE.DANGER,
+                title: 'Error ',
+                textBody: 'Something went wrong while uploading, please try again',
+                button: 'OK',
+              });
+              setUpload(false);
+
+              return
+            }
+            console.log(userRes?.ok)
+            setUpload(false);
+            setIdprocess(0);
+            Dialog.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: 'Document Uploaded Successfully',
+              textBody: 'Your Document has been uploaded successfully',
+              button: 'OK',
+            });
+
+            dispatch(setUser({
+              ...user,
+              govIDLink:downloadURL,
+              userGovID:uploadedDoc.idNumber
+            }))
+          }catch(err){
+            console.log(err)
+            Dialog.show({
+              type: ALERT_TYPE.DANGER,
+              title: 'Error ',
+              textBody: 'Something went wrong while uploading, please try again',
+              button: 'OK',
+            });
+            setUpload(false);
+
+          }
+         
         });
       },
     );
