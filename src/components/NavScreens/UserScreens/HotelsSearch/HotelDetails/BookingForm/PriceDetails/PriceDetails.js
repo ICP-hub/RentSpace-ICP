@@ -4,7 +4,7 @@ import { COLORS,SIZES } from '../../../../../../../constants/themes'
 import PriceCard from './PriceCard'
 
 const months=["Jan","Feb","Mar","Apr","May","June","July","Aug","Sep","Oct","Nov","Dec"]
-const PriceDetails = ({basePrice,nights,fullPayment,checkIn,days,roomData,setRoomData}) => {
+const PriceDetails = ({basePrice,nights,fullPayment,checkIn,days,roomData,setRoomData,setTotal}) => {
 
     // const [finalPrice,setFinalPrice]=useState(((basePrice)*0.15*days)+((basePrice)*0.10*days)+(basePrice*days))
 
@@ -13,7 +13,9 @@ const PriceDetails = ({basePrice,nights,fullPayment,checkIn,days,roomData,setRoo
     useEffect(() => {
       console.log("Selected Rooms: ", roomData);
       const total = roomData.reduce((sum, room) => sum + room.bill, 0);
-      setFinalPrice(total);
+      console.log(nights,"nights")
+      setFinalPrice(total*nights);
+      setTotal(total*nights)
     }, [roomData]);
 
     const prices=[
@@ -46,7 +48,7 @@ const PriceDetails = ({basePrice,nights,fullPayment,checkIn,days,roomData,setRoo
       }
       <View style={styles.line}/>
       <View style={styles.textCont}>
-        <Text style={styles.heading}>Total(USD)</Text>
+        <Text style={styles.heading}>Total(USD) with {nights} nights</Text>
         <Text style={styles.heading}>${finalPrice}</Text>
       </View>
       

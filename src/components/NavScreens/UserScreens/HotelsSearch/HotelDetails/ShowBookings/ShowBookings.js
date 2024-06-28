@@ -12,6 +12,7 @@ import {COLORS, SIZES} from '../../../../../../constants/themes';
 import {useSelector} from 'react-redux';
 import BookingCard from './BookingCard';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
+import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 
 const ShowBookings = ({bookingList, setShowReservations, getReservations}) => {
   const {authData} = useSelector(state => state.authDataReducer);
@@ -19,7 +20,7 @@ const ShowBookings = ({bookingList, setShowReservations, getReservations}) => {
   const {actors}=useSelector(state=>state.actorReducer)
 
   const loadData = () => {
-    setRefreshing(true);
+    // setRefreshing(true);
     getReservations(setRefreshing);
   };
 
@@ -71,7 +72,6 @@ const ShowBookings = ({bookingList, setShowReservations, getReservations}) => {
   useEffect(() => {
     console.log('authData', authData);
     loadData();
-    addNewReview();
   }, []);
   return (
     <View style={styles.view}>

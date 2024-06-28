@@ -6,8 +6,13 @@ const months=["Jan","Feb","Mar","Apr","May","June","July","Aug","Sep","Oct","Nov
 
 const ReservationCard = ({item}) => {
 
+  const parseDMY = s => {
+    let [d, m, y] = s.split(/\D/);
+    return new Date(y, m-1, d);
+  };
+
   const parseDate=(date)=>{
-    let d=new Date(date)
+    let d=parseDMY(date)
     let day=d.getDate()
     let month=months[d.getMonth()]
     return `${day} ${month}`
@@ -18,14 +23,14 @@ const ReservationCard = ({item}) => {
       <View style={styles.textCont}>
         <View style={styles.textRow}>
           <Text style={styles.title}>CheckIn Date</Text>
-          <Text style={styles.normalText}>{parseDate(item?.bookingData?.date)}</Text>
+          <Text style={styles.normalText}>{parseDate(item?.bookingData?.checkInDate)}</Text>
         </View>
         <View style={styles.textRow}>
           <Text style={styles.title}>Duration</Text>
           <Text style={styles.normalText}>1 days</Text>
           </View>
         <View style={styles.textRow}>
-          <Text style={styles.title}>Owner Name</Text>
+          <Text style={styles.title}>Customer Name</Text>
           <Text style={styles.normalText}>{item?.customerData?.firstName}</Text>
         </View>
       </View>

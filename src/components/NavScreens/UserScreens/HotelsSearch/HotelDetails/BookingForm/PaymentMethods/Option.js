@@ -3,7 +3,7 @@ import React from 'react'
 import { COLORS } from '../../../../../../../constants/themes'
 
 const Option = ({item,setMethod,method,connect}) => {
-  console.log(item);
+  // console.log(item);
   return (
     <TouchableOpacity 
         style={(method==item?.label)?styles.selectedCard:styles.card} 

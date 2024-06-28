@@ -17,24 +17,17 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
     const [loading,setLoading]=useState(false)
     const [paymentScreen,setPaymentScreen]=useState(false)
     const [bookingAnimation,showBookingAnimation]=useState(false)
-    const [days,setDays]=useState(1)
     const [booking,setBooking]=useState({
-        userId:principle,
-        checkInDate:'',
-        bookingDuration:{
-          bookedAt:"start",
-          bookedTill:"end"
-        },
-        cancelStatus:false,
-        refundStatus:false,
-        paymentStatus:false,
-        paymentId:"payId"
+        hotelId :item?.propertyId,
+        checkInDate : '',
+        checkOutDate : '',
+        bookingDuration : 1
       })
 
       const book=async(booking,notify)=>{
         if(booking.paymentStatus){
           setLoading(true)
-          await actors?.bookingActor.bookHotel(item?.id,booking).then((res)=>{
+          await actors?.bookingActor.bookHotel(item?.propertyId,booking).then((res)=>{
             console.log(res)
             console.log(booking)
             setLoading(false)
@@ -48,7 +41,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
             },3000)
             
           }).catch((err)=>{
-            console.log(booking,item?.id)
+            console.log(booking,item?.propertyId)
             console.log(err)
             // alert(err)
             Dialog.show({
@@ -86,12 +79,11 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
       <View style={styles.textCont}>
             <View style={styles.textContHorz}>
                 <TextInput
-                    value={days}
+                    value={parseInt(booking.bookingDuration)}
                     placeholder='1'
                     style={styles.boldLargeText}
                     onChangeText={value=>{
-                        // setBooking({...booking,bookingDuration:{...bookingDuration,bookedTill:}})
-                        setDays(parseInt(value))
+                        setBooking({...booking,bookingDuration:parseInt(value)})
                         console.log("something")
                       }}
                     keyboardType='numeric'
@@ -127,12 +119,10 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
             onDayPress={day => {
               setSelected(day.dateString);
               setBooking({...booking,
-                date:`${(day.day<10)?"0"+day.day:day.day}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`,
+                // date:`${(day.day<10)?"0"+day.day:day.day}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`,
+                checkOutDate:`${((day.day+booking.bookingDuration)<10)?"0"+(day.day+booking.bookingDuration):(day.day+booking.bookingDuration)}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`,
+
                 checkInDate:`${(day.day<10)?"0"+day.day:day.day}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`,
-                bookingDuration:{
-                  bookedAt:`${(day.day<10)?"0"+day.day:day.day}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`,
-                  bookedTill:`${((day.day+days)<10)?"0"+(day.day+days):(day.day+days)}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`
-              }
               })
             }}
             style={styles.calendar}
@@ -148,7 +138,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
       <View style={styles.bottomCont}>
         <Text style={styles.btmPriceText}>${item?.hotelPrice}/night</Text>
         <TouchableOpacity style={styles.btn} onPress={()=>{
-            console.log(booking)
+            console.log("booking : 123 : ",booking)
             setPaymentScreen(true)    
         }}>
             <Text style={styles.btnText}>
@@ -169,7 +159,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
             showBookingAnimation={showBookingAnimation}
             bookingAnimation={bookingAnimation}
             setOpen={setOpen}
-            days={days}
+            days={booking.bookingDuration}
         />
       </Modal>
       

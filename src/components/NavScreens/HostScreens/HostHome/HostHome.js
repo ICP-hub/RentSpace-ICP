@@ -23,6 +23,8 @@ import Step2Manager from '../../../HostViewNew/Step2Manager';
 import Step3Manager from '../../../HostViewNew/Step3Manager';
 import ReservationCard from '../Reservations/ReservationCard';
 import {Principal} from '@dfinity/principal';
+import axios, { all } from 'axios';
+import { nodeBackend } from '../../../../../DevelopmentConfig';
 
 const HostHome = ({navigation}) => {
   const [idprocess, setIdprocess] = useState(0);
@@ -38,6 +40,7 @@ const HostHome = ({navigation}) => {
   const [arrCount, setArrCount] = useState(0);
   const [hostingCount, setHostingCount] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
+  const {principle}=useSelector(state=>state.principleReducer)
   const reservationTypes = [
     {
       title: 'Checked out',
@@ -53,6 +56,11 @@ const HostHome = ({navigation}) => {
     },
   ];
 
+  const parseDMY = s => {
+    let [d, m, y] = s.split(/\D/);
+    return new Date(y, m-1, d);
+  };
+
   const getFilteredArray = (type, arr) => {
     return arr.filter(item => item.status == type);
   };
@@ -61,87 +69,110 @@ const HostHome = ({navigation}) => {
   };
 
   const getStatus = bookingRes => {
-    let checkInDate = new Date(bookingRes[0].date);
-    let checkOutDate = new Date(checkInDate.getDate() + 2);
+    let checkInDate = parseDMY(bookingRes?.checkInDate)
+    let checkOutDate = parseDMY(bookingRes?.checkOutDate)
     let currentDate = new Date();
+    console.log(checkInDate,checkOutDate,currentDate)
     let status = null;
     if (currentDate < checkOutDate && currentDate >= checkInDate) {
       status = 'Currently hosting';
+      console.log(' cur')
       setHostingCount(prev => prev + 1);
     } else if (currentDate < checkInDate) {
       status = 'Arriving soon';
+      console.log(' arr')
       setArrCount(prev => prev + 1);
     } else {
+      console.log(' out')
       status = 'Checked out';
       setOutCount(prev => prev + 1);
     }
     return status;
   };
 
-  const getAllReservations = async () => {
-    setArrCount(0);
-    setHostingCount(0);
-    setOutCount(0);
-    let bookingList = [];
+  async function getReservations(){
+    try{
+      setRefreshing(true)
+      console.log("executing getreservations")
+      let hotelIds=await getAllHotelList()
+      if(hotelIds==[] || hotelIds==undefined){
+        setRefreshing(false)
+        console.log('receiving empty hotel id : ',hotelIds)
+        return
+      };
+      let allBookings=[]
 
-    setRefreshing(true);
-    if (hotels?.length == 0) {
-      setRefreshing(false);
-      return;
-    }
-    hotels.map(async h => {
-      await actors?.bookingActor
-        ?.gethotelXBookingId(h)
-        .then(res => {
-          // console.log(res)
-          if (res.length == 0) {
-            setRefreshing(false);
+      for(let i=0;i<hotelIds?.length;i++){
+        console.log(`hotel id ${i+1} : ${hotelIds[i]}`)
+        let bookingRes=await actors?.bookingActor?.getAllHotelBookings(hotelIds[i])
+        if(bookingRes?.err!=undefined){
+          console.log(`err for booking in hotel ${i+1} : ${bookingRes?.err}`)
+          continue
+        }
+        // allBookings=[...allBookings,...bookingRes?.ok]
+        for(let j=0;j<bookingRes?.ok?.length;j++){
+          let userRes=await actors?.userActor?.getUserByPrincipal(Principal.fromText(bookingRes?.ok[j]?.userId))
+          if(userRes?.err!=undefined){
+            continue
           }
-          res.map(async r => {
-            setRefreshing(true);
-            await actors?.bookingActor
-              ?.getBookingDetials(r)
-              .then(async bookingRes => {
-                await actors?.userActor
-                  ?.getUserInfoByPrincipal(Principal.fromText(r.split('#')[0]))
-                  .then(userRes => {
-                    bookingList.push({
-                      bookingData: bookingRes[0],
-                      bookingId: r,
-                      customerId: r.split('#')[0],
-                      customerData: userRes[0],
-                      status: getStatus(bookingRes),
-                    });
-                    setReservationList([...bookingList]);
-                    setRefreshing(false);
-                  })
-                  .catch(err => {
-                    console.log(err);
-                    setRefreshing(false);
-                  });
-              })
-              .catch(err => {
-                console.log(err);
-                setRefreshing(false);
-              });
-          });
-        })
-        .catch(err => {
-          console.log(err);
-          setRefreshing(false);
-        });
-    });
-  };
+          allBookings.push({
+            bookingData: bookingRes?.ok[j],
+            bookingId: bookingRes?.ok[j]?.bookingId,
+            customerId: bookingRes?.ok[j]?.userId,
+            customerData: userRes?.ok,
+            status: getStatus(bookingRes?.ok[j]),
+          })
+        }
+        // console.log(bookingRes?.ok)
+      }
+      console.log(allBookings)
+      setRefreshing(false)
 
-  useEffect(() => {
-    if (hotels?.length == 0) {
-      setHostModal(1);
+      setReservationList([...allBookings])
+    }catch(err){
+      console.log(err)
+      setRefreshing(false)
+
     }
-  }, []);
+  }
+
+
+  async function getAllHotelList(){
+    setArrCount(0)
+    setHostingCount(0)
+    setOutCount(0)
+    try{
+      console.log("fetching hotels for : ",principle)
+      let hotelRes=await axios.get(`${nodeBackend}/api/v1/property/all?userPrincipal=${principle}`)
+      // console.log(hotelRes?.data?.properties)
+      if(hotelRes?.data?.properties==undefined){
+        console.log("getting undefined properties")
+        setRefreshing(false)
+        return
+      };
+      let hotelIds=[]
+      for(let i=0; i<hotelRes?.data?.properties?.length; i++){
+        hotelIds?.push(hotelRes?.data?.properties[i]?.propertyId)
+      }
+      console.log("hotels returned : ",hotelIds)
+      if(hotelIds.length==0){
+        setHostModal(1)
+      }
+      return hotelIds
+    }catch(err){
+      console.log(err)
+      setRefreshing(false)
+
+    }
+  }
+
+
 
   useEffect(() => {
-    getAllReservations();
-    console.log('fetching reservations!');
+    // getAllReservations();
+    // console.log('fetching reservations!');
+    // getAllHotelList()
+    getReservations()
   }, []);
 
   return (
@@ -236,10 +267,13 @@ const HostHome = ({navigation}) => {
         onRequestClose={() => setShowReservations(false)}>
         <Reservations
           setShowReservations={setShowReservations}
+          navigation={navigation}
           reservationList={reservationList}
           reservationTypes={reservationTypes}
-          getAllReservations={getAllReservations}
+          getAllReservations={getReservations}
           getFilteredArray={getFilteredArray}
+          showDrawer={showDrawer}
+          setShowDrawer={setShowDrawer}
         />
       </Modal>
       <Modal animationType="slide" visible={idprocess > 0 ? true : false}>
