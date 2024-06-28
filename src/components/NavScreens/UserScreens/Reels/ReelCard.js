@@ -18,6 +18,7 @@ import Comments from './Comments/Comments';
 import {useSelector} from 'react-redux';
 import {Principal} from '@dfinity/principal';
 import axios from 'axios';
+import {nodeBackend} from '../../../../../DevelopmentConfig';
 
 const months = [
   'January',
@@ -43,8 +44,12 @@ const ReelCard = ({item, reelIndex}) => {
   const {actors} = useSelector(state => state.actorReducer);
   const [reelComments, setReelComments] = useState([]);
   const [loading, setLoading] = useState(false);
-  const baseURL="https://rentspace.kaifoundry.com"
+  // const baseURL="https://rentspace.kaifoundry.com"
   // const baseURL = 'http://localhost:5000';
+  const baseURL = nodeBackend;
+
+  // console.log("ReelCard Item: ", item.propertyId);
+
   const openComments = () => {
     btmSheetComments.current.present();
   };
@@ -61,83 +66,227 @@ const ReelCard = ({item, reelIndex}) => {
   const getComments = async () => {
     setLoading(true);
 
+    // getComments
     const comments = [];
-    await actors?.commentActor
-      ?.getComments(item?.hotelId)
-      .then(res => {
-        let newRes = [];
-        res.map(r => {
-          if (r[1].parentCommentId == '') {
-            newRes.push(r);
+
+    try {
+      let commentResp = await actors?.commentActor?.getComments(item?.propertyId);
+
+      console.log('commentGetResp', commentResp);
+
+      let newRes = [];
+      // commentResp?.ok.map(r => {
+      //   if (r[1].parentCommentId == '') {
+      //     newRes.push(r);
+      //   }
+      // });
+
+      // commentResp?.ok.map(r => {
+      //   if (newRes.indexOf(r) == -1) {
+      //     newRes.push(r);
+      //   }
+      // });
+
+      for( let i = 0; i < commentResp?.ok.length; i++ ){
+        if(commentResp?.ok[i].parentCommentId == ''){
+          newRes.push(commentResp?.ok[i]);
+        }
+      }
+
+      for (let i = 0; i < commentResp?.ok.length; i++) {
+        if (newRes.indexOf(commentResp?.ok[i]) == -1) {
+          newRes.push(commentResp?.ok[i]);
+        }
+      }
+
+      let rootCount = 0;
+      let replyCount = 0;
+      // newRes = sortCreatedAt(newRes); // gives error [TypeError: Cannot read property 'createdAt' of undefined]
+      console.log('nes', newRes);
+
+      for (let i = 0; i < newRes.length; i++) {
+        setLoading(true);
+        let userResp = await actors?.userActor?.getUserByPrincipal(Principal.fromText(newRes[i].userId));
+
+        console.log('userResp : ', userResp);
+
+        const date = new Date(newRes[i].createdAt);
+        const dateString = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+        //     commentId:Text;
+        //     comment : Text;
+        //     hotelId : Text;
+        //     userId : Text;
+        //     parentCommentId : Text;
+        //     createdAt : Text;
+        const newComment = {
+          commentId : newRes[i].commentId,
+          comment : newRes[i].comment,
+          hotelId : newRes[i].propertyId, // hotelId
+          userId : newRes[i].userId,
+          parentCommentId : newRes[i].parentCommentId,
+          createdAt : dateString,
+        };
+
+        if(newComment.parentCommentId == ''){
+          comments.push(newComment);
+          rootCount += 1;
+          setLoading(false);
+          setReelComments([...comments]);
+        } else {
+          let index = -1;
+          for (let j = 0; j < comments.length; j++) {
+            if(comments[j].commentId == newComment.parentCommentId){
+              index = j;
+            }
           }
-        });
-        res.map(r => {
-          if (newRes.indexOf(r) == -1) {
-            newRes.push(r);
+          if(index != -1){
+            comments[index] = {
+              ...comments[index],
+              replies : [...comments[index].replies, newComment],
+            };
+            replyCount += 1;
+            setReelComments([...comments]);
+            setLoading(false);
+          } else {
+            comments.push(newComment);
+            setReelComments([...comments]);
+            setLoading(false);
           }
-        });
-        let rootCount = 0;
-        let replyCount = 0;
-        newRes = sortCreatedAt(newRes);
-        console.log('nes', newRes);
-        newRes.map(async r => {
-          setLoading(true);
-          await actors?.userActor
-            ?.getUserInfoByPrincipal(Principal.fromText(r[1].userId))
-            .then(userRes => {
-              const date = new Date(r[1].createdAt);
-              const dateString = `${date.getDate()} ${
-                months[date.getMonth()]
-              } ${date.getFullYear()}`;
-              const newComment = {
-                id: r[0],
-                user: `${userRes[0].firstName} ${userRes[0].lastName}`,
-                text: r[1].comment,
-                date: dateString,
-                userId: r[1].userId,
-                hotelId: r[1].hotelId,
-                parentCommentId: r[1].parentCommentId,
-                replies: [],
-              };
-              if (newComment.parentCommentId == '') {
-                comments.push(newComment);
-                rootCount += 1;
-                setLoading(false);
-                setReelComments([...comments]);
-              } else {
-                let index = -1;
-                comments.map(comment => {
-                  if (comment.id == newComment.parentCommentId) {
-                    index = comments.indexOf(comment);
-                  }
-                });
-                if (index != -1) {
-                  comments[index] = {
-                    ...comments[index],
-                    replies: [...comments[index].replies, newComment],
-                  };
-                  replyCount += 1;
-                  setReelComments([...comments]);
-                  setLoading(false);
-                } else {
-                  comments.push(newComment);
-                  setReelComments([...comments]);
-                  setLoading(false);
-                }
-              }
-            })
-            .catch(err => {
-              console.log(err);
-              setLoading(false);
-            });
-        });
-        console.log(comments.length, rootCount, replyCount);
-        return comments;
-      })
-      .catch(err => {
-        console.log('err fetching comments : ', err);
-        setLoading(false);
-      });
+        }
+
+
+      }
+
+      // newRes.map(async r => {
+      //   setLoading(true)
+      //   let userResp = await actors?.userActor?.getUserByPrincipal(Principal.fromText(r[1].userId));
+
+
+      //   console.log('userResp : ', userResp);
+      //   const date = new Date(r[1].createdAt)
+      //   const dateString = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
+      //   //     commentId:Text;
+      //   //     comment : Text;
+      //   //     hotelId : Text;
+      //   //     userId : Text;
+      //   //     parentCommentId : Text;
+      //   //     createdAt : Text;
+      //   const newComment = {
+      //     commentId : r[0],
+      //     comment : r[1].comment,
+      //     hotelId : r[1].propertyId, // hotelId
+      //     userId : r[1].userId,
+      //     parentCommentId : r[1].parentCommentId,
+      //     createdAt : dateString,
+      //   };
+      //   if(newComment.parentCommentId == ''){
+      //     comments.push(newComment);
+      //     rootCount += 1;
+      //     setLoading(false);
+      //     setReelComments([...comments]);
+      //   } else {
+      //     let index = -1;
+      //     comments.map(comment => {
+      //       if(comment.commentId == newComment.parentCommentId){
+      //         index = comments.indexOf(comment);
+      //       }
+      //     });
+      //     if(index != -1){
+      //       comments[index] = {
+      //         ...comments[index],
+      //         replies : [...comments[index].replies, newComment],
+      //       };
+      //       replyCount += 1;
+      //       setReelComments([...comments]);
+      //       setLoading(false);
+      //     } else {
+      //       comments.push(newComment);
+      //       setReelComments([...comments]);
+      //       setLoading(false);
+      //     }
+      //   }
+      // });
+
+
+    } catch (err) {
+      console.log('err fetching comments : ', err);
+      setLoading(false);
+    }
+
+    // .then(res => {
+    //   let newRes = [];
+    //   res.map(r => {
+    //     if (r[1].parentCommentId == '') {
+    //       newRes.push(r);
+    //     }
+    //   });
+    //   res.map(r => {
+    //     if (newRes.indexOf(r) == -1) {
+    //       newRes.push(r);
+    //     }
+    //   });
+    //   let rootCount = 0;
+    //   let replyCount = 0;
+    //   newRes = sortCreatedAt(newRes);
+    //   console.log('nes', newRes);
+    //   newRes.map(async r => {
+    //     setLoading(true);
+    //     await actors?.userActor
+    //       ?.getUserInfoByPrincipal(Principal.fromText(r[1].userId))
+    //       .then(userRes => {
+    //         const date = new Date(r[1].createdAt);
+    //         const dateString = `${date.getDate()} ${
+    //           months[date.getMonth()]
+    //         } ${date.getFullYear()}`;
+    //         const newComment = {
+    //           id: r[0],
+    //           user: `${userRes[0].firstName} ${userRes[0].lastName}`,
+    //           text: r[1].comment,
+    //           date: dateString,
+    //           userId: r[1].userId,
+    //           hotelId: r[1].hotelId,
+    //           parentCommentId: r[1].parentCommentId,
+    //           replies: [],
+    //         };
+    //         if (newComment.parentCommentId == '') {
+    //           comments.push(newComment);
+    //           rootCount += 1;
+    //           setLoading(false);
+    //           setReelComments([...comments]);
+    //         } else {
+    //           let index = -1;
+    //           comments.map(comment => {
+    //             if (comment.id == newComment.parentCommentId) {
+    //               index = comments.indexOf(comment);
+    //             }
+    //           });
+    //           if (index != -1) {
+    //             comments[index] = {
+    //               ...comments[index],
+    //               replies: [...comments[index].replies, newComment],
+    //             };
+    //             replyCount += 1;
+    //             setReelComments([...comments]);
+    //             setLoading(false);
+    //           } else {
+    //             comments.push(newComment);
+    //             setReelComments([...comments]);
+    //             setLoading(false);
+    //           }
+    //         }
+    //       })
+    //       .catch(err => {
+    //         console.log(err);
+    //         setLoading(false);
+    //       });
+    //   });
+    //   console.log(comments.length, rootCount, replyCount);
+    //   return comments;
+    // })
+    // .catch(err => {
+    //   console.log('err fetching comments : ', err);
+    //   setLoading(false);
+    // });
   };
 
   const updateLike = async () => {
@@ -166,7 +315,7 @@ const ReelCard = ({item, reelIndex}) => {
   return (
     <View style={styles.reel}>
       <Video
-        source={{uri: item?.videoUrls}}
+        source={{uri: item?.videoList[0]}}
         resizeMode="cover"
         pause={false}
         style={styles.bg}
@@ -209,7 +358,7 @@ const ReelCard = ({item, reelIndex}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.infoCont}>
-        <Text style={styles.infoTitle}>{item?.hotelName}</Text>
+        <Text style={styles.infoTitle}>{item?.propertyName}</Text>
         <Text style={styles.infoText}>499 kilometers away</Text>
         <Text style={styles.infoText}>1-6 Dec</Text>
         <Text style={styles.infoText}>
@@ -218,7 +367,7 @@ const ReelCard = ({item, reelIndex}) => {
       </View>
       <BottomSheetModal ref={btmSheetComments} index={0} snapPoints={['95%']}>
         <Comments
-          id={item?.hotelId}
+          id={item?.propertyId}
           comments={reelComments}
           getComments={getComments}
           loading={loading}

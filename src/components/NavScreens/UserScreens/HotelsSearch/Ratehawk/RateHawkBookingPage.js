@@ -1,35 +1,37 @@
 import {
+  Alert,
   Dimensions,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from 'react-native';
-import {useState,useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/Entypo';
 import {COLORS, SIZES} from '../../../../../constants/themes';
 import Header from '../HotelDetails/BookingForm/Header/Header';
 import GuestDetails from './bookingParts/GuestDetails';
 import CardDetails from './bookingParts/CardDetails';
 import AdditionalGuests from './bookingParts/AdditionalGuests';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import axios from 'axios';
-import { nodeBackend } from '../../../../../../DevelopmentConfig';
+import {nodeBackend} from '../../../../../../DevelopmentConfig';
 
-const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
-
+const RateHawkBookingPage = ({showSelf, transferData}) => {
   const {user} = useSelector(state => state.userReducer);
   // const baseUrl='https://rentspace.kaifoundry.com/api/v1'
   // const baseUrl='http://localhost:5000/api/v1'
 
   const baseUrl = nodeBackend;
 
-
   const customHotelData = {
-    hotelname: hotelName,
-    hotelAddress: hotelAddress,
+    hotelname: transferData.hotelName,
+    hotelAddress: transferData.hotelAddress,
   };
+
+  const [submit, setSubmit] = useState(false);
 
   const [IP, setIP] = useState('');
 
@@ -43,9 +45,9 @@ const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
     cvc: '',
     month: '',
     year: '',
-    guests:[]
+    guests: [],
   });
- 
+
   async function getIPAddress() {
     try {
       const response = await fetch('https://api.ipify.org?format=json');
@@ -62,10 +64,78 @@ const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
 
   // ------------------- Integration Testing -------------------
 
+  // to get booking hash and other details
+
+  async function testBookingFunction() {
+    console.log('object : ');
+
+    const postData = {
+      hotelId: 'test_hotel',
+      checkInDate: transferData.checkInDate,
+      checkOutDate: transferData.checkOutDate,
+      language: 'en',
+      adults: 2,
+      children: [16],
+    };
+
+    console.log('Post Data XXX : ', postData);
+
+    setSubmit(true);
+
+    await axios
+      .post(`${baseUrl}/api/v1/hotel/RateHawk/getHashForSampleHotel`, postData)
+      .then(response => {
+        console.log(
+          'Response : ',
+          response.data.data.data.hotels[0].rates[0].book_hash,
+        );
+        let hash = response.data.data.data.hotels[0].rates[0].book_hash;
+        // testorderBookingForm(hash);
+        prebook(hash);
+      })
+      .catch(error => {
+        console.error(error.message);
+        setSubmit(false);
+        showSelf(false);
+      });
+  }
+
+  async function prebook(hash) {
+    // /hotel/RateHawk/preBook
+
+    console.log('Prebook called : ', hash);
+
+    const postData = {
+      hash: hash,
+      price_increase_percent: 20,
+    };
+    await axios
+      .post(`${baseUrl}/api/v1/hotel/RateHawk/preBook`, postData)
+      .then(response => {
+        console.log(
+          'Prebook Response : ',
+          response.data.data.data.changes.price_changed,
+        );
+        if (!response.data.data.data.changes.price_changed) {
+          console.log('Price not changed');
+          testorderBookingForm(hash);
+        } else {
+          const newhash = response.data.data.data.hotels[0].rates[0].book_hash;
+          console.log('New Hash : ', newhash);
+          testorderBookingForm(newhash);
+        }
+      })
+      .catch(error => {
+        console.error(error.message);
+        setSubmit(false);
+        showSelf(false);
+      });
+  }
+
   // testing function for orderBookingForm
-  async function testorderBookingForm() {
+  async function testorderBookingForm(hash) {
     postData = {
-      book_hash: 'h-5d1fdbc6-bf82-5c41-a9b1-f5f43a1c8191', // change everytime
+      book_hash: hash,
       language: 'en',
       user_ip: IP,
     };
@@ -73,10 +143,7 @@ const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
     console.log('POST DATA : ', postData);
 
     await axios
-      .post(
-        `${baseUrl}/api/v1/hotel/RateHawk/orderBookingForm`,
-        postData,
-      )
+      .post(`${baseUrl}/api/v1/hotel/RateHawk/orderBookingForm`, postData)
       .then(response => {
         console.log('Item_ID : ', response.data.data.item_id);
         console.log('Partner_ID : ', response.data.data.partner_order_id);
@@ -88,6 +155,8 @@ const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
       })
       .catch(error => {
         console.error(error.message);
+        setSubmit(false);
+        showSelf(false);
       });
   }
 
@@ -110,16 +179,13 @@ const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
     };
 
     await axios
-      .post(
-        `${baseUrl}/api/v1/hotel/RateHawk/crediCardTokenization`,
-        postData,
-      )
+      .post(`${baseUrl}/api/v1/hotel/RateHawk/crediCardTokenization`, postData)
       .then(response => {
         const pay_uuid = response.data.pay_uuid;
         const init_uuid = response.data.init_uuid;
-        console.log("PAY_UUID : ",pay_uuid);
-        console.log("INIT_UUID : ",init_uuid);
-        console.log("payment_types : ",payment_types);
+        console.log('PAY_UUID : ', pay_uuid);
+        console.log('INIT_UUID : ', init_uuid);
+        console.log('payment_types : ', payment_types);
         testOrderBookingFinish(
           partner_order_id,
           payment_types,
@@ -129,6 +195,8 @@ const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
       })
       .catch(error => {
         console.error(error.message);
+        setSubmit(false);
+        showSelf(false);
       });
   }
 
@@ -156,19 +224,18 @@ const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
       return_path: 'google.com', // change it to the actual return path after payment
     };
 
-    console.log("postData : ", postData);
+    console.log('postData : ', postData);
 
     await axios
-      .post(
-        `${baseUrl}/api/v1/hotel/RateHawk/orderBookFinish`,
-        postData,
-      )
+      .post(`${baseUrl}/api/v1/hotel/RateHawk/orderBookFinish`, postData)
       .then(response => {
         console.log(response.data);
         testOrderBookingFinishStatus(partner_order_id);
       })
       .catch(error => {
         console.error(error.message);
+        setSubmit(false);
+        showSelf(false);
       });
   }
 
@@ -181,16 +248,29 @@ const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
     };
 
     await axios
-      .post(
-        `${baseUrl}/api/v1/hotel/RateHawk/orderBookFinishStatus`,
-        postData,
-      )
+      .post(`${baseUrl}/api/v1/hotel/RateHawk/orderBookFinishStatus`, postData)
       .then(response => {
         console.log('Final CLG');
         console.log(response.data);
+
+        Alert.alert(
+          'Booking Process Started',
+          'Order Creation for Test Hotel is in Progress.',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                setSubmit(false);
+                showSelf(false);
+              },
+            },
+          ],
+        );
       })
       .catch(error => {
         console.error(error.message);
+        setSubmit(false);
+        showSelf(false);
       });
   }
 
@@ -228,13 +308,15 @@ const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
         <TouchableOpacity
           style={styles.btn}
           onPress={() => {
-            console.log("testorderBookingForm called");
-            testorderBookingForm();
-          }}
-          >
+            console.log('testorderBookingForm called');
+            // testorderBookingForm();
+            testBookingFunction();
+          }}>
           <Text style={styles.btnText}>Confirm and Pay</Text>
         </TouchableOpacity>
       </ScrollView>
+
+      <ActivityIndicator animating={submit} style={styles.loader} size={40} />
     </View>
   );
 };
@@ -242,6 +324,13 @@ const RateHawkBookingPage = ({showSelf, hotelName, hotelAddress}) => {
 export default RateHawkBookingPage;
 
 const styles = StyleSheet.create({
+
+  loader: {
+    position: 'absolute',
+    top: '40%',
+    marginHorizontal: '50%',
+  },
+
   page: {
     display: 'flex',
     flexDirection: 'column',
@@ -269,7 +358,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     borderRadius: 12,
     paddingVertical: 15,
     alignItems: 'center',

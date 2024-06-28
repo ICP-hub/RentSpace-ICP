@@ -34,20 +34,29 @@ const RoomList = ({
 
   const [noRoomAvailable, setNoRoomAvailable] = useState(false);
 
-  // const baseUrl = 'https://rentspace.kaifoundry.com/api/v1';
-  // const baseUrl='http://localhost:5000/api/v1'
+  const [transferData, setTransferData] = useState({
+    hotelName: hotelName,
+    hotelAddress: hotelAddress,
+    checkInDate: checkInDate,
+    checkOutDate: checkOutDate,
+  });
+
+  // const baseUrl = 'https://rentspace.kaifoundry.com';
+  // const baseUrl='http://localhost:5000'
   const baseUrl = nodeBackend;
 
   console.log('Base URL : ', baseUrl)
 
   const fetchHash = async () => {
+
+    // sample hardcoded data for testing
     const postData = {
       hotelId: hotelId,
       checkInDate: checkInDate,
       checkOutDate: checkOutDate,
       language: 'en',
       adults: 2,
-      children: [17],
+      children: [16],
     };
 
     console.log('Post Data : ', postData);
@@ -77,6 +86,7 @@ const RoomList = ({
 
   useEffect(() => {
     fetchHash();
+    
   }, []);
 
   return (
@@ -146,7 +156,7 @@ const RoomList = ({
             <View style={styles.card}>
               <View style={styles.innerCard}>
                 <View style={styles.cardUp}>
-                  <Text style={styles.roomType}>Testing Room</Text>
+                  <Text style={styles.roomType}>Testing Hotel</Text>
                   <Text style={styles.occupancy}>2 Person</Text>
                 </View>
                 <View
@@ -161,7 +171,15 @@ const RoomList = ({
                   <TouchableOpacity
                     style={styles.bookBtn}
                     // onPress={() => testorderBookingForm()}
-                    onPress={() => setShowBookingForm(true)}>
+                    onPress={() => {
+                      setTransferData({
+                        hotelName : "Testing Hotel",
+                        hotelAddress: hotelAddress,
+                        checkInDate: checkInDate,
+                        checkOutDate: checkOutDate,
+                      
+                      })
+                      setShowBookingForm(true)}}>
                     <Text style={styles.bookBtnText}>Book Now</Text>
                   </TouchableOpacity>
                 </View>
@@ -174,8 +192,11 @@ const RoomList = ({
       <Modal visible={showBookingForm}>
         <RateHawkBookingPage
           showSelf={setShowBookingForm}
-          hotelName={hotelName}
-          hotelAddress={hotelAddress}
+          // hotelName={hotelName}
+          // hotelAddress={hotelAddress}
+          // checkInDate={checkInDate}
+          // checkOutDate={checkOutDate}
+          transferData={transferData}
         />
       </Modal>
     </View>
@@ -239,14 +260,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 10,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.black,
     borderRadius: 10,
     marginBottom: 15,
     elevation: 5,
   },
 
   innerCard: {
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.white,
     width: '100%',
     height: 180,
     borderRadius: 5,
@@ -261,15 +282,15 @@ const styles = StyleSheet.create({
 
   roomType: {
     fontSize: 25,
-    color: COLORS.white,
+    color: COLORS.black,
     fontWeight: 'bold',
   },
 
   occupancy: {
     fontSize: 15,
-    color: COLORS.mainPurple,
+    color: COLORS.white,
     fontWeight: 'medium',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.black,
     width: 85,
     height: 30,
     borderRadius: 5,
@@ -289,12 +310,12 @@ const styles = StyleSheet.create({
 
   price: {
     fontSize: 12,
-    color: COLORS.white,
+    color: COLORS.black,
     fontWeight: 'bold',
   },
 
   bookBtn: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.black,
     width: 120,
     height: 40,
     borderRadius: 5,
@@ -305,7 +326,7 @@ const styles = StyleSheet.create({
 
   bookBtnText: {
     fontSize: 12,
-    color: COLORS.mainPurple,
+    color: COLORS.white,
     fontWeight: 'bold',
   },
 });

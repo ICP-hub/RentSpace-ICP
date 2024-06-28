@@ -105,8 +105,8 @@ const RateHawk = ({hotelId, item, setOpen, navigation}) => {
             </Text>
             <View style={styles.ratingContainer}>
               <Icon1 name="star" size={17} style={{color: COLORS.black}} />
-              <Text style={styles.ratingText}>4.92</Text>
-              <Text style={styles.ratingText}>• 432 reviews</Text>
+              <Text style={styles.ratingText}>{item.star_rating} Rating</Text>
+              {/* <Text style={styles.ratingText}>• 432 reviews</Text> */}
             </View>
             <Text style={styles.ratingText2}>{item.address}</Text>
           </View>
@@ -131,7 +131,7 @@ const RateHawk = ({hotelId, item, setOpen, navigation}) => {
                   <TouchableOpacity
                     style={styles.amenities}
                     key={index}
-                    onPress={() => updateAmenities(item)}>
+                    onPress={() => {}}>
                     <IconComponent
                       name={item.icon}
                       style={styles.amenityIcon}
