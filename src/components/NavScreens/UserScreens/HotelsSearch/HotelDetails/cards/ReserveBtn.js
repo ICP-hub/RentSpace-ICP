@@ -3,6 +3,7 @@ import React from 'react';
 import {COLORS, SIZES} from '../../../../../../constants/themes';
 
 const ReserveBtn = ({item, onClick, setCloseBottomSheet}) => {
+  console.log("Item : ", item)
   function convertDate(input) {
     const date = new Date(input);
     const day = date.getDate();
@@ -29,9 +30,10 @@ const ReserveBtn = ({item, onClick, setCloseBottomSheet}) => {
     <View style={styles.card}>
       <View style={styles.textCont}>
         <View style={styles.price}>
-          <Text style={styles.boldText}>${item?.hotelPrice}</Text>
+          {/* <Text style={styles.boldText}>${item?.hotelPrice}</Text> */}
           {/* <Text style={styles.boldText}>$500</Text> */}
-          <Text style={styles.smallText}>{item.price}/night</Text>
+          {/* <Text style={styles.smallText}>{item.price}</Text> */}
+          <Text style={styles.smallText}>Available From</Text>
         </View>
         <Text style={styles.normalText}>
           {convertDate(item.availableFrom)} - {convertDate(item.availableTill)}
@@ -55,6 +57,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 80,
     width: '100%',
+    paddingBottom: 20,
     // backgroundColor:'red',
   },
   textCont: {

@@ -77,9 +77,11 @@ const Chat = ({item,setOpenChat}) => {
     return () => newSocket.close();
 
   },[])
+
+  console.log("item name : ",item?.ok?.firstName)
   return (
     <View style={styles.view}>
-      <ChatHeader name={item?.firstName} status={true} setOpenChat={setOpenChat}/>
+      <ChatHeader name={item?.ok?.firstName + " " + item?.ok?.lastName} status={true} setOpenChat={setOpenChat}/>
       <FlatList contentContainerStyle={styles.list} data={messages} renderItem={(item)=>(
         <ChatMessage item={item.item}/>
       )}/>

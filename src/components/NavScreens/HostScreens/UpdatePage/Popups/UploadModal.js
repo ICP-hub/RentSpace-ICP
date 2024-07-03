@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   uploadPercentage: {
     fontSize: 18,
     marginBottom: 10,
-    color: COLORS.mainPurple,
+    color: COLORS.black,
   },
   
   uploadBar: {
@@ -58,13 +58,13 @@ const styles = StyleSheet.create({
   },
   uploadBarProgress: {
     height: '100%',
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     borderRadius: 10,
   },
   uploadText: {
     fontSize: 16,
     marginVertical: 10,
-    color:COLORS.mainPurple,
+    color:COLORS.black,
   },
 
 });

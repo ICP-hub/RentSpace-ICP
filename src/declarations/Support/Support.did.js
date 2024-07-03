@@ -19,7 +19,7 @@ export const idlFactory = ({ IDL }) => {
     'err' : IDL.Text,
   });
   const SupportMessage = IDL.Record({
-    'to' : IDL.Principal,
+    'to' : IDL.Opt(IDL.Principal),
     'from' : IDL.Principal,
     'createdAt' : IDL.Text,
     'message' : IDL.Text,

@@ -12,6 +12,7 @@ import { useSelector,useDispatch } from 'react-redux';
 import { setUser } from '../../redux/users/actions';
 import DatePicker from 'react-native-date-picker';
 import { Dialog, ALERT_TYPE } from 'react-native-alert-notification';
+import Icon from 'react-native-vector-icons/Feather';
 
 const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
 
@@ -117,7 +118,7 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
       </View>
       <TextInput
         placeholder="First name"
-        placeholderTextColor={COLORS.mainPurple}
+        placeholderTextColor={COLORS.black}
         style={styles.firstName}
         value={fname}
         onChangeText={value => {
@@ -126,7 +127,7 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
       />
       <TextInput
         placeholder="Last name"
-        placeholderTextColor={COLORS.mainPurple}
+        placeholderTextColor={COLORS.black}
         style={styles.lastName}
         value={lname}
         onChangeText={value => {
@@ -142,7 +143,10 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
           setShowCalendar(true);
         }}>
         <Text style={styles.dateDivText}>{DOB}</Text>
-        <Image source={images.next} />
+        {/* <Image source={images.next} /> */}
+        <Icon name="chevron-right" size={20} color={COLORS.black} />
+
+
       </TouchableOpacity>
       <Text style={styles.simpleText}>
         To sign up, you need to be at level 18. Your birthday won’t be shared
@@ -150,7 +154,7 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
       </Text>
       <TextInput
         placeholder="Email"
-        placeholderTextColor={COLORS.mainPurple}
+        placeholderTextColor={COLORS.black}
         style={styles.simpleInput}
         value={email}
         onChangeText={value => {
@@ -230,7 +234,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   simpleInput: {
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderWidth: 1,
     borderRadius: 10,
     width: '80%',
@@ -245,7 +249,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderWidth: 1,
     borderRadius: 10,
     width: '100%',
@@ -262,7 +266,7 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
   },
   firstName: {
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderWidth: 1,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
@@ -274,7 +278,7 @@ const styles = StyleSheet.create({
     fontSize: SIZES.preMedium,
   },
   lastName: {
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderWidth: 1,
     borderTopWidth: 0,
     borderBottomLeftRadius: 10,
@@ -296,7 +300,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     borderRadius: 10,
     height: 50,
     paddingHorizontal: 80,
@@ -313,6 +317,6 @@ const styles = StyleSheet.create({
     elevation: 2,
     marginTop: '60%',
     borderWidth: 1,
-    borderBlockColor: COLORS.mainPurple,
+    borderBlockColor: COLORS.black,
   },
 });

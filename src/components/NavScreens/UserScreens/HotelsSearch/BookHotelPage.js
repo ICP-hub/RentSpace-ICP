@@ -230,7 +230,7 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
           </TouchableOpacity>
         </View>
         <Text style={styles.empty}>Please hold on while we fetch the best hotel options for you.{"\n"}If no results appear, try adjusting your search criteria.</Text>
-        <ActivityIndicator animating={true} size={40} color={COLORS.mainPurple} style={styles.loader} />
+        <ActivityIndicator animating={true} size={40} color={COLORS.black} style={styles.loader} />
         <Modal
           animationType="slide"
           visible={showReservation}

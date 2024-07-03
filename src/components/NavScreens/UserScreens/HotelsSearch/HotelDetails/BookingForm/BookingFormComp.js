@@ -92,17 +92,14 @@ const BookingFormComp = ({
   const [paymentMethod, setPaymentMethod] = useState('ICP');
   const [paymentType, setPaymentType] = useState('cypto');
   const [balanceScreen, setBalanceScreen] = useState(false);
-  const [total, setTotal] = useState(
-    0
-  );
+  const [total, setTotal] = useState(0);
   const [cryptoPrice, setCryptoPrice] = useState();
 
   // console.log('Item', item);
   const [roomModal, setRoomModal] = useState(false);
 
-  const [roomData, setRoomData] = useState([]);//[{roomID: '1', totalRooms: 0, roomPrice: 0, bill: 0}]);
+  const [roomData, setRoomData] = useState([]); //[{roomID: '1', totalRooms: 0, roomPrice: 0, bill: 0}]);
   const [totalBill, setTotalBill] = useState(0);
-  
 
   //Transak integration essential states
 
@@ -121,7 +118,7 @@ const BookingFormComp = ({
 
   //booking flow general functions
   function notifyBookingConfirm() {
-    console.log("hoetl item : ",item?.propertyName)
+    console.log('hoetl item : ', item?.propertyName);
     PushNotification.localNotification({
       title: 'Booking Successful!',
       message: `${user?.firstName}, your booking for ${item?.propertyName} is successful!`,
@@ -129,12 +126,12 @@ const BookingFormComp = ({
     });
   }
 
-  const book = async (obj, notify, amnt,id) => {
-    try{
+  const book = async (obj, notify, amnt, id) => {
+    try {
       let paymentOpt = null;
-      let opt={
-        id:parseInt(id)
-      }
+      let opt = {
+        id: parseInt(id),
+      };
       if (paymentMethod == 'ckEth') {
         paymentOpt = {ckETH: opt};
       } else if (paymentMethod == 'SOL') {
@@ -144,11 +141,15 @@ const BookingFormComp = ({
       } else {
         paymentOpt = {icp: opt};
       }
-      console.log(paymentOpt, paymentMethod,obj);
+      console.log(paymentOpt, paymentMethod, obj);
 
-      let bookingRes=await actors?.bookingActor?.createBooking(paymentOpt,obj,amnt)
-      console.log("booking response : ",bookingRes)
-      if(bookingRes?.err!=undefined){
+      let bookingRes = await actors?.bookingActor?.createBooking(
+        paymentOpt,
+        obj,
+        amnt,
+      );
+      console.log('booking response : ', bookingRes);
+      if (bookingRes?.err != undefined) {
         setLoading(false);
         Dialog.show({
           type: ALERT_TYPE.WARNING,
@@ -156,7 +157,7 @@ const BookingFormComp = ({
           textBody: bookingRes?.err,
           button: 'OK',
         });
-        return
+        return;
       }
       notify();
       setLoading(false);
@@ -165,9 +166,9 @@ const BookingFormComp = ({
         setBookingForm(false);
         setOpen(false);
       }, 2000);
-    }catch(err){
-      console.log(err)
-      setLoading(false)
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
       Dialog.show({
         type: ALERT_TYPE.DANGER,
         title: 'Some error occcured',
@@ -175,7 +176,6 @@ const BookingFormComp = ({
         button: 'OK',
       });
     }
-    
   };
 
   const afterPaymentFlow = async (paymentId, amnt) => {
@@ -190,7 +190,7 @@ const BookingFormComp = ({
     // };
     // alert("in after payment")
     console.log(booking);
-    book(booking, notifyBookingConfirm, amnt,paymentId);
+    book(booking, notifyBookingConfirm, amnt, paymentId);
     setBalanceScreen(false);
   };
   //crypto payment functions except solana
@@ -559,7 +559,10 @@ const BookingFormComp = ({
       console.log('SOL selected!');
       setPaymentType('phantom');
     } else {
-      Alert.alert("KYC needed","For this option, if you are a first time transak user, you may need to complete your KYC!")
+      Alert.alert(
+        'KYC needed',
+        'For this option, if you are a first time transak user, you may need to complete your KYC!',
+      );
       setPaymentType('fiat');
     }
   }, [paymentMethod]);
@@ -631,16 +634,25 @@ const BookingFormComp = ({
         <TouchableOpacity
           style={styles.btn}
           onPress={() => {
-            if (paymentType == 'fiat') {
-              launchTransac();
-            } else if (paymentType == 'phantom') {
-              // console.log(connection)
-              // connect()
-              // sendNewTransaction()
-              setPhantomModal(true);
+            if (total == 0) {
+              Dialog.show({
+                type: ALERT_TYPE.WARNING,
+                title: 'No Room Selected',
+                textBody: 'Please select a room to proceed!',
+                button: 'OK',
+              });
             } else {
-              getBalance();
-              setBalanceScreen(true);
+              if (paymentType == 'fiat') {
+                launchTransac();
+              } else if (paymentType == 'phantom') {
+                // console.log(connection)
+                // connect()
+                // sendNewTransaction()
+                setPhantomModal(true);
+              } else {
+                getBalance();
+                setBalanceScreen(true);
+              }
             }
           }}>
           <Text style={styles.btnText}>Confirm and pay</Text>
@@ -740,8 +752,19 @@ const BookingFormComp = ({
       </Modal>
 
       {/* Room modal */}
-      <Modal visible={roomModal} animationType="slide" onRequestClose={()=>setRoomModal(false)}>
-        <Rooms item={item} totalBill={totalBill} setTotalBill={setTotalBill} booking={booking} roomData={roomData} setRoomData={setRoomData} setRoomModal={setRoomModal} />
+      <Modal
+        visible={roomModal}
+        animationType="slide"
+        onRequestClose={() => setRoomModal(false)}>
+        <Rooms
+          item={item}
+          totalBill={totalBill}
+          setTotalBill={setTotalBill}
+          booking={booking}
+          roomData={roomData}
+          setRoomData={setRoomData}
+          setRoomModal={setRoomModal}
+        />
       </Modal>
     </View>
   );

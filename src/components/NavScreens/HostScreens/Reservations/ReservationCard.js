@@ -1,6 +1,7 @@
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
+import { Color } from 'react-native-alert-notification/lib/typescript/service'
 
 const months=["Jan","Feb","Mar","Apr","May","June","July","Aug","Sep","Oct","Nov","Dec"]
 
@@ -46,13 +47,13 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         justifyContent:'flex-start',
         alignItems:'center',
-        backgroundColor:COLORS.royalPurple,
+        backgroundColor:COLORS.white,
         width:Dimensions.get("window").width*0.8,
         // marginLeft:'5%',
         paddingVertical:20,
         borderRadius:12,
         marginBottom:20,
-        elevation:10,
+        elevation:5,
         maxHeight:140,
         marginRight:20
     },
@@ -73,13 +74,13 @@ const styles = StyleSheet.create({
       },
       title:{
         fontSize:SIZES.preMedium,
-        color:'white',
+        color:COLORS.black,
         fontWeight:'600',
         marginBottom:0
       },
       normalText:{
         fontSize:SIZES.small,
-        color:'white',
+        color:COLORS.black,
         fontWeight:'600'
       },
 })

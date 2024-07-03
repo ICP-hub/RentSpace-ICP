@@ -180,4 +180,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderBottomColor: COLORS.black,
   },
+  text: {
+    color: COLORS.black,
+    fontSize: SIZES.small,
+    fontWeight: '400',
+    marginTop: 5,
+  },
 });

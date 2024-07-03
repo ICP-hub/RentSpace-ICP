@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -12,12 +13,14 @@ import {COLORS, SIZES} from '../../../../../../constants/themes';
 import {useSelector} from 'react-redux';
 import BookingCard from './BookingCard';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
-import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
+import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
 
 const ShowBookings = ({bookingList, setShowReservations, getReservations}) => {
   const {authData} = useSelector(state => state.authDataReducer);
   const [refreshing, setRefreshing] = useState(false);
-  const {actors}=useSelector(state=>state.actorReducer)
+  const {actors} = useSelector(state => state.actorReducer);
+
+  const [loaderState, setLoaderState] = useState();
 
   const loadData = () => {
     // setRefreshing(true);
@@ -41,36 +44,32 @@ const ShowBookings = ({bookingList, setShowReservations, getReservations}) => {
       };
 
       console.log('Review add', actors.reviewActor);
-    console.log('a : ', actors.reviewActor);
-    await actors.reviewActor
-      .createReview(ReviewInput.hotelId, ReviewInput)
-      .then(res => {
-        console.log('review creation response : ', res);
-        // setLoading(false)
-        // alert('Thanks for giving your valueble feedback!')
-        Dialog.show({
-          title: 'SUCCESS',
-          type: ALERT_TYPE.SUCCESS,
-          textBody: 'Thanks for giving your valueable feedback',
+      console.log('a : ', actors.reviewActor);
+      await actors.reviewActor
+        .createReview(ReviewInput.hotelId, ReviewInput)
+        .then(res => {
+          console.log('review creation response : ', res);
+          // setLoading(false)
+          // alert('Thanks for giving your valueble feedback!')
+          Dialog.show({
+            title: 'SUCCESS',
+            type: ALERT_TYPE.SUCCESS,
+            textBody: 'Thanks for giving your valueable feedback',
+          });
+          // setAddReview(false)
+        })
+        .catch(err => {
+          console.log('review err :', err);
+          // setLoading(false)
         });
-        // setAddReview(false)
-      })
-      .catch(err => {
-        console.log('review err :', err);
-        // setLoading(false)
-      });
-
-
     } catch (err) {
       console.log(err);
     }
-    
-
-    
   };
 
   useEffect(() => {
     console.log('authData', authData);
+    setLoaderState(bookingList);
     loadData();
   }, []);
   return (
@@ -92,15 +91,23 @@ const ShowBookings = ({bookingList, setShowReservations, getReservations}) => {
         </TouchableOpacity>
       </View>
       {/* <Text style={styles.title}>Your Bookings</Text> */}
-      {bookingList.length > 0 ? (
-        <FlatList
-          refreshing={refreshing}
-          onRefresh={loadData}
-          contentContainerStyle={styles.list}
-          style={styles.Flist}
-          data={bookingList}
-          renderItem={item => <BookingCard item={item.item} />}
-        />
+
+      {loaderState !== undefined ? (
+        bookingList.length > 0 ? (
+          <FlatList
+            refreshing={refreshing}
+            onRefresh={loadData}
+            contentContainerStyle={styles.list}
+            style={styles.Flist}
+            data={bookingList}
+            renderItem={({item}) => <BookingCard item={item} />}
+          />
+        ) : (
+          <View style={styles.loading}>
+            <Text style={styles.emptyText}>Please wait we are fetching your Bookings</Text>
+            <ActivityIndicator size="large" color={COLORS.black} style={{marginTop:10}} />
+          </View>
+        )
       ) : (
         <Text style={styles.emptyText}>No bookings to show</Text>
       )}

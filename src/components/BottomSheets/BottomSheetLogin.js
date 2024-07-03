@@ -5,7 +5,7 @@ import {images} from '../../constants'
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 // const {height:SCREEN_HEIGHT}=Dimensions.get('window')
-
+import Icon from 'react-native-vector-icons/Feather';
 
 const BottomSheetLogin = ({handleLogin,delegationValidation,navigation}) => {
 
@@ -66,7 +66,8 @@ const getnew=async()=>{
         }}>
           <Image source={item.logo} style={styles.logo}/>
           <Text style={styles.loginBtnText}>{item.title}</Text>
-          <Image source={images.next} style={styles.nextIcon} />
+          {/* <Image source={images.next} style={styles.nextIcon} /> */}
+          <Icon name="chevron-right" size={20} color={COLORS.black} />
         </TouchableOpacity>
       )}/>
       <TouchableOpacity style={styles.backBtn} onPress={()=>{
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
         alignItems:"center",
         paddingVertical:10,
         borderWidth:1,
-        borderColor:COLORS.mainPurple,
+        borderColor:COLORS.black,
         borderRadius:10,
         marginBottom:10,
         
@@ -145,12 +146,12 @@ const styles = StyleSheet.create({
         alignItems:"center",
         paddingVertical:10,
         borderWidth:1,
-        borderColor:COLORS.mainPurple,
+        borderColor:COLORS.black,
         borderRadius:10,
         marginBottom:10,
     },
     backText:{
-      color:COLORS.mainPurple,
+      color:COLORS.black,
       fontWeight:'bold',
       fontSize:SIZES.preMedium
     },

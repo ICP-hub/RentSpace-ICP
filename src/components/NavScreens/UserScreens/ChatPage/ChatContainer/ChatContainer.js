@@ -110,6 +110,7 @@ const ChatContainer = ({navigation}) => {
     console.log('chats : ', chats);
     let fromPrinciples = [];
     let toPrinciples = [];
+    // chnage to for loop ----------------------------------------
     chats.map(chat => {
       fromPrinciples.push(chat.fromPrincipal);
       console.log('from map : ', {
@@ -117,6 +118,7 @@ const ChatContainer = ({navigation}) => {
         updateAt: chat.updatedAt,
       });
     });
+    // chnage to for loop ----------------------------------------
     chats.map(chat => {
       if (!fromPrinciples.includes(chat.toPrincipal)) {
         console.log('to map : ', chat.toPrincipal);
@@ -134,6 +136,7 @@ const ChatContainer = ({navigation}) => {
     if (fromPrinciples.length == 0) {
       setLoading(false);
     }
+    // chnage to for loop ----------------------------------------
     fromPrinciples.map(async (chat, index) => {
       console.log(`user ${index} : ${chat}`);
 
@@ -152,18 +155,7 @@ const ChatContainer = ({navigation}) => {
         console.log('error in fetching user : ', err);
       }
 
-      // .then(async(res)=>{
-      //     console.log(res[0])
-      //     // console.log([...chatUsers,{...res[0],id:chat}])
-      //     console.log({...res[0],id:chat})
-      //     arr.push({...res[0],id:chat})
-      //     // setChatUsers(c=>[...c,{...res[0],id:chat}])
-      //     setLoading(false)
-      //     setChatUsers(arr)
-      // }).catch((err)=>{
-      //     console.log("chatuser fetching err : ",err)
-      //     setLoading(false)
-      // })
+      
     });
     if (newChat != '' && !fromPrinciples.includes(newChat)) {
       //---------------------------------------
@@ -193,7 +185,7 @@ const ChatContainer = ({navigation}) => {
 
     console.log(chatUsers);
 
-    // setLoading(false)
+    setLoading(false)
   };
   useEffect(() => {
     chatLogin();

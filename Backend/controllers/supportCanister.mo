@@ -140,7 +140,7 @@ shared ({caller=owner}) actor class Support(){
                             from=caller;
                             message=message;
                             createdAt=time;
-                            to=some;
+                            to=?some;
                         };
 
                         switch(supportChatRecords.get(some)){
@@ -166,7 +166,7 @@ shared ({caller=owner}) actor class Support(){
                     from=caller;
                     message=message;
                     createdAt=time;
-                    to=adminList[0];
+                    to=null;
                 };
                 switch(supportChatRecords.get(caller)){
                     case(null){

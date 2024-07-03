@@ -112,7 +112,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
             Check In date :
         </Text>
         <Text style={styles.smallText}>
-            {booking.date}
+            {booking.checkInDate}
         </Text>
       </View>
       <Calendar
@@ -136,7 +136,7 @@ const FirstForm = ({setBookingForm,item,setOpen}) => {
             minDate={`${new Date().getFullYear()}-${new Date().getMonth()+1}-${new Date().getDate()}`}
           />
       <View style={styles.bottomCont}>
-        <Text style={styles.btmPriceText}>${item?.hotelPrice}/night</Text>
+        {/* <Text style={styles.btmPriceText}>${item?.hotelPrice}/night</Text> */}
         <TouchableOpacity style={styles.btn} onPress={()=>{
             console.log("booking : 123 : ",booking)
             setPaymentScreen(true)    
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
         fontWeight:'700'
     },
     smallText:{
-        color:COLORS.textLightGrey,
+        color:COLORS.black,
         opacity:0.7,
         fontSize:SIZES.small+1,
         padding:0
@@ -252,7 +252,9 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'column',
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
+        marginLeft:'auto',
+        right:0
     },
     btnText:{
         color:'white',

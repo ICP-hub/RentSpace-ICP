@@ -30,6 +30,6 @@ module{
         createdAt:Text;
         message:Text;
         from:Principal;
-        to:Principal;
+        to:?Principal;
     }
 }

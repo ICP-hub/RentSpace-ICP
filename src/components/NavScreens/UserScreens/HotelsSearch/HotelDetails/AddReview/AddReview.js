@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
         paddingLeft:30,
       },
       inputs:{
-        borderColor: COLORS.mainPurple,
+        borderColor: COLORS.black,
         borderWidth: 1,
         borderRadius: 13,
         width: '100%',
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
         height:150,
         width:'100%',
         borderWidth:1,
-        borderColor:COLORS.mainPurple,
+        borderColor:COLORS.black,
         borderRadius:20,
         color:COLORS.black,
         textAlignVertical:'top',
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
         paddingVertical:12,
         width:'100%',
         borderRadius:12,
-        backgroundColor:COLORS.mainPurple,
+        backgroundColor:COLORS.black,
         marginVertical:25
       },
       btnText:{

@@ -37,7 +37,7 @@ export interface Support {
   'whoami' : ActorMethod<[], string>,
 }
 export interface SupportMessage {
-  'to' : Principal,
+  'to' : [] | [Principal],
   'from' : Principal,
   'createdAt' : string,
   'message' : string,

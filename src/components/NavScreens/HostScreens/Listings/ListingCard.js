@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   Button,
   Image,
@@ -13,44 +14,64 @@ import {React, useState} from 'react';
 // import { images } from '../../../../constants'
 import {COLORS, SIZES} from '../../../../constants/themes';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon2 from 'react-native-vector-icons/AntDesign'
+import Icon2 from 'react-native-vector-icons/AntDesign';
 import Update from '../UpdatePage/Update';
-import { images } from '../../../../constants';
+import {images} from '../../../../constants';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { nodeBackend } from '../../../../../DevelopmentConfig';
+import {useSelector} from 'react-redux';
+import {nodeBackend} from '../../../../../DevelopmentConfig';
 
-const CustomAlert = ({showAlert, setShowAlert,item,getHotelDetails}) => {
+const CustomAlert = ({
+  showAlert,
+  setShowAlert,
+  item,
+  getHotelDetails,
+  loading,
+  setLoading,
+}) => {
   // const [loading,setLoading]=useState(false)
   // const baseUrl="http://localhost:5000"
   // const baseUrl="https://rentspace.kaifoundry.com"
-  baseUrl=nodeBackend
+  baseUrl = nodeBackend;
 
+  const {authData} = useSelector(state => state.authDataReducer);
+  const handleYes = async () => {
+    try {
+      console.log(item.propertyId);
+      // console.log(authData.privateKey,authData.publicKey,authData.delegation)
 
-  const {authData}=useSelector(state=>state.authDataReducer)
-  const handleYes = async() => {
-    console.log(item.propertyId);
-    // console.log(authData.privateKey,authData.publicKey,authData.delegation)
-
-
-    await axios.delete(`${baseUrl}/api/v1/property/delete`,{
-      headers:{
-        "x-private":authData.privateKey,
-        "x-public":authData.publicKey,
-        "x-delegation":authData.delegation,
-        // "Content-Type":"multipart/form-data"
-      },
-      data:{propertyId:item.propertyId}
-    }
-  ).then((res)=>{
-      console.log(res)
+      setLoading(true);
       setShowAlert(false);
-      getHotelDetails()
-    }).catch((err)=>{
-      console.log(err)
-    })
-  };
 
+      let res = await axios.delete(`${baseUrl}/api/v1/property/delete`, {
+        headers: {
+          'x-private': authData.privateKey,
+          'x-public': authData.publicKey,
+          'x-delegation': authData.delegation,
+          // "Content-Type":"multipart/form-data"
+        },
+        data: {propertyId: item.propertyId},
+      });
+
+      console.log(res);
+      setShowAlert(false);
+      getHotelDetails();
+      setLoading(false);
+
+    } catch (err) {
+      console.log(err);
+    }
+    // .then(res => {
+    //   console.log(res);
+    //   setShowAlert(false);
+    //   setLoading(false);
+    //   getHotelDetails();
+    // })
+    // .catch(err => {
+    //   console.log(err);
+    // });
+  };
+  // ------------------------
   const handleNo = () => {
     setShowAlert(false);
   };
@@ -103,11 +124,13 @@ const ListingCard = ({item, getHotelDetails}) => {
     setOpenUpdate(true);
   };
 
+  const [loading, setLoading] = useState(false);
+
   return (
-    <View style={styles.card} >
+    <View style={styles.card}>
       <View style={styles.cardView}>
-        <Text style={styles.status}>{"verified"}</Text>
-        <Image source={{uri:item.imageList[0]}} style={styles.img} />
+        <Text style={styles.status}>{'verified'}</Text>
+        <Image source={{uri: item.imageList[0]}} style={styles.img} />
       </View>
       <View style={styles.textCont}>
         <View>
@@ -116,19 +139,36 @@ const ListingCard = ({item, getHotelDetails}) => {
         </View>
         <View style={styles.iconCont}>
           <TouchableOpacity onPress={openUpdateModal}>
-            <Icon2 style={{marginRight:15}} name="edit" size={20} color={COLORS.black} />
+            <Icon2
+              style={{marginRight: 15}}
+              name="edit"
+              size={20}
+              color={COLORS.black}
+            />
           </TouchableOpacity>
           <TouchableOpacity onPress={deleteListing}>
             <Icon name="delete" color={COLORS.black} size={20} />
           </TouchableOpacity>
         </View>
-        <CustomAlert getHotelDetails={getHotelDetails} showAlert={showAlert} setShowAlert={setShowAlert} item={item} />
+        <CustomAlert
+          getHotelDetails={getHotelDetails}
+          showAlert={showAlert}
+          setShowAlert={setShowAlert}
+          item={item}
+          loading={loading}
+          setLoading={setLoading}
+        />
       </View>
 
-      <Modal visible={openUpdate} onRequestClose={() => setOpenUpdate(false)} >
-        <Update item={item} setOpenUpdate={setOpenUpdate} getHotelDetails={getHotelDetails} />
+      <Modal visible={openUpdate} onRequestClose={() => setOpenUpdate(false)}>
+        <Update
+          item={item}
+          setOpenUpdate={setOpenUpdate}
+          getHotelDetails={getHotelDetails}
+        />
       </Modal>
 
+      <ActivityIndicator animating={loading} style={styles.loader} size={40} />
     </View>
   );
 };
@@ -151,9 +191,9 @@ const styles = StyleSheet.create({
     paddingVertical: '5%',
     marginLeft: '5%',
   },
-  iconCont:{
-    display:'flex',
-    flexDirection:'row'
+  iconCont: {
+    display: 'flex',
+    flexDirection: 'row',
   },
 
   cardView: {
