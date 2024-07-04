@@ -26,15 +26,44 @@ import SubmitUpdates from './Popups/SubmitUpdates';
 import {useSelector} from 'react-redux';
 import {nodeBackend} from '../../../../../DevelopmentConfig';
 import {ALERT_TYPE, Dialog, Toast} from 'react-native-alert-notification';
+import PhantomPayment from '../../UserScreens/HotelsSearch/HotelDetails/BookingForm/cryptoScreens/PhantomPayment';
+import GetWalletId from '../../../HostViewNew/Step3/Pricing/GetWalletId';
 
 const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
-  // console.log(item.videoList);
+  
+  // console.log(item.phantomWalletID);
 
   // console.log("Pass Data => ", passData);
 
   // const baseUrl="https://rentspace.kaifoundry.com"
   // const baseUrl="http://localhost:5000"
   const baseUrl = nodeBackend;
+
+  const [phantomModal, setPhantomModal] = useState(false);
+  const [phantomAccID, setPhantomAccID] = useState(item.phantomWalletID);
+  const [phantomAccIDValidated, setPhantomAccIDValidated] = useState(false);
+  const [markSOL, setMarkSOL] = useState(false);
+
+  const updatePhantomAccID = (id) => {
+    setPhantomAccID(id);
+    setFinalData({...finalData, phantomWalletID: id});
+  };
+
+  const UpdatePaymentMethods = (method) => {
+    let temp = finalData.paymentMethods;
+    if (temp.includes(method)) {
+      temp = temp.filter(e => e !== method);
+    } else {
+      temp.push(method);
+    }
+    setFinalData({...finalData, paymentMethods: temp});
+  };
+
+  useEffect(() => {
+    console.log('Phantom Account ID => ', phantomAccID);
+    console.log('Final Data => ', finalData.phantomWalletID);
+    console.log('Payment Methods => ', finalData.paymentMethods);
+  }, [phantomAccID]);
 
   const [upload, setUpload] = useState(false);
   const [submit, setSubmit] = useState(false);
@@ -59,6 +88,7 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
     btc: false,
     icp: false,
     creditCard: false,
+    sol : false,
   });
 
   const [discounts, setDiscounts] = useState({
@@ -70,16 +100,17 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
   const [finalData, setFinalData] = useState({
     propertyId: item.propertyId,
     propertyName: passData.title,
+    propertyDescription: '',
+    price: item.price.toString(),
+    imageList: item.imageList,
+    videoList: item.videoList,
     location: passData.location,
     amenities: passData.propertyAmenities,
     propertyType: passData.propertyName,
-    propertyDescription: '',
-    price: "0000",
-    maxOccupancy: passData.maxOccupancy,
-    rooms: passData.rooms,
-    imageList: item.imageList,
-    videoList: item.videoList,
     paymentMethods: [],
+    rooms: passData.rooms,
+    maxOccupancy: passData.maxOccupancy,
+    phantomWalletID : phantomAccID,
   });
 
   const videoControl = () => {
@@ -260,7 +291,9 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
           multiline={true}
           placeholder={item?.propertyDescription}
           placeholderTextColor={COLORS.black}
-          onChangeText={text => setFinalData({...finalData, propertyDescription: text})}
+          onChangeText={text =>
+            setFinalData({...finalData, propertyDescription: text})
+          }
         />
 
         {/* sec2 */}
@@ -338,9 +371,10 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
           placeholder={`$${item.price}/Night`}
           placeholderTextColor={COLORS.black}
           onChangeText={text =>
-            setFinalData({...finalData, price: parseFloat(text)})
+            setFinalData({...finalData, price: text.toString()})
           }
         />
+        
 
         {/* sec5 */}
         <View style={styles.sectionHeader}>
@@ -350,85 +384,147 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
           <TouchableOpacity
             onPress={() => {
               setPayOption({...payOption, ethereum: !payOption.ethereum});
-              setFinalData(prevState => ({
-                ...prevState,
-                paymentMethods: [...prevState.paymentMethods, 'ckEth'],
-              }));
+              // setFinalData(prevState => ({
+              //   ...prevState,
+              //   paymentMethods: [...prevState.paymentMethods, 'ckEth'],
+              // }));
+              UpdatePaymentMethods('ckEth');
             }}>
             <View
               style={
                 payOption.ethereum ? styles.payItemActive : styles.payItem
               }>
-              <Icon4 name="ethereum" color={payOption.ethereum ? COLORS.white : COLORS.black} size={30} />
+              <Icon4
+                name="ethereum"
+                color={payOption.ethereum ? COLORS.white : COLORS.black}
+                size={30}
+              />
             </View>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setPayOption({...payOption, applePay: !payOption.applePay});
-              setFinalData(prevState => ({
-                ...prevState,
-                paymentMethods: [...prevState.paymentMethods, 'applePay'],
-              }));
+              // setFinalData(prevState => ({
+              //   ...prevState,
+              //   paymentMethods: [...prevState.paymentMethods, 'applePay'],
+              // }));
+              UpdatePaymentMethods('applePay');
             }}>
             <View
               style={
                 payOption.applePay ? styles.payItemActive : styles.payItem
               }>
-              <Icon4 name="apple-pay" color={payOption.applePay ? COLORS.white : COLORS.black} size={30} />
+              <Icon4
+                name="apple-pay"
+                color={payOption.applePay ? COLORS.white : COLORS.black}
+                size={30}
+              />
             </View>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setPayOption({...payOption, googlePay: !payOption.googlePay});
-              setFinalData(prevState => ({
-                ...prevState,
-                paymentMethods: [...prevState.paymentMethods, 'gPay'],
-              }));
+              // setFinalData(prevState => ({
+              //   ...prevState,
+              //   paymentMethods: [...prevState.paymentMethods, 'gPay'],
+              // }));
+              UpdatePaymentMethods('gPay');
             }}>
             <View
               style={
                 payOption.googlePay ? styles.payItemActive : styles.payItem
               }>
-              <Icon4 name="google-pay" color={payOption.googlePay ? COLORS.white : COLORS.black} size={30} />
+              <Icon4
+                name="google-pay"
+                color={payOption.googlePay ? COLORS.white : COLORS.black}
+                size={30}
+              />
             </View>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setPayOption({...payOption, btc: !payOption.btc});
-              setFinalData(prevState => ({
-                ...prevState,
-                paymentMethods: [...prevState.paymentMethods, 'ckBTC'],
-              }));
+              // setFinalData(prevState => ({
+              //   ...prevState,
+              //   paymentMethods: [...prevState.paymentMethods, 'ckBTC'],
+              // }));
+              UpdatePaymentMethods('ckBTC');
             }}>
             <View style={payOption.btc ? styles.payItemActive : styles.payItem}>
-              <Icon4 name="btc" color={payOption.btc ? COLORS.white : COLORS.black} size={30} />
+              <Icon4
+                name="btc"
+                color={payOption.btc ? COLORS.white : COLORS.black}
+                size={30}
+              />
             </View>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setPayOption({...payOption, icp: !payOption.icp});
-              setFinalData(prevState => ({
-                ...prevState,
-                paymentMethods: [...prevState.paymentMethods, 'ICP'],
-              }));
+              // setFinalData(prevState => ({
+              //   ...prevState,
+              //   paymentMethods: [...prevState.paymentMethods, 'ICP'],
+              // }));
+              UpdatePaymentMethods('ICP');
             }}>
             <View style={payOption.icp ? styles.payItemActive : styles.payItem}>
-              <Text style={payOption.icp ? styles.payItemTextActive : styles.payItemText}>ICP</Text>
+              <Text
+                style={
+                  payOption.icp ? styles.payItemTextActive : styles.payItemText
+                }>
+                ICP
+              </Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setPayOption({...payOption, creditCard: !payOption.creditCard});
-              setFinalData(prevState => ({
-                ...prevState,
-                paymentMethods: [...prevState.paymentMethods, 'creditCard'],
-              }));
+              // setFinalData(prevState => ({
+              //   ...prevState,
+              //   paymentMethods: [...prevState.paymentMethods, 'creditCard'],
+              // }));
+              UpdatePaymentMethods('creditCard');
             }}>
             <View
               style={
                 payOption.creditCard ? styles.payItemActive : styles.payItem
               }>
-              <Icon4 name="credit-card" color={payOption.creditCard ? COLORS.white : COLORS.black} size={30} />
+              <Icon4
+                name="credit-card"
+                color={payOption.creditCard ? COLORS.white : COLORS.black}
+                size={30}
+              />
+            </View>
+          </TouchableOpacity>
+          {/* SOl---------------------------------------------------------------------- */}
+          <TouchableOpacity
+            onPress={() => {
+              setPayOption({...payOption, sol: !payOption.sol});
+              // setFinalData(prevState => ({
+              //   ...prevState,
+              //   paymentMethods: [...prevState.paymentMethods, 'SOL'],
+              // }));
+              UpdatePaymentMethods('SOL');
+              // initiate phantom wallet connection
+
+              if(payOption.sol == false){
+                setPhantomModal(true);
+              }
+              
+             
+              
+
+            }}>
+            <View
+              style={
+                payOption.sol ? styles.payItemActive : styles.payItem
+              }>
+              <Text
+                style={
+                  payOption.sol ? styles.payItemTextActive : styles.payItemText
+                }>
+                SOL
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -562,6 +658,16 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
         <UploadModal transferred={transferred} />
       </Modal>
 
+      <Modal
+        transparent
+        animationType="fade"
+        visible={phantomModal}
+        onRequestClose={() => {
+          setPhantomModal(false);
+        }}>
+        <GetWalletId phantomAccID={phantomAccID} setPhantomAccID={updatePhantomAccID} setPhantomAccIDValidated={setPhantomAccIDValidated} setWalletIDModal={setPhantomModal} />
+      </Modal>
+      
       {/* Submit Modal */}
       {/* <Modal visible={submit} transparent>
         <SubmitUpdates />
