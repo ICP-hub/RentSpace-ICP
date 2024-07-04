@@ -18,7 +18,7 @@ shared ({caller=owner}) actor class Support(){
     var ticketRecords = TrieMap.TrieMap<Text,SupportTypes.Ticket>(Text.equal, Text.hash);
     var unresolvedTicketRecords = TrieMap.TrieMap<Text,SupportTypes.Ticket>(Text.equal, Text.hash);
     var supportChatRecords = TrieMap.TrieMap<Principal,[SupportTypes.SupportMessage]>(Principal.equal,Principal.hash);
-    var adminList:[Principal] = [];
+    var adminList:[Text] = ["oipae-tygga-efo77-64pmo-coupx-ulnm6-6m2em-oj2xf-aepkh-fxctl-hae"];
 
     //creates a new ticket
     public shared({caller}) func createTicket(ticket:SupportTypes.TicketInput,address:SupportTypes.Address):async Result.Result<Text,Text>{
@@ -257,7 +257,7 @@ shared ({caller=owner}) actor class Support(){
     };
 
     // returns list of all admins
-    public shared({caller}) func getAllAdmins():async Result.Result<[Principal],Text>{
+    public shared({caller}) func getAllAdmins():async Result.Result<[Text],Text>{
         try{
             //check  if admin
             await UtilityFunc.checkAnonymous(caller);
@@ -273,17 +273,17 @@ shared ({caller=owner}) actor class Support(){
     };
 
     // add new admin
-    public shared({caller}) func addAdmin(newAdmin:Principal):async Result.Result<Text,Text>{
+    public shared({caller}) func addAdmin(newAdmin:Text):async Result.Result<Text,Text>{
         try{
             await UtilityFunc.checkAnonymous(caller);
             let isAdmin=await checkIsAdmin(caller);
             if(isAdmin==false){
                 return #err("You are not an admin");
             };
-            var newAdminList:Buffer.Buffer<Principal> = Buffer.fromArray(adminList);
+            var newAdminList:Buffer.Buffer<Text> = Buffer.fromArray(adminList);
             newAdminList.add(newAdmin);
             adminList:=Buffer.toArray(newAdminList);
-            return #ok("New admin " # Principal.toText(newAdmin) # " has been added !");
+            return #ok("New admin " # newAdmin # " has been added !");
         }catch e{
             return #err(Error.message(e));  
         }
@@ -292,7 +292,7 @@ shared ({caller=owner}) actor class Support(){
 
     // checks if the principal passed is an admin or not
     public query func checkIsAdmin(caller : Principal) :async Bool {
-        switch (Array.find<Principal>(adminList, func(x) : Bool {x == caller})) {
+        switch (Array.find<Text>(adminList, func(x) : Bool {x == Principal.toText(caller)})) {
             case (null) {
                 return false;
             };
