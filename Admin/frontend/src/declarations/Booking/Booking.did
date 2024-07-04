@@ -1,0 +1,72 @@
+type Result_3 = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type Result_2 = 
+ variant {
+   err: text;
+   ok: vec BookingInfo;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: BookingInfo;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: AnnualData;
+ };
+type PaymentType = 
+ variant {
+   ckBTC: record {id: nat;};
+   ckETH: record {id: nat;};
+   icp: record {id: nat;};
+   sol;
+ };
+type BookingInput = 
+ record {
+   bookingDuration: nat;
+   checkInDate: text;
+   checkOutDate: text;
+   hotelId: text;
+ };
+type BookingInfo = 
+ record {
+   bookingDate: text;
+   bookingDuration: nat;
+   bookingId: text;
+   cancelStatus: bool;
+   checkInDate: text;
+   checkOutDate: text;
+   hotelId: text;
+   paymentId: text;
+   paymentStatus: bool;
+   refundStatus: bool;
+   userId: text;
+ };
+type Booking = 
+ service {
+   createBooking: (PaymentType, BookingInput, nat) -> (Result_3);
+   getAllHotelBookings: (text) -> (Result_2);
+   getAllUserBookings: () -> (Result_2);
+   getBookingDetails: (text) -> (Result_1);
+   getBookingFrequency: (text) -> (Result);
+ };
+type AnnualData = 
+ record {
+   april: nat;
+   aug: nat;
+   dec: nat;
+   feb: nat;
+   jan: nat;
+   july: nat;
+   june: nat;
+   march: nat;
+   may: nat;
+   nov: nat;
+   oct: nat;
+   sep: nat;
+ };
+service : () -> Booking
