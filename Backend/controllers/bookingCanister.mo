@@ -71,7 +71,7 @@ shared({caller=owner}) actor class Booking(){
                 case(#sol){
                     payId:="sol "# Nat.toText(solanaPayments);
                     solanaPayments:= solanaPayments+1;
-                    return #err("not complete");
+                    // return #err("not complete");
                 };
 
             };

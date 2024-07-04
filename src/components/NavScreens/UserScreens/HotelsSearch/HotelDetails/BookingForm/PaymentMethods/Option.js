@@ -9,11 +9,11 @@ const Option = ({item,setMethod,method,connect}) => {
         style={(method==item?.label)?styles.selectedCard:styles.card} 
         onPress={()=>{
           setMethod(item?.label)
-          if(item?.label=="SOL"){
-            // connect()
-            Alert.alert('Coming Soon','This feature is coming soon');
+          // if(item?.label=="SOL"){
+          //   connect()
+          //   // Alert.alert('Coming Soon','This feature is coming soon');
             
-          }
+          // }
         }}
     >
       {

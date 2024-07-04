@@ -307,8 +307,8 @@ const BookingFormComp = ({
           setCryptoPrice(res?.data?.data?.rates?.ETH);
           console.log('ETH', res?.data?.data?.rates?.ETH);
         } else if (paymentMethod == 'SOL') {
-          setCryptoPrice(res?.data?.data?.rates?.USDC);
-          console.log('SOL', res?.data?.data?.rates?.USDC);
+          setCryptoPrice(res?.data?.data?.rates?.SOL);
+          console.log('SOL', res?.data?.data?.rates?.SOL);
         } else {
           console.log('else');
         }
@@ -388,7 +388,7 @@ const BookingFormComp = ({
     transaction.instructions = [
       SystemProgram.transfer({
         fromPubkey: phantomWalletPublicKey,
-        toPubkey: new PublicKey(item?.details?.phantomWalletID),
+        toPubkey: new PublicKey(item?.phantomWalletID),
         lamports: 0.1 * LAMPORTS_PER_SOL,
       }),
     ];
@@ -452,6 +452,7 @@ const BookingFormComp = ({
       allParams.nonce,
       sharedSecretDapp,
     );
+    console.log(connectData, 'connect data')
     setPhantomWalletPublicKey(new PublicKey(connectData?.public_key));
     setSession(connectData?.session);
     setSharedSecret(sharedSecretDapp);
@@ -742,7 +743,7 @@ const BookingFormComp = ({
         }}>
         <PhantomPayment
           loading={loading}
-          accountId={item?.details?.phantomWalletID}
+          accountId={item?.phantomWalletID}
           sendNewTransaction={sendNewTransaction}
           connect={connect}
           total={fullPayment ? total : total / 2}

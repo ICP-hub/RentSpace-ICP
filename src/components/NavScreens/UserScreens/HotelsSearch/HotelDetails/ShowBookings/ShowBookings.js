@@ -27,49 +27,15 @@ const ShowBookings = ({bookingList, setShowReservations, getReservations}) => {
     getReservations(setRefreshing);
   };
 
-  // console.log('bookingList : ',bookingList)
+  console.log('bookingList : ',bookingList)
 
-  const addNewReview = async () => {
-    // setLoading(true)
-    // console.log("reviewObj : ",review)
-    // console.log("reviewActors : ",await actors.reviewActor.getPk())
-
-    try {
-      let ReviewInput = {
-        hotelId:
-          'j435d-ase4s-ebukf-tr6fc-5gt5c-mjsqh-awkvq-56gsw-s2vbv-nbohg-gae#c8bf686b-83d3-4790-b507-54523ea42b5b',
-        rating: 4.5,
-        title: 'Great Hotel',
-        des: 'I had a great experience at this hotel',
-      };
-
-      console.log('Review add', actors.reviewActor);
-      console.log('a : ', actors.reviewActor);
-      await actors.reviewActor
-        .createReview(ReviewInput.hotelId, ReviewInput)
-        .then(res => {
-          console.log('review creation response : ', res);
-          // setLoading(false)
-          // alert('Thanks for giving your valueble feedback!')
-          Dialog.show({
-            title: 'SUCCESS',
-            type: ALERT_TYPE.SUCCESS,
-            textBody: 'Thanks for giving your valueable feedback',
-          });
-          // setAddReview(false)
-        })
-        .catch(err => {
-          console.log('review err :', err);
-          // setLoading(false)
-        });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  
 
   useEffect(() => {
     console.log('authData', authData);
-    setLoaderState(bookingList);
+    if(bookingList.length !== 0){
+      setLoaderState(1);
+    }
     loadData();
   }, []);
   return (
