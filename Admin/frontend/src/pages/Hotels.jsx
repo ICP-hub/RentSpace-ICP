@@ -53,44 +53,74 @@ const Hotels = () => {
   const [hotelList,setHotelList]=useState([])
 
   const getHotelList=async()=>{
-    await actors?.hotelActor?.getNoOfPages(10).then(async(num)=>{
-      // alert(num)
-      await actors?.hotelActor?.scanHotel(0,15).then((res)=>{
-        console.log(res)
+    let hotelData=[]
+    let allRes=await actors?.hotelActor?.getAllHotels(10,1)
+    if(allRes?.err!=undefined){
+      console.log("err getting all hotel : ",allRes?.err)
+      return
+    }
+    console.log(allRes)
+
+    for(let i=0;i<allRes?.ok?.length;i++){
+      let userId=allRes?.ok[i][0].split("#")[0]
+      console.log(userId)
+      let userRes=await actors?.userActor?.getUserByPrincipal(Principal.fromText(userId))
+      if(userRes?.err!=undefined){
+        console.log("err fetching user data : ",userRes?.err)
+        return
+      }
+      console.log(userRes)
+      let hotelObj={
+        userId:userId,
+        hotelId:allRes?.ok[i][0],
+        hotelData:allRes?.ok[i][1],
+        userData:userRes?.ok
+      }
+      hotelData.push(hotelObj)
+    }
+    console.log(hotelData)
+    const set=new Set(hotelData)
+    setHotelList(Array.from(set))
+
+    // await actors?.hotelActor?.getNoOfPages(10).then(async(num)=>{
+    //   // alert(num)
+    //   await actors?.hotelActor?.scanHotel(0,15).then((res)=>{
+    //     console.log(res)
   
-        res.map(async(r)=>{
-          let userId=r[0].split("#")[0]
-          await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(userId)).then((userRes)=>{
-            let hotelObj={
-              userId:userId,
-              hotelId:r[0],
-              userData:userRes[0],
-              hotelData:r[1]
-            }
-            console.log("hotelObj : ",hotelObj)
-            let newSet =new Set([...hotelList,{...hotelObj}])
-            setHotelList(Array.from(newSet))
-          }).catch((err)=>{
-            console.log("user detail err : ",err)
-          })
-        })
-      }).catch((err)=>{
-        console.log("hotel detail err : ",err)
-      })
-    }).catch((err)=>{
-      console.log("err fetching number of hotel pages : ",err)
-    })
+    //     res.map(async(r)=>{
+    //       let userId=r[0].split("#")[0]
+    //       await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(userId)).then((userRes)=>{
+    //         let hotelObj={
+    //           userId:userId,
+    //           hotelId:r[0],
+    //           userData:userRes[0],
+    //           hotelData:r[1]
+    //         }
+    //         console.log("hotelObj : ",hotelObj)
+    //         let newSet =new Set([...hotelList,{...hotelObj}])
+    //         setHotelList(Array.from(newSet))
+    //       }).catch((err)=>{
+    //         console.log("user detail err : ",err)
+    //       })
+    //     })
+    //   }).catch((err)=>{
+    //     console.log("hotel detail err : ",err)
+    //   })
+    // }).catch((err)=>{
+    //   console.log("err fetching number of hotel pages : ",err)
+    // })
     
   }
 
   const getHotelStats=async(year)=>{
-    await actors?.hotelActor?.getHotelFrequencyByYear(year.toString()).then((res)=>{
-      console.log("hotel stats res : ",res[0])
-      setHotelCount(sumArray(createArray(res[0])))
-      setHotelStats(createArray(res[0]))
-    }).catch((err)=>{
-      console.log("hotel stats err : ",err)
-    })
+    let hotelRes=await actors?.hotelActor?.getHotelRegisterFrequencyData(year.toString())
+    if(hotelRes?.err!=undefined){
+      console.log("err fetching hotel stats : ",hotelRes?.err)
+      return
+    }
+    console.log("hotel stats res : ",hotelRes)
+    setHotelCount(sumArray(createArray(hotelRes?.ok)))
+    setHotelStats(createArray(hotelRes?.ok))
   }
 
   useEffect(()=>{
