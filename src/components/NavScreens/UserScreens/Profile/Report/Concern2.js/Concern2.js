@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     modal:{
         height:'100%',
         width:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG
     },
     page:{
         display:'flex',
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
         width:'82%',
         borderWidth:0.8,
         borderRadius:10,
-        borderColor:COLORS.mainPurple,
+        borderColor:COLORS.black,
         marginBottom:10,
         opacity:0.8,
         color:COLORS.black,
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
         width:'85%',
         borderWidth:0.8,
         borderRadius:10,
-        borderColor:COLORS.mainPurple,
+        borderColor:COLORS.black,
         marginVertical:10,
         color:COLORS.black,
         paddingLeft:15,

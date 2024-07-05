@@ -20,22 +20,14 @@ const ShowBookings = ({bookingList, setShowReservations, getReservations}) => {
   const [refreshing, setRefreshing] = useState(false);
   const {actors} = useSelector(state => state.actorReducer);
 
-  const [loaderState, setLoaderState] = useState();
-
   const loadData = () => {
     // setRefreshing(true);
     getReservations(setRefreshing);
   };
 
-  console.log('bookingList : ',bookingList)
-
-  
+  console.log('bookingList : ', bookingList);
 
   useEffect(() => {
-    console.log('authData', authData);
-    if(bookingList.length !== 0){
-      setLoaderState(1);
-    }
     loadData();
   }, []);
   return (
@@ -57,25 +49,30 @@ const ShowBookings = ({bookingList, setShowReservations, getReservations}) => {
         </TouchableOpacity>
       </View>
       {/* <Text style={styles.title}>Your Bookings</Text> */}
+      {console.log(refreshing)}
 
-      {loaderState !== undefined ? (
-        bookingList.length > 0 ? (
-          <FlatList
-            refreshing={refreshing}
-            onRefresh={loadData}
-            contentContainerStyle={styles.list}
-            style={styles.Flist}
-            data={bookingList}
-            renderItem={({item}) => <BookingCard item={item} />}
+      {refreshing ? (
+        <View style={styles.loading}>
+          <Text style={styles.emptyText}>
+            Please wait we are fetching your Bookings
+          </Text>
+          <ActivityIndicator
+            size="large"
+            color={COLORS.black}
+            style={{marginTop: 20}}
           />
-        ) : (
-          <View style={styles.loading}>
-            <Text style={styles.emptyText}>Please wait we are fetching your Bookings</Text>
-            <ActivityIndicator size="large" color={COLORS.black} style={{marginTop:10}} />
-          </View>
-        )
-      ) : (
+        </View>
+      ) : bookingList.length === 0 ? (
         <Text style={styles.emptyText}>No bookings to show</Text>
+      ) : (
+        <FlatList
+          refreshing={refreshing}
+          onRefresh={loadData}
+          contentContainerStyle={styles.list}
+          style={styles.Flist}
+          data={bookingList}
+          renderItem={({item}) => <BookingCard item={item} />}
+        />
       )}
     </View>
   );

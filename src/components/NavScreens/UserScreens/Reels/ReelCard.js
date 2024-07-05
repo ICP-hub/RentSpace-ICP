@@ -51,7 +51,7 @@ const ReelCard = ({item, reelIndex}) => {
   const baseURL = nodeBackend;
 
   // console.log("ReelCard Item: ", item.likedBy.length); 
-  const [reelLikes, setReelLikes] = useState(item?.likedBy.length);
+  const [reelLikes, setReelLikes] = useState();
   const [distance, setDistance] = useState(0);
   const [coord1, setCoord1] = useState({
     latitude: item.latitude,
@@ -361,6 +361,7 @@ const ReelCard = ({item, reelIndex}) => {
       .then(res => {
         console.log('updated like : ', res.data);
         console.log('includes principal : ', item?.likedBy.includes(principle));
+        // setLiked(res.data.likedBy.includes(principle));
         setReelLikes(res.data.likes);
         setLikeDisabled(false);
       })

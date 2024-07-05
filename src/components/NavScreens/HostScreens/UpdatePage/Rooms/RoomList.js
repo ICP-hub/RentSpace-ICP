@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   deleteBtn: {
     fontSize: 16,
     color: COLORS.white,
-    backgroundColor: '#FF0000',
+    backgroundColor: COLORS.black,
     textAlign: 'center',
     paddingVertical: 10,
     fontWeight: 'bold',

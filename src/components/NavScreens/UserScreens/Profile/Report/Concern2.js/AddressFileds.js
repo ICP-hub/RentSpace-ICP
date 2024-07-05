@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     middleInputs:{
         width:'100%',
         borderWidth:0.8,
-        borderColor:COLORS.hostTitle,
+        borderColor:COLORS.black,
         opacity:0.8,
         color:COLORS.black,
         paddingLeft:15,
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     lastInp:{
         width:'100%',
         borderWidth:0.8,
-        borderColor:COLORS.mainPurple,
+        borderColor:COLORS.black,
         color:COLORS.black,
         paddingLeft:15,
         borderBottomLeftRadius:10,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
         borderWidth:0.8,
         borderTopRightRadius:10,
         borderTopLeftRadius:10,
-        borderColor:COLORS.mainPurple,
+        borderColor:COLORS.black,
         color:COLORS.black,
         paddingLeft:15,
         paddingVertical:10
