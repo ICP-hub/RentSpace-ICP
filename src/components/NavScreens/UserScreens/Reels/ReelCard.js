@@ -145,12 +145,14 @@ const ReelCard = ({item, reelIndex}) => {
       //   }
       // });
 
+      // adding original comments first
       for (let i = 0; i < commentResp?.ok.length; i++) {
         if (commentResp?.ok[i].parentCommentId == '') {
           newRes.push(commentResp?.ok[i]);
         }
       }
 
+      // adding missing comments and check for unique comments
       for (let i = 0; i < commentResp?.ok.length; i++) {
         if (newRes.indexOf(commentResp?.ok[i]) == -1) {
           newRes.push(commentResp?.ok[i]);
@@ -174,12 +176,6 @@ const ReelCard = ({item, reelIndex}) => {
         const dateString = `${date.getDate()} ${
           months[date.getMonth()]
         } ${date.getFullYear()}`;
-        //     commentId:Text;
-        //     comment : Text;
-        //     hotelId : Text;
-        //     userId : Text;
-        //     parentCommentId : Text;
-        //     createdAt : Text;
         const newComment = {
           commentId: newRes[i].commentId,
           comment: newRes[i].comment,
@@ -192,8 +188,8 @@ const ReelCard = ({item, reelIndex}) => {
         if (newComment.parentCommentId == '') {
           comments.push(newComment);
           rootCount += 1;
-          setLoading(false);
-          setReelComments([...comments]);
+          // setLoading(false);
+          // setReelComments([...comments]);
         } else {
           let index = -1;
           for (let j = 0; j < comments.length; j++) {
@@ -207,15 +203,17 @@ const ReelCard = ({item, reelIndex}) => {
               replies: [...comments[index].replies, newComment],
             };
             replyCount += 1;
-            setReelComments([...comments]);
-            setLoading(false);
+            // setReelComments([...comments]);
+            // setLoading(false);
           } else {
             comments.push(newComment);
-            setReelComments([...comments]);
-            setLoading(false);
+            // setReelComments([...comments]);
+            // setLoading(false);
           }
         }
       }
+            setReelComments([...comments]);
+            setLoading(false);
 
       // newRes.map(async r => {
       //   setLoading(true)
@@ -345,8 +343,6 @@ const ReelCard = ({item, reelIndex}) => {
     //   setLoading(false);
     // });
   };
-
-  
 
   // this --------------------------------------
   const updateLike = async () => {
