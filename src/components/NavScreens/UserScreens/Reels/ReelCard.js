@@ -19,6 +19,7 @@ import {useSelector} from 'react-redux';
 import {Principal} from '@dfinity/principal';
 import axios from 'axios';
 import {nodeBackend} from '../../../../../DevelopmentConfig';
+import Geolocation from '@react-native-community/geolocation';
 
 const months = [
   'January',
@@ -36,6 +37,7 @@ const months = [
 ];
 
 const ReelCard = ({item, reelIndex}) => {
+  console.log("Is liked: ", item?.likedBy.includes(principle));
   const [likeDisabled, setLikeDisabled] = useState(false);
   const {user} = useSelector(state => state.userReducer);
   const {principle} = useSelector(state => state.principleReducer);
@@ -48,7 +50,61 @@ const ReelCard = ({item, reelIndex}) => {
   // const baseURL = 'http://localhost:5000';
   const baseURL = nodeBackend;
 
-  // console.log("ReelCard Item: ", item.propertyId);
+  // console.log("ReelCard Item: ", item.likedBy.length); 
+  const [reelLikes, setReelLikes] = useState(item?.likedBy.length);
+  const [distance, setDistance] = useState(0);
+  const [coord1, setCoord1] = useState({
+    latitude: item.latitude,
+    longitude: item.longitude,
+  });
+  const [coord2, setCoord2] = useState({
+    latitude: 0,
+    longitude: 0,
+  });
+
+  function changeDateFormat(date) {
+    const d = new Date(date);
+    const month = d.toLocaleString('default', {month: 'short'});
+    return `${d.getDate()} ${month}`;
+  }
+
+  function haversineDistance(coords1, coords2) {
+    const toRadians = degrees => (degrees * Math.PI) / 180;
+
+    const lat1 = coords1.latitude;
+    const lon1 = coords1.longitude;
+    const lat2 = coords2.latitude;
+    const lon2 = coords2.longitude;
+
+    const R = 6371; // Radius of the Earth in kilometers
+
+    const dLat = toRadians(lat2 - lat1);
+    const dLon = toRadians(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRadians(lat1)) *
+        Math.cos(toRadians(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const distance = R * c;
+    console.log("Distance: ", parseFloat(distance.toFixed(1)));
+    return parseFloat(distance.toFixed(1));
+  }
+
+  const getCurrentLocation = async () => {
+    Geolocation.getCurrentPosition(loc => {
+      const coordinates = loc.coords;
+      console.log(
+        'coordinates : ' + coordinates.latitude + ' ' + coordinates.longitude,
+      );
+      setCoord2({
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
+      });
+    });
+  };
 
   const openComments = () => {
     btmSheetComments.current.present();
@@ -70,7 +126,9 @@ const ReelCard = ({item, reelIndex}) => {
     const comments = [];
 
     try {
-      let commentResp = await actors?.commentActor?.getComments(item?.propertyId);
+      let commentResp = await actors?.commentActor?.getComments(
+        item?.propertyId,
+      );
 
       console.log('commentGetResp', commentResp);
 
@@ -87,8 +145,8 @@ const ReelCard = ({item, reelIndex}) => {
       //   }
       // });
 
-      for( let i = 0; i < commentResp?.ok.length; i++ ){
-        if(commentResp?.ok[i].parentCommentId == ''){
+      for (let i = 0; i < commentResp?.ok.length; i++) {
+        if (commentResp?.ok[i].parentCommentId == '') {
           newRes.push(commentResp?.ok[i]);
         }
       }
@@ -106,12 +164,16 @@ const ReelCard = ({item, reelIndex}) => {
 
       for (let i = 0; i < newRes.length; i++) {
         setLoading(true);
-        let userResp = await actors?.userActor?.getUserByPrincipal(Principal.fromText(newRes[i].userId));
+        let userResp = await actors?.userActor?.getUserByPrincipal(
+          Principal.fromText(newRes[i].userId),
+        );
 
         console.log('userResp : ', userResp);
 
         const date = new Date(newRes[i].createdAt);
-        const dateString = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+        const dateString = `${date.getDate()} ${
+          months[date.getMonth()]
+        } ${date.getFullYear()}`;
         //     commentId:Text;
         //     comment : Text;
         //     hotelId : Text;
@@ -119,15 +181,15 @@ const ReelCard = ({item, reelIndex}) => {
         //     parentCommentId : Text;
         //     createdAt : Text;
         const newComment = {
-          commentId : newRes[i].commentId,
-          comment : newRes[i].comment,
-          hotelId : newRes[i].propertyId, // hotelId
-          userId : newRes[i].userId,
-          parentCommentId : newRes[i].parentCommentId,
-          createdAt : dateString,
+          commentId: newRes[i].commentId,
+          comment: newRes[i].comment,
+          hotelId: newRes[i].propertyId, // hotelId
+          userId: newRes[i].userId,
+          parentCommentId: newRes[i].parentCommentId,
+          createdAt: dateString,
         };
 
-        if(newComment.parentCommentId == ''){
+        if (newComment.parentCommentId == '') {
           comments.push(newComment);
           rootCount += 1;
           setLoading(false);
@@ -135,14 +197,14 @@ const ReelCard = ({item, reelIndex}) => {
         } else {
           let index = -1;
           for (let j = 0; j < comments.length; j++) {
-            if(comments[j].commentId == newComment.parentCommentId){
+            if (comments[j].commentId == newComment.parentCommentId) {
               index = j;
             }
           }
-          if(index != -1){
+          if (index != -1) {
             comments[index] = {
               ...comments[index],
-              replies : [...comments[index].replies, newComment],
+              replies: [...comments[index].replies, newComment],
             };
             replyCount += 1;
             setReelComments([...comments]);
@@ -153,14 +215,11 @@ const ReelCard = ({item, reelIndex}) => {
             setLoading(false);
           }
         }
-
-
       }
 
       // newRes.map(async r => {
       //   setLoading(true)
       //   let userResp = await actors?.userActor?.getUserByPrincipal(Principal.fromText(r[1].userId));
-
 
       //   console.log('userResp : ', userResp);
       //   const date = new Date(r[1].createdAt)
@@ -206,8 +265,6 @@ const ReelCard = ({item, reelIndex}) => {
       //     }
       //   }
       // });
-
-
     } catch (err) {
       console.log('err fetching comments : ', err);
       setLoading(false);
@@ -289,24 +346,36 @@ const ReelCard = ({item, reelIndex}) => {
     // });
   };
 
+  
+
+  // this --------------------------------------
   const updateLike = async () => {
     setLiked(!liked);
     setLikeDisabled(true);
+    // propertyId, userPrincipal
     await axios
-      .patch(`${baseURL}/api/v1/updateLikesOnHotel`, {
-        user: principle,
-        hotelId: item?.hotelId,
+      .put(`${baseURL}/api/v1/property/updateLikes`, {
+        propertyId: item?.propertyId, 
+        userPrincipal : principle,
       })
       .then(res => {
         console.log('updated like : ', res.data);
         console.log('includes principal : ', item?.likedBy.includes(principle));
+        setReelLikes(res.data.likes);
         setLikeDisabled(false);
       })
       .catch(err => {
         setLikeDisabled(false);
-        console.log(err);
+        console.log('error updating like : ', err);
       });
   };
+
+  useEffect(() => {
+    getCurrentLocation();
+    // console.log('distance : ', haversineDistance(coord1, coord2));
+    const dist = haversineDistance(coord1, coord2);
+    setDistance(dist);
+  }, []);
 
   useEffect(() => {
     setLiked(item?.likedBy.includes(principle));
@@ -331,6 +400,9 @@ const ReelCard = ({item, reelIndex}) => {
           ) : (
             <Icon name="hearto" color={COLORS.black} size={25} />
           )}
+          <Text style={{color: COLORS.black, fontSize: SIZES.small}}>
+            {reelLikes}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           disabled={user?.firstName == undefined}
@@ -359,8 +431,8 @@ const ReelCard = ({item, reelIndex}) => {
       </View>
       <View style={styles.infoCont}>
         <Text style={styles.infoTitle}>{item?.propertyName}</Text>
-        <Text style={styles.infoText}>499 kilometers away</Text>
-        <Text style={styles.infoText}>1-6 Dec</Text>
+        <Text style={styles.infoText}>{distance} kilometers away</Text>
+        <Text style={styles.infoText}>{changeDateFormat(item?.availableFrom) + ' - ' + changeDateFormat(item?.availableTill)}</Text>
         <Text style={styles.infoText}>
           <Text style={{fontWeight: 'bold'}}>${item?.price}</Text> night
         </Text>
