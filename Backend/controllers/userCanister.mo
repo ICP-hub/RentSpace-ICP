@@ -14,7 +14,7 @@ import UserTypes "../types/userTypes";
 shared ({ caller = owner }) actor class User() {
     var userRecord = TrieMap.TrieMap<Principal, UserTypes.UserInfo>(Principal.equal, Principal.hash);
     var anualRegisterFrequency = TrieMap.TrieMap<UserTypes.Year, UserTypes.AnnualData>(Text.equal, Text.hash);
-    var admin : [UserTypes.AdminId] = []; // make it stable array for main net
+    // var admin : [UserTypes.AdminId] = []; // make it stable array for main net
 
     // Register a new user
     public shared ({ caller }) func registerUser(userData : UserTypes.User) : async Result.Result<Text, Text> {
@@ -183,10 +183,10 @@ shared ({ caller = owner }) actor class User() {
     // Get anual registered users
     public shared ({ caller }) func getAnnualRegisterByYear(year : Text) : async Result.Result<UserTypes.AnnualData, Text> {
         try {
-            let isAdmin = await UtilityFunc.getAdminFromArray(caller, admin);
-            if (isAdmin == false) {
-                return #err("User not authorized to access this data");
-            };
+            // let isAdmin = await UtilityFunc.getAdminFromArray(caller, admin);
+            // if (isAdmin == false) {
+                // return #err("User not authorized to access this data");
+            // };
             switch (anualRegisterFrequency.get(year)) {
                 case (null) {
                     return #err("No user registered in this year");
