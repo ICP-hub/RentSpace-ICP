@@ -190,7 +190,7 @@ const UpdateProfile = ({setEditProfile}) => {
         <TouchableOpacity onPress={()=>{
           chooseUserImg()
         }}>
-          <Icon name='pluscircle' size={20} color={COLORS.mainPurple} style={styles.iconPlus}/>
+          <Icon name='pluscircle' size={20} color={COLORS.black} style={styles.iconPlus}/>
           <Image source={userImg.uri==null?userImg:{uri:userImg.uri}} style={styles.img}/>
         </TouchableOpacity> 
         
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: '100%',
         paddingVertical:40,
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG
       },
       titleCont:{
         display:'flex',
@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
 
       },
       inputs:{
-        borderColor: COLORS.inputBorder,
+        borderColor: COLORS.black,
         borderWidth: 1,
         borderRadius: 10,
         width: '80%',

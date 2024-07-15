@@ -85,6 +85,7 @@ const RateHawkBookingPage = ({showSelf, transferData}) => {
     await axios
       .post(`${baseUrl}/api/v1/hotel/RateHawk/getHashForSampleHotel`, postData)
       .then(response => {
+        console.log("first resp : ", response.data.data.data.hotels[0])
         console.log(
           'Response : ',
           response.data.data.data.hotels[0].rates[0].book_hash,
