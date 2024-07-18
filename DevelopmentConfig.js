@@ -5,6 +5,8 @@ export const host = production ? 'https://icp-api.io' : 'http://127.0.0.1:4943';
 
 export const nodeBackend = production ? 'https://rentspace.kaifoundry.com' : 'http://localhost:5000';
 
+export const payPalUrl = "https://api-m.sandbox.paypal.com";
+
 export const ids = {
   userCan: production
     ? 'ttotv-cyaaa-aaaao-a3o2a-cai'

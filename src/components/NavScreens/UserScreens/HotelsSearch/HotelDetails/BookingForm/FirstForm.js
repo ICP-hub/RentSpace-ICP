@@ -31,6 +31,7 @@ const FirstForm = ({setBookingForm, item, setOpen}) => {
     bookingDuration: 1,
   });
 
+  // console.log("item on 1st form : ", item.payPalId);
   const book = async (booking, notify) => {
     if (booking.paymentStatus) {
       setLoading(true);

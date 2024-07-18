@@ -23,6 +23,8 @@ module{
         #ckBTC:{id:Nat};
         #ckETH:{id:Nat};
         #sol;
+        #creditCard;
+        #paypal;
     };
     public type AnnualData = {
         jan : Nat;

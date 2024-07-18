@@ -20,6 +20,8 @@ shared({caller=owner}) actor class Booking(){
     var userBookingRecord = TrieMap.TrieMap<Principal,[BookingTypes.BookingInfo]>(Principal.equal,Principal.hash);
     var bookingFreq = TrieMap.TrieMap<Text,BookingTypes.AnnualData>(Text.equal,Text.hash);
     var solanaPayments:Nat=0;
+    var creditCardPayments:Nat=0;
+    var paypalPayments:Nat=0;
 
     let icpLedger = "ryjl3-tyaaa-aaaaa-aaaba-cai";
     let ckbtcLedger = "mxzaz-hqaaa-aaaar-qaada-cai";
@@ -71,6 +73,16 @@ shared({caller=owner}) actor class Booking(){
                 case(#sol){
                     payId:="sol "# Nat.toText(solanaPayments);
                     solanaPayments:= solanaPayments+1;
+                    // return #err("not complete");
+                };
+                case(#creditCard){
+                    payId:="creditCard "# Nat.toText(creditCardPayments);
+                    creditCardPayments:= creditCardPayments+1;
+                    // return #err("not complete");
+                };
+                case(#paypal){
+                    payId:="paypal "# Nat.toText(paypalPayments);
+                    paypalPayments:= paypalPayments+1;
                     // return #err("not complete");
                 };
 

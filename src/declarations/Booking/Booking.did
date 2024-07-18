@@ -22,7 +22,9 @@ type PaymentType =
  variant {
    ckBTC: record {id: nat;};
    ckETH: record {id: nat;};
+   creditCard;
    icp: record {id: nat;};
+   paypal;
    sol;
  };
 type BookingInput = 

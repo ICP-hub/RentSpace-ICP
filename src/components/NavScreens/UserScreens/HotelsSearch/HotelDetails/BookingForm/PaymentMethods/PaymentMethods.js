@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { COLORS,SIZES } from '../../../../../../../constants/themes'
 import Option from './Option'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
+
 
 const PaymentMethods = ({setMethod,method,connect,item}) => {
   const methods=[
@@ -34,6 +36,10 @@ const PaymentMethods = ({setMethod,method,connect,item}) => {
       label:'creditCard',
       icon:<Icon name='credit-card' color={COLORS.black} size={25}/>
     },
+    {
+      label:'paypal',
+      icon:<Icon2 name='paypal' color={COLORS.black} size={25}/>
+    }
   ]
   useEffect(()=>{
     console.log(item?.paymentMethods.includes("ICP"))

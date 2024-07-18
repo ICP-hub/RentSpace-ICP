@@ -61,6 +61,10 @@ import {fromHexString} from '@dfinity/candid';
 import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
 import {clearScreenDown} from 'readline';
 import Rooms from './RoomSelection/Rooms';
+import { payPalUrl} from '../../../../../../../DevelopmentConfig';
+import PayPalApi from './Paypal/PayPalApi';
+import queryString from 'query-string';
+
 
 const onConnectRedirectLink = 'rentspace://onConnect';
 const connection = new Connection(clusterApiUrl('devnet'));
@@ -116,6 +120,75 @@ const BookingFormComp = ({
   const [deepLink, setDeepLink] = useState('');
   const [phantomModal, setPhantomModal] = useState(false);
 
+  // --------------------- paypal functionality -------------------
+  const [paypalModal, setPaypalModal] = useState(false);
+  const [approvedUrl, setApprovedUrl] = useState('');
+  const [accessToken, setAccessToken] = useState('');
+
+  console.log("Paypal ID in form : ", item?.payPalId);
+
+  const onPayPal = async () => {
+    try {
+      const token = await PayPalApi.generateToken(item?.payPalId, item?.payPalSecret);
+      console.log("PayPal Token : ", token);
+      setAccessToken(token);
+      const res = await PayPalApi.createOrder(token, total);
+      console.log("PayPal Order : ", res);
+      // console.log("Approve : ", res?.links[1]?.href);
+      // setApprovedUrl(res?.links[1]?.href);
+
+      if(!!res?.links){
+        const findUrl = res?.links.find(data => data.rel == 'approve');
+        console.log("Approve : ", findUrl);
+        setApprovedUrl(findUrl?.href);
+        setPaypalModal(true);
+      }
+      
+    } catch (error) {
+      console.log("Error in onPayPal: ", error);
+    }
+  };
+
+  const onUrlChange = (webViewState) => {
+    console.log("webViewState : ", webViewState);
+    if(webViewState.url.includes('https://example.com/cancel')){
+      setPaypalModal(false);
+      console.log("Payment Cancelled");
+      return;
+    }
+    if(webViewState.url.includes('https://example.com/return')){
+
+      const urlValue = queryString.parseUrl(webViewState.url);
+
+      console.log("URL Value : ", urlValue);
+
+      const {token} = urlValue.query;
+
+      console.log("Token : ", token);
+
+      if(!!token){
+        paymentSuccess(token);
+      }
+    }
+  };
+
+  const paymentSuccess = async (id) => {
+    try {
+      const res = await PayPalApi.capturePayment(id, accessToken);
+
+      console.log("Payment Capture : ", res);
+      Alert.alert("Payment Success");
+      setPaypalModal(false);
+      console.log("totalBill for creditCard : ", totalBill);
+      // afterPaymentFlow('creditCard Payment', 100);
+      afterPaymentFlow('Credit card payment', 100);
+      
+    } catch (error) {
+      console.log("error raised in payment capture : ", error);
+    }
+  };
+  // ---------------------------------------------------------------
+
   //booking flow general functions
   function notifyBookingConfirm() {
     console.log('hoetl item : ', item?.propertyName);
@@ -132,16 +205,24 @@ const BookingFormComp = ({
       let opt = {
         id: parseInt(id),
       };
+
       if (paymentMethod == 'ckEth') {
         paymentOpt = {ckETH: opt};
       } else if (paymentMethod == 'SOL') {
         paymentOpt = {sol: null};
       } else if (paymentMethod == 'ckBTC') {
         paymentOpt = {ckBTC: opt};
-      } else {
+      } else if (paymentMethod == 'creditCard'){
+        paymentOpt = {creditCard: null};
+      } else if (paymentMethod == 'paypal'){
+        paymentOpt = {paypal: null};
+      }
+      else {
         paymentOpt = {icp: opt};
       }
-      console.log(paymentOpt, paymentMethod, obj);
+      console.log("POpp :> ", paymentOpt, "PMeth :> ", paymentMethod, "Obj :> ", obj, "AmNt :> ", amnt);
+
+      console.log("Booking Actor : ", actors?.bookingActor?.createBooking);
 
       let bookingRes = await actors?.bookingActor?.createBooking(
         paymentOpt,
@@ -167,7 +248,7 @@ const BookingFormComp = ({
         setOpen(false);
       }, 2000);
     } catch (err) {
-      console.log(err);
+      console.log("the error is : ", err);
       setLoading(false);
       Dialog.show({
         type: ALERT_TYPE.DANGER,
@@ -177,6 +258,9 @@ const BookingFormComp = ({
       });
     }
   };
+
+
+  
 
   const afterPaymentFlow = async (paymentId, amnt) => {
     // setBooking({...booking, paymentStatus: true, paymentId: paymentId});
@@ -189,12 +273,15 @@ const BookingFormComp = ({
     //   // bookedTill:"end"
     // };
     // alert("in after payment")
-    console.log(booking);
+    console.log("booking : ", booking);
+    console.log("paymentId : ", paymentId);
+    console.log("amnt : ", amnt);
+
     book(booking, notifyBookingConfirm, amnt, paymentId);
     setBalanceScreen(false);
   };
-  //crypto payment functions except solana
 
+  //crypto payment functions except solana
   const transferApprove = async (sendAmount, sendPrincipal, tokenActor) => {
     setLoading(true);
     console.log('metaData[decimals]', metaData);
@@ -559,7 +646,19 @@ const BookingFormComp = ({
       getCryptoPrice();
       console.log('SOL selected!');
       setPaymentType('phantom');
-    } else {
+    }
+    //-------------------------------------------------------------------------- PayPal for credit card 
+    else if (paymentMethod == 'creditCard') { 
+      // Alert.alert("PayPal", "PayPal payment is choosen !");
+      setPaymentType('paypal');
+      // setPaymentType('fiat');
+    }
+    else if (paymentMethod == 'paypal') {
+      console.log("PayPal selected!");
+      setPaymentType('paypal');
+    }
+    
+    else {
       Alert.alert(
         'KYC needed',
         'For this option, if you are a first time transak user, you may need to complete your KYC!',
@@ -571,6 +670,8 @@ const BookingFormComp = ({
   // useEffect(() => {
   //   console.log("Room Data : ", roomData);
   // }, [roomData]);
+
+  console.log("PayPal Approved URL : ", approvedUrl)
 
   return (
     <View style={styles.page}>
@@ -650,7 +751,14 @@ const BookingFormComp = ({
                 // connect()
                 // sendNewTransaction()
                 setPhantomModal(true);
-              } else {
+              } 
+              // ----------------------------------------- PayPal for credit card
+              else if (paymentType == 'paypal') {
+                  Alert.alert("PayPal", "PayPal payment selected!");
+                  console.log(payPalUrl);
+                  onPayPal();
+              } 
+              else {
                 getBalance();
                 setBalanceScreen(true);
               }
@@ -766,6 +874,21 @@ const BookingFormComp = ({
           setRoomData={setRoomData}
           setRoomModal={setRoomModal}
         />
+      </Modal>
+
+      {/* Paypal Modal */}
+      <Modal
+        visible={paypalModal}
+        animationType="fade"
+        onRequestClose={() => setPaypalModal(false)}    
+      >
+        <View style={{flex:1}}>
+          <WebView 
+            source={{uri: approvedUrl}}
+            onNavigationStateChange={onUrlChange}
+          />
+        </View>
+
       </Modal>
     </View>
   );

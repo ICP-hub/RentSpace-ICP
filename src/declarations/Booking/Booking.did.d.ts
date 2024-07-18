@@ -44,8 +44,10 @@ export interface BookingInput {
 }
 export type PaymentType = { 'icp' : { 'id' : bigint } } |
   { 'sol' : null } |
+  { 'creditCard' : null } |
   { 'ckBTC' : { 'id' : bigint } } |
-  { 'ckETH' : { 'id' : bigint } };
+  { 'ckETH' : { 'id' : bigint } } |
+  { 'paypal' : null };
 export type Result = { 'ok' : AnnualData } |
   { 'err' : string };
 export type Result_1 = { 'ok' : BookingInfo } |

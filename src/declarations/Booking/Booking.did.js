@@ -2,8 +2,10 @@ export const idlFactory = ({ IDL }) => {
   const PaymentType = IDL.Variant({
     'icp' : IDL.Record({ 'id' : IDL.Nat }),
     'sol' : IDL.Null,
+    'creditCard' : IDL.Null,
     'ckBTC' : IDL.Record({ 'id' : IDL.Nat }),
     'ckETH' : IDL.Record({ 'id' : IDL.Nat }),
+    'paypal' : IDL.Null,
   });
   const BookingInput = IDL.Record({
     'hotelId' : IDL.Text,

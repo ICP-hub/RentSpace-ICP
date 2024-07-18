@@ -18,7 +18,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setListing} from '../../../../redux/NewListing/actions';
 import MethodOption from './MethodOption';
 import GetWalletId from './GetWalletId';
-import { Dialog,ALERT_TYPE } from 'react-native-alert-notification';
+import {Dialog, ALERT_TYPE} from 'react-native-alert-notification';
+import GetPaypal from './GetPaypal';
 
 const methods = [
   {
@@ -67,10 +68,13 @@ const methods = [
       </Text>
     ),
   },
+  {
+    label: 'paypal',
+    icon: <Icon2 name="paypal" color={COLORS.black} size={25} />,
+  },
 ];
 
 const Pricing = ({setHostModal, pos}) => {
- 
   const [price, setPrice] = useState(0);
   const {listing} = useSelector(state => state.listingReducer);
   const dispatch = useDispatch();
@@ -78,30 +82,51 @@ const Pricing = ({setHostModal, pos}) => {
   const [walletIDModal, setWalletIDModal] = useState(false);
   const [phantomAccID, setPhantomAccID] = useState('');
   const [phantomAccIDValidated, setPhantomAccIDValidated] = useState(false);
+  const [paypalModal, setPaypalModal] = useState(false);
+
+  const [clientID, setClientID] = useState();
+  const [clientSecret, setClientSecret] = useState();
+  const [creditcardForwards, setCreditcardForwards] = useState(false);
 
   const chechSol = () => {
     if (paymentMethods.includes('SOL') && !phantomAccIDValidated) {
       console.log('sol is selected');
       setWalletIDModal(true);
       return false;
-    } else {
+    } 
+    // ------------------ >>>
+    // if (paymentMethods.includes('creditCard') && !clientID && !clientSecret) {
+    //   setPaypalModal(true);
+    //   return false;
+    // } 
+    // if (paymentMethods.includes('paypal') && !clientID && !clientSecret){
+    //   setPaypalModal(true);
+    //   return false;
+    // }
+    if ((paymentMethods.includes('creditCard') || paymentMethods.includes('paypal')) && !clientID && !clientSecret) {
+      setPaypalModal(true);
+      return false;
+    }
+    
+    else {
       return checkEmpty();
     }
   };
 
   const checkEmpty = () => {
     if (price == 0) {
-        // Alert.alert(
-        //   'No price selected',
-        //   'You cannot add a listing for free! Please add a price for it',
-        // );
-        Dialog.show({
-          type:ALERT_TYPE.WARNING,
-          title:'No price selected',
-          textBody:'You cannot add a listing for free! Please add a price for it',
-          button:'OK',
-        })
-      
+      // Alert.alert(
+      //   'No price selected',
+      //   'You cannot add a listing for free! Please add a price for it',
+      // );
+      Dialog.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'No price selected',
+        textBody:
+          'You cannot add a listing for free! Please add a price for it',
+        button: 'OK',
+      });
+
       return false;
     } else if (paymentMethods.length == 0) {
       // Alert.alert(
@@ -109,19 +134,23 @@ const Pricing = ({setHostModal, pos}) => {
       //   'Add atleast one payment method through which you are willing to accept payments',
       // );
       Dialog.show({
-        type:ALERT_TYPE.WARNING,
-        title:'No payment method selected',
-        textBody:'Add atleast one payment method through which you are willing to accept payments',
-        button:'OK',
-      })
-        
-    } else {
+        type: ALERT_TYPE.WARNING,
+        title: 'No payment method selected',
+        textBody:
+          'Add atleast one payment method through which you are willing to accept payments',
+        button: 'OK',
+      });
+    } 
+    else {
+      console.log(phantomAccID, clientID, clientSecret);
       dispatch(
         setListing({
           ...listing,
           hotelPrice: price.toString(),
           phantomWalletID: phantomAccID,
           paymentMethods: paymentMethods,
+          payPalId: clientID,
+          payPalSecret: clientSecret,
         }),
       );
       return true;
@@ -190,6 +219,7 @@ const Pricing = ({setHostModal, pos}) => {
         pos={pos}
         step={3}
         nextFunc={chechSol}
+        // nextFunc={dispatchListing}
         back={2}
       />
       <Modal
@@ -205,7 +235,24 @@ const Pricing = ({setHostModal, pos}) => {
           setWalletIDModal={setWalletIDModal}
         />
       </Modal>
-      
+
+      {/* Modal for paypal  */}
+
+      <Modal
+        transparent
+        visible={paypalModal}
+        onRequestClose={() => {
+          setPaypalModal(false);
+        }}>
+        <GetPaypal
+          clientID={clientID}
+          setClientID={setClientID}
+          clientSecret={clientSecret}
+          setClientSecret={setClientSecret}
+          setCreditcardForwards={setCreditcardForwards}
+          setPaypalModal={setPaypalModal}
+        />
+      </Modal>
     </View>
   );
 };

@@ -166,6 +166,8 @@ const Congratulations = ({setHostModal, pos, getHotelDetails}) => {
         propertyType: listing?.propertyType,
         phantomWalletID: listing?.phantomWalletID,
         paymentMethods: listing?.paymentMethods,
+        payPalId : listing?.payPalId,
+        payPalSecret : listing?.payPalSecret,
       };
 
       console.log('Data => ', data);

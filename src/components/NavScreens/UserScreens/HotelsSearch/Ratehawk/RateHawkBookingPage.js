@@ -24,12 +24,19 @@ const RateHawkBookingPage = ({showSelf, transferData}) => {
   // const baseUrl='https://rentspace.kaifoundry.com/api/v1'
   // const baseUrl='http://localhost:5000/api/v1'
 
+  const {actors} = useSelector(state => state.actorReducer);
+
   const baseUrl = nodeBackend;
 
   const customHotelData = {
     hotelname: transferData.hotelName,
     hotelAddress: transferData.hotelAddress,
   };
+
+  const [tokenActor, setTokenActor] = useState(null);
+  
+  const [cryptoPrice,setCryptoPrice] = useState(0);
+  const [paymentMethod, setPaymentMethod] = useState('ICP');
 
   const [submit, setSubmit] = useState(false);
 
@@ -275,6 +282,70 @@ const RateHawkBookingPage = ({showSelf, transferData}) => {
       });
   }
 
+  // ------------------- ICP Testing -------------------
+
+
+  const payWithICP = async () => {
+    console.log('payWithICP called');
+    getCryptoPrice(paymentMethod);
+  };
+
+
+  const getCryptoPrice = async method => {
+    await axios
+      .get('https://api.coinbase.com/v2/exchange-rates?currency=USD')
+      .then(res => {
+        console.log(res?.data?.data?.rates?.ICP, paymentMethod);
+        if (paymentMethod == 'ICP') {
+          setCryptoPrice(res?.data?.data?.rates?.ICP);
+        } else if (paymentMethod == 'ckBTC') {
+          setCryptoPrice(res?.data?.data?.rates?.BTC);
+          console.log('BTC ', res?.data?.data?.rates?.BTC);
+        } else if (paymentMethod == 'ckEth') {
+          setCryptoPrice(res?.data?.data?.rates?.ETH);
+          console.log('ETH', res?.data?.data?.rates?.ETH);
+        } else if (paymentMethod == 'SOL') {
+          setCryptoPrice(res?.data?.data?.rates?.SOL);
+          console.log('SOL', res?.data?.data?.rates?.SOL);
+        } else {
+          console.log('else');
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  async function settingToken() {
+    let canID = '';
+    let newActor;
+    console.log(paymentMethod);
+    if (paymentMethod == 'ckBTC') {
+      newActor = actors?.ckbtcTokenActor;
+      setTokenActor(actors?.ckbtcTokenActor);
+    } else if (paymentMethod == 'ckEth') {
+      newActor = actors?.ckETHtokenActor;
+      setTokenActor(actors?.ckETHtokenActor);
+    } else {
+      newActor = actors?.icpTokenActor;
+      setTokenActor(actors?.icpTokenActor);
+    }
+    setTokenActor(newActor);
+    console.log('token actor', tokenActor);
+    await newActor
+      .icrc1_metadata()
+      .then(res => {
+        console.log('icrc1_metadata res : ', res);
+
+        setMetaData(formatTokenMetaData(res));
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  useEffect(() => {}, [cryptoPrice]);
+
   return (
     <View style={styles.page}>
       <View style={styles.backIconCont}>
@@ -314,6 +385,11 @@ const RateHawkBookingPage = ({showSelf, transferData}) => {
             testBookingFunction();
           }}>
           <Text style={styles.btnText}>Confirm and Pay</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() => {payWithICP()}}>
+          <Text style={styles.btnText}>Pay with ICP</Text>
         </TouchableOpacity>
       </ScrollView>
 
