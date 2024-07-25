@@ -34,10 +34,10 @@ const KeyDetails = ({setIdprocess,pos}) => {
       <ListingCard/>
       <StatusCard item={processes[0]}/>
       <View style={styles.line}/>
-      <StatusCard item={processes[1]}/>
-      <View style={styles.line}/>
+      {/* <StatusCard item={processes[1]}/> */}
+      {/* <View style={styles.line}/> */}
       <VerifyBtn item={processes[2]} setIdprocess={setIdprocess} pos={pos}/>
-      <BottomBotton title={"Publish listing"} onClick={()=>{}}/>
+      {/* <BottomBotton title={"Publish listing"} onClick={()=>{}}/> */}
     </View>
   )
 }

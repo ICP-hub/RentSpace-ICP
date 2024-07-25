@@ -48,17 +48,17 @@ const Report = ({setReportPage}) => {
            I agree to treat everyone in the RentSpace community -regardless of their race, religion, national origin, ethnicity, skin colour, disability, sex, gender identity, sexual orientation or age - with respect, and without judgement or bias.
         </Text>
       </View>
-      <Text style={styles.sectionHeading}>
+      {/* <Text style={styles.sectionHeading}>
         Urgent neighborhood situations
       </Text>
       <Text style={styles.normalText}>
        You can report a party, noise complaint or neighbourhood concern here
-      </Text>
-      <TouchableOpacity style={styles.btn}>
+      </Text> */}
+      {/* <TouchableOpacity style={styles.btn}>
         <Text style={styles.btnText}>
           Request a call
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <Text style={styles.sectionHeading}>
         Urgent neighborhood situations
       </Text>

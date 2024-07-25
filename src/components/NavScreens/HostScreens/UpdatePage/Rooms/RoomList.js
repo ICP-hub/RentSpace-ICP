@@ -79,7 +79,7 @@ export default function RoomList({item, updateRooms, setRoomPopup}) {
               </View>
               <View style={styles.lowerInfos}>
                 <Text style={styles.lowerInfoTitle}>Price</Text>
-                <Text style={styles.price}>${room.roomPrice}/Night</Text>
+                <Text style={styles.price}>€{room.roomPrice}/Night</Text>
               </View>
               <TouchableOpacity onPress={() => deleteRoom(index)}>
                 <Text style={styles.deleteBtn}>Delete Room</Text>

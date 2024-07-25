@@ -16,7 +16,7 @@ const ListingCard = ({listing}) => {
       <View style={styles.textCont}>
         <View style={styles.textSubCont}>
             <Text style={styles.boldText}>{listing?.hotelTitle}</Text>
-            <Text style={styles.normalText}>
+            {/* <Text style={styles.normalText}>
                 <Text style={styles.normalTextCrossed}>
                     ${parseInt(listing?.hotelPrice)+2}
                 </Text>
@@ -25,7 +25,7 @@ const ListingCard = ({listing}) => {
                     ${listing?.hotelPrice}
                 </Text>
                 /night
-            </Text>
+            </Text> */}
         </View>
         <View style={styles.tagCont}>
             <Text style={styles.tag}>New{" "}</Text>

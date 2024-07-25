@@ -21,7 +21,7 @@ const Step2 = ({setHostModal,pos}) => {
         </View> */}
       </View>
       <Text style={styles.subTitle}>Step 2</Text>
-      <Text style={styles.title}>Make your place stand out</Text>
+      <Text style={styles.title}>Make your space stand out</Text>
       <Text style={styles.text}>
       Our comprehensive verification system checks details such as name, address, government ID and more to confirm the identity of guests who book on Rentspace.
       </Text>

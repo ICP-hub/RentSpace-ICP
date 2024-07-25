@@ -140,7 +140,7 @@ const EditRoomFinal = ({passIndex, room, item, updateRooms, closeModal, setRoomP
         <Text style={styles.fleidTitle}>Price</Text>
         <TextInput
           keyboardType="numeric"
-          placeholder={`$${lastItem.roomPrice}`}
+          placeholder={`€${lastItem.roomPrice}`}
           placeholderTextColor={COLORS.textLightGrey}
           style={styles.fleid}
           value={lastItem.roomPrice}

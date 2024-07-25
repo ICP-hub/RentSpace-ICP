@@ -18,7 +18,7 @@ shared ({caller=owner}) actor class Support(){
     var ticketRecords = TrieMap.TrieMap<Text,SupportTypes.Ticket>(Text.equal, Text.hash);
     var unresolvedTicketRecords = TrieMap.TrieMap<Text,SupportTypes.Ticket>(Text.equal, Text.hash);
     var supportChatRecords = TrieMap.TrieMap<Principal,[SupportTypes.SupportMessage]>(Principal.equal,Principal.hash);
-    var adminList:[Text] = ["oipae-tygga-efo77-64pmo-coupx-ulnm6-6m2em-oj2xf-aepkh-fxctl-hae"];
+    var adminList:[Text] = ["sfwko-hd7us-gen5t-ssuci-vfjwf-afepb-a7p4y-guh5l-s5n2e-zuxvt-dae"];
 
     //creates a new ticket
     public shared({caller}) func createTicket(ticket:SupportTypes.TicketInput,address:SupportTypes.Address):async Result.Result<Text,Text>{

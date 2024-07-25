@@ -36,7 +36,7 @@ shared ({ caller = owner }) actor class () {
         if (
             UtilityFunc.validText(hotelData.hotelTitle, 40) == false or
             UtilityFunc.validText(hotelData.hotelDes, 300) == false or
-            UtilityFunc.validText(hotelData.hotelLocation, 30) == false
+            UtilityFunc.validText(hotelData.hotelLocation, 300) == false
         ) {
             Debug.trap("Invalid Hotel Data");
         };

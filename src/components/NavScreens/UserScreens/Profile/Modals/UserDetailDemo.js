@@ -202,11 +202,11 @@ const styles = StyleSheet.create({
       backgroundColor:COLORS.white,
       borderBottomRightRadius:20,
       borderBottomLeftRadius:20,
-      height:'37%',
+      height:'38%',
       width:'100%',
       display:'flex',
       flexDirection:'column',
-      alignItems:'center'
+      alignItems:'center',
     },
     title:{
         fontSize:SIZES.medium,

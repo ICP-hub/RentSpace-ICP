@@ -106,7 +106,7 @@ const Listings = ({navigation}) => {
   return (
     <View style={styles.view}>
       <View style={styles.header}>
-        <Text style={styles.title}>Your listings</Text>
+        <Text style={styles.title}>Your Spaces</Text>
         <View style={styles.iconCont}>
           <TouchableOpacity style={styles.icon} onPress={getHotelDetails}>
             {/* <Icon name="collage" size={30} color={COLORS.black} /> */}
@@ -129,7 +129,7 @@ const Listings = ({navigation}) => {
         />
       ) : (
         <Text style={{color: COLORS.black, marginTop: 50}}>
-          Sorry! No listings to show
+          Sorry! No space to show
         </Text>
       )}
 

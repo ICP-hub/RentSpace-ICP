@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon2 from 'react-native-vector-icons/AntDesign';
+import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import {COLORS} from '../../../../constants/themes';
 import Icon4 from 'react-native-vector-icons/FontAwesome5';
 import Video from 'react-native-video';
@@ -28,9 +28,10 @@ import {nodeBackend} from '../../../../../DevelopmentConfig';
 import {ALERT_TYPE, Dialog, Toast} from 'react-native-alert-notification';
 import PhantomPayment from '../../UserScreens/HotelsSearch/HotelDetails/BookingForm/cryptoScreens/PhantomPayment';
 import GetWalletId from '../../../HostViewNew/Step3/Pricing/GetWalletId';
+import GetPaypal from '../../../HostViewNew/Step3/Pricing/GetPaypal';
+import PayPalModal from './Popups/PayPalModal';
 
 const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
-  
   // console.log(item.phantomWalletID);
 
   // console.log("Pass Data => ", passData);
@@ -44,12 +45,29 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
   const [phantomAccIDValidated, setPhantomAccIDValidated] = useState(false);
   const [markSOL, setMarkSOL] = useState(false);
 
-  const updatePhantomAccID = (id) => {
+  const [paypalMark, setPaypalMark] = useState(false);
+  const [paypalModal, setPaypalModal] = useState(false);
+  const [paypalClientID, setPaypalClientID] = useState(item.payPalId);
+  const [paypalClientSecret, setPaypalClientSecret] = useState(item.payPalSecret);
+
+
+  const updatePhantomAccID = id => {
     setPhantomAccID(id);
     setFinalData({...finalData, phantomWalletID: id});
   };
 
-  const UpdatePaymentMethods = (method) => {
+  const updatePaypalClientIDandSecret = (id,secret) => {
+
+    setFinalData({
+      ...finalData,
+      payPalId: id,
+      payPalSecret: secret,
+    });
+  };
+
+
+
+  const UpdatePaymentMethods = method => {
     let temp = finalData.paymentMethods;
     if (temp.includes(method)) {
       temp = temp.filter(e => e !== method);
@@ -88,7 +106,8 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
     btc: false,
     icp: false,
     creditCard: false,
-    sol : false,
+    sol: false,
+    payPal: false,
   });
 
   const [discounts, setDiscounts] = useState({
@@ -110,7 +129,9 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
     paymentMethods: [],
     rooms: passData.rooms,
     maxOccupancy: passData.maxOccupancy,
-    phantomWalletID : phantomAccID,
+    phantomWalletID: phantomAccID,
+    payPalId: paypalClientID,
+    payPalSecret: paypalClientSecret,
   });
 
   const videoControl = () => {
@@ -225,7 +246,9 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
   const saveAndExit = async () => {
     console.log('Save And Exit');
 
-    console.log('Final Data => ', finalData);
+    // setFinalData({...finalData, payPalId: paypalClientID, payPalSecret: paypalClientSecret});
+
+    console.log('Final Data => ', finalData.payPalId, finalData.payPalSecret);
 
     if (finalData.paymentMethods.length == 0) {
       // alert("Please Select Payment Methods")
@@ -284,7 +307,7 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
         }}>
         {/* sec1 */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Place Description</Text>
+          <Text style={styles.sectionTitle}>Space Description</Text>
         </View>
         <TextInput
           style={[styles.textInput, {height: 100, textAlignVertical: 'top'}]}
@@ -362,7 +385,7 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
         </View>
 
         {/* sec4 */}
-        <View style={styles.sectionHeader}>
+        {/* <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Price</Text>
         </View>
         <TextInput
@@ -373,8 +396,7 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
           onChangeText={text =>
             setFinalData({...finalData, price: text.toString()})
           }
-        />
-        
+        /> */}
 
         {/* sec5 */}
         <View style={styles.sectionHeader}>
@@ -484,6 +506,10 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
               //   paymentMethods: [...prevState.paymentMethods, 'creditCard'],
               // }));
               UpdatePaymentMethods('creditCard');
+              // initiate paypal wallet connection
+              if (payOption.payPal == false && payOption.creditCard == false) {
+                setPaypalModal(true);
+              }
             }}>
             <View
               style={
@@ -507,24 +533,40 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
               UpdatePaymentMethods('SOL');
               // initiate phantom wallet connection
 
-              if(payOption.sol == false){
+              if (payOption.sol == false) {
                 setPhantomModal(true);
               }
-              
-             
-              
-
             }}>
-            <View
-              style={
-                payOption.sol ? styles.payItemActive : styles.payItem
-              }>
+            <View style={payOption.sol ? styles.payItemActive : styles.payItem}>
               <Text
                 style={
                   payOption.sol ? styles.payItemTextActive : styles.payItemText
                 }>
                 SOL
               </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setPayOption({...payOption, payPal: !payOption.payPal});
+              // setFinalData(prevState => ({
+              //   ...prevState,
+              //   paymentMethods: [...prevState.paymentMethods, 'paypal'],
+              // }));
+              UpdatePaymentMethods('paypal');
+
+              // initiate paypal wallet connection
+              if (payOption.payPal == false && payOption.creditCard == false) {
+                setPaypalModal(true);
+              }
+            }}>
+            <View
+              style={payOption.payPal ? styles.payItemActive : styles.payItem}>
+              <Icon2
+                name="paypal"
+                color={payOption.payPal ? COLORS.white : COLORS.black}
+                size={30}
+              />
             </View>
           </TouchableOpacity>
         </View>
@@ -665,9 +707,32 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
         onRequestClose={() => {
           setPhantomModal(false);
         }}>
-        <GetWalletId phantomAccID={phantomAccID} setPhantomAccID={updatePhantomAccID} setPhantomAccIDValidated={setPhantomAccIDValidated} setWalletIDModal={setPhantomModal} />
+        <GetWalletId
+          phantomAccID={phantomAccID}
+          setPhantomAccID={updatePhantomAccID}
+          setPhantomAccIDValidated={setPhantomAccIDValidated}
+          setWalletIDModal={setPhantomModal}
+        />
       </Modal>
-      
+
+      <Modal
+        transparent
+        animationType="fade"
+        visible={paypalModal}
+        onRequestClose={() => {
+          setPaypalModal(false);
+        }}>
+        <PayPalModal
+        clientID = {paypalClientID}
+        clientSecret = {paypalClientSecret}
+        updatePaypal={updatePaypalClientIDandSecret}
+        setPaypalModal={()=>{
+          setPaypalModal(false);
+        }}
+        
+        />
+      </Modal>
+
       {/* Submit Modal */}
       {/* <Modal visible={submit} transparent>
         <SubmitUpdates />

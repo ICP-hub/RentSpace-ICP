@@ -321,7 +321,7 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
         </View> */}
         {/* fifth-section */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Title of your place</Text>
+          <Text style={styles.sectionTitle}>Title of your space</Text>
         </View>
         <View style={styles.sectionContent}>
           <TextInput

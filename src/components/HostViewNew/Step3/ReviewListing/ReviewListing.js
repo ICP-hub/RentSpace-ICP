@@ -42,7 +42,7 @@ const ReviewListing = ({setHostModal,pos}) => {
       <Text style={styles.subtitle}>What's next?</Text>
       <NextStepsCard item={todos[0]}/>
       <NextStepsCard item={todos[1]}/>
-      <NextStepsCard item={todos[2]}/>
+      {/* <NextStepsCard item={todos[2]}/> */}
       <BottomBtn back={3} setHostModal={setHostModal} pos={pos} step={3} nextFunc={()=>{return true}}/>
     </View>
   )

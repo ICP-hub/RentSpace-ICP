@@ -30,6 +30,18 @@ const AddReview = ({item,setAddReview}) => {
 
       console.log('Review add', actors.reviewActor);
 
+      if(review.title=='' || review.des==''){
+        setLoading(false)
+        Dialog.show({
+          title: 'Something went wrong',
+          type: ALERT_TYPE.WARNING,
+          textBody: 'Please fill all the fields',
+          button:'OK',
+
+        });
+        return
+      }
+
       let reviewRes=await actors?.reviewActor?.createReview(review?.hotelId,review)
       console.log('review creation response : ', reviewRes);
       if(reviewRes?.err!=undefined){

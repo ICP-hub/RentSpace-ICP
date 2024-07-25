@@ -114,21 +114,18 @@ const Pricing = ({setHostModal, pos}) => {
   };
 
   const checkEmpty = () => {
-    if (price == 0) {
-      // Alert.alert(
-      //   'No price selected',
-      //   'You cannot add a listing for free! Please add a price for it',
-      // );
-      Dialog.show({
-        type: ALERT_TYPE.WARNING,
-        title: 'No price selected',
-        textBody:
-          'You cannot add a listing for free! Please add a price for it',
-        button: 'OK',
-      });
+    // if (price == 0) {
+    //   Dialog.show({
+    //     type: ALERT_TYPE.WARNING,
+    //     title: 'No price selected',
+    //     textBody:
+    //       'You cannot add a listing for free! Please add a price for it',
+    //     button: 'OK',
+    //   });
 
-      return false;
-    } else if (paymentMethods.length == 0) {
+    //   return false;
+    // } 
+    if (paymentMethods.length == 0) {
       // Alert.alert(
       //   'No payment method selected',
       //   'Add atleast one payment method through which you are willing to accept payments',
@@ -179,7 +176,7 @@ const Pricing = ({setHostModal, pos}) => {
               />
             ))}
           </View>
-          <Text style={styles.title}>Now, set your price</Text>
+          {/* <Text style={styles.title}>Now, set your price</Text>
           <Text style={styles.text}>You can change it any time as well</Text>
           <View style={styles.priceCont}>
             <TextInput
@@ -190,8 +187,8 @@ const Pricing = ({setHostModal, pos}) => {
               }}
             />
             <Icon2 name="pencil" size={12} color={COLORS.black} />
-          </View>
-          <View style={styles.pricingCard}>
+          </View> */}
+          {/* <View style={styles.pricingCard}>
             <View style={styles.pricingRow}>
               <Text style={styles.pricingNormal}>Base price</Text>
               <Text style={styles.pricingNormal}>${price}</Text>
@@ -205,12 +202,12 @@ const Pricing = ({setHostModal, pos}) => {
               <Text style={styles.pricingBold}>Guest price before taxes</Text>
               <Text style={styles.pricingBold}>${Number(price) + 0}</Text>
             </View>
-          </View>
-          <View style={styles.earningCard}>
-            <Text style={styles.earningText}>You earn</Text>
+          </View> */}
+          {/* <View style={styles.earningCard}> */}
+            {/* <Text style={styles.earningText}>You earn</Text> */}
             {/* <Text style={styles.bigText}>${price < 200 ? 0 : price - 200}</Text> */}
-            <Text style={styles.bigText}>${price}</Text>
-          </View>
+            {/* <Text style={styles.bigText}>${price}</Text> */}
+          {/* </View> */}
         </View>
       </ScrollView>
 

@@ -6,7 +6,6 @@ import HotelType from './Step1/HotelType/HotelType'
 import HotelLocation from './Step1/HotelLocation.js/HotelLocation'
 import BasicDetails from './Step1/BasicDetails.js/BasicDetails'
 import Amenities from './Step1/Amenities/Amenities'
-import Room from './Step1/RoomTypes/Room'
 
 const Step1Manager = ({hostModal,setHostModal}) => {
 
@@ -19,9 +18,9 @@ const Step1Manager = ({hostModal,setHostModal}) => {
             component=<Amenities setHostModal={setHostModal} pos={5}/>
             break
         case(6):
-            // component=<HotelType setHostModal={setHostModal} pos={6}/>
-            // setHostModal(7)
-            component=<Room setHostModal={setHostModal} pos={6}/>
+            component=<HotelType setHostModal={setHostModal} pos={6}/>
+            setHostModal(7)
+            // component=<Room setHostModal={setHostModal} pos={6}/>
             break
         case(7):
             component=<HotelLocation setHostModal={setHostModal} pos={7}/>

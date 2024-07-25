@@ -14,6 +14,7 @@ const HotelTitle = ({setHostModal,pos}) => {
     const {listing}=useSelector(state=>state.listingReducer)
     const dispatch=useDispatch()
 
+    console.log(listing);
     const checkEmpty=()=>{
         if(title==''){
             // alert("You cannot leave title empty")

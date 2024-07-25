@@ -19,6 +19,8 @@ import {useSelector} from 'react-redux';
 import axios from 'axios';
 import {nodeBackend} from '../../../../../../DevelopmentConfig';
 
+import {createTokenActor, formatTokenMetaData} from '../../HotelsSearch/HotelDetails/BookingForm/utils/utils';
+
 const RateHawkBookingPage = ({showSelf, transferData}) => {
   const {user} = useSelector(state => state.userReducer);
   // const baseUrl='https://rentspace.kaifoundry.com/api/v1'
@@ -34,6 +36,7 @@ const RateHawkBookingPage = ({showSelf, transferData}) => {
   };
 
   const [tokenActor, setTokenActor] = useState(null);
+  const [metaData, setMetaData] = useState(null);
   
   const [cryptoPrice,setCryptoPrice] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('ICP');
@@ -288,6 +291,7 @@ const RateHawkBookingPage = ({showSelf, transferData}) => {
   const payWithICP = async () => {
     console.log('payWithICP called');
     getCryptoPrice(paymentMethod);
+    settingToken();
   };
 
 

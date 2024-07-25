@@ -13,10 +13,15 @@ const ChatHeader = ({setSupportChatPage}) => {
       <View style={styles.textCont}>
         <Text style={styles.name}>Support Chat</Text>
         <Text style={styles.status}>
-            {
+            {/* {
                 status?
                 "Äctive Now":
                 "Last seen on Monday"
+            } */}
+            {
+                status?
+                "Online":
+                "Offline"
             }
         </Text>
       </View>

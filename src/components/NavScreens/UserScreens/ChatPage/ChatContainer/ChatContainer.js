@@ -205,7 +205,7 @@ const ChatContainer = ({navigation}) => {
         <View style={styles.view}>
           <View style={styles.header}>
             <Text style={styles.title}>Your Chats</Text>
-            <View style={styles.iconCont}>
+            {/* <View style={styles.iconCont}>
               <TouchableOpacity
                 style={styles.icon}
                 onPress={() => console.log('newChat : ', newChat)}>
@@ -214,7 +214,7 @@ const ChatContainer = ({navigation}) => {
               <TouchableOpacity style={styles.icon}>
                 <Icon2 name="plus" size={30} color={COLORS.textLightGrey} />
               </TouchableOpacity>
-            </View>
+            </View> */}
           </View>
           <FlatList
             style={styles.list}
@@ -246,7 +246,7 @@ const ChatContainer = ({navigation}) => {
       <View style={styles.view}>
         <View style={styles.header}>
           <Text style={styles.title}>Your Chats</Text>
-          <View style={styles.iconCont}>
+          {/* <View style={styles.iconCont}>
             <TouchableOpacity
               style={styles.icon}
               onPress={() => {
@@ -257,7 +257,7 @@ const ChatContainer = ({navigation}) => {
             <TouchableOpacity style={styles.icon}>
               <Icon2 name="plus" size={30} color={COLORS.textLightGrey} />
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
         <View style={styles.nothingCont}>
           <Text style={styles.nothingText}>You don't have any chats yet!</Text>
