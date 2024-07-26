@@ -1,6 +1,26 @@
-# React native internet identity integration
+# RentSpace 
 
-This Documentation is for referance to anyone trying to integrate internet identity authentication with react native.
+RentSpace is a decentralized application that allows users to rent out their spaces to other users. The application is built using React Native and Dfinity SDK. As an innovative startup, we combine the advantages of blockchain, cryptocurrency payments, and TikTok-style video content to transform the user experience.
+
+Crypto and Fiat Flexibility: RentSpace enables tenants to pay rental deposits, fees and rent in either cryptocurrency or traditional money. We meet users where they are while expanding access to crypto’s advantages.
+
+Collaborative Booking: Our smart contracts allow both individual and group bookings. Friends, families, or co-workers can transparently pool funds and formally share rental responsibility.
+
+Rewards Programs: RentSpace will have an integrated actions-based rewards system. Users earn crypto rewards for rent paid, reviews written, referrals sent, and other platform contributions.
+
+Our reward system includes points, levels and badges.
+
+- create and connect Internet Identity - 50 points
+- register and verify identity - 100 points
+- connect socials and follow RentSpace (twitter, telegram, discord) - 25 points per social profile
+- first time rent via RentSpace - 500 points with a multiplier 5x
+- first time host via RentSpace - 1000 points with a multiplier 5x
+- mint RentSpace Identity NFT - 200 points 
+- daily check in transaction in ICP or Solana - 10 points per day
+
+
+
+## RentSpace App Setup
 
 ## Versions Used : 
 
