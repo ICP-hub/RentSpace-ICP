@@ -51,63 +51,63 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
     // getHotelList()
   },[])
 
-  const makeHost=async()=>{
-    setLoading(true)
-    console.log("You are host now")
-    console.log({...user
-      ,userRole:'Host',
-      isHost:true,
-      userImage:(user?.userImage)!=""?user?.userImage:"img",
-      userGovID:((user?.userGovID==""||user?.userGovID==null)?"Not Provided":user?.userGovID)})
-    await actors.userActor?.updateUserInfo({...user
-      ,userRole:'Host',
-      isHost:true,
-      userImage:(user?.userImage)!=""?user?.userImage:"img",
-      userGovID:((user?.userGovID==""||user?.userGovID==null)?"Not Provided":user?.userGovID
+  // const makeHost=async()=>{
+  //   setLoading(true)
+  //   console.log("You are host now")
+  //   console.log({...user
+  //     ,userRole:'Host',
+  //     isHost:true,
+  //     userImage:(user?.userImage)!=""?user?.userImage:"img",
+  //     userGovID:((user?.userGovID==""||user?.userGovID==null)?"Not Provided":user?.userGovID)})
+  //   await actors.userActor?.updateUserInfo({...user
+  //     ,userRole:'Host',
+  //     isHost:true,
+  //     userImage:(user?.userImage)!=""?user?.userImage:"img",
+  //     userGovID:((user?.userGovID==""||user?.userGovID==null)?"Not Provided":user?.userGovID
       
-      ),
-      agreementStatus:user?.agreementStatus
-    }).then(async(res)=>{
-      console.log(res)
+  //     ),
+  //     agreementStatus:user?.agreementStatus
+  //   }).then(async(res)=>{
+  //     console.log(res)
       
-      setLoading(false)
-      // alert('You are a host now!')
-      Dialog.show({
-        type:ALERT_TYPE.SUCCESS,
-        title:'SUCCESS',
-        textBody:'You are a host now!',
-        button:'OK',
-      })
-      setCreateHotel(true)
-      await actors.userActor?.getUserInfo().then((res)=>{
-        console.log(res[0])
-        dispatch(setUser(res[0]))
-      }).then(()=>{
-        getHotelList()
-      }).catch((err)=>{
-        setLoading(false)
-        // alert(err)
-        Dialog.show({
-          type:ALERT_TYPE.DANGER,
-          title:'ERROR',
-          textBody:err,
-          button:'OK',
-        })
-        console.log(err)
-      })
+  //     setLoading(false)
+  //     // alert('You are a host now!')
+  //     Dialog.show({
+  //       type:ALERT_TYPE.SUCCESS,
+  //       title:'SUCCESS',
+  //       textBody:'You are a host now!',
+  //       button:'OK',
+  //     })
+  //     setCreateHotel(true)
+  //     await actors.userActor?.getUserInfo().then((res)=>{
+  //       console.log(res[0])
+  //       dispatch(setUser(res[0]))
+  //     }).then(()=>{
+  //       getHotelList()
+  //     }).catch((err)=>{
+  //       setLoading(false)
+  //       // alert(err)
+  //       Dialog.show({
+  //         type:ALERT_TYPE.DANGER,
+  //         title:'ERROR',
+  //         textBody:err,
+  //         button:'OK',
+  //       })
+  //       console.log(err)
+  //     })
 
-    }).catch((err)=>{
-      setLoading(false)
-      // alert(err)
-      Dialog.show({
-        type:ALERT_TYPE.DANGER,
-        title:'ERROR',
-        textBody:err,
-        button:'OK',
-      })
-      console.log(err)
-    })
-  }
+  //   }).catch((err)=>{
+  //     setLoading(false)
+  //     // alert(err)
+  //     Dialog.show({
+  //       type:ALERT_TYPE.DANGER,
+  //       title:'ERROR',
+  //       textBody:err,
+  //       button:'OK',
+  //     })
+  //     console.log(err)
+  //   })
+  // }
 
   return (
 

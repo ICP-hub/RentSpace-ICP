@@ -12,8 +12,7 @@ import Icon from 'react-native-vector-icons/Entypo';
 import EditRoomFinal from './EditRoomFinal';
 import Room from '../../../../HostViewNew/Step1/RoomTypes/Room';
 
-const EditRoom = ({closeModal, passIndex, room, updateRooms,setRoomPopup}) => {
-
+const EditRoom = ({closeModal, passIndex, room, updateRooms, setRoomPopup}) => {
   /*
 
   closeModal = callback function to close this modal
@@ -26,8 +25,7 @@ const EditRoom = ({closeModal, passIndex, room, updateRooms,setRoomPopup}) => {
 
   const [openEditFinalModal, setOpenEditFinalModal] = useState(false);
 
-  console.log("Selected Room Index : ", passIndex);
-  
+  console.log('Selected Room Index : ', passIndex);
 
   const [rooms, setRooms] = useState({
     roomID: room[passIndex].roomID,
@@ -37,10 +35,13 @@ const EditRoom = ({closeModal, passIndex, room, updateRooms,setRoomPopup}) => {
     totalRooms: room[passIndex].totalRooms,
     maxOccupancy: room[passIndex].maxOccupancy,
     totalAvailableRooms: room[passIndex].totalAvailableRooms,
+    // photos: room[passIndex].photos,
+    // roomPrice: room[passIndex].roomPrice,
   });
 
   // console.log('1 : ',rooms.roomID);
   // console.log('2 : ',room[passIndex].roomID);
+  // console.log('3 : ', rooms.photos, rooms.roomPrice);
 
   const booked = rooms.totalRooms - rooms.totalAvailableRooms;
 
@@ -104,7 +105,7 @@ const EditRoom = ({closeModal, passIndex, room, updateRooms,setRoomPopup}) => {
         <TextInput
           value={rooms.roomDes}
           multiline={true}
-          // placeholder={rooms.roomDes}
+          placeholder={rooms.roomDes}
           placeholderTextColor={COLORS.textLightGrey}
           style={[styles.fleid, {height: 100, textAlignVertical: 'top'}]}
           onChangeText={text => setRooms({...rooms, roomDes: text})}
@@ -162,11 +163,17 @@ const EditRoom = ({closeModal, passIndex, room, updateRooms,setRoomPopup}) => {
         onRequestClose={() => {
           setOpenEditFinalModal(false);
         }}>
-        <EditRoomFinal passIndex={passIndex} room={rooms} item={room} updateRooms={updateRooms} closeModal={setOpenEditFinalModal} setRoomPopup={setRoomPopup} />
+        <EditRoomFinal
+          passIndex={passIndex}
+          room={rooms}
+          setRoom={setRooms}
+          item={room}
+          updateRooms={updateRooms}
+          closeModal={setOpenEditFinalModal}
+          setRoomPopup={setRoomPopup}
+        />
       </Modal>
     </View>
-
-
   );
 };
 

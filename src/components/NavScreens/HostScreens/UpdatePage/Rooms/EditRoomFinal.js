@@ -8,8 +8,9 @@ import {
   FlatList,
   ScrollView,
   Modal,
+  Alert,
 } from 'react-native';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {COLORS} from '../../../../../constants/themes';
 import Icon from 'react-native-vector-icons/Entypo';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -17,9 +18,17 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
 import {storage} from '../../../../../../firebaseConfig';
 import UploadModal from '../Popups/UploadModal';
+import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
 
-const EditRoomFinal = ({passIndex, room, item, updateRooms, closeModal, setRoomPopup}) => {
-
+const EditRoomFinal = ({
+  passIndex,
+  room,
+  setRoom,
+  item,
+  updateRooms,
+  closeModal,
+  setRoomPopup,
+}) => {
   // console.log("Prev : ", room.roomID);
 
   console.log('Origina Length', item.length);
@@ -31,76 +40,150 @@ const EditRoomFinal = ({passIndex, room, item, updateRooms, closeModal, setRoomP
   const [upload, setUpload] = useState(false);
 
   const [lastItem, setLastItem] = useState({
-    roomPrice: item[0].roomPrice,
-    photos: item[0].photos,
-    // photos: [],
+    roomPrice: item[passIndex].roomPrice,
+    photos: item[passIndex].photos,
+
   });
 
-  const selectImage = async() => {
+
+  const [roomPrice, setRoomPrice] = useState(item[passIndex].roomPrice);
+  const [photos, setPhotos] = useState(item[passIndex].photos);
+
+  const selectImage = async () => {
     console.log('Select Image');
     await launchImageLibrary(
       {mediaType: 'photo', includeBase64: true},
-      response=>{
-        if(response && !response.didCancel){
+      response => {
+        if (response && !response.didCancel) {
+          const fileSize = response.assets[0].fileSize;
+          console.log('Response Size : ', fileSize);
           console.log('Response', response.assets[0].uri);
-          setUpload(true);
-          uploadImage(response.assets[0].uri);
-        } else{
-          console.log('No Image Selected');
-        }
-      }
-    );
 
-  };
+          const fileSizeInMB = fileSize / (1024 * 1024);
+          console.log('File Size : ', fileSizeInMB);
 
-  const uploadImage = async(uri) => {
-    console.log('Upload Image');
-    const response = await fetch(uri);
-    const blob = await response.blob();
-    const storageRef = ref(storage, 'hotelImage/' + new Date().getTime());
-    const uploadTask = uploadBytesResumable(storageRef, blob);
+          if (fileSizeInMB > 10) {
+            // Alert.alert('Error', 'The selected image is larger than 10 MB. Please select a smaller image.');
+            Dialog.show({
+              type: ALERT_TYPE.WARNING,
+              title: 'Size Exceeded',
+              textBody:
+                'The selected image is larger than 10 MB. Please select a smaller image.',
+              button: 'OK',
+            });
+            return;
+          }
 
-    uploadTask.on(
-      'state_changed',
-      snapshot => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-        setTransferred(progress.toFixed());
-      },
-      error=>{
-        console.log('Error Uploading Image', error);
-      },
-      ()=>{
-        getDownloadURL(uploadTask.snapshot.ref).then(downloadURL=>{
-          console.log('File available at', downloadURL);
-          const newPhotos = [...lastItem.photos, downloadURL];
+          // setUpload(true);
+          // uploadImage(response.assets[0].uri);
+          const newPhotos = [response.assets[0].uri, ...lastItem.photos];
           console.log('New Photos', newPhotos);
           setLastItem({...lastItem, photos: newPhotos});
-          setUpload(false);
-        });
-      }
+          // setPhotos(newPhotos);
+        } else {
+          console.log('No Image Selected');
+        }
+      },
     );
   };
+
+  const uploadImage = async uri => {
+    return new Promise(async (resolve, reject) => {
+      console.log('Upload Image');
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const storageRef = ref(storage, 'hotelImage/' + new Date().getTime());
+      const uploadTask = uploadBytesResumable(storageRef, blob);
+
+      uploadTask.on(
+        'state_changed',
+        snapshot => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          setTransferred(progress.toFixed());
+        },
+        error => {
+          console.log('Error Uploading Image', error);
+          reject(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
+            console.log('File available at', downloadURL);
+            const newPhotos = [...photos, downloadURL];
+            console.log('New Photos', newPhotos);
+            // setLastItem({...lastItem, photos: newPhotos});
+            // setPhotos(newPhotos);
+            resolve(newPhotos);
+
+            setUpload(false);
+          });
+        },
+      );
+    });
+  };
+
+  useEffect(() => {
+    console.log('Upload State : ', upload);
+  }, [upload]);
 
   const deleteImage = index => {
     console.log('Delete Index', index);
     const newPhotos = lastItem.photos.filter((photo, i) => i !== index);
     console.log('New Photos', newPhotos);
     setLastItem({...lastItem, photos: newPhotos});
+    
   };
 
-  const updateFinalList = () => {
-    const finalList = Object.assign({}, room, lastItem);
-    // console.log('Final List', finalList);
+  const updateFinalList = async() => {
+    if (lastItem.photos.length === 0) {
+      // alert('Please add atleast one photo');
+      Dialog.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'No Photo',
+        textBody: 'Please add atleast one photo',
+        button: 'OK',
+      });
+      return;
+    }
+    if (roomPrice === '' || roomPrice === '0' || roomPrice === 0) {
+      // alert('Please enter the price');
+      Dialog.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'No Price',
+        textBody: 'Please enter the price',
+        button: 'OK',
+      });
+      return;
+    } else {
+      console.log('Before set upload : ', upload);
 
-    // item = [finalList, rest of the items];
+      setUpload(true);
+      // uploadImage(lastItem.photos[0]);
+      const resp = await Promise.resolve(uploadImage(lastItem.photos[0]));
 
-    item[passIndex] = finalList;
+      console.log('Upload Response : ', resp);
 
-    console.log('Updated List', item);
+      const finalPhotos = [resp[0], ...lastItem.photos.slice(1)];
 
-    // updateRooms(item);
-    setRoomPopup(false);
+
+      const finalList = Object.assign({}, room, {
+        roomPrice: roomPrice,
+        photos: finalPhotos,
+      });
+      console.log('Final List', finalList);
+      // item = [finalList, rest of the items];
+
+      item[passIndex] = finalList;
+
+      console.log('Updated List', item);
+
+      // updateRooms(item);
+
+      // setTimeout(() => {
+        setRoomPopup(false);
+      // }, 5000);
+    }
   };
 
   return (
@@ -122,10 +205,13 @@ const EditRoomFinal = ({passIndex, room, item, updateRooms, closeModal, setRoomP
         </View>
 
         {lastItem.photos.map((item, index) => {
+          console.log('Item : ', item, index);
           return (
             <View key={index} style={{marginBottom: 5, height: 150}}>
               <Image key={index} source={{uri: item}} style={styles.roomImg} />
-              <TouchableOpacity onPress={() => deleteImage(index)}>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => deleteImage(index)}>
                 <Icon2
                   name="delete"
                   size={20}
@@ -140,11 +226,12 @@ const EditRoomFinal = ({passIndex, room, item, updateRooms, closeModal, setRoomP
         <Text style={styles.fleidTitle}>Price</Text>
         <TextInput
           keyboardType="numeric"
-          placeholder={`€${lastItem.roomPrice}`}
+          placeholder={roomPrice ? `€${roomPrice}` : '€0'}
           placeholderTextColor={COLORS.textLightGrey}
           style={styles.fleid}
-          value={lastItem.roomPrice}
-          onChangeText={text => setLastItem({...lastItem, roomPrice: text})}
+          value={roomPrice}
+          // onChangeText={text => setLastItem({...lastItem, roomPrice: text})}
+          onChangeText={text => setRoomPrice(text)}
         />
         <TouchableOpacity onPress={() => updateFinalList()}>
           <Text style={styles.saveBtn}>Update & Save</Text>
@@ -213,12 +300,21 @@ const styles = StyleSheet.create({
     borderColor: COLORS.black,
   },
 
+  deleteButton: {
+    padding: 5,
+    borderRadius: 5,
+    zIndex: 1,
+    width: 50,
+    left: '86%',
+    top: -50,
+  },
+
   deleteIcon: {
     backgroundColor: COLORS.white,
     width: 30,
     position: 'relative',
-    top: -50,
-    left: '88%',
+    // top: -50,
+    // left: '88%',
     padding: 5,
     borderRadius: 5,
   },

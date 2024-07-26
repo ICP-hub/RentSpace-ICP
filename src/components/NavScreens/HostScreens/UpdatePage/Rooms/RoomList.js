@@ -11,7 +11,8 @@ import {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {COLORS} from '../../../../../constants/themes';
 import EditRoom from './EditRoom';
-import RoomDetails from '../../../../HostViewNew/Step1/RoomTypes/RoomDetails';
+// import RoomDetails from '../../../../HostViewNew/Step1/RoomTypes/RoomDetails';
+import RoomDetails from '../../../../HostViewNew/Step3/RoomTypes/RoomDetails';
 
 export default function RoomList({item, updateRooms, setRoomPopup}) {
   const [openEditModal, setOpenEditModal] = useState(false);

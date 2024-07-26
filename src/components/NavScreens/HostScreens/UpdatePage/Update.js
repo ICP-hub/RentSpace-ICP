@@ -21,6 +21,7 @@ import AmenitiesPopup from './Popups/AmenitiesPopup';
 import Icon11 from 'react-native-vector-icons/MaterialIcons'; //0
 import Icon12 from 'react-native-vector-icons/MaterialCommunityIcons'; //1
 import RoomList from './Rooms/RoomList';
+import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 
 const Update = ({item, setOpenUpdate, getHotelDetails}) => {
   const [rooms, setRooms] = useState(item.rooms);
@@ -159,6 +160,20 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
   }, [rooms, passData]);
 
   const goToNextPage = () => {
+
+    // room check
+    if (rooms.length === 0) {
+      Dialog.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'Error',
+        textBody: 'Please add atleast one room type.',
+        button: 'OK',
+      });
+
+      return;
+    }
+
+
     const newPropertyAmenities = amenities.data.map(amenity => amenity.name);
 
     console.log('Room on Page Next => ', rooms);

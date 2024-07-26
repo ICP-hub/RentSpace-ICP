@@ -39,6 +39,8 @@ const Congratulations = ({setHostModal, pos, getHotelDetails}) => {
   const [imageList, setImageList] = useState([]);
   const [videoList, setVideoList] = useState([]);
 
+  const [btnDisabled, setBtnDisabled] = useState(false);
+
   console.log("Principal : ", principle)
 
   // upload function to upload image to firebase
@@ -108,6 +110,7 @@ const Congratulations = ({setHostModal, pos, getHotelDetails}) => {
       ApiHotelCreate();
     } catch (error) {
       console.log(error);
+      setBtnDisabled(false);
     }
   };
 
@@ -194,9 +197,11 @@ const Congratulations = ({setHostModal, pos, getHotelDetails}) => {
         });
 
       // console.log("Response : ", response);
+      setBtnDisabled(false);
     } catch (error) {
       setLoading(false);
       console.log('Hotel creation API error: ', error);
+      setBtnDisabled(false);
 
       Dialog.show({
         type: ALERT_TYPE.DANGER,
@@ -341,7 +346,12 @@ const Congratulations = ({setHostModal, pos, getHotelDetails}) => {
       </Text>
       <Text style={styles.subtitle}>Thank You...</Text>
       <View style={styles.btnView}>
-        <TouchableOpacity style={styles.btn} onPress={uploadAllFiles}>
+        <TouchableOpacity style={styles.btn} onPress={()=>{
+          if(!btnDisabled){
+            setBtnDisabled(true)
+            uploadAllFiles()
+          }
+        }}>
           <Text style={styles.btnText}>Let’s get started</Text>
         </TouchableOpacity>
       </View>

@@ -16,15 +16,24 @@ import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
 import {storage} from '../../../../../firebaseConfig';
-import { downloadFile } from 'react-native-fs';
+import {downloadFile} from 'react-native-fs';
 import UploadModal from '../../../NavScreens/HostScreens/UpdatePage/Popups/UploadModal';
-import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
+import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
 
-const RoomFinal = ({newRoom, setNewRoom, rooms, setRooms, setOpenNext,closeModal}) => {
+const RoomFinal = ({
+  imgList,
+  setImgList,
+  newRoom,
+  setNewRoom,
+  rooms,
+  setRooms,
+  setOpenNext,
+  closeModal,
+}) => {
   // const [imgList, setImgList] = useState([
   //   'https://fastly.picsum.photos/id/866/536/354.jpg?hmac=tGofDTV7tl2rprappPzKFiZ9vDh5MKj39oa2D--gqhA',
   // ]);
-  const [imgList, setImgList] = useState([]);
+  // const [imgList, setImgList] = useState([]);
 
   const [transferred, setTransferred] = useState(0);
   const [upload, setUpload] = useState(false);
@@ -33,24 +42,28 @@ const RoomFinal = ({newRoom, setNewRoom, rooms, setRooms, setOpenNext,closeModal
     setNewRoom({...newRoom, photos: imgList});
   }, [imgList]);
 
-  const selectImage = async() =>{
-    console.log("Select Image");
+  const selectImage = async () => {
+    console.log('Select Image');
     await launchImageLibrary(
       {mediaType: 'photo', includeBase64: true},
-      response=>{
-        if(response && !response.didCancel){
+      response => {
+        if (response && !response.didCancel) {
           console.log('Response', response.assets[0].uri);
-          setUpload(true);
-          uploadImage(response.assets[0].uri);
-        } else{
+          // setUpload(true);
+          // uploadImage(response.assets[0].uri);
+          // ----------------------
+          const newPhotos = [...imgList, response.assets[0].uri];
+          console.log('New Photos', newPhotos);
+          setImgList(newPhotos);
+        } else {
           console.log('No Image Selected');
         }
-      }
-    )
+      },
+    );
   };
 
-  const uploadImage = async(uri)=>{
-    console.log("Upload Image");
+  const uploadImage = async uri => {
+    console.log('Upload Image');
     const response = await fetch(uri);
     const blob = await response.blob();
     const storageRef = ref(storage, 'hotelImage/' + new Date().getTime());
@@ -59,28 +72,26 @@ const RoomFinal = ({newRoom, setNewRoom, rooms, setRooms, setOpenNext,closeModal
     uploadTask.on(
       'state_changed',
       snapshot => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log('Upload is ' + progress + '% done');
         setTransferred(progress.toFixed());
       },
-      error=>{
+      error => {
         console.log('Error Uploading Image', error);
       },
-      ()=>{
-        getDownloadURL(uploadTask.snapshot.ref).then(downloadURL=>{
-          console.log("File available at", downloadURL);
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
+          console.log('File available at', downloadURL);
           const newPhotos = [...imgList, downloadURL];
           console.log('New Photos', newPhotos);
           setImgList(newPhotos);
           setUpload(false);
-        })
-      }
-    )
-
-
-
-
-  }
+          closeModal(false);
+        });
+      },
+    );
+  };
 
   const deleteImg = index => {
     console.log('Delete Index', index);
@@ -90,21 +101,23 @@ const RoomFinal = ({newRoom, setNewRoom, rooms, setRooms, setOpenNext,closeModal
   };
 
   const createRoom = () => {
-
-    if(newRoom.roomPrice === 0 || imgList.length === 0){
+    if (newRoom.roomPrice === 0 || imgList.length === 0) {
       Dialog.show({
-        type:ALERT_TYPE.WARNING,
-        title:'Please Fill All the Fields',
-        textBody:'No Field Should be Empty',
-        button:'OK',
-      })
-    }
-    else{
+        type: ALERT_TYPE.WARNING,
+        title: 'Please Fill All the Fields',
+        textBody: 'No Field Should be Empty',
+        button: 'OK',
+      });
+    } else {
       console.log(newRoom);
-      const finalRoomList = [...rooms, newRoom]
-      console.log("Final Room => ", finalRoomList)
+      // ----------------------
+      setUpload(true);
+      uploadImage(imgList[0]);
+      // ----------------------
+      const finalRoomList = [...rooms, newRoom];
+      console.log('Final Room => ', finalRoomList);
       setRooms(finalRoomList);
-      closeModal(false);
+      // closeModal(false);
     }
 
     // console.log(newRoom);
@@ -142,104 +155,104 @@ const RoomFinal = ({newRoom, setNewRoom, rooms, setRooms, setOpenNext,closeModal
         />
       </View>
 
-      <ScrollView contentContainerStyle={{height:'100%'}}>
-
-      <View style={styles.formContainer}>
-        {imgList.length > 0 ? (
-          <>
-            <View style={styles.imgUphead}>
-              <Text style={styles.fleidTitle}>Upload Photos</Text>
-              <TouchableOpacity onPress={() => selectImage()}>
-                <Text style={{color: COLORS.black}}>+ Add More</Text>
-              </TouchableOpacity>
-            </View>
-            {imgList.map((img, index) => {
-              return (
-                <View key={index} style={{marginBottom: 5, height: 150}}>
-                  <Image
-                    key={index}
-                    source={{uri: img}}
-                    style={styles.roomImg}
-                  />
-                  <TouchableOpacity
-                    style={styles.deleteButton}
-                    onPress={() => deleteImg(index)}>
-                    <Icon2
-                      name="delete"
-                      size={20}
-                      color={COLORS.black}
-                      style={styles.deleteIcon}
+      <ScrollView contentContainerStyle={{height: '100%'}}>
+        <View style={styles.formContainer}>
+          {imgList.length > 0 ? (
+            <>
+              <View style={styles.imgUphead}>
+                <Text style={styles.fleidTitle}>Upload Photos</Text>
+                <TouchableOpacity onPress={() => selectImage()}>
+                  <Text style={{color: COLORS.black}}>+ Add More</Text>
+                </TouchableOpacity>
+              </View>
+              {imgList.map((img, index) => {
+                return (
+                  <View key={index} style={{marginBottom: 5, height: 150}}>
+                    <Image
+                      key={index}
+                      source={{uri: img}}
+                      style={styles.roomImg}
                     />
-                  </TouchableOpacity>
-                </View>
-              );
-            })}
-          </>
-        ) : (
-          <>
-            <View style={styles.imgUphead}>
-              <Text style={styles.fleidTitle}>Upload Photos</Text>
-            </View>
-            <View style={styles.fleid2}>
-              <Text style={{color: COLORS.textLightGrey, fontSize: 12}}>
-                No File Choosen
-              </Text>
-              <TouchableOpacity style={styles.uploadBtn} onPress={()=>selectImage()}>
-                <Icon
-                  name="upload"
-                  size={20}
-                  color={COLORS.white}
-                  style={{marginRight: 10}}
-                />
-                <Text style={{color: COLORS.white, fontSize: 12}}>Upload</Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
+                    <TouchableOpacity
+                      style={styles.deleteButton}
+                      onPress={() => deleteImg(index)}>
+                      <Icon2
+                        name="delete"
+                        size={20}
+                        color={COLORS.black}
+                        style={styles.deleteIcon}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                );
+              })}
+            </>
+          ) : (
+            <>
+              <View style={styles.imgUphead}>
+                <Text style={styles.fleidTitle}>Upload Photos</Text>
+              </View>
+              <View style={styles.fleid2}>
+                <Text style={{color: COLORS.textLightGrey, fontSize: 12}}>
+                  No File Choosen
+                </Text>
+                <TouchableOpacity
+                  style={styles.uploadBtn}
+                  onPress={() => selectImage()}>
+                  <Icon
+                    name="upload"
+                    size={20}
+                    color={COLORS.white}
+                    style={{marginRight: 10}}
+                  />
+                  <Text style={{color: COLORS.white, fontSize: 12}}>
+                    Upload
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
 
-        <Text style={styles.fleidTitle}>Room Price</Text>
-        <TextInput
-          value={newRoom.roomPrice.toString()}
-          keyboardType="numeric"
-          placeholder={newRoom.roomPrice.toString()}
-          placeholderTextColor={COLORS.textLightGrey}
-          style={styles.fleid}
-          onChangeText={text =>
-            setNewRoom({...newRoom, roomPrice: Number(text)})
-          }
-        />
+          <Text style={styles.fleidTitle}>Room Price</Text>
+          <TextInput
+            value={newRoom.roomPrice.toString()}
+            keyboardType="numeric"
+            placeholder={newRoom.roomPrice.toString()}
+            placeholderTextColor={COLORS.textLightGrey}
+            style={styles.fleid}
+            onChangeText={text =>
+              setNewRoom({...newRoom, roomPrice: Number(text)})
+            }
+          />
 
-        <TouchableOpacity onPress={() => createRoom()}>
-          <Text style={styles.createBTN}>Create Room</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={{flex: 1, justifyContent: 'flex-end'}}>
-        <View style={styles.progressBar} />
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginHorizontal: 26,
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-              setOpenNext(false);
-            }}>
-            <Text style={styles.link}>Back</Text>
+          <TouchableOpacity onPress={() => createRoom()}>
+            <Text style={styles.createBTN}>Create Room</Text>
           </TouchableOpacity>
         </View>
-      </View>
 
+        <View style={{flex: 1, justifyContent: 'flex-end'}}>
+          <View style={styles.progressBar} />
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginHorizontal: 26,
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                setOpenNext(false);
+              }}>
+              <Text style={styles.link}>Back</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </ScrollView>
 
       <Modal visible={upload} transparent>
         <UploadModal transferred={transferred} />
       </Modal>
-
-
     </View>
   );
 };
@@ -282,7 +295,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.black,
   },
 
-  deleteButton:{
+  deleteButton: {
     padding: 5,
     borderRadius: 5,
     zIndex: 1,

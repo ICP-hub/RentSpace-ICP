@@ -17,6 +17,8 @@ import { Dialog,ALERT_TYPE } from 'react-native-alert-notification';
 const RoomDetails = ({rooms, setRooms, closeModal}) => {
   const [openNext, setOpenNext] = useState(false);
 
+  const [imgList, setImgList] = useState([]);
+
   // console.log('Rooms', rooms);
 
   const [newRoom, setNewRoom] = useState({
@@ -191,6 +193,8 @@ const RoomDetails = ({rooms, setRooms, closeModal}) => {
         animationType="slide"
         onRequestClose={() => setOpenNext(false)}>
         <RoomFinal
+          imgList={imgList}
+          setImgList={setImgList}
           newRoom={newRoom}
           setNewRoom={setNewRoom}
           rooms={rooms}

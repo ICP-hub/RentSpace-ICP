@@ -132,9 +132,9 @@ shared ({ caller = owner }) actor class User() {
                         userImage = userData.userImage;
                         userGovID = userData.userGovID;
                         govIDLink = userData.govIDLink;
-                        isHost = true;
-                        isVerified = true;
-                        agreementStatus = false;
+                        isHost = userData.isHost;
+                        isVerified = userData.isVerified;
+                        agreementStatus = userData.agreementStatus;
                         createdAt = userData.createdAt;
                     };
                     ignore userRecord.replace(caller, updateData);
