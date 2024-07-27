@@ -23,6 +23,10 @@ const EditRoom = ({closeModal, passIndex, room, updateRooms, setRoomPopup}) => {
   
   */
 
+  useEffect(() => {
+    console.log("opera : ", room[passIndex]);
+  }, []);
+
   const [openEditFinalModal, setOpenEditFinalModal] = useState(false);
 
   console.log('Selected Room Index : ', passIndex);
@@ -30,7 +34,7 @@ const EditRoom = ({closeModal, passIndex, room, updateRooms, setRoomPopup}) => {
   const [rooms, setRooms] = useState({
     roomID: room[passIndex].roomID,
     roomName: room[passIndex].roomName,
-    roomDes: room[passIndex].roomDes,
+    roomDes: room[passIndex].roomDec,
     roomType: room[passIndex].roomType,
     totalRooms: room[passIndex].totalRooms,
     maxOccupancy: room[passIndex].maxOccupancy,
@@ -95,7 +99,7 @@ const EditRoom = ({closeModal, passIndex, room, updateRooms, setRoomPopup}) => {
       <View style={styles.formContainer}>
         <Text style={styles.fleidTitle}>Room Name</Text>
         <TextInput
-          value={rooms.roomName}
+          value={String(rooms.roomName)}
           // placeholder={rooms.roomName}
           placeholderTextColor={COLORS.textLightGrey}
           style={styles.fleid}

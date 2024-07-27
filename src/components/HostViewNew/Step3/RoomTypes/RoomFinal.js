@@ -21,8 +21,8 @@ import UploadModal from '../../../NavScreens/HostScreens/UpdatePage/Popups/Uploa
 import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
 
 const RoomFinal = ({
-  imgList,
-  setImgList,
+  // imgList,
+  // setImgList,
   newRoom,
   setNewRoom,
   rooms,
@@ -33,14 +33,14 @@ const RoomFinal = ({
   // const [imgList, setImgList] = useState([
   //   'https://fastly.picsum.photos/id/866/536/354.jpg?hmac=tGofDTV7tl2rprappPzKFiZ9vDh5MKj39oa2D--gqhA',
   // ]);
-  // const [imgList, setImgList] = useState([]);
+  const [imgList, setImgList] = useState([]);
 
   const [transferred, setTransferred] = useState(0);
   const [upload, setUpload] = useState(false);
 
-  useEffect(() => {
-    setNewRoom({...newRoom, photos: imgList});
-  }, [imgList]);
+  // useEffect(() => {
+  //   setNewRoom({...newRoom, photos: imgList});
+  // }, [imgList]);
 
   const selectImage = async () => {
     console.log('Select Image');
@@ -49,10 +49,27 @@ const RoomFinal = ({
       response => {
         if (response && !response.didCancel) {
           console.log('Response', response.assets[0].uri);
+
+          const fileSize = response.assets[0].fileSize;
+          const fileSizeInMB = fileSize / (1024 * 1024);
+          console.log('File Size : ', fileSizeInMB);
+
+          if (fileSizeInMB > 10) {
+            // Alert.alert('Error', 'The selected image is larger than 10 MB. Please select a smaller image.');
+            Dialog.show({
+              type: ALERT_TYPE.WARNING,
+              title: 'Size Exceeded',
+              textBody:
+                'The selected image is larger than 10 MB. Please select a smaller image.',
+              button: 'OK',
+            });
+            return;
+          }
+
           // setUpload(true);
           // uploadImage(response.assets[0].uri);
           // ----------------------
-          const newPhotos = [...imgList, response.assets[0].uri];
+          const newPhotos = [response.assets[0].uri, ...imgList];
           console.log('New Photos', newPhotos);
           setImgList(newPhotos);
         } else {
@@ -63,34 +80,35 @@ const RoomFinal = ({
   };
 
   const uploadImage = async uri => {
-    console.log('Upload Image');
-    const response = await fetch(uri);
-    const blob = await response.blob();
-    const storageRef = ref(storage, 'hotelImage/' + new Date().getTime());
-    const uploadTask = uploadBytesResumable(storageRef, blob);
+    return new Promise(async (resolve, reject) => {
+      console.log('Upload Image');
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const storageRef = ref(storage, 'hotelImage/' + new Date().getTime());
+      const uploadTask = uploadBytesResumable(storageRef, blob);
 
-    uploadTask.on(
-      'state_changed',
-      snapshot => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-        setTransferred(progress.toFixed());
-      },
-      error => {
-        console.log('Error Uploading Image', error);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
-          console.log('File available at', downloadURL);
-          const newPhotos = [...imgList, downloadURL];
-          console.log('New Photos', newPhotos);
-          setImgList(newPhotos);
-          setUpload(false);
-          closeModal(false);
-        });
-      },
-    );
+      uploadTask.on(
+        'state_changed',
+        snapshot => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          setTransferred(progress.toFixed());
+        },
+        error => {
+          console.log('Error Uploading Image', error);
+          reject(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
+            console.log('File available at', downloadURL);
+            const newPhotos = [downloadURL];
+            console.log('New Photos', newPhotos);
+            resolve(newPhotos);
+          });
+        },
+      );
+    });
   };
 
   const deleteImg = index => {
@@ -100,7 +118,7 @@ const RoomFinal = ({
     setImgList(newPhotos);
   };
 
-  const createRoom = () => {
+  const createRoom = async () => {
     if (newRoom.roomPrice === 0 || imgList.length === 0) {
       Dialog.show({
         type: ALERT_TYPE.WARNING,
@@ -112,12 +130,18 @@ const RoomFinal = ({
       console.log(newRoom);
       // ----------------------
       setUpload(true);
-      uploadImage(imgList[0]);
-      // ----------------------
-      const finalRoomList = [...rooms, newRoom];
+      // can be used to upload multiple images in the future using loop
+      // uploadImage(imgList[0]);
+      const uploadURL = await Promise.resolve(uploadImage(imgList[0]));
+
+      setNewRoom({...newRoom, photos: uploadURL});
+      setUpload(false);
+      // closeModal(false);
+      // // ----------------------
+      const finalRoomList = [...rooms, {...newRoom, photos: uploadURL}];
       console.log('Final Room => ', finalRoomList);
       setRooms(finalRoomList);
-      // closeModal(false);
+      closeModal(false);
     }
 
     // console.log(newRoom);

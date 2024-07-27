@@ -114,6 +114,7 @@ const RoomDetails = ({rooms, setRooms, closeModal}) => {
         <Text style={styles.fleidTitle}>Room Dec</Text>
         <TextInput
           multiline={true}
+          value={newRoom.roomDec}
           placeholder="Enter Room Description"
           placeholderTextColor={COLORS.textLightGrey}
           style={[styles.fleid, {height: 100, textAlignVertical: 'top'}]}
@@ -193,8 +194,8 @@ const RoomDetails = ({rooms, setRooms, closeModal}) => {
         animationType="slide"
         onRequestClose={() => setOpenNext(false)}>
         <RoomFinal
-          imgList={imgList}
-          setImgList={setImgList}
+          // imgList={imgList}
+          // setImgList={setImgList}
           newRoom={newRoom}
           setNewRoom={setNewRoom}
           rooms={rooms}

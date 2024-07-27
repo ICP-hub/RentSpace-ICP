@@ -24,6 +24,7 @@ import RoomList from './Rooms/RoomList';
 import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 
 const Update = ({item, setOpenUpdate, getHotelDetails}) => {
+  
   const [rooms, setRooms] = useState(item.rooms);
 
   function nameToIcon(name) {

@@ -31,23 +31,18 @@ const EditRoomFinal = ({
 }) => {
   // console.log("Prev : ", room.roomID);
 
-  console.log('Origina Length', item.length);
-  console.log('Origina List', item);
+  // console.log('Origina Length', item.length);
+  // console.log('Origina List', item);
 
   console.log('Room', room);
 
   const [transferred, setTransferred] = useState(0);
   const [upload, setUpload] = useState(false);
 
-  const [lastItem, setLastItem] = useState({
-    roomPrice: item[passIndex].roomPrice,
-    photos: item[passIndex].photos,
-
-  });
-
-
   const [roomPrice, setRoomPrice] = useState(item[passIndex].roomPrice);
   const [photos, setPhotos] = useState(item[passIndex].photos);
+
+  console.log('Initial Photos : ', item[passIndex].photos);
 
   const selectImage = async () => {
     console.log('Select Image');
@@ -76,10 +71,9 @@ const EditRoomFinal = ({
 
           // setUpload(true);
           // uploadImage(response.assets[0].uri);
-          const newPhotos = [response.assets[0].uri, ...lastItem.photos];
-          console.log('New Photos', newPhotos);
-          setLastItem({...lastItem, photos: newPhotos});
-          // setPhotos(newPhotos);
+          const newPhotos = [response.assets[0].uri, ...photos];
+          console.log('New Photos after Image select : ', newPhotos);
+          setPhotos(newPhotos);
         } else {
           console.log('No Image Selected');
         }
@@ -110,7 +104,7 @@ const EditRoomFinal = ({
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
             console.log('File available at', downloadURL);
-            const newPhotos = [...photos, downloadURL];
+            const newPhotos = [downloadURL, ...item[passIndex].photos];
             console.log('New Photos', newPhotos);
             // setLastItem({...lastItem, photos: newPhotos});
             // setPhotos(newPhotos);
@@ -129,14 +123,13 @@ const EditRoomFinal = ({
 
   const deleteImage = index => {
     console.log('Delete Index', index);
-    const newPhotos = lastItem.photos.filter((photo, i) => i !== index);
-    console.log('New Photos', newPhotos);
-    setLastItem({...lastItem, photos: newPhotos});
-    
+    const newPhotos = photos.filter((photo, i) => i !== index);
+    console.log('New Photos after Delete : ', newPhotos);
+    setPhotos(newPhotos);
   };
 
-  const updateFinalList = async() => {
-    if (lastItem.photos.length === 0) {
+  const updateFinalList = async () => {
+    if (photos.length === 0) {
       // alert('Please add atleast one photo');
       Dialog.show({
         type: ALERT_TYPE.WARNING,
@@ -156,33 +149,26 @@ const EditRoomFinal = ({
       });
       return;
     } else {
-      console.log('Before set upload : ', upload);
 
       setUpload(true);
-      // uploadImage(lastItem.photos[0]);
-      const resp = await Promise.resolve(uploadImage(lastItem.photos[0]));
+
+      const resp = await Promise.resolve(uploadImage(photos[0]));
 
       console.log('Upload Response : ', resp);
 
-      const finalPhotos = [resp[0], ...lastItem.photos.slice(1)];
-
-
       const finalList = Object.assign({}, room, {
         roomPrice: roomPrice,
-        photos: finalPhotos,
+        photos: [resp[0], ...photos.slice(1)],
       });
       console.log('Final List', finalList);
-      // item = [finalList, rest of the items];
 
       item[passIndex] = finalList;
 
       console.log('Updated List', item);
 
-      // updateRooms(item);
+      updateRooms(item);
 
-      // setTimeout(() => {
-        setRoomPopup(false);
-      // }, 5000);
+      setRoomPopup(false);
     }
   };
 
@@ -204,7 +190,7 @@ const EditRoomFinal = ({
           </TouchableOpacity>
         </View>
 
-        {lastItem.photos.map((item, index) => {
+        {photos.map((item, index) => {
           console.log('Item : ', item, index);
           return (
             <View key={index} style={{marginBottom: 5, height: 150}}>
