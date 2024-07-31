@@ -239,9 +239,9 @@ const RoomFinal = ({
 
           <Text style={styles.fleidTitle}>Room Price</Text>
           <TextInput
-            value={newRoom.roomPrice.toString()}
+            // value={newRoom.roomPrice.toString()}
             keyboardType="numeric"
-            placeholder={newRoom.roomPrice.toString()}
+            placeholder="€0"
             placeholderTextColor={COLORS.textLightGrey}
             style={styles.fleid}
             onChangeText={text =>

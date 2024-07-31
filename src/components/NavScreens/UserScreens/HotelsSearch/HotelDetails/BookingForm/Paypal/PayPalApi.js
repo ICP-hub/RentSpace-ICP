@@ -38,11 +38,11 @@ const createOrder = async (token = '',price) => {
     purchase_units: [
       {
         amount: {
-          currency_code: 'USD',
+          currency_code: 'EUR',
           value: String(price),
           breakdown: {
             item_total: {
-              currency_code: 'USD',
+              currency_code: 'EUR',
               value: String(price),
             },
           },

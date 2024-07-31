@@ -382,7 +382,8 @@ const BookingFormComp = ({
   }
   const getCryptoPrice = async method => {
     await axios
-      .get('https://api.coinbase.com/v2/exchange-rates?currency=USD')
+      // .get('https://api.coinbase.com/v2/exchange-rates?currency=USD')
+      .get('https://api.coinbase.com/v2/exchange-rates?currency=EUR')
       .then(res => {
         console.log(res?.data?.data?.rates?.ICP, paymentMethod);
         if (paymentMethod == 'ICP') {

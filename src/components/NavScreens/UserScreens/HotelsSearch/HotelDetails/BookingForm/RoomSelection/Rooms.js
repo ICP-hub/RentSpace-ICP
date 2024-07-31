@@ -146,7 +146,7 @@ const Rooms = ({item, setRoomData, setRoomModal,booking}) => {
                 </View>
                 <View style={styles.roomDetailsContainer}>
                   <Text style={styles.roomDetailsText}>Room Price</Text>
-                  <Text style={styles.roomDetailsText}>${room.roomPrice}</Text>
+                  <Text style={styles.roomDetailsText}>€{room.roomPrice}</Text>
                 </View>
               </View>
 

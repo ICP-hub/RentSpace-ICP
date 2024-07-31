@@ -308,6 +308,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     width: 100,
     textAlign: 'center',
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
   },
 });

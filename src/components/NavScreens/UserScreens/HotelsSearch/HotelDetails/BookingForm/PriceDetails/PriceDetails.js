@@ -48,8 +48,8 @@ const PriceDetails = ({basePrice,nights,fullPayment,checkIn,days,roomData,setRoo
       }
       <View style={styles.line}/>
       <View style={styles.textCont}>
-        <Text style={styles.heading}>Total(USD) with {nights} nights</Text>
-        <Text style={styles.heading}>${finalPrice}</Text>
+        <Text style={styles.heading}>Total(EUR) with {nights} nights</Text>
+        <Text style={styles.heading}>€{finalPrice}</Text>
       </View>
       
       <View style={styles.line}/>
@@ -58,21 +58,21 @@ const PriceDetails = ({basePrice,nights,fullPayment,checkIn,days,roomData,setRoo
         <>
         <View style={styles.textCont}>
           <Text style={styles.heading}>Due now</Text>
-          <Text style={styles.heading}>${finalPrice}</Text>
+          <Text style={styles.heading}>€{finalPrice}</Text>
         </View>
         </>
         :
         <>
         <View style={styles.textCont}>
           <Text style={styles.heading}>Due now</Text>
-          <Text style={styles.heading}>${finalPrice/2}</Text>
+          <Text style={styles.heading}>€{finalPrice/2}</Text>
         </View>
         <View style={styles.textCont}>
           <Text style={styles.lightText}>
             Due on {checkIn.split("/")[0]} 
             {" "+months[parseInt(checkIn.split("/")[1])-1]}
           </Text>
-          <Text style={styles.lightText}>${finalPrice/2}</Text>
+          <Text style={styles.lightText}>€{finalPrice/2}</Text>
         </View>
         </>
         }

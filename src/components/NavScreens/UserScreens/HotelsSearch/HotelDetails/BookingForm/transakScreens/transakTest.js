@@ -30,7 +30,7 @@ import { ids } from '../../../../../../../../DevelopmentConfig';
       walletAddress:walletId,
       email:email,
       fiatAmount:amount,
-      fiatCurrency:"USD",
+      fiatCurrency:"EUR", //------------------ HERE ------------------
       paymentMethod:currentMethod,
       hideMenu:true
       // isTransakOne:true

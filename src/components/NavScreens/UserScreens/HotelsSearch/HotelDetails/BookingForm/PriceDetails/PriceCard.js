@@ -11,8 +11,8 @@ const PriceCard = ({item}) => {
     <>
     <Text style={styles.text}>{item.roomName}</Text>
     <View style={styles.card}>
-      <Text style={styles.text}>{item?.totalRooms} x ${item?.roomPrice}</Text>
-      <Text style={styles.text}>${item?.bill}</Text>
+      <Text style={styles.text}>{item?.totalRooms} x €{item?.roomPrice}</Text>
+      <Text style={styles.text}>€{item?.bill}</Text>
     </View>
     </>
   )
