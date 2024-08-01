@@ -29,7 +29,7 @@ const BottomSheetNotification = ({self}) => {
                 value={switchVal}
                 onValueChange={()=>{setSwitchVal(!switchVal)}}
                 thumbColor={COLORS.white}
-                trackColor={{false:COLORS.mainGrey,true:COLORS.mainPurple}}
+                trackColor={{false:COLORS.mainGrey,true:COLORS.black}}
                 
             />
         </View>
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:COLORS.mainPurple,
+        backgroundColor:COLORS.black,
         borderRadius:10,
         height:50,
         paddingHorizontal:30,
@@ -143,10 +143,10 @@ const styles = StyleSheet.create({
         paddingHorizontal:30,
         marginTop:10,
         borderWidth:1,
-        borderColor:COLORS.mainPurple
+        borderColor:COLORS.black
     },
     skipText:{
-        color:COLORS.mainPurple,
+        color:COLORS.black,
         fontWeight:'bold',
         fontSize:SIZES.medium
     }

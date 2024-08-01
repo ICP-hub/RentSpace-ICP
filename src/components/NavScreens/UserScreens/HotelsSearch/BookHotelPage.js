@@ -43,57 +43,78 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
 
   // const [bottom,setBottom]=useState(70)
 
-  async function getReservations(setRefreshing) {
-    setRefreshing(true);
-    setBookingList([]);
-    await actors?.bookingActor
-      .getBookingId()
-      .then(res => {
-        console.log('getid resp : ', res);
+  // async function getReservations(setRefreshing) {
+  //   setRefreshing(true);
+  //   setBookingList([]);
+  //   await actors?.bookingActor
+  //     .getBookingId()
+  //     .then(res => {
+  //       console.log('getid resp : ', res);
 
-        console.log('all bookings1: ', res[0]);
-        if (res.length <= 0) {
-          setRefreshing(false);
-          return;
-        }
-        res.map(async r => {
-          setRefreshing(true);
-          console.log('booking-->', r);
-          let hotelId = r.split('#')[0] + '#' + r.split('#')[1];
-          console.log(hotelId);
-          await actors?.bookingActor
-            .getBookingDetials(r)
-            .then(async resp => {
-              let hotel = null;
+  //       console.log('all bookings1: ', res[0]);
+  //       if (res.length <= 0) {
+  //         setRefreshing(false);
+  //         return;
+  //       }
+  //       res.map(async r => {
+  //         setRefreshing(true);
+  //         console.log('booking-->', r);
+  //         let hotelId = r.split('#')[0] + '#' + r.split('#')[1];
+  //         console.log(hotelId);
+  //         await actors?.bookingActor
+  //           .getBookingDetials(r)
+  //           .then(async resp => {
+  //             let hotel = null;
 
-              await actors?.hotelActor
-                .getHotel(hotelId)
-                .then(hRes => {
-                  setRefreshing(false);
-                  hotel = {...hRes[0], hotelId: hotelId};
-                })
-                .catch(err => {
-                  console.log(err);
-                  setRefreshing(false);
-                });
-              console.log('booking details : ', resp);
-              console.log({...resp[0], hotel: hotel, bookingId: r});
-              setBookingList(b => [
-                ...b,
-                {...resp[0], hotel: hotel, bookingId: r},
-              ]);
-            })
-            .catch(err => {
-              console.log(err);
-              setRefreshing(false);
-            });
-        });
-      })
-      .catch(err => {
-        console.log('getid err :', err);
-        setRefreshing(false);
-      });
-    console.log('bookingList', bookingList);
+  //             await actors?.hotelActor
+  //               .getHotel(hotelId)
+  //               .then(hRes => {
+  //                 setRefreshing(false);
+  //                 hotel = {...hRes[0], hotelId: hotelId};
+  //               })
+  //               .catch(err => {
+  //                 console.log(err);
+  //                 setRefreshing(false);
+  //               });
+  //             console.log('booking details : ', resp);
+  //             console.log({...resp[0], hotel: hotel, bookingId: r});
+  //             setBookingList(b => [
+  //               ...b,
+  //               {...resp[0], hotel: hotel, bookingId: r},
+  //             ]);
+  //           })
+  //           .catch(err => {
+  //             console.log(err);
+  //             setRefreshing(false);
+  //           });
+  //       });
+  //     })
+  //     .catch(err => {
+  //       console.log('getid err :', err);
+  //       setRefreshing(false);
+  //     });
+  //   console.log('bookingList', bookingList);
+  // }
+
+  async function getReservations(setRefreshing){
+    try{
+      setRefreshing(true)
+      console.log(actors?.bookingActor?.getAllUserBookings)
+      let bookingRes=await actors?.bookingActor?.getAllUserBookings()
+
+      if(bookingRes?.err!=undefined){
+        setRefreshing(false)
+        setBookingList([])
+        return
+      }
+      console.log(bookingRes?.ok)
+      setBookingList(bookingRes?.ok)
+      setRefreshing(false)
+      console.log("end of fetching bookings")
+    }catch(err){
+      console.log(err)
+      setRefreshing(false)
+    }
   }
   async function dispatchBookingData() {
     setShowReservations(true);
@@ -107,24 +128,28 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
       setHotelsList([]);
       return;
     }
+    console.log('queryHotelsLength : ', queryHotels.length)
     for (let i = 0; i < queryHotels?.length; i++) {
-      // console.log('Hotel ID : ', queryHotels[i].hotelId);
-      await actors.hotelActor
-        ?.getHotel(queryHotels[i].hotelId)
-        .then(res => {
-          newArr.push({
-            ...res[0],
-            id: queryHotels[i].hotelId,
-            details: queryHotels[i],
-          });
-          setRefreshing(false);
-          setHotelsList([...newArr]);
-        })
-        .catch(err => {
-          console.log(err);
-          setRefreshing(false);
-        });
+      console.log(`Property ${i} ID : `, queryHotels[i].propertyId);
+      // await actors.hotelActor
+      //   ?.getHotel(queryHotels[i].hotelId)
+      //   .then(res => {
+      //     newArr.push({
+      //       ...res[0],
+      //       id: queryHotels[i].hotelId,
+      //       details: queryHotels[i],
+      //     });
+      //     setRefreshing(false);
+      //     setHotelsList([...newArr]);
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //     setRefreshing(false);
+      //   });
+      setRefreshing(false);
+      setHotelsList([...queryHotels]);
     }
+    // console.log(queryHotels)
   }
   const refresh = () => {
     // console.log(queryHotels);
@@ -159,13 +184,13 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
             <Icon2 name="reload-circle-sharp" size={20} color={COLORS.black} />
             <Text style={styles.btnText}>Reload Data</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn} onPress={dispatchBookingData}>
+          <TouchableOpacity style={styles.btn} onPress={()=>setShowReservations(true)}>
             <Icon name="address-book" size={20} color={COLORS.black} />
             <Text style={styles.btnText}>Show my bookings</Text>
           </TouchableOpacity>
         </View>
 
-        <ScrollView style={{width: '100%', marginBottom: 65}}>
+        <ScrollView style={{width: '100%', marginBottom: 65, backgroundColor:'#F5F5F5'}}>
           {hotelsList.map((item, index) => {
             return (
               <HotelCard key={index} item={item} navigation={navigation} />
@@ -205,7 +230,17 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
           </TouchableOpacity>
         </View>
         <Text style={styles.empty}>Please hold on while we fetch the best hotel options for you.{"\n"}If no results appear, try adjusting your search criteria.</Text>
-        <ActivityIndicator animating={true} size={40} color={COLORS.mainPurple} style={styles.loader} />
+        <ActivityIndicator animating={true} size={40} color={COLORS.black} style={styles.loader} />
+        <Modal
+          animationType="slide"
+          visible={showReservation}
+          onRequestClose={() => setShowReservations(false)}>
+          <ShowBookings
+            getReservations={getReservations}
+            bookingList={bookingList}
+            setShowReservations={setShowReservations}
+          />
+        </Modal>
       </>
     );
   }
@@ -277,7 +312,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     paddingHorizontal: '8%',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
     paddingBottom: 10,
   },
   btn: {
@@ -304,7 +339,8 @@ const styles = StyleSheet.create({
     fontSize: SIZES.largeMed,
     color: COLORS.textLightGrey,
     fontWeight: '500',
-    backgroundColor: COLORS.lighterGrey,
+    backgroundColor: COLORS.white,
+    borderWidth:1,
     borderRadius: 20,
     marginTop: 40,
     marginLeft: '5%',

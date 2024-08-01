@@ -16,7 +16,7 @@ const HostWelcomeBack = ({setHostModal}) => {
       <Text style={styles.title}>Welcome back, {"Lucy"}!</Text>
       <Text style={styles.subTitle}>Complete your space</Text>
       <View style={styles.listingCard}>
-        <Icon2 name='home' color={COLORS.mainPurple} size={40}/>
+        <Icon2 name='home' color={COLORS.black} size={40}/>
         <Text style={styles.listingCardText}>
             Your space started on 25 November 2023
         </Text>
@@ -40,11 +40,11 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'flex-start',
         width:'100%',
-        backgroundColor:COLORS.mainGrey,
+        backgroundColor:COLORS.newBG,
         height:'100%'
     },
     title:{
-        color:COLORS.mainPurple,
+        color:COLORS.black,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:24,
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         marginLeft:'10%'
     },
     subTitle:{
-      color:COLORS.mainPurple,
+      color:COLORS.black,
       fontSize:SIZES.large,
       fontWeight:'800',
       marginBottom:14,
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
       marginLeft:'10%',
       justifyContent:'space-between',
       marginVertical:20,
-      borderColor:COLORS.mainPurple,
+      borderColor:COLORS.black,
       borderRadius:10,
       borderWidth:1,
       paddingHorizontal:10,

@@ -27,15 +27,18 @@ const ReelObject = ({fetchReels,openComments,reels}) => {
   }
 
   const itemChanged=async(index)=>{
-    // console.log(index.index)
+    console.log(index.index)
     setReelIndex(index.index)
   }
 
-    const sampleReels=[
-        "https://storage.googleapis.com/rentspace/City%20Of%20Gold%20_%20Nirvair%20Pannu%20(Full%20Video)%20Deep%20Royce%20_%20Juke%20Dock.mp4-85c96ba9-0c41-4357-a7e5-afcbbbb45497.mp4",
-        "https://storage.googleapis.com/rentspace/VID-20231213-WA0000.mp4-28945091-e871-4dc2-afc4-2dffe6517492.mp4",
-        "https://storage.googleapis.com/rentspace/VID-20240107-WA0001.mp4-1d6abeee-3798-4ac6-9480-3aa9d0110e4a.mp4"
-    ]
+  // console.log("Reels on object page: ",reels)
+
+    // const sampleReels=[
+    //     "https://storage.googleapis.com/rentspace/City%20Of%20Gold%20_%20Nirvair%20Pannu%20(Full%20Video)%20Deep%20Royce%20_%20Juke%20Dock.mp4-85c96ba9-0c41-4357-a7e5-afcbbbb45497.mp4",
+    //     "https://storage.googleapis.com/rentspace/VID-20231213-WA0000.mp4-28945091-e871-4dc2-afc4-2dffe6517492.mp4",
+    //     "https://storage.googleapis.com/rentspace/VID-20240107-WA0001.mp4-1d6abeee-3798-4ac6-9480-3aa9d0110e4a.mp4"
+    // ]
+
   return (
     
     <SwiperFlatList 
@@ -47,7 +50,7 @@ const ReelObject = ({fetchReels,openComments,reels}) => {
         vertical={true}
         refreshing={refreshing}
         onRefresh={refresh}
-        onChangeIndex={itemChanged}
+        // onChangeIndex={itemChanged}
         keyExtractor={(item)=>item.hotelId}
         />                 
   )

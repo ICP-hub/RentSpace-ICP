@@ -1,32 +1,37 @@
 //Decides if canister ids used are of production or development
-const production = true;
+const production = false;
 
 export const host = production ? 'https://icp-api.io' : 'http://127.0.0.1:4943';
 
+export const nodeBackend = production ? 'https://rentspace.kaifoundry.com' : 'http://localhost:5000';
+
+export const payPalUrl = "https://api-m.sandbox.paypal.com";
+
 export const ids = {
   userCan: production
-    ? // "tassb-3qaaa-aaaan-qloxq-cai":
-      'xlygc-qqaaa-aaaao-a3odq-cai'
-    : 'be2us-64aaa-aaaaa-qaabq-cai',
+    ? 'ttotv-cyaaa-aaaao-a3o2a-cai'
+    : 'by6od-j4aaa-aaaaa-qaadq-cai', // rajnish
+    // :"avqkn-guaaa-aaaaa-qaaea-cai", // atharva
 
   hotelCan: production
-    ? 'wbxey-saaaa-aaaao-a3oeq-cai'
-    : // "5mldq-waaaa-aaaan-qlqta-cai":
-      'b77ix-eeaaa-aaaaa-qaada-cai',
+    ? 'tilpq-yaaaa-aaaao-a3oyq-cai'
+    : 'be2us-64aaa-aaaaa-qaabq-cai', // rajnish
+    // :"br5f7-7uaaa-aaaaa-qaaca-cai", // atharva
 
   backendCan: production
-    ? // "thtuv-wiaaa-aaaan-qloxa-cai":
-      '5cjoy-nqaaa-aaaan-qlqsa-cai'
+    ? '5cjoy-nqaaa-aaaan-qlqsa-cai'
     : 'be2us-64aaa-aaaaa-qaabq-cai',
   reviewCan: production
-    ? 'w2sy5-iyaaa-aaaao-a3oga-cai'
-    : 'bd3sg-teaaa-aaaaa-qaaba-cai',
+    ? 'tbiem-oiaaa-aaaao-a3oza-cai'
+    : 'bw4dl-smaaa-aaaaa-qaacq-cai', // rajnish
+    // :"b77ix-eeaaa-aaaaa-qaada-cai", // atharva
   bookingCan: production
-    ? 'wiupe-eiaaa-aaaao-a3ofa-cai'
-    : 'br5f7-7uaaa-aaaaa-qaaca-cai',
+    ? 'rsxhm-gqaaa-aaaao-a3oxq-cai'
+    : 'bkyz2-fmaaa-aaaaa-qaaaq-cai', // rajnish
+    // :"bd3sg-teaaa-aaaaa-qaaba-cai", // atharva
   ICPtokenCan: production
     ? 'ryjl3-tyaaa-aaaaa-aaaba-cai'
-    : 'ryjl3-tyaaa-aaaaa-aaaba-cai', //bw4dl-smaaa-aaaaa-qaacq-cai
+    : 'ryjl3-tyaaa-aaaaa-aaaba-cai', 
   ckBTCtokenCan: production
     ? 'mxzaz-hqaaa-aaaar-qaada-cai'
     : 'mxzaz-hqaaa-aaaar-qaada-cai',
@@ -34,11 +39,13 @@ export const ids = {
     ? 'ss2fx-dyaaa-aaaar-qacoq-cai'
     : 'ss2fx-dyaaa-aaaar-qacoq-cai',
   commentCan: production
-    ? 'wpvjq-jqaaa-aaaao-a3ofq-cai'
-    : 'bw4dl-smaaa-aaaaa-qaacq-cai',
+    ? 'tpkje-vyaaa-aaaao-a3oya-cai'
+    : 'bd3sg-teaaa-aaaaa-qaaba-cai', // rajnish
+    // :"be2us-64aaa-aaaaa-qaabq-cai", // atharva
   supportCan: production
-    ? 'wgwcm-7yaaa-aaaao-a3oea-cai'
-    : 'by6od-j4aaa-aaaaa-qaadq-cai',
+    ? 'tgjcy-dqaaa-aaaao-a3ozq-cai'
+    : 'b77ix-eeaaa-aaaaa-qaada-cai', // rajnish
+    // :"by6od-j4aaa-aaaaa-qaadq-cai", // atharva
 };
 
 // {

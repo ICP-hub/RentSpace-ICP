@@ -1,92 +1,159 @@
-import {ActivityIndicator, Alert, Image, Modal, StyleSheet, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  Modal,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {useState, useEffect} from 'react';
 import {SIZES, COLORS} from '../../constants/themes';
 import {images} from '../../constants';
-import {
-  TextInput,
-  TouchableOpacity,
-} from 'react-native-gesture-handler';
+import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {Calendar} from 'react-native-calendars';
 import {User} from '../../declarations/User/index.js';
-import { useSelector,useDispatch } from 'react-redux';
-import { setUser } from '../../redux/users/actions';
+import {useSelector, useDispatch} from 'react-redux';
+import {setUser} from '../../redux/users/actions';
 import DatePicker from 'react-native-date-picker';
-import { Dialog, ALERT_TYPE } from 'react-native-alert-notification';
+import {Dialog, ALERT_TYPE} from 'react-native-alert-notification';
+import Icon from 'react-native-vector-icons/Feather';
 
-const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
+import validator from 'validator';
 
 
-
+const BottomSheetFinishSignUp = ({openComm, closeModal}) => {
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
   const [email, setEmail] = useState('');
-  const [DOB, setDOB] = useState('Birthday(dd/mm/yyyy)');
+  const [DOB, setDOB] = useState('DOB (dd/mm/yyyy)');
   const [showCalendar, setShowCalendar] = useState(false);
-  const [loading,setLoading]=useState(false)
-  const [date,setDate]=useState(new Date())
+  const [loading, setLoading] = useState(false);
+  const [date, setDate] = useState(new Date());
 
-  const {user} =useSelector(state=>state.userReducer)
-  const {actors}=useSelector(state=>state.actorReducer)
-  const dispatch=useDispatch()
+  const {user} = useSelector(state => state.userReducer);
+  const {actors} = useSelector(state => state.actorReducer);
+  const dispatch = useDispatch();
 
-  async function signUp(){
-    setLoading(true)
-    const userObj={
-      firstName:fname,
-      lastName:lname,
-      dob:DOB,
-      userEmail:email,
-    }
-    console.log(userObj)
-    console.log(date)
+  async function signUp() {
+    setLoading(true);
 
-    let whoami=await actors?.userActor?.whoami().catch((err)=>{console.log(err)})
-    console.log("principal signup page : ",whoami)
-    console.log(actors?.userActor)
-    await actors.userActor?.createUser(userObj).then(async(res)=>{
-      console.log(res)
-      setLoading(false)
-      // Alert.alert('Registration successful',`Welcome ${fname}! You are successfully registered `)
+    if (
+      fname == '' ||
+      lname == '' ||
+      email == '' ||
+      DOB == 'DOB (dd/mm/yyyy)'
+    ) {
+      // Alert.alert('Please fill all the fields','All fields are required to continue')
       Dialog.show({
-        type:ALERT_TYPE.SUCCESS,
-        title:'Registration successful',
-        textBody:`Welcome ${fname}! You are successfully registered `,
-        button:'OK',
+        type: ALERT_TYPE.WARNING,
+        title: 'Please fill all the fields',
+        textBody: 'All fields are required to continue',
+        button: 'OK',
+      });
+      setLoading(false);
+      return;
+    }
+
+    const validEmail = validator.isEmail(email);
+
+    console.log("validEmail : ",validEmail)
+
+    if (!validEmail) {
+      // Alert.alert('Invalid email address','Please enter a valid email address')
+      Dialog.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'Invalid email address',
+        textBody: 'Please enter a valid email address',
+        button: 'OK',
+      });
+      setLoading(false);
+      return;
+    }
+
+    const userObj = {
+      firstName: fname,
+      lastName: lname,
+      dob: DOB,
+      userEmail: email,
+    };
+    console.log(userObj);
+    console.log(date);
+
+    let whoami = await actors?.userActor?.whoami().catch(err => {
+      console.log(err);
+    });
+    console.log('principal signup page : ', whoami);
+    console.log(actors?.userActor);
+    await actors.userActor
+      ?.registerUser(userObj)
+      .then(async res => {
+        if (res?.ok == 'User registered successfully') {
+          console.log(res);
+          setLoading(false);
+          // Alert.alert('Registration successful',`Welcome ${fname}! You are successfully registered `)
+          Dialog.show({
+            type: ALERT_TYPE.SUCCESS,
+            title: 'Registration successful',
+            textBody: `Welcome ${fname}! You are successfully registered `,
+            button: 'OK',
+          });
+
+          await actors.userActor
+            ?.getuserDetails()
+            .then(res => {
+              console.log(res?.ok), dispatch(setUser(res?.ok));
+              openComm();
+              closeModal();
+              console.log(user);
+            })
+            .catch(err => {
+              console.log('get user info catch : ', err);
+            });
+        } else {
+          console.log(res?.err);
+          Dialog.show({
+            type: ALERT_TYPE.WARNING,
+            // title:res?.err,
+            title: 'Trying to register failed',
+            textBody: res?.err,
+            button: 'OK',
+          });
+          await actors.userActor
+            ?.getuserDetails()
+            .then(res => {
+              console.log(res?.ok), dispatch(setUser(res?.ok));
+              openComm();
+              closeModal();
+              console.log(user);
+            })
+            .catch(err => {
+              console.log('get user info catch : ', err);
+            });
+        }
       })
-      
-      await actors.userActor?.getUserInfo().then((res)=>{
-        console.log(res[0]),
-        dispatch(setUser(res[0]))
-        openComm()
-        closeModal()
-        console.log(user)
-      }).catch((err)=>{console.log("get user info catch : ",err)})
-    }).catch((err)=>{
-     
-      console.log("err create user : ",err)
-      setLoading(false)
-    })
+      .catch(err => {
+        console.log('err create user : ', err);
+        setLoading(false);
+      });
   }
- 
 
   return (
     <View style={styles.bottomSheet}>
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {
-            if(user?.fname!=null){
+            if (user?.fname != null) {
               closeModal();
-            }else{
+            } else {
               // Alert.alert('Cannot skip','Please Register first to continue further')
               Dialog.show({
-                type:ALERT_TYPE.WARNING,
-                title:'CANNOT SKIP',
-                textBody:'Please Register first to continue further',
-                button:'OK',
-              })
-              
+                type: ALERT_TYPE.WARNING,
+                title: 'CANNOT SKIP',
+                textBody: 'Please Register first to continue further',
+                button: 'OK',
+              });
             }
-            
           }}>
           <Image source={images.cross} style={styles.crossImg} />
         </TouchableOpacity>
@@ -95,7 +162,7 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
       </View>
       <TextInput
         placeholder="First name"
-        placeholderTextColor={COLORS.mainPurple}
+        placeholderTextColor={COLORS.black}
         style={styles.firstName}
         value={fname}
         onChangeText={value => {
@@ -104,7 +171,7 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
       />
       <TextInput
         placeholder="Last name"
-        placeholderTextColor={COLORS.mainPurple}
+        placeholderTextColor={COLORS.black}
         style={styles.lastName}
         value={lname}
         onChangeText={value => {
@@ -120,7 +187,8 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
           setShowCalendar(true);
         }}>
         <Text style={styles.dateDivText}>{DOB}</Text>
-        <Image source={images.next} />
+        {/* <Image source={images.next} /> */}
+        <Icon name="chevron-right" size={20} color={COLORS.black} />
       </TouchableOpacity>
       <Text style={styles.simpleText}>
         To sign up, you need to be at level 18. Your birthday won’t be shared
@@ -128,7 +196,7 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
       </Text>
       <TextInput
         placeholder="Email"
-        placeholderTextColor={COLORS.mainPurple}
+        placeholderTextColor={COLORS.black}
         style={styles.simpleInput}
         value={email}
         onChangeText={value => {
@@ -146,27 +214,35 @@ const BottomSheetFinishSignUp = ({openComm,closeModal}) => {
         </Text>{' '}
         and acknowledge the <Text style={styles.linkText}>Privacy Policy.</Text>
       </Text>
-      <ActivityIndicator size={40} animating={loading}/>
-      <TouchableOpacity style={styles.submitBtn} onPress={()=>{signUp()}}>
+      <ActivityIndicator size={40} animating={loading} />
+      <TouchableOpacity
+        style={styles.submitBtn}
+        onPress={() => {
+          signUp();
+        }}>
         <Text style={styles.submitText}>Accept and continue</Text>
       </TouchableOpacity>
       <DatePicker
         modal
-        mode='date'
+        mode="date"
         open={showCalendar}
         date={date}
-        onConfirm={(date) => {
-          setShowCalendar(false)
-          setDate(date)
-          setDOB(`${(date.getDate()<10)?"0"+date.getDate():date.getDate()}/${(date.getMonth()+1<10)?"0"+(date.getMonth()+1):date.getMonth()+1}/${date.getFullYear()}`);
+        onConfirm={date => {
+          setShowCalendar(false);
+          setDate(date);
+          setDOB(
+            `${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}/${
+              date.getMonth() + 1 < 10
+                ? '0' + (date.getMonth() + 1)
+                : date.getMonth() + 1
+            }/${date.getFullYear()}`,
+          );
         }}
         onCancel={() => {
-          setShowCalendar(false)
+          setShowCalendar(false);
         }}
         maximumDate={new Date()}
       />
-
-
     </View>
   );
 };
@@ -204,11 +280,11 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     fontSize: SIZES.small,
     width: '80%',
-    opacity:0.4,
+    opacity: 0.4,
     marginBottom: 20,
   },
   simpleInput: {
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderWidth: 1,
     borderRadius: 10,
     width: '80%',
@@ -223,7 +299,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderWidth: 1,
     borderRadius: 10,
     width: '100%',
@@ -240,7 +316,7 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
   },
   firstName: {
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderWidth: 1,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
@@ -252,7 +328,7 @@ const styles = StyleSheet.create({
     fontSize: SIZES.preMedium,
   },
   lastName: {
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderWidth: 1,
     borderTopWidth: 0,
     borderBottomLeftRadius: 10,
@@ -274,7 +350,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     borderRadius: 10,
     height: 50,
     paddingHorizontal: 80,
@@ -291,6 +367,6 @@ const styles = StyleSheet.create({
     elevation: 2,
     marginTop: '60%',
     borderWidth: 1,
-    borderBlockColor: COLORS.mainPurple,
+    borderBlockColor: COLORS.black,
   },
 });

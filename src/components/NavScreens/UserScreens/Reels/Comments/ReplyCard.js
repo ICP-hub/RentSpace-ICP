@@ -6,15 +6,20 @@ import { useSelector } from 'react-redux'
 import {Principal} from '@dfinity/principal'
 
 const ReplyCard = ({item}) => {
+
+  console.log("Item on Reply Card",item);
+
   const {actors}=useSelector(state=>state.actorReducer)
   const [cardUser,setCardUser]=useState({})
   const getUser=async()=>{
-    await actors?.userActor.getUserInfoByPrincipal(Principal.fromText(item?.userId)).then((res)=>{
-      console.log(res)
-      setCardUser(res[0])
-    }).catch((err)=>{
+    try{
+      let usrresp = await actors?.userActor.getUserByPrincipal(Principal.fromText(item?.userId));
+      console.log('UserResp', usrresp);
+      setCardUser(usrresp.ok);
+    }
+    catch(err){
       console.log(err)
-    })
+    }
   }
   useEffect(()=>{
     getUser()

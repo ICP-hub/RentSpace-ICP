@@ -11,9 +11,9 @@ const ChatCard = ({item,setOpenChat,openChat,setChat}) => {
       setOpenChat(true)
       setChat(item)
       }}>
-        <Image source={(item?.userProfile==""||item?.userProfile=="img")?images.sampleProfile2:{uri:item?.userProfile}} style={styles.img}/>
+        <Image source={(item?.userImage==""||item?.userImage=="img")?images.sampleProfile2:{uri:item?.userImage}} style={styles.img}/>
       <Text style={styles.title}>{item?.firstName}</Text>
-      <Text style={styles.time}>Mon</Text>
+      {/* <Text style={styles.time}>Mon</Text> */}
     </TouchableOpacity>
     
     </>

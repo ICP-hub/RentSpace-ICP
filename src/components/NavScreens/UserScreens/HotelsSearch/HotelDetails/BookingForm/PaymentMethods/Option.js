@@ -1,17 +1,19 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { COLORS } from '../../../../../../../constants/themes'
 
 const Option = ({item,setMethod,method,connect}) => {
+  // console.log(item);
   return (
     <TouchableOpacity 
         style={(method==item?.label)?styles.selectedCard:styles.card} 
         onPress={()=>{
           setMethod(item?.label)
-          if(item?.label=="SOL"){
-            // connect()
+          // if(item?.label=="SOL"){
+          //   connect()
+          //   // Alert.alert('Coming Soon','This feature is coming soon');
             
-          }
+          // }
         }}
     >
       {
@@ -40,7 +42,7 @@ const styles = StyleSheet.create({
         width:'30%',
         backgroundColor:'white',
         height:50,
-        borderColor:COLORS.mainPurple,
+        borderColor:COLORS.black,
         borderWidth:1.2,
         elevation:2,
         borderRadius:8,

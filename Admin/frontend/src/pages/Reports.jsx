@@ -16,6 +16,13 @@ const Reports = () => {
 
   const getAllReports=async()=>{
     let newArr=[]
+    let reportRes=await actors?.supportActor?.getAllUnresolvedTickets(10,1)
+    if(reportRes?.err!=undefined){
+      console.log("err fetching reports : ",reportRes?.err)
+      return
+    }
+    console.log(reportRes)
+    
     await actors?.supportActor?.scanBooking(0,10).then((res)=>{
       console.log("report : ",res[0][1])
       res[0][1].map(async(r)=>{

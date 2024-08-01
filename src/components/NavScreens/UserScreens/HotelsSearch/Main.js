@@ -50,13 +50,15 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {host, ids} from '../../../../../DevelopmentConfig';
 import Geolocation from '@react-native-community/geolocation';
+import { nodeBackend } from '../../../../../DevelopmentConfig';
 global.Buffer = require('buffer').Buffer;
 
 const Main = ({navigation}) => {
   // const [loading,setLoading]=useState(false)
 
-  const baseQueryUrl=`https://rentspace.kaifoundry.com/api/v1/hotel/filters?`
+  // const baseQueryUrl=`https://rentspace.kaifoundry.com/api/v1/hotel/filters?`
   // const baseQueryUrl = `http://localhost:5000/api/v1/hotel/filters?`;
+  const baseQueryUrl = `${nodeBackend}/api/v1/property/filters?`
 
   const route = useRoute();
   const dispatch = useDispatch();
@@ -84,12 +86,13 @@ const Main = ({navigation}) => {
   // );
 
   const [query, setQuery] = useState({
-    location: '',
+    location: null,
+    minPrice: 0,
     maxPrice: 1000,
     pageSize: 15,
     amenities: [],
-    propertyType: 'Hotel',
-    name: 'hotel',
+    propertyType: '',
+    name: '',
     latitude: 0,
     longitude: 0,
   });
@@ -181,7 +184,7 @@ const Main = ({navigation}) => {
   };
 
   const filterQuery = async () => {
-    let finalquery = `maxPrice=${query.maxPrice}&pageSize=${query.pageSize}&amenities=${query.amenities}&propertyType=${query.propertyType}&location=${query.location}&name=${query.name}&latitude=${query.latitude}&longitude=${query.longitude}`;
+    let finalquery = `minPrice=${query.minPrice}&maxPrice=${query.maxPrice}&pageSize=${query.pageSize}&amenities=${query.amenities}&propertyType=${query.propertyType}&location=${query.location}&name=${query.name}&latitude=${query.latitude}&longitude=${query.longitude}`;
 
     console.log('filter query func', finalquery);
     await axios
@@ -203,6 +206,7 @@ const Main = ({navigation}) => {
           // console.log(res.data);
           console.log('External hotels : ' + res.data.externalHotels);
           console.log('Internal hotels : ' + res.data.hotels);
+          // console.log('External hotels ID :' + res.data.externalHotelsIDs);
         }
       })
       .catch(err => console.log(err));
@@ -343,7 +347,7 @@ const styles = StyleSheet.create({
   view: {
     width: '100%',
     height: '100%',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.newBG,
   },
   loader: {
     position: 'absolute',

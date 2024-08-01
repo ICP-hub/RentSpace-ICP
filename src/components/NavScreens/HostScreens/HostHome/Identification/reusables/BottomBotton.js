@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         width:'90%',
         paddingVertical:15,
-        backgroundColor:COLORS.hostTitle,
+        backgroundColor:COLORS.black,
         borderRadius:10,
     },
     btnText:{

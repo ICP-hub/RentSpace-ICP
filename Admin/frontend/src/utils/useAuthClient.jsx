@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { AuthClient } from "@dfinity/auth-client";
 import { createActor as createUserActor } from '../declarations/User';
-import { createActor as createBookingActor } from '../declarations/booking';
-import { createActor as createHotelActor } from '../declarations/hotel';
-import { createActor as createSupportActor, supportChat } from '../declarations/supportChat';
+import { createActor as createBookingActor } from '../declarations/Booking';
+import { createActor as createHotelActor } from '../declarations/Hotel';
+import { createActor as createSupportActor, supportChat } from '../declarations/Support';
 import {ids} from '../../../AdminDevelopmentConfig'
 import Login from '../pages/Login'
+import { Principal } from '@dfinity/principal';
 
 const AuthContext = createContext();
 
@@ -32,20 +33,23 @@ export const useAuthClient = () => {
             let hotelActor=createHotelActor(ids.hotelCan,{agentOptions:{identity:identity}})
             let bookingActor=createBookingActor(ids.bookingCan,{agentOptions:{identity:identity}})
             let supportActor=createSupportActor(ids.supportCan,{agentOptions:{identity:identity}})
+            console.log(supportActor)
             setActors({
                 userActor:userActor,
                 hotelActor:hotelActor,
                 bookingActor:bookingActor,
                 supportActor:supportActor
             })
-            await supportActor.isAdmin().then((res)=>{
-                if(res == true){
-                    setIsAuthenticated(true);
-                }
-                else{
-                    alert("You are not an admin -->" + principal);
-                }
-            })
+            let supportRes=await supportActor?.checkIsAdmin(identity.getPrincipal())
+            if(supportRes==false){
+                console.log(supportRes)
+                alert(`You are not the admin, please add this principal as admin to access functionalities : \n${identity.getPrincipal().toString()}`)
+                console.log(`You are not the admin, please add this principal as admin to access functionalities : \n${identity.getPrincipal().toString()}`)
+                return false
+            }else{
+                console.log(supportRes)
+                setIsAuthenticated(true)
+            }
         }
 
         return true;

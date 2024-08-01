@@ -23,6 +23,12 @@
 // '#8280D4'
 
 const COLORS={
+
+  newBG: '#F5F5F5',
+  newGray: '#8a8a8a',
+
+
+
   text:"red",
   inputBorder:'#8280D4',
   
@@ -53,12 +59,12 @@ const COLORS={
 
 export const AlertThemes=[
   {
-    label:COLORS.mainPurple,
+    label:COLORS.black,
     card:'#fff',
     overlay:'#E0E0E0',
-    success:COLORS.mainPurple,
-    danger:COLORS.mainPurple,
-    warning:COLORS.mainPurple,
+    success:'#4CC900',
+    danger:'#FF0000',
+    warning:'#FFD683',
   }
 ]
 
@@ -75,7 +81,7 @@ const SIZES={
   xxLarge: 32,
 }
 const FONTS={
-
+  primary: 'Poppins-Regular',
 }
 
 export {COLORS,FONTS,SIZES}

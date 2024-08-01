@@ -3,13 +3,15 @@ import React, { useEffect } from 'react'
 import { COLORS, SIZES } from '../../../../../../../constants/themes'
 
 const BalanceScreen = ({self,paymentMethod,walletID,balance,receiver,total,transfer,tokenActor,userId,loading,cryptoPrice}) => {
+  // console.log( (balance/100000000)>cryptoPrice,balance,total*cryptoPrice)
+  console.log(total)
 
   return (
     <View style={styles.modal}>
       <View style={styles.alert}>
         <Text style={styles.title}>
           {
-            (balance>total)?
+            (balance/100000000)>total*cryptoPrice?
             "Confirm Transaction"
             :
             "Insufficient Balance"
@@ -38,8 +40,8 @@ const BalanceScreen = ({self,paymentMethod,walletID,balance,receiver,total,trans
           </View>
         </View>
         {
-          balance>total?
-          <TouchableOpacity style={styles.btn} onPress={()=>{
+            (balance/100000000)>total*cryptoPrice?
+            <TouchableOpacity style={styles.btn} onPress={()=>{
             transfer(total*cryptoPrice,userId,tokenActor)
           }}>
             <Text style={styles.btnText}>Proceed</Text>
@@ -78,7 +80,7 @@ const styles = StyleSheet.create({
     alignItems:'center'
   },
   title:{
-    color:COLORS.hostTitle,
+    color:COLORS.black,
     fontSize:SIZES.large,
     marginVertical:10,
     fontWeight:'500',
@@ -90,7 +92,7 @@ const styles = StyleSheet.create({
     display:'flex',
     flexDirection:'column',
     justifyContent:'center',
-    backgroundColor:COLORS.hostTitle,
+    backgroundColor:COLORS.black,
     borderRadius:12,
     paddingVertical:15,
     alignItems:'center',

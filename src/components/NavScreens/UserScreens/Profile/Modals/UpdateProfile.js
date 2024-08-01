@@ -25,9 +25,9 @@ const UpdateProfile = ({setEditProfile}) => {
     const [updatedUser,setUpdatedUser]=useState({
       ...user,
       userGovId:user?.userGovId=="nothing"||user?.userGovId==""?"Not Provided":user?.userGovId,
-      userProfile:"img"
+      userImage:"img"
     })
-    const [userImg,setUserImg]=useState((user?.userProfile==""||user?.userProfile=="img")?images.sampleProfile2:{uri:user?.userProfile})
+    const [userImg,setUserImg]=useState((user?.userImage==""||user?.userImage=="img")?images.sampleProfile2:{uri:user?.userImage})
     const [showCalendar, setShowCalendar] = useState(false);
     const [date,setDate]=useState(new Date())
 
@@ -66,16 +66,26 @@ const UpdateProfile = ({setEditProfile}) => {
         if(userImg.uri==undefined){
           setUpdatedUser({
             ...updatedUser,
-            userType:user?.userType,
-            hostStatus:user?.hostStatus,
-            verificationStatus:false,
+            userRole:user?.userRole,
+            isHost:user?.isHost,
+            isVerified:false,
             agreementStatus:user?.agreementStatus,
-            userProfile:res
+            // userGovID:user?.userGovId,
           })
           console.log("2",updatedUser)
           
-          await actors.userActor?.updateUserInfo({...updatedUser,userProfile:res})
+          await actors.userActor?.updateUserDetails({...updatedUser})
           .then(async(res)=>{
+            if(res?.ok==undefined){
+              setLoading(false)
+              Dialog.show({
+                type:ALERT_TYPE.DANGER,
+                title:'Failed',
+                textBody:`${res?.err} !`,
+                button:'OK',
+              })
+              return
+            }
             console.log("3")
               console.log("update res : ",res[0])
               // alert(`Your profile is updated ${updatedUser?.firstName} !`)
@@ -85,11 +95,11 @@ const UpdateProfile = ({setEditProfile}) => {
                 textBody:`Your profile is updated ${updatedUser?.firstName} !`,
                 button:'OK',
               })
-              await actors.userActor?.getUserInfo()
+              await actors.userActor?.getuserDetails()
               .then(async(res)=>{
                   setLoading(false)
-                  dispatch(setUser(res[0]))
-                  console.log("response user",res[0])
+                  dispatch(setUser(res?.ok))
+                  console.log("response user",res?.ok)
                   setEditProfile(false)
               }).catch((err)=>{
                 console.log(err)
@@ -105,16 +115,26 @@ const UpdateProfile = ({setEditProfile}) => {
           console.log(res)
           setUpdatedUser({
             ...updatedUser,
-            userType:user?.userType,
-            hostStatus:user?.hostStatus,
-            verificationStatus:false,
+            userRole:user?.userRole,
+            isHost:user?.isHost,
             agreementStatus:user?.agreementStatus,
-            userProfile:res
+            userImage:res,
+            userGovID:user?.userGovId,
           })
           console.log("2",updatedUser)
           
-          await actors.userActor?.updateUserInfo({...updatedUser,userProfile:res})
+          await actors.userActor?.updateUserDetails({...updatedUser,userImage:res})
           .then(async(res)=>{
+            if(res?.ok==undefined){
+              setLoading(false)
+              Dialog.show({
+                type:ALERT_TYPE.DANGER,
+                title:'Failed',
+                textBody:`${res?.err} !`,
+                button:'OK',
+              })
+              return
+            }
             console.log("3")
               console.log("update res : ",res[0])
               // alert(`Your profile is updated ${updatedUser?.firstName} !`)
@@ -124,11 +144,11 @@ const UpdateProfile = ({setEditProfile}) => {
                 textBody:`Your profile is updated ${updatedUser?.firstName} !`,
                 button:'OK',
               })
-              await actors.userActor?.getUserInfo()
+              await actors.userActor?.getuserDetails()
               .then(async(res)=>{
                   setLoading(false)
-                  dispatch(setUser(res[0]))
-                  console.log("response user",res[0])
+                  dispatch(setUser(res?.ok))
+                  console.log("response user",res?.ok)
                   setEditProfile(false)
               }).catch((err)=>{
                 console.log(err)
@@ -153,7 +173,7 @@ const UpdateProfile = ({setEditProfile}) => {
       console.log(result.assets[0].uri)
       // setUpdatedUser({
       //   ...updatedUser,
-      //   userProfile:result.assets[0].uri
+      //   userImage:result.assets[0].uri
       // })
       setUserImg(result.assets[0])
       // console.log(result.assets[0].base64)
@@ -170,7 +190,7 @@ const UpdateProfile = ({setEditProfile}) => {
         <TouchableOpacity onPress={()=>{
           chooseUserImg()
         }}>
-          <Icon name='pluscircle' size={20} color={COLORS.mainPurple} style={styles.iconPlus}/>
+          <Icon name='pluscircle' size={20} color={COLORS.black} style={styles.iconPlus}/>
           <Image source={userImg.uri==null?userImg:{uri:userImg.uri}} style={styles.img}/>
         </TouchableOpacity> 
         
@@ -217,15 +237,15 @@ const UpdateProfile = ({setEditProfile}) => {
         style={styles.inputs} 
         placeholder='Govt Id No.' 
         placeholderTextColor={COLORS.inputBorder}
-        value={updatedUser?.userGovId}
-        onChangeText={value=>{setUpdatedUser({...updatedUser,userGovId:value})}}
+        value={updatedUser?.userGovID}
+        onChangeText={value=>{setUpdatedUser({...updatedUser,userGovID:value})}}
         />
       {/* <TextInput 
         style={styles.inputs} 
         placeholder='Profile image' 
         placeholderTextColor={COLORS.inputBorder}
-        value={updatedUser?.userProfile}
-        onChangeText={value=>{setUpdatedUser({...updatedUser,userProfile:value})}}
+        value={updatedUser?.userImage}
+        onChangeText={value=>{setUpdatedUser({...updatedUser,userImage:value})}}
     /> */}
     <View style={styles.labelCont}>
         <Icon3 name='birthday-cake' size={15} color={COLORS.black} style={{marginRight:6}}/>
@@ -275,7 +295,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: '100%',
         paddingVertical:40,
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG
       },
       titleCont:{
         display:'flex',
@@ -322,7 +342,7 @@ const styles = StyleSheet.create({
 
       },
       inputs:{
-        borderColor: COLORS.inputBorder,
+        borderColor: COLORS.black,
         borderWidth: 1,
         borderRadius: 10,
         width: '80%',

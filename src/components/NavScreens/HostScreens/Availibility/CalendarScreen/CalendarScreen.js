@@ -14,18 +14,21 @@ import Icon from 'react-native-vector-icons/Feather';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../../../../constants/themes';
 import { useSelector } from 'react-redux';
+import { nodeBackend } from '../../../../../../DevelopmentConfig';
 
 const CalendarScreen = ({item, setModalVisible, getHotelDetails}) => {
   // console.log(item.availableFrom)
-  const baseUrl="https://rentspace.kaifoundry.com"
+  // const baseUrl="https://rentspace.kaifoundry.com"
   // const baseUrl="http://localhost:5000"
+  const baseUrl = nodeBackend;
+
+  const {authData}=useSelector(state => state.authDataReducer)
+
   const [startDate, setStartDate] = useState({
-    // date: today,
     date: item.availableFrom.slice(0, 10),
     marked: false,
   });
-  const {authData}=useSelector(state => state.authDataReducer)
-
+  
   const [endDate, setEndDate] = useState({
     date: '',
     marked: false,
@@ -50,7 +53,7 @@ const CalendarScreen = ({item, setModalVisible, getHotelDetails}) => {
 
   const updateDates = async () => {
     const updateDates = {
-      hotelId: item.hotelId,
+      propertyId: item.propertyId,
       availableFrom: startDate.date + ' 00:00:00+05:30',
       availableTill: endDate.date + ' 00:00:00+05:30',
     };
@@ -58,7 +61,7 @@ const CalendarScreen = ({item, setModalVisible, getHotelDetails}) => {
 
     await axios
       .put(
-        `${baseUrl}/api/v1/hotel/updateHotelAvailbility`,
+        `${baseUrl}/api/v1/property/updateAvailability`,
         updateDates,
         {
           headers:{
@@ -100,7 +103,7 @@ const CalendarScreen = ({item, setModalVisible, getHotelDetails}) => {
           markedDates={{
             [startDate.date]: {
               selected: startDate.marked,
-              selectedColor: COLORS.mainPurple,
+              selectedColor: COLORS.black,
             },
           }}
         />
@@ -112,7 +115,7 @@ const CalendarScreen = ({item, setModalVisible, getHotelDetails}) => {
           markedDates={{
             [endDate.date]: {
               selected: endDate.marked,
-              selectedColor: COLORS.mainPurple,
+              selectedColor: COLORS.black,
             },
           }}
           disabledByDefault={secondCalenderDisplay}
@@ -181,7 +184,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     color: COLORS.white,
     padding: 10,
     borderRadius: 10,

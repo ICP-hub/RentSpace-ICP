@@ -10,9 +10,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useState,useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon2 from 'react-native-vector-icons/AntDesign';
+import Icon2 from 'react-native-vector-icons/SimpleLineIcons';
 import {COLORS} from '../../../../constants/themes';
 import Icon4 from 'react-native-vector-icons/FontAwesome5';
 import Video from 'react-native-video';
@@ -23,28 +23,75 @@ import {storage} from '../../../../../firebaseConfig';
 import axios from 'axios';
 import UploadModal from './Popups/UploadModal';
 import SubmitUpdates from './Popups/SubmitUpdates';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
+import {nodeBackend} from '../../../../../DevelopmentConfig';
+import {ALERT_TYPE, Dialog, Toast} from 'react-native-alert-notification';
+import PhantomPayment from '../../UserScreens/HotelsSearch/HotelDetails/BookingForm/cryptoScreens/PhantomPayment';
+import GetWalletId from '../../../HostViewNew/Step3/Pricing/GetWalletId';
+import GetPaypal from '../../../HostViewNew/Step3/Pricing/GetPaypal';
+import PayPalModal from './Popups/PayPalModal';
 
 const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
-  // console.log(item);
+  // console.log(item.phantomWalletID);
 
-  const baseUrl="https://rentspace.kaifoundry.com"
+  // console.log("Pass Data => ", passData);
+
+  // const baseUrl="https://rentspace.kaifoundry.com"
   // const baseUrl="http://localhost:5000"
+  const baseUrl = nodeBackend;
 
-  let img = item.imagesUrls;
-  let vdo = item.videoUrls;
+  const [phantomModal, setPhantomModal] = useState(false);
+  const [phantomAccID, setPhantomAccID] = useState(item.phantomWalletID);
+  const [phantomAccIDValidated, setPhantomAccIDValidated] = useState(false);
+  const [markSOL, setMarkSOL] = useState(false);
+
+  const [paypalMark, setPaypalMark] = useState(false);
+  const [paypalModal, setPaypalModal] = useState(false);
+  const [paypalClientID, setPaypalClientID] = useState(item.payPalId);
+  const [paypalClientSecret, setPaypalClientSecret] = useState(item.payPalSecret);
+
+
+  const updatePhantomAccID = id => {
+    setPhantomAccID(id);
+    setFinalData({...finalData, phantomWalletID: id});
+  };
+
+  const updatePaypalClientIDandSecret = (id,secret) => {
+
+    setFinalData({
+      ...finalData,
+      payPalId: id,
+      payPalSecret: secret,
+    });
+  };
+
+
+
+  const UpdatePaymentMethods = method => {
+    let temp = finalData.paymentMethods;
+    if (temp.includes(method)) {
+      temp = temp.filter(e => e !== method);
+    } else {
+      temp.push(method);
+    }
+    setFinalData({...finalData, paymentMethods: temp});
+  };
+
+  useEffect(() => {
+    console.log('Phantom Account ID => ', phantomAccID);
+    console.log('Final Data => ', finalData.phantomWalletID);
+    console.log('Payment Methods => ', finalData.paymentMethods);
+  }, [phantomAccID]);
 
   const [upload, setUpload] = useState(false);
   const [submit, setSubmit] = useState(false);
   const [pauseReel, setPauseReel] = useState(true);
   const [videoControlOpacity, setVideoControlOpacity] = useState(true);
-  const [hotelImg, setHotelImg] = useState(item.imagesUrls);
-  const [hotelVdo, setHotelVdo] = useState(item.videoUrls);
-  const {authData}=useSelector(state => state.authDataReducer)
+  const [hotelImg, setHotelImg] = useState(item.imageList[0]);
+  const [hotelVdo, setHotelVdo] = useState(item.videoList[0]);
+  const {authData} = useSelector(state => state.authDataReducer);
 
   const [transferred, setTransferred] = useState(0);
-
- 
 
   const [checkOption, setCheckOption] = useState({
     camera: true,
@@ -59,6 +106,8 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
     btc: false,
     icp: false,
     creditCard: false,
+    sol: false,
+    payPal: false,
   });
 
   const [discounts, setDiscounts] = useState({
@@ -68,16 +117,21 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
   });
 
   const [finalData, setFinalData] = useState({
-    hotelId: passData.hotelId,
-    hotelName: passData.title,
+    propertyId: item.propertyId,
+    propertyName: passData.title,
+    propertyDescription: '',
+    price: item.price.toString(),
+    imageList: item.imageList,
+    videoList: item.videoList,
     location: passData.location,
     amenities: passData.propertyAmenities,
     propertyType: passData.propertyName,
-    hotelDes: '',
-    price: '',
-    imagesUrls: '',
-    videoUrls: '',
     paymentMethods: [],
+    rooms: passData.rooms,
+    maxOccupancy: passData.maxOccupancy,
+    phantomWalletID: phantomAccID,
+    payPalId: paypalClientID,
+    payPalSecret: paypalClientSecret,
   });
 
   const videoControl = () => {
@@ -89,11 +143,12 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
     }, 1500);
   };
 
-    const chooseHotelImg = async () => {
+  const chooseHotelImg = async () => {
     await launchImageLibrary(
-      { mediaType: 'photo', includeBase64: true },
+      {mediaType: 'photo', includeBase64: true},
       response => {
-        if (response && !response.didCancel) { // Check if response is valid and not cancelled
+        if (response && !response.didCancel) {
+          // Check if response is valid and not cancelled
           setHotelImg(response.assets[0].uri);
           console.log('Image => ', response.assets[0].uri);
           setUpload(true);
@@ -107,9 +162,10 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
 
   const chooseHotelvdo = async () => {
     await launchImageLibrary(
-      { mediaType: 'video', includeBase64: true },
+      {mediaType: 'video', includeBase64: true},
       response => {
-        if (response && !response.didCancel) { // Check if response is valid and not cancelled
+        if (response && !response.didCancel) {
+          // Check if response is valid and not cancelled
           setHotelVdo(response.assets[0].uri);
           console.log('Video => ', response.assets[0].uri);
           setUpload(true);
@@ -142,7 +198,11 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
           console.log('File available at', downloadURL);
-          setFinalData({...finalData, imagesUrls: downloadURL});
+
+          const temp = [downloadURL, ...finalData.imageList];
+          console.log('Temp => ', temp);
+
+          setFinalData({...finalData, imageList: temp});
           setUpload(false);
         });
       },
@@ -170,47 +230,61 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(async downloadURL => {
           console.log('File available at', downloadURL);
-          setFinalData({...finalData, videoUrls: downloadURL});
+
+          const temp = [downloadURL, ...finalData.videoList];
+
+          console.log('TEMP => ', temp);
+
+          setFinalData({...finalData, videoList: temp});
           setUpload(false);
         });
       },
     );
   };
 
-
-
   // save and exit function to save data and exit modal
   const saveAndExit = async () => {
     console.log('Save And Exit');
 
-    setSubmit(true);
+    // setFinalData({...finalData, payPalId: paypalClientID, payPalSecret: paypalClientSecret});
 
-    await axios
-      .put(`${baseUrl}/api/v1/hotel/updateHotel`, finalData,{
-        headers:{
-        "x-private":authData.privateKey,
-        "x-public":authData.publicKey,
-        "x-delegation":authData.delegation,
-      }})
-      .then(res => {
-        console.log(res.data);
-      })
-      .catch(err => {
-        console.log(err);
+    console.log('Final Data => ', finalData.payPalId, finalData.payPalSecret);
+
+    if (finalData.paymentMethods.length == 0) {
+      // alert("Please Select Payment Methods")
+      Dialog.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'Please Select Payment Methods',
+        textBody: 'You must select atleast one payment method to proceed!',
+        button: 'OK',
       });
+    } else {
+      setSubmit(true);
 
-    setTimeout(() => {
-      setSubmit(false);
-    }, 5000);
+      await axios
+        .put(`${baseUrl}/api/v1/property/update`, finalData, {
+          headers: {
+            'x-private': authData.privateKey,
+            'x-public': authData.publicKey,
+            'x-delegation': authData.delegation,
+          },
+        })
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
 
-    getHotelDetails();
-    exitModal(false);
-    console.log(finalData);
+      setTimeout(() => {
+        setSubmit(false);
+      }, 5000);
+
+      getHotelDetails();
+      exitModal(false);
+      console.log(finalData);
+    }
   };
-
-
-
-
 
   return (
     <View style={styles.container}>
@@ -233,13 +307,16 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
         }}>
         {/* sec1 */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Place Description</Text>
+          <Text style={styles.sectionTitle}>Space Description</Text>
         </View>
         <TextInput
           style={[styles.textInput, {height: 100, textAlignVertical: 'top'}]}
           multiline={true}
-          placeholder={item.hotelDescription}
-          onChangeText={text => setFinalData({...finalData, hotelDes: text})}
+          placeholder={item?.propertyDescription}
+          placeholderTextColor={COLORS.black}
+          onChangeText={text =>
+            setFinalData({...finalData, propertyDescription: text})
+          }
         />
 
         {/* sec2 */}
@@ -277,7 +354,6 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
             posterResizeMode="cover"
             poster={hotelImg}
             style={styles.backgroundVideo}
-            
           />
           <TouchableOpacity
             onPress={videoControl}
@@ -309,17 +385,18 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
         </View>
 
         {/* sec4 */}
-        <View style={styles.sectionHeader}>
+        {/* <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Price</Text>
         </View>
         <TextInput
           style={styles.textInput}
           inputMode="numeric"
           placeholder={`$${item.price}/Night`}
+          placeholderTextColor={COLORS.black}
           onChangeText={text =>
-            setFinalData({...finalData, price: parseFloat(text)})
+            setFinalData({...finalData, price: text.toString()})
           }
-        />
+        /> */}
 
         {/* sec5 */}
         <View style={styles.sectionHeader}>
@@ -329,85 +406,167 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
           <TouchableOpacity
             onPress={() => {
               setPayOption({...payOption, ethereum: !payOption.ethereum});
-              setFinalData(prevState => ({
-                ...prevState,
-                paymentMethods: [...prevState.paymentMethods, 'ckEth'],
-              }));
+              // setFinalData(prevState => ({
+              //   ...prevState,
+              //   paymentMethods: [...prevState.paymentMethods, 'ckEth'],
+              // }));
+              UpdatePaymentMethods('ckEth');
             }}>
             <View
               style={
                 payOption.ethereum ? styles.payItemActive : styles.payItem
               }>
-              <Icon4 name="ethereum" color={COLORS.black} size={30} />
+              <Icon4
+                name="ethereum"
+                color={payOption.ethereum ? COLORS.white : COLORS.black}
+                size={30}
+              />
             </View>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setPayOption({...payOption, applePay: !payOption.applePay});
-              setFinalData(prevState => ({
-                ...prevState,
-                paymentMethods: [...prevState.paymentMethods, 'applePay'],
-              }));
+              // setFinalData(prevState => ({
+              //   ...prevState,
+              //   paymentMethods: [...prevState.paymentMethods, 'applePay'],
+              // }));
+              UpdatePaymentMethods('applePay');
             }}>
             <View
               style={
                 payOption.applePay ? styles.payItemActive : styles.payItem
               }>
-              <Icon4 name="apple-pay" color={COLORS.black} size={30} />
+              <Icon4
+                name="apple-pay"
+                color={payOption.applePay ? COLORS.white : COLORS.black}
+                size={30}
+              />
             </View>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setPayOption({...payOption, googlePay: !payOption.googlePay});
-              setFinalData(prevState => ({
-                ...prevState,
-                paymentMethods: [...prevState.paymentMethods, 'gPay'],
-              }));
+              // setFinalData(prevState => ({
+              //   ...prevState,
+              //   paymentMethods: [...prevState.paymentMethods, 'gPay'],
+              // }));
+              UpdatePaymentMethods('gPay');
             }}>
             <View
               style={
                 payOption.googlePay ? styles.payItemActive : styles.payItem
               }>
-              <Icon4 name="google-pay" color={COLORS.black} size={30} />
+              <Icon4
+                name="google-pay"
+                color={payOption.googlePay ? COLORS.white : COLORS.black}
+                size={30}
+              />
             </View>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setPayOption({...payOption, btc: !payOption.btc});
-              setFinalData(prevState => ({
-                ...prevState,
-                paymentMethods: [...prevState.paymentMethods, 'ckBTC'],
-              }));
+              // setFinalData(prevState => ({
+              //   ...prevState,
+              //   paymentMethods: [...prevState.paymentMethods, 'ckBTC'],
+              // }));
+              UpdatePaymentMethods('ckBTC');
             }}>
             <View style={payOption.btc ? styles.payItemActive : styles.payItem}>
-              <Icon4 name="btc" color={COLORS.black} size={30} />
+              <Icon4
+                name="btc"
+                color={payOption.btc ? COLORS.white : COLORS.black}
+                size={30}
+              />
             </View>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setPayOption({...payOption, icp: !payOption.icp});
-              setFinalData(prevState => ({
-                ...prevState,
-                paymentMethods: [...prevState.paymentMethods, 'ICP'],
-              }));
+              // setFinalData(prevState => ({
+              //   ...prevState,
+              //   paymentMethods: [...prevState.paymentMethods, 'ICP'],
+              // }));
+              UpdatePaymentMethods('ICP');
             }}>
             <View style={payOption.icp ? styles.payItemActive : styles.payItem}>
-              <Text style={styles.payItemText}>ICP</Text>
+              <Text
+                style={
+                  payOption.icp ? styles.payItemTextActive : styles.payItemText
+                }>
+                ICP
+              </Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setPayOption({...payOption, creditCard: !payOption.creditCard});
-              setFinalData(prevState => ({
-                ...prevState,
-                paymentMethods: [...prevState.paymentMethods, 'creditCard'],
-              }));
+              // setFinalData(prevState => ({
+              //   ...prevState,
+              //   paymentMethods: [...prevState.paymentMethods, 'creditCard'],
+              // }));
+              UpdatePaymentMethods('creditCard');
+              // initiate paypal wallet connection
+              if (payOption.payPal == false && payOption.creditCard == false) {
+                setPaypalModal(true);
+              }
             }}>
             <View
               style={
                 payOption.creditCard ? styles.payItemActive : styles.payItem
               }>
-              <Icon4 name="credit-card" color={COLORS.black} size={30} />
+              <Icon4
+                name="credit-card"
+                color={payOption.creditCard ? COLORS.white : COLORS.black}
+                size={30}
+              />
+            </View>
+          </TouchableOpacity>
+          {/* SOl---------------------------------------------------------------------- */}
+          <TouchableOpacity
+            onPress={() => {
+              setPayOption({...payOption, sol: !payOption.sol});
+              // setFinalData(prevState => ({
+              //   ...prevState,
+              //   paymentMethods: [...prevState.paymentMethods, 'SOL'],
+              // }));
+              UpdatePaymentMethods('SOL');
+              // initiate phantom wallet connection
+
+              if (payOption.sol == false) {
+                setPhantomModal(true);
+              }
+            }}>
+            <View style={payOption.sol ? styles.payItemActive : styles.payItem}>
+              <Text
+                style={
+                  payOption.sol ? styles.payItemTextActive : styles.payItemText
+                }>
+                SOL
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setPayOption({...payOption, payPal: !payOption.payPal});
+              // setFinalData(prevState => ({
+              //   ...prevState,
+              //   paymentMethods: [...prevState.paymentMethods, 'paypal'],
+              // }));
+              UpdatePaymentMethods('paypal');
+
+              // initiate paypal wallet connection
+              if (payOption.payPal == false && payOption.creditCard == false) {
+                setPaypalModal(true);
+              }
+            }}>
+            <View
+              style={payOption.payPal ? styles.payItemActive : styles.payItem}>
+              <Icon2
+                name="paypal"
+                color={payOption.payPal ? COLORS.white : COLORS.black}
+                size={30}
+              />
             </View>
           </TouchableOpacity>
         </View>
@@ -541,11 +700,44 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
         <UploadModal transferred={transferred} />
       </Modal>
 
+      <Modal
+        transparent
+        animationType="fade"
+        visible={phantomModal}
+        onRequestClose={() => {
+          setPhantomModal(false);
+        }}>
+        <GetWalletId
+          phantomAccID={phantomAccID}
+          setPhantomAccID={updatePhantomAccID}
+          setPhantomAccIDValidated={setPhantomAccIDValidated}
+          setWalletIDModal={setPhantomModal}
+        />
+      </Modal>
+
+      <Modal
+        transparent
+        animationType="fade"
+        visible={paypalModal}
+        onRequestClose={() => {
+          setPaypalModal(false);
+        }}>
+        <PayPalModal
+        clientID = {paypalClientID}
+        clientSecret = {paypalClientSecret}
+        updatePaypal={updatePaypalClientIDandSecret}
+        setPaypalModal={()=>{
+          setPaypalModal(false);
+        }}
+        
+        />
+      </Modal>
+
       {/* Submit Modal */}
       {/* <Modal visible={submit} transparent>
         <SubmitUpdates />
       </Modal> */}
-      <ActivityIndicator animating={submit} style={styles.loader} size={40}/>
+      <ActivityIndicator animating={submit} style={styles.loader} size={40} />
     </View>
   );
 };
@@ -553,15 +745,15 @@ const UpdateModal = ({item, passData, exitModal, getHotelDetails}) => {
 export default UpdateModal;
 
 const styles = StyleSheet.create({
-  loader:{
-    position:'absolute',
-    top:'40%',
-    marginHorizontal:'50%',
+  loader: {
+    position: 'absolute',
+    top: '40%',
+    marginHorizontal: '50%',
   },
   container: {
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
     paddingTop: 10,
     width: '100%',
     height: '100%',
@@ -615,7 +807,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
   },
 
   imageContainer: {
@@ -643,9 +835,9 @@ const styles = StyleSheet.create({
   btn: {
     width: 150,
     height: 50,
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderRadius: 10,
     textAlign: 'center',
     paddingTop: 15,
@@ -704,7 +896,7 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 14,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -714,11 +906,11 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 14,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: COLORS.mainPurple,
-    backgroundColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
+    backgroundColor: COLORS.black,
   },
 
   payItemText: {
@@ -738,7 +930,7 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 14,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     marginVertical: 5,
     paddingHorizontal: 15,
     display: 'flex',
@@ -756,7 +948,7 @@ const styles = StyleSheet.create({
   optionTextActive: {
     fontSize: 16,
     fontWeight: '500',
-    color: COLORS.mainPurple,
+    color: COLORS.black,
   },
 
   optionIcon: {
@@ -765,7 +957,7 @@ const styles = StyleSheet.create({
 
   optionIconActive: {
     display: 'flex',
-    color: COLORS.mainPurple,
+    color: COLORS.black,
   },
 
   saveBtn: {
@@ -773,8 +965,8 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 14,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
-    backgroundColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
+    backgroundColor: COLORS.black,
     marginVertical: 10,
     paddingHorizontal: 15,
     justifyContent: 'center',

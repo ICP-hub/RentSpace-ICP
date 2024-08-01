@@ -9,7 +9,9 @@ const months=["January","Febraury","March","April","May","June","July","August",
 
 const ReviewCard = ({item}) => {
   // const rating=4
-  let ratingArr=new Array(item?.rating)
+  // console.log("Item = ", item.rating)
+  let ratingArr=new Array(parseInt(item?.rating))
+  // let ratingArr=new Array(item)
   const {actors}=useSelector(state=>state.actorReducer)
 
   ratingArr.fill(1)

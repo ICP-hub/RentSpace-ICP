@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         height:25,
         borderRadius:20,
         borderWidth:1,
-        borderColor:COLORS.mainPurple,
+        borderColor:COLORS.black,
         display:'flex',
         flexDirection:'column',
         justifyContent:'center',
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         width:15,
         height:15,
         borderRadius:25,
-        backgroundColor:COLORS.mainPurple
+        backgroundColor:COLORS.black
     },
     text:{
         fontWeight:SIZES.medium,

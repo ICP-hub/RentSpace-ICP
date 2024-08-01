@@ -14,11 +14,12 @@ import {Dropdown} from 'react-native-element-dropdown';
 import { Dialog,ALERT_TYPE } from 'react-native-alert-notification';
 
 const data = [
-  {label: 'India', value: 'India'},
-  {label: 'USA', value: 'USA'},
-  {label: 'UK', value: 'UK'},
-  {label: 'China', value: 'China'},
-  {label: 'South Africa', value: 'South Africa'},
+  {label: 'Asia', value: 'Asia'},
+  {label: 'Africa', value: 'Africa'},
+  {label: 'Australia', value: 'Australia'},
+  {label: 'Europe', value: 'Europe'},
+  {label: 'North America', value: 'North America'},
+  {label: 'South America', value: 'South America'},
 ];
 
 const FillAdress = ({self, setLocation, location}) => {
@@ -54,8 +55,10 @@ const FillAdress = ({self, setLocation, location}) => {
         <Dropdown
           data={data}
           value={address?.region}
-          placeholder="Country/region"
-          onChange={value => setAddress({...address, region: value})}
+          placeholder="Region"
+          onChange={value => {
+            console.log(value);
+            setAddress({...address, region: value.value})}}
           labelField="label"
           valueField="value"
           style={styles.drop}
@@ -74,8 +77,8 @@ const FillAdress = ({self, setLocation, location}) => {
         <TextInput
           style={styles.middleInputs}
           value={address?.building}
-          onChangeText={value => setAddress({...address, building: value})}
-          placeholder="Apt, suite, bldg (optinal)"
+          onChangeText={value => setAddress({...address, suiteBuilding: value})}
+          placeholder="Apt, suite, Building"
           placeholderTextColor={COLORS.black}
         />
         <TextInput
@@ -83,6 +86,7 @@ const FillAdress = ({self, setLocation, location}) => {
           value={address?.city}
           onChangeText={value => {
             setAddress({...address, city: value});
+            // setLocation(value);
           }}
           placeholder="City"
           placeholderTextColor={COLORS.black}
@@ -97,7 +101,7 @@ const FillAdress = ({self, setLocation, location}) => {
         <TextInput
           style={styles.lastInp}
           value={address?.postalCode}
-          onChangeText={value => setAddress({...address, postalCode: value})}
+          onChangeText={value => setAddress({...address, postcode: value})}
           placeholder="Postcode"
           placeholderTextColor={COLORS.black}
         />
@@ -112,18 +116,13 @@ const FillAdress = ({self, setLocation, location}) => {
           style={styles.btn}
           onPress={() => {
             if (
-              address.city != ''||
-              address.country != ''||
-              address.postcode !=''||
-              address.region != ''||
-              address.streetAdd !=''||
-              address.suiteBuilding !=''
+              address.city == ''||
+              address.country == ''||
+              address.postcode ==''||
+              address.region == ''||
+              address.streetAdd ==''||
+              address.suiteBuilding ==''
             ) {
-              let temp = location;
-              setLocation(`${temp}#${address.city}`);
-              console.log(location);
-              self(false);
-            } else {
               // alert('Please do not leave any fields empty!');
               Dialog.show({
                 type:ALERT_TYPE.WARNING,
@@ -131,6 +130,15 @@ const FillAdress = ({self, setLocation, location}) => {
                 textBody:'Please do not leave any fields empty!',
                 button:'OK',
               })
+              
+            } else {
+              // let temp = location;
+              let temp = `${address.suiteBuilding} ${address.streetAdd}, ${address.city} ${address.country}, ${address.postcode}`;
+              // let temp = `${address}`;
+              setLocation(`${temp}`);
+              console.log("location : ",temp);
+              self(false);
+              
                 
             }
           }}>
@@ -154,14 +162,14 @@ const styles = StyleSheet.create({
     height: '94%',
     position: 'absolute',
     top: '6%',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.newBG,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     elevation: 10,
   },
   title: {
     width: '85%',
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     fontSize: SIZES.xxLarge,
     fontWeight: '500',
     marginBottom: 8,
@@ -245,7 +253,7 @@ const styles = StyleSheet.create({
     width: '90%',
     paddingVertical: 12,
     borderRadius: 12,
-    backgroundColor: COLORS.hostTitle,
+    backgroundColor: COLORS.black,
     marginTop: 15,
   },
   btnText: {

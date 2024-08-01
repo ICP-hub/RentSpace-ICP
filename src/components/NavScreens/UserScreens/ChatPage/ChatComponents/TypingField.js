@@ -19,7 +19,7 @@ const TypingField = ({setMessages,messages,setMessage,message,sendMessage}) => {
        onChangeText={value=>setMessage(value)}
       />
       <TouchableOpacity style={styles.icon} onPress={sendMessage}>
-        <Icon name='location-arrow' color={COLORS.mainPurple} size={30}/>
+        <Icon name='location-arrow' color={COLORS.black} size={30}/>
       </TouchableOpacity>
       
     </View>

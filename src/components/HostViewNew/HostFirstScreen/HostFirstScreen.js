@@ -9,7 +9,7 @@ import { COLORS } from '../../../constants/themes'
 
 const HostFirstScreen = ({setHostModal,navigation}) => {
   return (
-        <ScrollView contentContainerStyle={styles.view}>
+        <ScrollView contentContainerStyle={styles.view} showsVerticalScrollIndicator={false}>
             <BackBtn setHostModal={setHostModal} navigation={navigation}/>
             <Header/>
             <SearchMap/>
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         width:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG
     },
     footer:{
         width:'100%',

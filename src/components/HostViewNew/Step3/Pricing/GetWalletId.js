@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     fontSize: SIZES.large,
     marginVertical: 10,
     fontWeight: '500',
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     borderRadius: 12,
     paddingVertical: 15,
     alignItems: 'center',

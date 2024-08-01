@@ -13,10 +13,15 @@ const ChatHeader = ({setSupportChatPage}) => {
       <View style={styles.textCont}>
         <Text style={styles.name}>Support Chat</Text>
         <Text style={styles.status}>
-            {
+            {/* {
                 status?
                 "Äctive Now":
                 "Last seen on Monday"
+            } */}
+            {
+                status?
+                "Online":
+                "Offline"
             }
         </Text>
       </View>
@@ -35,7 +40,7 @@ const styles = StyleSheet.create({
         backgroundColor:'white',
         width:'100%',
         paddingVertical:10,
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG
     },
     btn:{
         position:'absolute',

@@ -12,7 +12,8 @@ const Navbar = () => {
         // location.reload()
         await logout().then((res)=>{
             console.log(res)
-            location.reload()
+            navg('/')
+            localStorage.clear()
         }).catch((err)=>{
             console.log(err)
         })

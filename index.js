@@ -25,7 +25,7 @@ import UserDetailDemo from './src/components/NavScreens/UserScreens/Profile/Moda
 // import Map from './src/components/NavScreens/UserScreens/Map/Map';
 import Reels from './src/components/NavScreens/UserScreens/Reels/Reels';
 import {User} from './src/declarations/User';
-import {hotel} from './src/declarations/hotel';
+import {Hotel} from './src/declarations/Hotel'
 import {backend} from './src/declarations/backend';
 import PolyfillCrypto from 'react-native-webview-crypto';
 import {
@@ -49,11 +49,11 @@ import {
 } from 'react-native';
 import {createActor} from './src/declarations/backend';
 import {createActor as createUserActor} from './src/declarations/User';
-import {createActor as createHotelActor} from './src/declarations/hotel';
-import {createActor as createBookingActor} from './src/declarations/booking';
+import {createActor as createHotelActor} from './src/declarations/Hotel/';
+import {createActor as createBookingActor} from './src/declarations/Booking';
 import {createActor as createReviewActor} from './src/declarations/Review';
-import {createActor as createCommentActor} from './src/declarations/comment';
-import {createActor as createSupportActor} from './src/declarations/supportChat';
+import {createActor as createCommentActor} from './src/declarations/Comment';
+import {createActor as createSupportActor} from './src/declarations/Support';
 import store from './src/redux/store';
 import {setActor} from './src/redux/actor/actions';
 import {setPrinciple} from './src/redux/principle/actions';
@@ -64,7 +64,7 @@ import {createTokenActor} from './src/components/NavScreens/UserScreens/HotelsSe
 import {setAuthData} from './src/redux/authData/actions';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {host, ids} from './DevelopmentConfig';
+import {host, ids, nodeBackend} from './DevelopmentConfig';
 import MainProfile from './src/components/NavScreens/UserScreens/Profile/MainProfile/MainProfile';
 import HotelChoice from './src/components/NavScreens/HostScreens/Availibility/HotelChoice/HotelChoice';
 import {AlertNotificationRoot, ALERT_TYPE,Dialog} from 'react-native-alert-notification'
@@ -293,10 +293,11 @@ const RootComponent: React.FC = () => {
         try {
           Linking.addEventListener('url', handleDeepLink);
           setTimeout(async () => {
-            const url = `https://xmzaw-5iaaa-aaaao-a3oda-cai.icp0.io?publicKey=${toHex(res.getPublicKey().toDer())}`;
-            // const url = `http://127.0.0.1:4943/?canisterId=bkyz2-fmaaa-aaaaa-qaaaq-cai&publicKey=${toHex(
-            //   res.getPublicKey().toDer(),
-            // )}`;
+            // const url = `https://xmzaw-5iaaa-aaaao-a3oda-cai.icp0.io?publicKey=${toHex(res.getPublicKey().toDer())}`;
+            // const url = `http://127.0.0.1:4943/?canisterId=bw4dl-smaaa-aaaaa-qaacq-cai&publicKey=${toHex( // for atharva local
+            const url = `http://127.0.0.1:4943/?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai&publicKey=${toHex( // for rajnish local 
+              res.getPublicKey().toDer(),
+            )}`;
             if (await InAppBrowser.isAvailable()) {
               const result = await InAppBrowser.open(url, {
                 // iOS Properties
@@ -451,7 +452,8 @@ const RootComponent: React.FC = () => {
         store.dispatch(setAuthData(signObj));
         // const baseUrl="http://localhost:5000"
         // alert('implementing chat register')
-        const baseUrl = 'https://rentspace.kaifoundry.com';
+        // const baseUrl = 'https://rentspace.kaifoundry.com';
+        const baseUrl = nodeBackend;
         await axios
           .post(
             `${baseUrl}/api/v1/register/user`,
@@ -527,16 +529,16 @@ const RootComponent: React.FC = () => {
       console.log('Getting user data');
       setTimeout(async () => {
         await actorUser
-          ?.getUserInfo()
+          ?.getuserDetails()
           .then(res => {
-            if (res[0]?.firstName != null) {
-              store.dispatch(setUser(res[0]));
+            if (res?.ok?.firstName != null) {
+              store.dispatch(setUser(res?.ok));
               btmSheetLoginRef.current.dismiss();
               // Alert.alert(`Welcome`,`You are welcome again ${res[0]?.firstName}!`);
               Dialog.show({
                 type:ALERT_TYPE.SUCCESS,
                 title:'WELCOME',
-                textBody:`You are welcome again ${res[0]?.firstName}!`,
+                textBody:`You are welcome again ${res?.ok?.firstName}!`,
                 button:'OK',
               })
             } else {

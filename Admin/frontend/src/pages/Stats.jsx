@@ -48,22 +48,25 @@ const Stats = () => {
   const {actors}=useAuth()
 
   const getUserData=async(year)=>{
-    await actors?.userActor?.getAnnualRegisterByYear(year.toString()).then((res)=>{
-        console.log("user count res : ",res[0])
-        setUserCount(sumArray(createArray(res[0])))
-        setUserData(createArray(res[0]))
-    }).catch((err)=>{
-      console.log("user count err : ",err)
-    })
+    let userRes=await actors?.userActor?.getAnnualRegisterByYear(year.toString())
+    if(userRes?.err!=undefined){
+      console.log("err fetching user data  : ",userRes?.err)
+      return
+    }
+    console.log("user count res : ",userRes)
+    setUserCount(sumArray(createArray(userRes?.ok)))
+    setUserData(createArray(userRes?.ok))
   }
   const getHotelData=async(year)=>{
-      await actors?.hotelActor?.getHotelFrequencyByYear(year.toString()).then((res)=>{
-          console.log("hotel count res : ",res[0])
-          setHotelCount(sumArray(createArray(res[0])))
-          setHotelData(createArray(res[0]))
-      }).catch((err)=>{
-        console.log("hotel count err : ",err)
-      })
+      const hotelRes=await actors?.hotelActor?.getHotelRegisterFrequencyData(year.toString())
+      if(hotelRes?.err!=undefined){
+        console.log("err in fetching hotel data : ",hotelRes?.err)
+        return
+      }
+      console.log("hotel count res : ",hotelRes)
+      setHotelCount(sumArray(createArray(hotelRes?.ok)))
+      setHotelData(createArray(hotelRes?.ok))
+
   }
   useEffect(()=>{
     getUserData(userYear)

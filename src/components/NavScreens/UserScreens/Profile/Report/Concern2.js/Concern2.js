@@ -45,12 +45,26 @@ const Concern2 = ({setConcernForm,setReportPage,setReport,report}) => {
         }
         setLoading(true)
         console.log(actors?.supportActor)
-        await actors?.supportActor?.raiseNewTicket(
-          report?.reason,
-          report?.hostMessage,
-          report?.adminMessage,
+        await actors?.supportActor?.createTicket(
+          {
+            messageToHost:report?.hostMessage,
+            messageToAdmin:report?.adminMessage,
+            reason:report?.reason,
+            address:report?.address
+          },
           report?.address
         ).then((res)=>{
+          if(res?.ok==undefined){
+            setLoading(false)
+            // alert('Your issue ticket have been raised!')
+            Dialog.show({
+              type:ALERT_TYPE.DANGER,
+              title:'TICKET NOT RAISED',
+              textBody:res?.err,
+              button:'OK',
+            })
+            return
+          }
           console.log("res raising ticket : ",res)
           setLoading(false)
           // alert('Your issue ticket have been raised!')
@@ -155,7 +169,7 @@ const styles = StyleSheet.create({
     modal:{
         height:'100%',
         width:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG
     },
     page:{
         display:'flex',
@@ -214,7 +228,7 @@ const styles = StyleSheet.create({
         width:'82%',
         borderWidth:0.8,
         borderRadius:10,
-        borderColor:COLORS.mainPurple,
+        borderColor:COLORS.black,
         marginBottom:10,
         opacity:0.8,
         color:COLORS.black,
@@ -225,7 +239,7 @@ const styles = StyleSheet.create({
         width:'85%',
         borderWidth:0.8,
         borderRadius:10,
-        borderColor:COLORS.mainPurple,
+        borderColor:COLORS.black,
         marginVertical:10,
         color:COLORS.black,
         paddingLeft:15,

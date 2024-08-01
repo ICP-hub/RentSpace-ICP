@@ -51,7 +51,7 @@ const Faq = ({setFAQPage}) => {
     <View style={{backgroundColor: COLORS.mainGrey}}>
       <TouchableOpacity
         style={styles.exiticon}
-        onPress={() => setTermsPage(false)}>
+        onPress={() => setFAQPage(false)}>
         <Icon2
           color={COLORS.black}
           name="chevron-left"
@@ -162,18 +162,18 @@ const styles = StyleSheet.create({
   },
 
   subHeading: {
-    fontSize: 20,
-    fontWeight: '400',
+    fontSize: 18,
+    fontWeight: '300',
     color: 'black',
-    marginTop: 10,
-    marginBottom: 10,
+    // marginTop: 10,
+    // marginBottom: 10,
     width: '93%',
     height: '100%',
     left: -10,
     paddingLeft: 10,
-    borderWidth: 2,
+    // borderWidth: 2,
     borderRadius: -5,
-    borderLeftColor: COLORS.mainPurple,
+    // borderLeftColor: COLORS.mainPurple,
     borderRightColor: COLORS.white,
     borderTopColor: COLORS.white,
     borderBottomColor: COLORS.white,

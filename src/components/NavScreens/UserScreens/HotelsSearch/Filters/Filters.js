@@ -19,53 +19,53 @@ import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon4 from 'react-native-vector-icons/Fontisto';
 import Icon5 from 'react-native-vector-icons/MaterialIcons';
 
-const amenitiesList = [
-  {name: 'wifi', icon: <Icon name="wifi" size={28} color={COLORS.black} />},
-  {name: 'gym', icon: <Icon2 name="dumbbell" size={28} color={COLORS.black} />},
-  {name: 'tv', icon: <Icon name="tv" size={28} color={COLORS.black} />},
-  {
-    name: 'laundry',
-    icon: <Icon3 name="washing-machine" size={28} color={COLORS.black} />,
-  },
-  {name: 'parking', icon: <Icon4 name="car" size={28} color={COLORS.black} />},
-  {
-    name: 'medication',
-    icon: <Icon2 name="briefcase-medical" size={28} color={COLORS.black} />,
-  },
-  {
-    name: 'gaming',
-    icon: <Icon name="gamepad" size={28} color={COLORS.black} />,
-  },
-  {
-    name: 'dining',
-    icon: <Icon5 name="local-dining" size={28} color={COLORS.black} />,
-  },
-];
-const propertyTypesList = [
-  {name: 'House', icon: <Icon name="home" size={24} color={COLORS.black} />},
-  {
-    name: 'Villa',
-    icon: <Icon5 name="villa" size={24} color={COLORS.black} />,
-  },
-  {
-    name: 'Apartment',
-    icon: <Icon5 name="apartment" size={24} color={COLORS.black} />,
-  },
-  {
-    name: 'Hotel',
-    icon: <Icon name="building-o" size={24} color={COLORS.black} />,
-  },
-  {
-    name: 'Resort',
-    icon: <Icon4 name="holiday-village" size={24} color={COLORS.black} />,
-  },
-  {
-    name: 'Glamping',
-    icon: <Icon4 name="tent" size={24} color={COLORS.black} />,
-  },
-];
+const Filters = ({setShowFilters, query, setQuery}) => {
+  const amenitiesList = [
+    {name: 'wifi', icon: <Icon name="wifi" size={28} />},
+    {name: 'gym', icon: <Icon2 name="dumbbell" size={28} />},
+    {name: 'tv', icon: <Icon name="tv" size={28} />},
+    {
+      name: 'laundry',
+      icon: <Icon3 name="washing-machine" size={28} />,
+    },
+    {name: 'parking', icon: <Icon4 name="car" size={28} />},
+    {
+      name: 'medication',
+      icon: <Icon2 name="briefcase-medical" size={28} />,
+    },
+    {
+      name: 'gaming',
+      icon: <Icon name="gamepad" size={28} />,
+    },
+    {
+      name: 'dining',
+      icon: <Icon5 name="local-dining" size={28} />,
+    },
+  ];
+  const propertyTypesList = [
+    {name: 'House', icon: <Icon name="home" size={24} color={COLORS.black} />},
+    {
+      name: 'Villa',
+      icon: <Icon5 name="villa" size={24} color={COLORS.black} />,
+    },
+    {
+      name: 'Apartment',
+      icon: <Icon5 name="apartment" size={24} color={COLORS.black} />,
+    },
+    {
+      name: 'Hotel',
+      icon: <Icon name="building-o" size={24} color={COLORS.black} />,
+    },
+    {
+      name: 'Resort',
+      icon: <Icon4 name="holiday-village" size={24} color={COLORS.black} />,
+    },
+    {
+      name: 'Glamping',
+      icon: <Icon4 name="tent" size={24} color={COLORS.black} />,
+    },
+  ];
 
-const Filters = ({setShowFilters,query, setQuery}) => {
   const [maxPrice, setMaxPrice] = useState(query.maxPrice);
   const [propertyType, setPropertyType] = useState(propertyTypesList[3].name);
   const [amenities, setAmenities] = useState([]);
@@ -99,11 +99,12 @@ const Filters = ({setShowFilters,query, setQuery}) => {
       </ScrollView>
       <View style={styles.footer}>
         <View style={styles.placeHolder} />
-        <TouchableOpacity onPress={()=>{
-          setMaxPrice(0)
-          setPropertyType('')
-          setAmenities([])
-        }}>
+        <TouchableOpacity
+          onPress={() => {
+            setMaxPrice(0);
+            setPropertyType('');
+            setAmenities([]);
+          }}>
           <Text style={styles.link}>Clear all</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -118,8 +119,8 @@ const Filters = ({setShowFilters,query, setQuery}) => {
               pageSize: 25,
               amenities: amenities,
               propertyType: propertyType,
-              location : query.location,
-            })
+              location: query.location,
+            });
             setShowFilters(false);
           }}>
           <Text style={styles.btnText}>Show places</Text>
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.hostTitle,
+    backgroundColor: COLORS.black,
     borderRadius: 12,
     paddingVertical: 12,
     width: '40%',

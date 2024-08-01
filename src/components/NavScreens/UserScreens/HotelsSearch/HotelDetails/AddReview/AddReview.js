@@ -9,32 +9,73 @@ import { Dialog,ALERT_TYPE } from 'react-native-alert-notification'
 const AddReview = ({item,setAddReview}) => {
   const {actors}=useSelector(state=>state.actorReducer)
   const [loading,setLoading]=useState(false)
+  
+
+  // console.log("item : ",item.hotelId)
+
   const [review,setReview]=useState({
-    bookingId : item?.bookingId,
-    rating : 0,
-    title : "",
-    des : "",
-    createdAt : "to be set"
+    hotelId:item?.hotelId,
+    rating: 1,
+    title: '',
+    des: '',
   })
-  const addNewReview=async()=>{
+  
+  const addNewReview = async () => {
     setLoading(true)
     console.log("reviewObj : ",review)
     // console.log("reviewActors : ",await actors.reviewActor.getPk())
-    await actors.reviewActor.createReview(item?.bookingId,review).then((res)=>{
-      console.log("review creation response : ",res)
+
+    try {
+      console.log("review : ",review)
+
+      console.log('Review add', actors.reviewActor);
+
+      if(review.title=='' || review.des==''){
+        setLoading(false)
+        Dialog.show({
+          title: 'Something went wrong',
+          type: ALERT_TYPE.WARNING,
+          textBody: 'Please fill all the fields',
+          button:'OK',
+
+        });
+        return
+      }
+
+      let reviewRes=await actors?.reviewActor?.createReview(review?.hotelId,review)
+      console.log('review creation response : ', reviewRes);
+      if(reviewRes?.err!=undefined){
+        setLoading(false)
+        Dialog.show({
+          title: 'Something went wrong',
+          type: ALERT_TYPE.DANGER,
+          textBody: reviewRes?.err,
+        });
+        return
+      }
+        Dialog.show({
+          title: 'SUCCESS',
+          type: ALERT_TYPE.SUCCESS,
+          textBody: 'Thanks for giving your valueable feedback',
+        });
+        setLoading(false)
+        setAddReview(false)
+
+
+    } catch (err) {
+      console.log(err);
       setLoading(false)
-      // alert('Thanks for giving your valueble feedback!')
       Dialog.show({
-        title:'SUCCESS',
-        type:ALERT_TYPE.SUCCESS,
-        textBody:'Thanks for giving your valueable feedback'
-      })
-      setAddReview(false)
-    }).catch((err)=>{
-      console.log("review err :",err)
-      setLoading(false)
-    })
-  }
+        title: 'Something went wrong',
+        type: ALERT_TYPE.DANGER,
+        textBody: 'some err occured while adding your review',
+      });
+    }
+    
+
+    
+  };
+ 
   return (
     <View style={styles.view}>
         <TouchableOpacity style={styles.backIcon} onPress={()=>{setAddReview(false)}}>
@@ -93,7 +134,7 @@ const styles = StyleSheet.create({
         paddingLeft:30,
       },
       inputs:{
-        borderColor: COLORS.mainPurple,
+        borderColor: COLORS.black,
         borderWidth: 1,
         borderRadius: 13,
         width: '100%',
@@ -121,7 +162,7 @@ const styles = StyleSheet.create({
         height:150,
         width:'100%',
         borderWidth:1,
-        borderColor:COLORS.mainPurple,
+        borderColor:COLORS.black,
         borderRadius:20,
         color:COLORS.black,
         textAlignVertical:'top',
@@ -136,7 +177,7 @@ const styles = StyleSheet.create({
         paddingVertical:12,
         width:'100%',
         borderRadius:12,
-        backgroundColor:COLORS.mainPurple,
+        backgroundColor:COLORS.black,
         marginVertical:25
       },
       btnText:{

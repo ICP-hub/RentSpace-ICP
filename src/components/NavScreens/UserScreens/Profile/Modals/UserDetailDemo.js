@@ -47,67 +47,67 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
   }
 
   useEffect(()=>{
-    console.log(user?.userProfile)
-    getHotelList()
+    console.log(user?.userImage)
+    // getHotelList()
   },[])
 
-  const makeHost=async()=>{
-    setLoading(true)
-    console.log("You are host now")
-    console.log({...user
-      ,userType:'Host',
-      hostStatus:true,
-      userProfile:(user?.userProfile)!=""?user?.userProfile:"img",
-      userGovId:((user?.userGovId==""||user?.userGovId==null)?"Not Provided":user?.userGovId)})
-    await actors.userActor?.updateUserInfo({...user
-      ,userType:'Host',
-      hostStatus:true,
-      userProfile:(user?.userProfile)!=""?user?.userProfile:"img",
-      userGovId:((user?.userGovId==""||user?.userGovId==null)?"Not Provided":user?.userGovId
+  // const makeHost=async()=>{
+  //   setLoading(true)
+  //   console.log("You are host now")
+  //   console.log({...user
+  //     ,userRole:'Host',
+  //     isHost:true,
+  //     userImage:(user?.userImage)!=""?user?.userImage:"img",
+  //     userGovID:((user?.userGovID==""||user?.userGovID==null)?"Not Provided":user?.userGovID)})
+  //   await actors.userActor?.updateUserInfo({...user
+  //     ,userRole:'Host',
+  //     isHost:true,
+  //     userImage:(user?.userImage)!=""?user?.userImage:"img",
+  //     userGovID:((user?.userGovID==""||user?.userGovID==null)?"Not Provided":user?.userGovID
       
-      ),
-      agreementStatus:user?.agreementStatus
-    }).then(async(res)=>{
-      console.log(res)
+  //     ),
+  //     agreementStatus:user?.agreementStatus
+  //   }).then(async(res)=>{
+  //     console.log(res)
       
-      setLoading(false)
-      // alert('You are a host now!')
-      Dialog.show({
-        type:ALERT_TYPE.SUCCESS,
-        title:'SUCCESS',
-        textBody:'You are a host now!',
-        button:'OK',
-      })
-      setCreateHotel(true)
-      await actors.userActor?.getUserInfo().then((res)=>{
-        console.log(res[0])
-        dispatch(setUser(res[0]))
-      }).then(()=>{
-        getHotelList()
-      }).catch((err)=>{
-        setLoading(false)
-        // alert(err)
-        Dialog.show({
-          type:ALERT_TYPE.DANGER,
-          title:'ERROR',
-          textBody:err,
-          button:'OK',
-        })
-        console.log(err)
-      })
+  //     setLoading(false)
+  //     // alert('You are a host now!')
+  //     Dialog.show({
+  //       type:ALERT_TYPE.SUCCESS,
+  //       title:'SUCCESS',
+  //       textBody:'You are a host now!',
+  //       button:'OK',
+  //     })
+  //     setCreateHotel(true)
+  //     await actors.userActor?.getUserInfo().then((res)=>{
+  //       console.log(res[0])
+  //       dispatch(setUser(res[0]))
+  //     }).then(()=>{
+  //       getHotelList()
+  //     }).catch((err)=>{
+  //       setLoading(false)
+  //       // alert(err)
+  //       Dialog.show({
+  //         type:ALERT_TYPE.DANGER,
+  //         title:'ERROR',
+  //         textBody:err,
+  //         button:'OK',
+  //       })
+  //       console.log(err)
+  //     })
 
-    }).catch((err)=>{
-      setLoading(false)
-      // alert(err)
-      Dialog.show({
-        type:ALERT_TYPE.DANGER,
-        title:'ERROR',
-        textBody:err,
-        button:'OK',
-      })
-      console.log(err)
-    })
-  }
+  //   }).catch((err)=>{
+  //     setLoading(false)
+  //     // alert(err)
+  //     Dialog.show({
+  //       type:ALERT_TYPE.DANGER,
+  //       title:'ERROR',
+  //       textBody:err,
+  //       button:'OK',
+  //     })
+  //     console.log(err)
+  //   })
+  // }
 
   return (
 
@@ -115,7 +115,7 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
       
       <View style={styles.header}>
         <Text style={styles.title}>My Profile</Text>
-        <Image source={(user?.userProfile==""||user?.userProfile=="img")?images.sampleProfile2:{uri:user.userProfile}} style={styles.profileLogo}/>
+        <Image source={(user?.userImage==""||user?.userImage=="img")?images.sampleProfile2:{uri:user.userImage}} style={styles.profileLogo}/>
         <Text style={styles.headerName}>{user?.firstName +" "+ user?.lastName}</Text>
         <Text style={styles.headerText}>{user?.userEmail}</Text>
         <Text style={styles.headerText}>{user?.dob}</Text>
@@ -126,14 +126,14 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
           <Icon3 name='manage-accounts' size={20} color={'black'} style={{marginRight:8}}/>
             <Text style={styles.propertyText}>Host Status</Text>
           </View>
-          <Text style={styles.valueText}>{user?.hostStatus?"True":"False"}</Text>
+          <Text style={styles.valueText}>{user?.isHost?"True":"False"}</Text>
         </View>
         <View style={styles.dataRow}>
           <View style={styles.propertyCont}>
             <Icon name='idcard' size={20} color={'black'} style={{marginRight:8}}/>
             <Text style={styles.propertyText}>Government ID</Text>
           </View>
-          <Text style={styles.valueText}>{(user?.userGovId=="nothing"||user?.userGovId=="Not Provided")?"Not Provided":user?.userGovId}</Text>
+          <Text style={styles.valueText}>{(user?.userGovID==""||user?.userGovID=="Not Provided")?"Not Provided":user?.userGovID}</Text>
         </View>
         {/* <View style={styles.dataRow}>
           <View style={styles.propertyCont}>
@@ -147,7 +147,7 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
           <Icon2 name='user' size={20} color={'black'} style={{marginRight:8}}/>
             <Text style={styles.propertyText}>User Type</Text>
           </View>
-          <Text style={styles.valueText}>{user?.userType}</Text>
+          <Text style={styles.valueText}>{user?.userRole}</Text>
         </View>
         <ActivityIndicator size={40} animating={loading}/>
         
@@ -161,7 +161,7 @@ const UserDetailDemo = ({navigation,setShowDetails}) => {
           </View>
         
         {/* {
-          (user?.userType!='Host')? 
+          (user?.userRole!='Host')? 
           <TouchableOpacity style={styles.updateBtn} onPress={()=>{
             makeHost()
             
@@ -202,11 +202,11 @@ const styles = StyleSheet.create({
       backgroundColor:COLORS.white,
       borderBottomRightRadius:20,
       borderBottomLeftRadius:20,
-      height:'37%',
+      height:'38%',
       width:'100%',
       display:'flex',
       flexDirection:'column',
-      alignItems:'center'
+      alignItems:'center',
     },
     title:{
         fontSize:SIZES.medium,

@@ -1,0 +1,31 @@
+type Result_1 = 
+ variant {
+   err: text;
+   ok: Comment__1;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: vec Comment__1;
+ };
+type Comment__1 = 
+ record {
+   comment: text;
+   commentId: text;
+   createdAt: text;
+   hotelId: text;
+   parentCommentId: text;
+   userId: text;
+ };
+type CommentInput = 
+ record {
+   message: text;
+   parentCommentId: text;
+ };
+type Comment = 
+ service {
+   createComment: (text, CommentInput) -> (Result_1);
+   getComments: (text) -> (Result) query;
+   whoami: () -> (text);
+ };
+service : () -> Comment

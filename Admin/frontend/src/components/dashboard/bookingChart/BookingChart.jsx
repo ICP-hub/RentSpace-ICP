@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import './bookingChart.css'
 import Barchart from '../../../charts/Barchart'
 import { Chart as ChartJS } from 'chart.js/auto'
-import { booking } from '../../../declarations/booking'
 
 
 

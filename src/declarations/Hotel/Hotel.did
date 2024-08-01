@@ -1,0 +1,80 @@
+type _anon_class_19_1 = 
+ service {
+   checkHotelExist: (HotelId) -> (bool) query;
+   createHotel: (HotelInfo, RoomType) -> (Result);
+   deleteHotel: (HotelId) -> (Result);
+   getAllHotels: (nat, nat) -> (Result_5);
+   getHotel: (HotelId) -> (Result_4) query;
+   getHotelRegisterFrequencyData: (Year) -> (Result_3) query;
+   getNumberofHotels: () -> (Result_2);
+   getRoom: (HotelId) -> (Result_1) query;
+   updateHotel: (HotelInfo, RoomType) -> (Result);
+   whoami: () -> (text);
+ };
+type Year = text;
+type RoomType = 
+ record {
+   roomPrice: nat;
+   roomType: text;
+ };
+type Result_5 = 
+ variant {
+   err: text;
+   ok: vec record {
+             HotelId;
+             HotelInfo;
+           };
+ };
+type Result_4 = 
+ variant {
+   err: text;
+   ok: HotelInfo;
+ };
+type Result_3 = 
+ variant {
+   err: text;
+   ok: AnnualData;
+ };
+type Result_2 = 
+ variant {
+   err: text;
+   ok: nat;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: RoomType;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type HotelInfo = 
+ record {
+   createdAt: text;
+   hotelAvailableFrom: text;
+   hotelAvailableTill: text;
+   hotelDes: text;
+   hotelId: text;
+   hotelImage: text;
+   hotelLocation: text;
+   hotelTitle: text;
+ };
+type HotelId = text;
+type AnnualData = 
+ record {
+   april: nat;
+   aug: nat;
+   dec: nat;
+   feb: nat;
+   jan: nat;
+   july: nat;
+   june: nat;
+   march: nat;
+   may: nat;
+   nov: nat;
+   oct: nat;
+   sep: nat;
+ };
+service : () -> _anon_class_19_1

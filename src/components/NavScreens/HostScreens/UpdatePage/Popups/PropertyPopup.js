@@ -3,7 +3,7 @@ import {COLORS} from '../../../../../constants/themes';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/Fontisto';
 
-const PropertyPopup = ({propertyType, setPropertyType}) => {
+const PropertyPopup = ({propertyType, setPropertyType, passData, setPassData}) => {
 
   const propertiesList = [
     {name: 'House', icon: 'house'},
@@ -17,6 +17,7 @@ const PropertyPopup = ({propertyType, setPropertyType}) => {
   const updateProperty = (item) => {
     // setPropertyType({...propertyType,  status:false, name: item.name, icon: item.icon, class: item.class});
     setPropertyType({...propertyType,  status:false, name: item.name, icon: item.icon});
+    setPassData({...passData, propertyName: item.name});
   };
 
   return (
@@ -118,25 +119,36 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    padding: 5,
+    borderRadius: 10,
+  },
+  popupItemActive: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    backgroundColor: COLORS.black,
+    padding: 5,
+    borderRadius: 10,
   },
 
   popupItemIcon: {
-    color: COLORS.textLightGrey,
+    // color: COLORS.textLightGrey,
+    color: COLORS.newGray,
     fontSize: 50,
   },
 
   popupItemText: {
-    color: COLORS.textLightGrey,
+    color: COLORS.newGray,
     fontSize: 14,
     fontWeight: '500',
   },
   popupItemIconActive: {
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     fontSize: 50,
   },
 
   popupItemTextActive: {
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     fontSize: 14,
     fontWeight: '500',
   },

@@ -1,13 +1,19 @@
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { COLORS,SIZES } from '../../../../constants/themes'
+import { Color } from 'react-native-alert-notification/lib/typescript/service'
 
 const months=["Jan","Feb","Mar","Apr","May","June","July","Aug","Sep","Oct","Nov","Dec"]
 
 const ReservationCard = ({item}) => {
 
+  const parseDMY = s => {
+    let [d, m, y] = s.split(/\D/);
+    return new Date(y, m-1, d);
+  };
+
   const parseDate=(date)=>{
-    let d=new Date(date)
+    let d=parseDMY(date)
     let day=d.getDate()
     let month=months[d.getMonth()]
     return `${day} ${month}`
@@ -18,14 +24,14 @@ const ReservationCard = ({item}) => {
       <View style={styles.textCont}>
         <View style={styles.textRow}>
           <Text style={styles.title}>CheckIn Date</Text>
-          <Text style={styles.normalText}>{parseDate(item?.bookingData?.date)}</Text>
+          <Text style={styles.normalText}>{parseDate(item?.bookingData?.checkInDate)}</Text>
         </View>
         <View style={styles.textRow}>
           <Text style={styles.title}>Duration</Text>
           <Text style={styles.normalText}>1 days</Text>
           </View>
         <View style={styles.textRow}>
-          <Text style={styles.title}>Owner Name</Text>
+          <Text style={styles.title}>Customer Name</Text>
           <Text style={styles.normalText}>{item?.customerData?.firstName}</Text>
         </View>
       </View>
@@ -41,13 +47,13 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         justifyContent:'flex-start',
         alignItems:'center',
-        backgroundColor:COLORS.royalPurple,
+        backgroundColor:COLORS.white,
         width:Dimensions.get("window").width*0.8,
         // marginLeft:'5%',
         paddingVertical:20,
         borderRadius:12,
         marginBottom:20,
-        elevation:10,
+        elevation:5,
         maxHeight:140,
         marginRight:20
     },
@@ -68,13 +74,13 @@ const styles = StyleSheet.create({
       },
       title:{
         fontSize:SIZES.preMedium,
-        color:'white',
+        color:COLORS.black,
         fontWeight:'600',
         marginBottom:0
       },
       normalText:{
         fontSize:SIZES.small,
-        color:'white',
+        color:COLORS.black,
         fontWeight:'600'
       },
 })

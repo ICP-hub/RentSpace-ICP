@@ -22,6 +22,7 @@ import ChatDrawer from '../ChatPage/ChatDrawer/ChatDrawer';
 import Update from '../UpdatePage/Update';
 import axios from 'axios';
 import { setChatToken } from '../../../../redux/chatToken/actions';
+const {nodeBackend} = require('../../../../../DevelopmentConfig.js')
 
 const Listings = ({navigation}) => {
   const {hotels} = useSelector(state => state.hotelsReducer);
@@ -37,8 +38,12 @@ const Listings = ({navigation}) => {
   const [listings, setListings] = useState([]);
   const {principle}=useSelector(state=>state.principleReducer)
 
-  const baseUrl="https://rentspace.kaifoundry.com"
+  // const baseUrl="https://rentspace.kaifoundry.com"
   // const baseUrl="http://localhost:5000"
+
+  const baseUrl= nodeBackend
+
+  // console.log("principle",principle)
 
   // async function getHotelDetails() {
   //   setHotelList([]);
@@ -50,36 +55,39 @@ const Listings = ({navigation}) => {
   //     });
   //   }
   // }
-  const ApiLogin=async()=>{
-    // console.log("files",files)
-     await axios.post(`${baseUrl}/api/v1/login/user`,{},{headers:{
-      "x-private":authData.privateKey,
-      "x-public":authData.publicKey,
-      "x-delegation":authData.delegation
-     }}).then((res)=>{
-        console.log('hotel login api : ',res.data.userToken)
-        dispatch(setChatToken(res.data.userToken))
-        // setToken(res.data.userToken)
-     })
-    }
-  useEffect(() => {
-    // getHotelDetails();
-    ApiLogin()
+  // const ApiLogin=async()=>{
+  //   // console.log("files",files)
+  //    await axios.post(`${baseUrl}/api/v1/login/user`,{},{headers:{
+  //     "x-private":authData.privateKey,
+  //     "x-public":authData.publicKey,
+  //     "x-delegation":authData.delegation
+  //    }}).then((res)=>{
+  //       console.log('hotel login api : ',res.data.userToken)
+  //       dispatch(setChatToken(res.data.userToken))
+  //       // setToken(res.data.userToken)
+  //    })
+  //   }
+  // useEffect(() => {
+  //   // getHotelDetails();
+  //   ApiLogin()
 
-  }, []);
+  // }, []);
 
   // Geting hotel details from the server
 
   function getHotelDetails() {
     setLoading(true)
+    console.log("BaseUrl",`${baseUrl}/api/v1/property/all?userPrincipal=${principle}`);
+    console.log("Principle :",principle)
+
     axios
-      .get(`${baseUrl}/api/v1/hotel/getAllHotels?userPrincipal=${principle}`)
+      .get(`${baseUrl}/api/v1/property/all?userPrincipal=${principle}`)
       .then(res => {
         setLoading(false)
 
-        console.log("res",res);
-        if(res.data.hotels.length != undefined && res.data.hotels.length != 0){
-          setListings(res.data.hotels);
+        // console.log("res",res.data.properties);
+        if(res.data.properties.length != undefined && res.data.properties.length != 0){
+          setListings(res.data.properties);
         }else{
           setListings([]);
         }
@@ -98,7 +106,7 @@ const Listings = ({navigation}) => {
   return (
     <View style={styles.view}>
       <View style={styles.header}>
-        <Text style={styles.title}>Your listings</Text>
+        <Text style={styles.title}>Your Spaces</Text>
         <View style={styles.iconCont}>
           <TouchableOpacity style={styles.icon} onPress={getHotelDetails}>
             {/* <Icon name="collage" size={30} color={COLORS.black} /> */}
@@ -121,7 +129,7 @@ const Listings = ({navigation}) => {
         />
       ) : (
         <Text style={{color: COLORS.black, marginTop: 50}}>
-          Sorry! No listings to show
+          Sorry! No space to show
         </Text>
       )}
 
@@ -175,7 +183,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     height: '100%',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
   },
   header: {
     display: 'flex',

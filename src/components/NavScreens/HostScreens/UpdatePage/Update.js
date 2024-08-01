@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {COLORS} from '../../../../constants/themes';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/AntDesign';
@@ -20,9 +20,21 @@ import AmenitiesPopup from './Popups/AmenitiesPopup';
 
 import Icon11 from 'react-native-vector-icons/MaterialIcons'; //0
 import Icon12 from 'react-native-vector-icons/MaterialCommunityIcons'; //1
+import RoomList from './Rooms/RoomList';
+import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
 
 const Update = ({item, setOpenUpdate, getHotelDetails}) => {
+  
+  const [rooms, setRooms] = useState(item.rooms);
+
   function nameToIcon(name) {
+    if (name === 'Resort') {
+      return 'fort';
+    }
+    if (name === 'Glamping') {
+      return 'tent';
+    }
+
     const lowerCase = name.charAt(0).toLowerCase() + name.slice(1);
     return lowerCase;
   }
@@ -39,6 +51,8 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
     icon: nameToIcon(item.propertyType),
     name: item.propertyType,
   });
+
+  const [roomPopup, setRoomPopup] = useState(false);
 
   const amenitiesList = [
     {name: 'tv', icon: 'tv'},
@@ -133,28 +147,51 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
   };
 
   const [passData, setPassData] = useState({
-    hotelId: item.hotelId,
+    hotelId: item.propertyId,
     location: '',
     title: '',
-    propertyName: '',
+    propertyName: item.propertyType,
     propertyAmenities: [],
+    rooms: [],
   });
 
+  useEffect(() => {
+    console.log('Room initial : ', rooms.length);
+    console.log('passdata title : ', passData);
+  }, [rooms, passData]);
+
   const goToNextPage = () => {
+
+    // room check
+    if (rooms.length === 0) {
+      Dialog.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'Error',
+        textBody: 'Please add atleast one room type.',
+        button: 'OK',
+      });
+
+      return;
+    }
+
+
     const newPropertyAmenities = amenities.data.map(amenity => amenity.name);
+
+    console.log('Room on Page Next => ', rooms);
 
     setPassData({
       ...passData,
-      propertyName: propertyType.name,
+      propertyType: propertyType.name, //---------------------> Property Type
       propertyAmenities: [
         ...passData.propertyAmenities,
         ...newPropertyAmenities,
       ],
+      rooms: rooms,
     });
 
+    // console.log("Pass Data : ",passData);
+
     setSecondPage(true);
-    
-  
   };
 
   return (
@@ -162,12 +199,12 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Update Page</Text>
         <View style={styles.headerIcons}>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Icon name="collage" size={25} color={COLORS.black} />
           </TouchableOpacity>
           <TouchableOpacity>
             <Icon2 name="plus" size={25} color={COLORS.black} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
       <ScrollView
@@ -183,7 +220,7 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
         </View>
         <View style={styles.sectionContent}>
           <View style={styles.sectionItem}>
-            {propertyType.class === 1 ? (
+            {propertyType.name === 'Glamping' ? (
               <Icon4 name={propertyType.icon} size={30} color={COLORS.black} />
             ) : (
               <Icon3 name={propertyType.icon} size={30} color={COLORS.black} />
@@ -203,7 +240,14 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
         <View style={styles.sectionContent}>
           {amenities.data.map((item, index) => {
             // const IconComponent = item.class === 0 ? Icon11 : Icon12;
-            const IconComponent = ['tv', 'wifi', 'dining', 'medication'].includes(item.name) ? Icon11 : Icon12;
+            const IconComponent = [
+              'tv',
+              'wifi',
+              'dining',
+              'medication',
+            ].includes(item.name)
+              ? Icon11
+              : Icon12;
             const word = item.name;
             const firstLetter = word.charAt(0);
             const firstLetterCap = firstLetter.toUpperCase();
@@ -293,16 +337,52 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
         </View> */}
         {/* fifth-section */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Title of your place</Text>
+          <Text style={styles.sectionTitle}>Title of your space</Text>
         </View>
         <View style={styles.sectionContent}>
           <TextInput
+            // value={item?.propertyName}
             style={styles.textInput}
-            placeholder={item?.hotelName}
+            placeholder={item?.propertyName}
             placeholderTextColor={COLORS.textLightGrey}
-            onChangeText={text => setPassData({...passData, title: text})}
+            onChangeText={text => {
+              setPassData({...passData, title: text});
+            }}
           />
         </View>
+
+        {/* Room Type edit only for Resort and Hotel */}
+
+        {/* {propertyType.name === 'Resort' || propertyType.name === 'Hotel' ? (
+          <>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Edit Room Types</Text>
+              <TouchableOpacity onPress={() => setRoomPopup(true)}>
+                <Icon name="pencil" size={20} color={COLORS.black} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.sectionContent}>
+              <Text style={[styles.sectionItemText, {marginLeft: 5}]}>
+                Currently there are {rooms.length} room types.{' '}
+              </Text>
+            </View>
+          </>
+        ) : null} */}
+
+        {/* Room Type edit only for All properties*/}
+
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Edit Room Types</Text>
+          <TouchableOpacity onPress={() => setRoomPopup(true)}>
+            <Icon name="pencil" size={20} color={COLORS.black} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.sectionContent}>
+          <Text style={[styles.sectionItemText, {marginLeft: 5}]}>
+            Currently there are {rooms.length} room types.{' '}
+          </Text>
+        </View>
+
         {/* sixth-section */}
         {/* <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>It Describes your place </Text>
@@ -387,13 +467,16 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
       </ScrollView>
 
       {/* 2nd page modal */}
-
       <Modal visible={secondPage} onRequestClose={() => setSecondPage(false)}>
-        <UpdateModal item={item} passData={passData} exitModal={exitModal} getHotelDetails={getHotelDetails}/>
+        <UpdateModal
+          item={item}
+          passData={passData}
+          exitModal={exitModal}
+          getHotelDetails={getHotelDetails}
+        />
       </Modal>
 
       {/* property popup modal */}
-
       <Modal
         visible={propertyType.status}
         onRequestClose={() => setPropertyType({...propertyType, status: false})}
@@ -401,16 +484,31 @@ const Update = ({item, setOpenUpdate, getHotelDetails}) => {
         <PropertyPopup
           propertyType={propertyType}
           setPropertyType={setPropertyType}
+          passData={passData}
+          setPassData={setPassData}
         />
       </Modal>
 
       {/* amenities popup modal */}
-
       <Modal
         visible={amenities.status}
         onRequestClose={() => setAmenities({...amenities, status: false})}
         transparent>
         <AmenitiesPopup amenities={amenities} setAmenities={setAmenities} />
+      </Modal>
+
+      {/* Room Update Modal */}
+      <Modal
+        visible={roomPopup}
+        onRequestClose={() => setRoomPopup(false)}
+        // transparent
+      >
+        {/* <Text style={{color: COLORS.black}}>Room POPUP</Text> */}
+        <RoomList
+          item={rooms}
+          updateRooms={setRooms}
+          setRoomPopup={setRoomPopup}
+        />
       </Modal>
     </View>
   );
@@ -426,7 +524,7 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
     paddingTop: 10,
     width: '100%',
     height: '100%',
@@ -482,6 +580,20 @@ const styles = StyleSheet.create({
     marginTop: 5,
     paddingHorizontal: 15,
   },
+  sectionContent2: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 15,
+    marginTop: 5,
+    paddingHorizontal: 15,
+    borderWidth: 2,
+    borderColor: COLORS.black,
+    backgroundColor: COLORS.white,
+    marginHorizontal: 20,
+    borderRadius: 10,
+    height: 70,
+  },
 
   sectionItem: {
     width: 85,
@@ -492,7 +604,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 14,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderWidth: 2,
     color: COLORS.black,
   },
@@ -511,14 +623,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
   },
 
   spaceOptionsContainer: {
     display: 'flex',
     flexDirection: 'column',
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     width: '100%',
     minHeight: 200,
     height: 'fit-content',
@@ -557,7 +669,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 10,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     width: '100%',
     height: 'fit-content',
     borderRadius: 10,
@@ -577,9 +689,9 @@ const styles = StyleSheet.create({
   },
 
   optionsContainerItemActive: {
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     color: COLORS.white,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
   },
 
   buttonSection: {
@@ -591,7 +703,7 @@ const styles = StyleSheet.create({
   },
 
   buttonSectionBtn: {
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     color: COLORS.white,
     borderRadius: 10,
     width: 135,

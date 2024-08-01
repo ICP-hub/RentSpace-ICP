@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
         alignItems:'center',
         width:'100%',
-        backgroundColor:COLORS.mainGrey,
+        backgroundColor:COLORS.newBG,
         position:'absolute',
     },
     progressBar:{
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         flexDirection:'flex-start',
     },
     progress:{
-        backgroundColor:COLORS.mainPurple,
+        backgroundColor:COLORS.black,
         height:'100%',
         borderRadius:10
     },
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         width:'37%',
         paddingVertical:15,
-        backgroundColor:COLORS.mainPurple,
+        backgroundColor:COLORS.black,
         borderRadius:10
     },
     btnText:{

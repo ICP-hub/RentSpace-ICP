@@ -18,7 +18,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setListing} from '../../../../redux/NewListing/actions';
 import MethodOption from './MethodOption';
 import GetWalletId from './GetWalletId';
-import { Dialog,ALERT_TYPE } from 'react-native-alert-notification';
+import {Dialog, ALERT_TYPE} from 'react-native-alert-notification';
+import GetPaypal from './GetPaypal';
 
 const methods = [
   {
@@ -67,10 +68,13 @@ const methods = [
       </Text>
     ),
   },
+  {
+    label: 'paypal',
+    icon: <Icon2 name="paypal" color={COLORS.black} size={25} />,
+  },
 ];
 
 const Pricing = ({setHostModal, pos}) => {
- 
   const [price, setPrice] = useState(0);
   const {listing} = useSelector(state => state.listingReducer);
   const dispatch = useDispatch();
@@ -78,50 +82,72 @@ const Pricing = ({setHostModal, pos}) => {
   const [walletIDModal, setWalletIDModal] = useState(false);
   const [phantomAccID, setPhantomAccID] = useState('');
   const [phantomAccIDValidated, setPhantomAccIDValidated] = useState(false);
+  const [paypalModal, setPaypalModal] = useState(false);
+
+  const [clientID, setClientID] = useState();
+  const [clientSecret, setClientSecret] = useState();
+  const [creditcardForwards, setCreditcardForwards] = useState(false);
 
   const chechSol = () => {
     if (paymentMethods.includes('SOL') && !phantomAccIDValidated) {
       console.log('sol is selected');
       setWalletIDModal(true);
       return false;
-    } else {
+    } 
+    // ------------------ >>>
+    // if (paymentMethods.includes('creditCard') && !clientID && !clientSecret) {
+    //   setPaypalModal(true);
+    //   return false;
+    // } 
+    // if (paymentMethods.includes('paypal') && !clientID && !clientSecret){
+    //   setPaypalModal(true);
+    //   return false;
+    // }
+    if ((paymentMethods.includes('creditCard') || paymentMethods.includes('paypal')) && !clientID && !clientSecret) {
+      setPaypalModal(true);
+      return false;
+    }
+    
+    else {
       return checkEmpty();
     }
   };
 
   const checkEmpty = () => {
-    if (price == 0) {
-        // Alert.alert(
-        //   'No price selected',
-        //   'You cannot add a listing for free! Please add a price for it',
-        // );
-        Dialog.show({
-          type:ALERT_TYPE.WARNING,
-          title:'No price selected',
-          textBody:'You cannot add a listing for free! Please add a price for it',
-          button:'OK',
-        })
-      
-      return false;
-    } else if (paymentMethods.length == 0) {
+    // if (price == 0) {
+    //   Dialog.show({
+    //     type: ALERT_TYPE.WARNING,
+    //     title: 'No price selected',
+    //     textBody:
+    //       'You cannot add a listing for free! Please add a price for it',
+    //     button: 'OK',
+    //   });
+
+    //   return false;
+    // } 
+    if (paymentMethods.length == 0) {
       // Alert.alert(
       //   'No payment method selected',
       //   'Add atleast one payment method through which you are willing to accept payments',
       // );
       Dialog.show({
-        type:ALERT_TYPE.WARNING,
-        title:'No payment method selected',
-        textBody:'Add atleast one payment method through which you are willing to accept payments',
-        button:'OK',
-      })
-        
-    } else {
+        type: ALERT_TYPE.WARNING,
+        title: 'No payment method selected',
+        textBody:
+          'Add atleast one payment method through which you are willing to accept payments',
+        button: 'OK',
+      });
+    } 
+    else {
+      console.log(phantomAccID, clientID, clientSecret);
       dispatch(
         setListing({
           ...listing,
           hotelPrice: price.toString(),
           phantomWalletID: phantomAccID,
           paymentMethods: paymentMethods,
+          payPalId: clientID,
+          payPalSecret: clientSecret,
         }),
       );
       return true;
@@ -150,7 +176,7 @@ const Pricing = ({setHostModal, pos}) => {
               />
             ))}
           </View>
-          <Text style={styles.title}>Now, set your price</Text>
+          {/* <Text style={styles.title}>Now, set your price</Text>
           <Text style={styles.text}>You can change it any time as well</Text>
           <View style={styles.priceCont}>
             <TextInput
@@ -161,8 +187,8 @@ const Pricing = ({setHostModal, pos}) => {
               }}
             />
             <Icon2 name="pencil" size={12} color={COLORS.black} />
-          </View>
-          <View style={styles.pricingCard}>
+          </View> */}
+          {/* <View style={styles.pricingCard}>
             <View style={styles.pricingRow}>
               <Text style={styles.pricingNormal}>Base price</Text>
               <Text style={styles.pricingNormal}>${price}</Text>
@@ -176,12 +202,12 @@ const Pricing = ({setHostModal, pos}) => {
               <Text style={styles.pricingBold}>Guest price before taxes</Text>
               <Text style={styles.pricingBold}>${Number(price) + 0}</Text>
             </View>
-          </View>
-          <View style={styles.earningCard}>
-            <Text style={styles.earningText}>You earn</Text>
+          </View> */}
+          {/* <View style={styles.earningCard}> */}
+            {/* <Text style={styles.earningText}>You earn</Text> */}
             {/* <Text style={styles.bigText}>${price < 200 ? 0 : price - 200}</Text> */}
-            <Text style={styles.bigText}>${price}</Text>
-          </View>
+            {/* <Text style={styles.bigText}>${price}</Text> */}
+          {/* </View> */}
         </View>
       </ScrollView>
 
@@ -190,6 +216,7 @@ const Pricing = ({setHostModal, pos}) => {
         pos={pos}
         step={3}
         nextFunc={chechSol}
+        // nextFunc={dispatchListing}
         back={2}
       />
       <Modal
@@ -205,7 +232,24 @@ const Pricing = ({setHostModal, pos}) => {
           setWalletIDModal={setWalletIDModal}
         />
       </Modal>
-      
+
+      {/* Modal for paypal  */}
+
+      <Modal
+        transparent
+        visible={paypalModal}
+        onRequestClose={() => {
+          setPaypalModal(false);
+        }}>
+        <GetPaypal
+          clientID={clientID}
+          setClientID={setClientID}
+          clientSecret={clientSecret}
+          setClientSecret={setClientSecret}
+          setCreditcardForwards={setCreditcardForwards}
+          setPaypalModal={setPaypalModal}
+        />
+      </Modal>
     </View>
   );
 };
@@ -219,7 +263,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     width: '100%',
     height: '100%',
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
   },
   subView: {
     display: 'flex',
@@ -229,7 +273,7 @@ const styles = StyleSheet.create({
   },
   title: {
     width: '85%',
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     fontSize: SIZES.xxLarge,
     fontWeight: '500',
     marginBottom: 5,
@@ -244,7 +288,7 @@ const styles = StyleSheet.create({
     fontWeight: '300',
   },
   bigText: {
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     fontSize: SIZES.xxLarge,
     fontWeight: '500',
     marginBottom: 5,

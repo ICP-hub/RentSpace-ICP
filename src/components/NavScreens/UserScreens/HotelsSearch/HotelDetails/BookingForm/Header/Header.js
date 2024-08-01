@@ -39,10 +39,11 @@ const styles = StyleSheet.create({
     textCont:{
         display:'flex',
         flexDirection:'column',
-        alignItems:'flex-start',
-        justifyContent:'space-between',
+        // alignItems:'center',
+        // justifyContent:'space-between',
+        // backgroundColor:'red',
         width:'60%',
-        height:70
+        height:50
     },
     title:{
         color:COLORS.black,

@@ -7,6 +7,7 @@ import Discount from './Step3/Discount/Discount'
 import SecurityCheck from './Step3/SecurityCheck/SecurityCheck'
 import ReviewListing from './Step3/ReviewListing/ReviewListing'
 import Congratulations from './Step3/Congratulations/Congratulations'
+import Room from './Step3/RoomTypes/Room'
 
 const Step3Manager = ({hostModal,setHostModal,getHotelDetails}) => {
   let component="<></>"
@@ -23,11 +24,13 @@ const Step3Manager = ({hostModal,setHostModal,getHotelDetails}) => {
         component=<Pricing setHostModal={setHostModal} pos={19}/>
         break   
     case(20):
-        component=<Discount setHostModal={setHostModal} pos={20}/>
-        setHostModal(22)
+        // component=<Discount setHostModal={setHostModal} pos={20}/>
+        // setHostModal(22)
+        component=<Room setHostModal={setHostModal} pos={20}/>
         break   
     case(21):
         component=<SecurityCheck setHostModal={setHostModal} pos={21}/>
+        setHostModal(22)
         break   
     case(22):
         component=<ReviewListing setHostModal={setHostModal} pos={22}/>

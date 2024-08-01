@@ -20,37 +20,45 @@ import CheckInOut from './CheckInOut';
 const RateHawk = ({hotelId, item, setOpen, navigation}) => {
   const [hotelDetails, setHotelDetails] = useState({});
   const [description, setDescription] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [calenderPage, setcalenderPage] = useState(false);
 
+  console.log(item.id);
+  // console.log(item.images[0]);
+
+  const imageUrl = item.images[0];
+
+  const size = '1024x768';
+  const updatedUrl = {uri : imageUrl.replace('{size}', size)};
+
   // const baseUrl = 'http://localhost:5000/api/v1/hotel/RateHawk/getHotelInfo';
-  const baseUrl='https://rentspace.kaifoundry.com/api/v1/hotel/RateHawk/getHotelInfo'
-  const serachData = {
-    hotelId,
-    language: 'en',
-  };
+  // const baseUrl='https://rentspace.kaifoundry.com/api/v1/hotel/RateHawk/getHotelInfo'
+  // const serachData = {
+  //   hotelId,
+  //   language: 'en',
+  // };
 
-  useEffect(() => {
-    axios
-      .post(baseUrl, serachData)
-      .then(response => {
-        console.log(response.data);
-        setHotelDetails(response.data.data.data);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }, [hotelId]); // add hotelId as a dependency to re-fetch if it changes
+  // useEffect(() => {
+  //   axios
+  //     .post(baseUrl, serachData)
+  //     .then(response => {
+  //       console.log(response.data);
+  //       setHotelDetails(response.data.data.data);
+  //       setLoading(false);
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //     });
+  // }, [hotelId]); // add hotelId as a dependency to re-fetch if it changes
 
-  useEffect(() => {
-    if (hotelDetails?.description_struct) {
-      console.log(hotelDetails.description_struct[0]);
-      setDescription(hotelDetails.description_struct[0].paragraphs[0]);
-    } else {
-      console.log('hotelDetails or description_struct is undefined');
-    }
-  }, [hotelDetails]); // add hotelDetails as a dependency to log whenever it updates
+  // useEffect(() => {
+  //   if (hotelDetails?.description_struct) {
+  //     console.log(hotelDetails.description_struct[0]);
+  //     setDescription(hotelDetails.description_struct[0].paragraphs[0]);
+  //   } else {
+  //     console.log('hotelDetails or description_struct is undefined');
+  //   }
+  // }, [hotelDetails]); // add hotelDetails as a dependency to log whenever it updates
 
   const amenitiesList = [
     {name: 'Pool', icon: 'pool', class: 0},
@@ -72,7 +80,7 @@ const RateHawk = ({hotelId, item, setOpen, navigation}) => {
         <ActivityIndicator
           animating={true}
           size={40}
-          color={COLORS.mainPurple}
+          color={COLORS.black}
           style={styles.loader}
         />
       </View>
@@ -88,32 +96,30 @@ const RateHawk = ({hotelId, item, setOpen, navigation}) => {
         />
         <ScrollView style={styles.scrollView}>
           <View style={styles.imageContainer}>
-            <Image style={styles.hotelImage} source={defaultImg} />
+            <Image style={styles.hotelImage} source={updatedUrl} />
           </View>
           <View style={styles.hotelInfo}>
             <Text style={styles.hotelName}>
               {/* Charm Ville - Villa with Nature! FarmVilla n Hosur */}
-              {hotelDetails.name}
+              {item.name}
             </Text>
             <View style={styles.ratingContainer}>
-              <Icon1 name="star" size={17} style={{color: COLORS.mainPurple}} />
-              <Text style={styles.ratingText}>4.92</Text>
-              <Text style={styles.ratingText}>• 432 reviews</Text>
+              <Icon1 name="star" size={17} style={{color: COLORS.black}} />
+              <Text style={styles.ratingText}>{item.star_rating} Rating</Text>
+              {/* <Text style={styles.ratingText}>• 432 reviews</Text> */}
             </View>
-            <Text style={styles.ratingText2}>{hotelDetails.address}</Text>
+            <Text style={styles.ratingText2}>{item.address}</Text>
           </View>
           <View style={styles.verificationTag}>
-            <Icon
-              name="verified"
-              size={15}
-              style={{color: COLORS.mainPurple}}
-            />
+            <Icon name="verified" size={15} style={{color: COLORS.black}} />
             <Text style={styles.verificationTagText}>Verified By Ratehawk</Text>
           </View>
           <View style={styles.descriptionContainer}>
             <Text style={styles.descriptionTitle}>Description</Text>
-            <Text style={styles.description}>{description}</Text>
-            <Text style={styles.showMoreBtn}>Show more</Text>
+            <Text style={styles.description}>
+              {item.description_struct[0].paragraphs[0]}
+            </Text>
+            {/* <Text style={styles.showMoreBtn}>Show more</Text> */}
           </View>
           <View style={styles.descriptionContainer}>
             <Text style={styles.descriptionTitle}>Amenities</Text>
@@ -125,7 +131,7 @@ const RateHawk = ({hotelId, item, setOpen, navigation}) => {
                   <TouchableOpacity
                     style={styles.amenities}
                     key={index}
-                    onPress={() => updateAmenities(item)}>
+                    onPress={() => {}}>
                     <IconComponent
                       name={item.icon}
                       style={styles.amenityIcon}
@@ -142,11 +148,33 @@ const RateHawk = ({hotelId, item, setOpen, navigation}) => {
               <Text style={styles.bottomLinkText}>Staying rules</Text>
             </View>
             <Text style={[styles.bottomLinkSubText2, {marginVertical: 2}]}>
-              Check In : {hotelDetails.check_in_time}
+              Check In : {item.check_in_time}
             </Text>
             <Text style={[styles.bottomLinkSubText2, {marginVertical: 2}]}>
-              Check Out : {hotelDetails.check_out_time}
+              Check Out : {item.check_out_time}
             </Text>
+          </View>
+          <View style={styles.bottomLink}>
+            <View style={styles.bottomLinkHead}>
+              <Text style={styles.bottomLinkText}>Contact</Text>
+            </View>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                marginLeft: 20,
+                marginTop: 10,
+              }}>
+              <Icon2 name="phone" size={20} style={{color: COLORS.black}} />
+              <Text
+                style={{
+                  fontWeight: '400',
+                  color: COLORS.black,
+                  marginLeft: 5,
+                }}>
+                {item.phone}
+              </Text>
+            </View>
           </View>
 
           <TouchableOpacity
@@ -170,17 +198,16 @@ const RateHawk = ({hotelId, item, setOpen, navigation}) => {
           onRequestClose={() => setcalenderPage(false)}>
           {/* <RoomList hotelId={hotelId}/> */}
           <CheckInOut
-            hotelId={hotelId}
-            hotelName={hotelDetails.name}
-            hotelAddress={hotelDetails.address}
+            hotelId={item.id}
+            hotelName={item.name}
+            hotelAddress={item.address}
           />
         </Modal>
 
-        {/* <ActivityIndicator animating={true} size={40} color={COLORS.mainPurple} style={styles.loader}/> */}
+        {/* <ActivityIndicator animating={true} size={40} color={COLORS.black} style={styles.loader}/> */}
       </View>
     );
   }
-
 };
 
 export default RateHawk;
@@ -274,14 +301,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 155,
     borderWidth: 2,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
     borderRadius: 25,
     marginLeft: 35,
     padding: 5,
   },
 
   verificationTagText: {
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     fontSize: SIZES.small,
     fontWeight: '700',
   },
@@ -329,7 +356,7 @@ const styles = StyleSheet.create({
     height: 80,
     borderWidth: 2,
     borderRadius: 10,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
   },
 
   amenityIcon: {
@@ -397,7 +424,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '80%',
     height: 50,
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     borderRadius: 10,
     marginVertical: 10,
     marginHorizontal: 40,

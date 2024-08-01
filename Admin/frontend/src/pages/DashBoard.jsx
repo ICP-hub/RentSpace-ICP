@@ -48,32 +48,36 @@ const DashBoard = () => {
   const [year,setYear]=useState(2024)
 
   const getBookingData=async(year)=>{
-      await actors?.bookingActor?.getBookingFrequencyInYear(year.toString()).then((res)=>{
-          console.log("booking count res : ",res[0])
-          setBookingData(createArray(res[0]))
-          setBookingCount(sumArray(createArray(res[0])))
-      }).catch((err)=>{
-        console.log("booking count err : ",err)
-      })
+      let bookingRes=await actors?.bookingActor?.getBookingFrequency(year.toString())
+      if(bookingRes?.err!=undefined){
+        console.log("err in fetchin booking data : ",bookingRes?.err)
+        return
+      }
+      console.log("booking res : ",bookingRes)
+      setBookingData(createArray(bookingRes?.ok))
+      setBookingCount(sumArray(createArray(bookingRes?.ok)))
   }
   const getUserCount=async()=>{
     const date=new Date()
-    await actors?.userActor?.getAnnualRegisterByYear(date.getFullYear().toString()).then((res)=>{
-        console.log("user count res : ",res[0])
-        setUserCount(sumArray(createArray(res[0])))
-        console.log(sumArray(createArray(res[0])))
-    }).catch((err)=>{
-      console.log("user count err : ",err)
-    })
+    let userRes=await actors?.userActor?.getAnnualRegisterByYear(date.getFullYear().toString())
+    if(userRes?.err!=undefined){
+      console.log("err in fetching user's data : ",userRes?.err)
+      return
+    }
+    console.log("user count res : ",userRes)
+    setUserCount(sumArray(createArray(userRes?.ok)))
+    console.log(sumArray(createArray(userRes?.ok)))
   }
   const getHotelCount=async()=>{
       const date=new Date()
-      await actors?.hotelActor?.getHotelFrequencyByYear(date.getFullYear().toString()).then((res)=>{
-          console.log("hotel count res : ",res[0])
-          setHotelCount(sumArray(createArray(res[0])))
-      }).catch((err)=>{
-        console.log("hotel count err : ",err)
-      })
+      let hotelRes=await actors?.hotelActor?.getHotelRegisterFrequencyData(date.getFullYear().toString())
+      if(hotelRes?.err!=undefined){
+        console.log("errr in fetching hotel data : ",hotelRes?.err)
+        return 
+      }
+      console.log("hotel count res : ",hotelRes?.ok)
+      setHotelCount(sumArray(createArray(hotelRes?.ok)))
+
   }
   console.log(actors);
   useEffect(() => {

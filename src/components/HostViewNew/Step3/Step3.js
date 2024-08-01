@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG
     },
     imageCont:{
         display:'flex',
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     },
     title:{
         width:'70%',
-        color:COLORS.mainPurple,
+        color:COLORS.black,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:15,

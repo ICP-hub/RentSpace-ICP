@@ -20,6 +20,7 @@ const Step1Manager = ({hostModal,setHostModal}) => {
         case(6):
             component=<HotelType setHostModal={setHostModal} pos={6}/>
             setHostModal(7)
+            // component=<Room setHostModal={setHostModal} pos={6}/>
             break
         case(7):
             component=<HotelLocation setHostModal={setHostModal} pos={7}/>

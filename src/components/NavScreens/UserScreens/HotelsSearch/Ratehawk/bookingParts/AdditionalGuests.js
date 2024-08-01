@@ -52,7 +52,7 @@ const AdditionalGuests = ({finalData, setFinalData}) => {
           </TouchableOpacity>
           <Text
             style={{
-              color: COLORS.mainPurple,
+              color: COLORS.black,
               fontSize: 15,
               fontWeight: 'bold',
             }}>
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     borderRadius: 5,
   },
 

@@ -4,8 +4,11 @@ import { COLORS,SIZES } from '../../../constants/themes'
 import { images } from '../../../constants'
 import SaveBtn from '../Reusables/SaveBtn'
 import BottomBtn from '../Reusables/BottomBtn'
+import { useSelector } from 'react-redux'
 
 const Step2 = ({setHostModal,pos}) => {
+    const {listing}=useSelector(state=>state.listingReducer)
+  console.log(listing);
   return (
     <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal}/>
@@ -18,7 +21,7 @@ const Step2 = ({setHostModal,pos}) => {
         </View> */}
       </View>
       <Text style={styles.subTitle}>Step 2</Text>
-      <Text style={styles.title}>Make your place stand out</Text>
+      <Text style={styles.title}>Make your space stand out</Text>
       <Text style={styles.text}>
       Our comprehensive verification system checks details such as name, address, government ID and more to confirm the identity of guests who book on Rentspace.
       </Text>
@@ -35,7 +38,7 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG
     },
     imageCont:{
         display:'flex',
@@ -64,7 +67,7 @@ const styles = StyleSheet.create({
     },
     title:{
         width:'88%',
-        color:COLORS.mainPurple,
+        color:COLORS.black,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:15,

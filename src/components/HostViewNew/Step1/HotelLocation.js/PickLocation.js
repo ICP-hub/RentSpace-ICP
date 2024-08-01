@@ -12,7 +12,7 @@ const PickLocation = ({setShowAddressForm,setShowLocationPicker,coords,setCoords
     const pickCurrentLocation=()=>{
         Geolocation.getCurrentPosition((loc)=>{
             const coordinates=loc.coords
-            setLocation(`${coordinates.longitude}#${coordinates.latitude}`)
+            // setLocation(`${coordinates.longitude}#${coordinates.latitude}`) 
             console.log(location)
             setCoords({
               latitude:coordinates.latitude,
@@ -27,7 +27,7 @@ const PickLocation = ({setShowAddressForm,setShowLocationPicker,coords,setCoords
     const onMapPress = (event) => {
         const pressedCoords = event.nativeEvent.coordinate;
         // Do something with pressedCoords, for example, update state
-        setLocation(`${pressedCoords.longitude}#${pressedCoords.latitude}`)
+        // setLocation(`${pressedCoords.longitude}#${pressedCoords.latitude}`)
         console.log(location)
         setCoords({
           latitude: pressedCoords.latitude,
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
         width:'90%',
         paddingVertical:12,
         borderRadius:12,
-        backgroundColor:COLORS.mainPurple,
+        backgroundColor:COLORS.black,
         marginTop:15
     },
     btnText:{

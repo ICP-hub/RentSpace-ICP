@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Image,
   Modal,
   ScrollView,
   StyleSheet,
@@ -12,6 +13,7 @@ import {COLORS} from '../../../../../constants/themes';
 import Line from '../Filters/ReUsables/Line';
 import axios from 'axios';
 import RateHawkBookingPage from './RateHawkBookingPage';
+import { nodeBackend } from '../../../../../../DevelopmentConfig';
 
 const RoomList = ({
   hotelId,
@@ -29,27 +31,53 @@ const RoomList = ({
   const [roomsList, setRoomsList] = useState([]);
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [loading, setLoading] = useState(true);
-  const baseUrl='https://rentspace.kaifoundry.com/api/v1'
-  // const baseUrl='http://localhost:5000/api/v1'
+
+  const [noRoomAvailable, setNoRoomAvailable] = useState(false);
+
+  const [transferData, setTransferData] = useState({
+    hotelName: hotelName,
+    hotelAddress: hotelAddress,
+    checkInDate: checkInDate,
+    checkOutDate: checkOutDate,
+  });
+
+  // const baseUrl = 'https://rentspace.kaifoundry.com';
+  // const baseUrl='http://localhost:5000'
+  const baseUrl = nodeBackend;
+
+  console.log('Base URL : ', baseUrl)
 
   const fetchHash = async () => {
+
+    // sample hardcoded data for testing
     const postData = {
       hotelId: hotelId,
       checkInDate: checkInDate,
       checkOutDate: checkOutDate,
       language: 'en',
       adults: 2,
-      children: [],
+      children: [16],
     };
 
     console.log('Post Data : ', postData);
 
     await axios
-      .post(`${baseUrl}/hotel/RateHawk/bookHotel`, postData)
+      .post(`${baseUrl}/api/v1/hotel/RateHawk/bookHotel`, postData)
       .then(response => {
-        console.log(response?.data?.data?.data?.hotels[0]?.rates[0].book_hash);
-        setRoomsList(response?.data?.data?.data?.hotels[0]?.rates);
-        setLoading(false);
+        if (
+          response?.data?.data?.data?.hotels[0]?.rates[0].book_hash ===
+          undefined
+        ) {
+          console.log('No Room Available');
+          setLoading(false);
+          setNoRoomAvailable(true);
+        } else {
+          console.log(
+            response?.data?.data?.data?.hotels[0]?.rates[0].book_hash,
+          );
+          setRoomsList(response?.data?.data?.data?.hotels[0]?.rates);
+          setLoading(false);
+        }
       })
       .catch(error => {
         console.error(error.message);
@@ -58,6 +86,7 @@ const RoomList = ({
 
   useEffect(() => {
     fetchHash();
+    
   }, []);
 
   return (
@@ -86,6 +115,7 @@ const RoomList = ({
             {roomsList.map((room, index) => {
               return (
                 <View style={styles.card} key={index}>
+                  <Image source={{uri: room.images[0]}} style={styles.img} />
                   <View style={styles.innerCard}>
                     <View style={styles.cardUp}>
                       <Text style={styles.roomType}>{room.room_name}</Text>
@@ -120,10 +150,13 @@ const RoomList = ({
             })}
 
             {/* only for integration testing */}
+            <Text style={[styles.hotelName, {marginVertical: 10}]}>
+              {noRoomAvailable ? 'No Room Available' : null}
+            </Text>
             <View style={styles.card}>
               <View style={styles.innerCard}>
                 <View style={styles.cardUp}>
-                  <Text style={styles.roomType}>Testing Room</Text>
+                  <Text style={styles.roomType}>Testing Hotel</Text>
                   <Text style={styles.occupancy}>2 Person</Text>
                 </View>
                 <View
@@ -138,7 +171,15 @@ const RoomList = ({
                   <TouchableOpacity
                     style={styles.bookBtn}
                     // onPress={() => testorderBookingForm()}
-                    onPress={() => setShowBookingForm(true)}>
+                    onPress={() => {
+                      setTransferData({
+                        hotelName : "Testing Hotel",
+                        hotelAddress: hotelAddress,
+                        checkInDate: checkInDate,
+                        checkOutDate: checkOutDate,
+                      
+                      })
+                      setShowBookingForm(true)}}>
                     <Text style={styles.bookBtnText}>Book Now</Text>
                   </TouchableOpacity>
                 </View>
@@ -151,8 +192,11 @@ const RoomList = ({
       <Modal visible={showBookingForm}>
         <RateHawkBookingPage
           showSelf={setShowBookingForm}
-          hotelName={hotelName}
-          hotelAddress={hotelAddress}
+          // hotelName={hotelName}
+          // hotelAddress={hotelAddress}
+          // checkInDate={checkInDate}
+          // checkOutDate={checkOutDate}
+          transferData={transferData}
         />
       </Modal>
     </View>
@@ -162,7 +206,6 @@ const RoomList = ({
 export default RoomList;
 
 const styles = StyleSheet.create({
-
   loaderContainer: {
     display: 'flex',
     flexDirection: 'column',
@@ -178,9 +221,8 @@ const styles = StyleSheet.create({
     marginHorizontal: '50%',
   },
 
-
   container: {
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
     width: '100%',
     height: '100%',
     display: 'flex',
@@ -218,13 +260,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 10,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.black,
     borderRadius: 10,
     marginBottom: 15,
+    elevation: 5,
   },
 
   innerCard: {
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.white,
     width: '100%',
     height: 180,
     borderRadius: 5,
@@ -239,15 +282,15 @@ const styles = StyleSheet.create({
 
   roomType: {
     fontSize: 25,
-    color: COLORS.white,
+    color: COLORS.black,
     fontWeight: 'bold',
   },
 
   occupancy: {
     fontSize: 15,
-    color: COLORS.mainPurple,
+    color: COLORS.white,
     fontWeight: 'medium',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.black,
     width: 85,
     height: 30,
     borderRadius: 5,
@@ -267,12 +310,12 @@ const styles = StyleSheet.create({
 
   price: {
     fontSize: 12,
-    color: COLORS.white,
+    color: COLORS.black,
     fontWeight: 'bold',
   },
 
   bookBtn: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.black,
     width: 120,
     height: 40,
     borderRadius: 5,
@@ -283,7 +326,7 @@ const styles = StyleSheet.create({
 
   bookBtnText: {
     fontSize: 12,
-    color: COLORS.mainPurple,
+    color: COLORS.white,
     fontWeight: 'bold',
   },
 });

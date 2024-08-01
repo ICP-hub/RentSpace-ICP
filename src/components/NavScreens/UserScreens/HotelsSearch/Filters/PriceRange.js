@@ -21,8 +21,8 @@ const PriceRange = ({maxPrice,setMaxPrice}) => {
             value={maxPrice}
             onValueChange={value=>{setMaxPrice(value)}}
             step={10}
-            minimumTrackTintColor={COLORS.hostTitle}
-            thumbTintColor={COLORS.hostTitle}
+            minimumTrackTintColor={COLORS.black}
+            thumbTintColor={COLORS.black}
             maximumTrackTintColor={COLORS.lighterGrey}
             trackStyle={styles.sliderTrack}
         />

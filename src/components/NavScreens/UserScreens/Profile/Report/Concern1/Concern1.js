@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     modal:{
         width:'100%',
         height:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG,
     },
     page:{
         display:'flex',

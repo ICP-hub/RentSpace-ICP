@@ -14,6 +14,7 @@ const HotelTitle = ({setHostModal,pos}) => {
     const {listing}=useSelector(state=>state.listingReducer)
     const dispatch=useDispatch()
 
+    console.log(listing);
     const checkEmpty=()=>{
         if(title==''){
             // alert("You cannot leave title empty")
@@ -51,7 +52,7 @@ const HotelTitle = ({setHostModal,pos}) => {
     <View style={styles.view}>
       <SaveBtn setHostModal={setHostModal}/>  
       <Text style={styles.title}>
-        Now, let’s give your house a title
+        Now, let’s give your Property a title
       </Text>
       <Text style={styles.text}>
        Our comprehensive verification system checks details such as name.
@@ -84,11 +85,11 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG
     },
     title:{
         width:'85%',
-        color:COLORS.mainPurple,
+        color:COLORS.black,
         fontSize:SIZES.prexxLarge,
         fontWeight:'500',
         marginBottom:10,

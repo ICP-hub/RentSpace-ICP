@@ -13,14 +13,14 @@ const BottomNavHost = ({navigation, showDrawer, setShowDrawer}) => {
         <Icon
           name="shield-checkmark-outline"
           size={26}
-          color={COLORS.mainPurple}
+          color={COLORS.black}
         />
       </TouchableOpacity>
       <TouchableOpacity style={styles.iconNav}>
         <Icon
           name="calendar-clear-outline"
           size={26}
-          color={COLORS.mainPurple}
+          color={COLORS.black}
           onPress={() => navigation.navigate('hotelAvailable')}
         />
       </TouchableOpacity>
@@ -28,7 +28,7 @@ const BottomNavHost = ({navigation, showDrawer, setShowDrawer}) => {
         <Icon2
           name="home-city-outline"
           size={26}
-          color={COLORS.mainPurple}
+          color={COLORS.black}
           onPress={() => navigation.navigate('hostListing')}
         />
       </TouchableOpacity>
@@ -36,14 +36,14 @@ const BottomNavHost = ({navigation, showDrawer, setShowDrawer}) => {
         <Icon
           name="chatbubble-ellipses-outline"
           size={26}
-          color={COLORS.mainPurple}
+          color={COLORS.black}
           onPress={() => setShowDrawer(!showDrawer)}
         />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.iconNav}
         onPress={() => navigation.navigate('hostMenu')}>
-        <Icon name="list" size={26} color={COLORS.mainPurple} />
+        <Icon name="list" size={26} color={COLORS.black} />
       </TouchableOpacity>
     </View>
   );

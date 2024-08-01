@@ -27,13 +27,23 @@ const BottomSheetCommunity = ({selfMod, openNotiModal}) => {
     });
     setLoading(true);
     await actors?.userActor
-      .updateUserInfo({
+      .updateUserDetails({
         ...user,
         agreementStatus: true,
-        userGovId: '123',
+        userGovId: '',
         userProfile: 'img1',
       })
       .then(res => {
+        if(res?.ok==undefined){
+          setLoading(false)
+          Dialog.show({
+            type:ALERT_TYPE.SUCCESS,
+            title:'Error occured',
+            textBody:res?.err,
+            button:'OK',
+          })
+          return
+        }
         setLoading(false);
         // Alert.alert('Guidelines Accepted','Thanks for accepting our guidelines!');
         Dialog.show({
@@ -149,7 +159,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    backgroundColor: COLORS.mainPurple,
+    backgroundColor: COLORS.black,
     borderRadius: 10,
     height: 50,
     paddingHorizontal: 80,
@@ -172,10 +182,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 125,
     marginTop: 10,
     borderWidth: 1,
-    borderColor: COLORS.mainPurple,
+    borderColor: COLORS.black,
   },
   declineText: {
-    color: COLORS.mainPurple,
+    color: COLORS.black,
     fontWeight: 'bold',
     fontSize: SIZES.medium,
   },

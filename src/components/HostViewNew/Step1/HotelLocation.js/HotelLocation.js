@@ -23,10 +23,11 @@ const HotelLocation = ({setHostModal,pos}) => {
   const [showLocationPicker,setShowLocationPicker]=useState(false)
   const [showAddressForm,setShowAddressForm]=useState(false)
   const {listing}=useSelector(state=>state.listingReducer)
+  console.log(listing);
   const dispatch=useDispatch()
   const checkEmpty=()=>{
     if(location!="Ludhiana"){
-      dispatch(setListing({...listing,hotelLocation:location}))
+      dispatch(setListing({...listing,hotelLocation:location,latitude:coords.latitude,longitude:coords.longitude}))
       return true
     }else{
       // alert('Please select a location before moving forward!')
@@ -73,11 +74,11 @@ const styles = StyleSheet.create({
         alignItems:'flex-start',
         width:'100%',
         height:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.newBG,
     },
     title:{
         width:'88%',
-        color:COLORS.mainPurple,
+        color:COLORS.black,
         fontSize:SIZES.xxLarge,
         fontWeight:'500',
         marginBottom:8,

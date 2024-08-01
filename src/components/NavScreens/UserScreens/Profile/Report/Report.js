@@ -48,17 +48,17 @@ const Report = ({setReportPage}) => {
            I agree to treat everyone in the RentSpace community -regardless of their race, religion, national origin, ethnicity, skin colour, disability, sex, gender identity, sexual orientation or age - with respect, and without judgement or bias.
         </Text>
       </View>
-      <Text style={styles.sectionHeading}>
+      {/* <Text style={styles.sectionHeading}>
         Urgent neighborhood situations
       </Text>
       <Text style={styles.normalText}>
        You can report a party, noise complaint or neighbourhood concern here
-      </Text>
-      <TouchableOpacity style={styles.btn}>
+      </Text> */}
+      {/* <TouchableOpacity style={styles.btn}>
         <Text style={styles.btnText}>
           Request a call
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <Text style={styles.sectionHeading}>
         Urgent neighborhood situations
       </Text>
@@ -89,12 +89,12 @@ const styles = StyleSheet.create({
     alignItems:'flex-start',
     minHeight:'100%',
     width:'100%',
-    backgroundColor:COLORS.mainGrey,
+    backgroundColor:COLORS.newBG,
     paddingBottom:40,
   },
   topNav:{
     width:'100%',
-    backgroundColor:COLORS.mainGrey,
+    backgroundColor:COLORS.newBG,
     padding:0,
     display:'flex',
     flexDirection:'column',
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     width:'85%',
     marginLeft:'7.5%',
     borderWidth:1,
-    borderColor:COLORS.hostTitle,
+    borderColor:COLORS.black,
     borderRadius:12,
     paddingVertical:20,
     justifyContent:'center',
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
     borderRadius:12,
-    backgroundColor:COLORS.mainPurple,
+    backgroundColor:COLORS.black,
     paddingVertical:12,
     paddingHorizontal:15,
     marginLeft:'7.5%',

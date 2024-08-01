@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 
 const ChatCard = ({item,setOpenChat,openChat,setChat}) => {
   useEffect(()=>{
-    console.log(item)
+    console.log("chat Card item",item.ok);
   },[])
   return (
     <>
@@ -15,9 +15,9 @@ const ChatCard = ({item,setOpenChat,openChat,setChat}) => {
       setOpenChat(true)
       setChat(item)
       }}>
-        <Image source={(item?.userProfile==""||item?.userProfile=="img")?images.sampleProfile2:{uri:item?.userProfile}} style={styles.img}/>
-      <Text style={styles.title}>{item?.firstName}</Text>
-      <Text style={styles.time}>Mon</Text>
+        <Image source={(item?.ok?.userImage==""||item?.ok?.userImage=="img")?images.sampleProfile2:{uri:item?.ok?.userImage}} style={styles.img}/>
+      <Text style={styles.title}>{item?.ok?.firstName}</Text>
+      {/* <Text style={styles.time}>Mon</Text> */}
     </TouchableOpacity>
     
     </>
