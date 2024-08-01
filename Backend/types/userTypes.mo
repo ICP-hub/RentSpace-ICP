@@ -5,6 +5,10 @@ import Bool "mo:base/Bool";
 
 module {
 
+    public type StableUserData = [(Principal, UserInfo)];
+
+    public type StableRegistry = [(Year, AnnualData)];
+
     public type Year = Text;
     public type UserId = Text;
     public type AdminId = Text;

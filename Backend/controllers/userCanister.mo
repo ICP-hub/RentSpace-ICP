@@ -16,6 +16,60 @@ shared ({ caller = owner }) actor class User() {
     var anualRegisterFrequency = TrieMap.TrieMap<UserTypes.Year, UserTypes.AnnualData>(Text.equal, Text.hash);
     // var admin : [UserTypes.AdminId] = []; // make it stable array for main net
 
+    stable var stableUserRecords : [UserTypes.StableUserData] = [];
+
+    stable var stableAnnualRegisterFrequency : [UserTypes.StableRegistry] = [];
+
+    ///////////////////////////// Private Functions ////////////////////////////////////
+
+    private func fromUserData(userData : UserTypes.UserInfo) : (Principal, UserTypes.UserInfo) {
+        (userData.userID, userData)
+    };
+
+    private func fromAnnualRegistry(year : UserTypes.Year, data : UserTypes.AnnualData) : (UserTypes.Year, UserTypes.AnnualData) {
+        (year, data)
+    };
+
+    private func toStableUserData() : [UserTypes.StableUserData] {
+        let users = userRecord.vals() |> Iter.map(_, fromUserData) |> Iter.toArray(_);
+        return users;
+    };
+
+    private func toStableAnnualRegistry() : [UserTypes.StableRegistry] {
+        let annualData = anualRegisterFrequency.vals() |> Iter.map(_, fromAnnualRegistry) |> Iter.toArray(_);
+        return annualData;
+    };
+
+    private func buildUserMap(users : [UserTypes.StableUserData]) : TrieMap.TrieMap<Principal, UserTypes.UserInfo> {
+        let userMap = TrieMap.empty<Principal, UserTypes.UserInfo>(Principal.equal, Principal.hash);
+        for (user in users) {
+            userMap.put(user._1, user._2);
+        };
+        return userMap;
+    };
+
+    private func buildAnnualRegistry(annualData : [UserTypes.StableRegistry]) : TrieMap.TrieMap<UserTypes.Year, UserTypes.AnnualData> {
+        let registry = TrieMap.empty<UserTypes.Year, UserTypes.AnnualData>(Text.equal, Text.hash);
+        for (data in annualData) {
+            registry.put(data._1, data._2);
+        };
+        return registry;
+    };
+
+    system func preupgrade() {
+        stableUserRecords := toStableUserData();
+        stableAnnualRegisterFrequency := toStableAnnualRegistry();
+    };
+
+    system func postupgrade() {
+        userRecord := buildUserMap(stableUserRecords);
+        anualRegisterFrequency := buildAnnualRegistry(stableAnnualRegisterFrequency);
+        stableUserRecords := [];
+        stableAnnualRegisterFrequency := [];
+    };
+
+    ///////////////////////////// Public Functions ////////////////////////////////////
+
     // Register a new user
     public shared ({ caller }) func registerUser(userData : UserTypes.User) : async Result.Result<Text, Text> {
         try {
