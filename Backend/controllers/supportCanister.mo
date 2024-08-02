@@ -38,6 +38,9 @@ shared ({caller=owner}) actor class Support(){
         ticketRecords := TrieMap.fromEntries<Text, SupportTypes.Ticket>(ticketRecordsVals, Text.equal, Text.hash);
         unresolvedTicketRecords := TrieMap.fromEntries<Text, SupportTypes.Ticket>(unresolvedTicketRecordsVals, Text.equal, Text.hash);
         supportChatRecords := TrieMap.fromEntries<Principal, [SupportTypes.SupportMessage]>(supportChatRecordsVals, Principal.equal, Principal.hash);
+
+        stableTicketRecords := [];
+        stableUnresolvedTicketRecords := [];
     };
 
     //creates a new ticket
