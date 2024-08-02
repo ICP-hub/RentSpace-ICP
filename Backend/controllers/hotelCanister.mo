@@ -27,6 +27,33 @@ shared ({ caller = owner }) actor class () {
 
     var hotelRoomRecord = TrieMap.TrieMap<HotelTypes.HotelId, HotelTypes.RoomType>(Text.equal, Text.hash);
 
+    stable var stableHotelRecord : [(HotelTypes.HotelId, HotelTypes.HotelInfo)] = [];
+    stable var stableHotelIdMap : [(HotelTypes.UserId, [HotelTypes.HotelId])] = [];
+    stable var stableHotelRegisterFrequencyMap : [(HotelTypes.Year, HotelTypes.AnnualData)] = [];
+    stable var stableHotelRoomRecord : [(HotelTypes.HotelId, HotelTypes.RoomType)] = [];
+
+
+    system func preupgrade() {
+        stableHotelRecord := Iter.toArray(hotelRecord.entries());
+        stableHotelIdMap := Iter.toArray(hotelIdMap.entries());
+        stableHotelRegisterFrequencyMap := Iter.toArray(hotelRegisterFrequencyMap.entries());
+        stableHotelRoomRecord := Iter.toArray(hotelRoomRecord.entries());
+    };
+
+    system func postupgrade() {
+        let hotelRecordVals = hotelRecord.entries();
+        let hotelIdMapVals = hotelIdMap.entries();
+        let hotelRegisterFrequencyMapVals = hotelRegisterFrequencyMap.entries();
+
+        hotelRecord := TrieMap.fromEntries<HotelTypes.HotelId, HotelTypes.HotelInfo>(hotelRecordVals, Text.equal, Text.hash);
+        hotelIdMap := TrieMap.fromEntries<HotelTypes.UserId, [HotelTypes.HotelId]>(hotelIdMapVals, Text.equal, Text.hash);
+        hotelRegisterFrequencyMap := TrieMap.fromEntries<HotelTypes.Year, HotelTypes.AnnualData>(hotelRegisterFrequencyMapVals, Text.equal, Text.hash);
+
+        stableHotelRecord := [];
+        stableHotelIdMap := [];
+        stableHotelRegisterFrequencyMap := [];  
+    };
+
     // creating refrence for user canister
     // let userActor = actor (userCanisterID) : actor {
     //     checkUserExist : query (Text) -> async (Bool);
