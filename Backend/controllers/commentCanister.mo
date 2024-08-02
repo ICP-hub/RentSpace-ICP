@@ -1,6 +1,7 @@
 import Result "mo:base/Result";
 import Principal "mo:base/Principal";
 import TrieMap "mo:base/TrieMap";
+import Iter "mo:base/Iter";
 import Text "mo:base/Text";
 import Error "mo:base/Error";
 import Buffer "mo:base/Buffer";
@@ -14,6 +15,18 @@ import UtilityFunc "../utils/utilityFunc";
 shared ({caller=owner}) actor class Comment(){
 
     var commentRecord = TrieMap.TrieMap<Text,[CommentTypes.Comment]>(Text.equal, Text.hash);
+
+    stable var stableCommentRecord : [(Text, [CommentTypes.Comment])] = [];
+
+    system func preupgrade() {
+        stableCommentRecord := Iter.toArray(commentRecord.entries());
+    };
+
+    system func postupgrade() {
+        let commentRecordVals = commentRecord.entries();
+        commentRecord := TrieMap.fromEntries<Text, [CommentTypes.Comment]>(commentRecordVals, Text.equal, Text.hash);
+        stableCommentRecord := [];
+    };
 
     //createCiomment
     //getCommentsonHOtel
