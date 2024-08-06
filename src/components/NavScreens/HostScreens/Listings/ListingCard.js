@@ -133,7 +133,7 @@ const ListingCard = ({item, getHotelDetails}) => {
         <Image source={{uri: item.imageList[0]}} style={styles.img} />
       </View>
       <View style={styles.textCont}>
-        <View>
+        <View style={styles.propDetails}>
           <Text style={styles.text}>{item?.propertyName}</Text>
           <Text style={styles.address}>{item?.location}</Text>
         </View>
@@ -233,6 +233,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
+  },
+
+  propDetails: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    width: '80%',
   },
 
   text: {

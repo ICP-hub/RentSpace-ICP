@@ -28,7 +28,7 @@ shared({caller=owner}) actor class Booking(){
     let ckethLedger = "ss2fx-dyaaa-aaaar-qacoq-cai";
 
     // create a new booking
-    public shared({caller}) func createBooking(paymentType:BookingTypes.PaymentType,booking:BookingTypes.BookingInput,amount:Nat):async Result.Result<Text,Text>{
+    public shared({caller}) func createBooking(paymentType:BookingTypes.PaymentType,booking:BookingTypes.BookingInput,amount:Nat, euroAmount:Nat):async Result.Result<Text,Text>{
         try{
             await UtilityFunc.checkAnonymous(caller);
             let time=DateTime.DateTime(Time.now()).toText();
@@ -99,6 +99,7 @@ shared({caller=owner}) actor class Booking(){
                 bookingDate=time;
                 bookingId=newBookingId;
                 refundStatus=false;
+                euroAmount=euroAmount;
             };
             bookingRecord.put(newBookingId,newBooking);                    
             switch(hotelBookingRecord.get(booking.hotelId)) {

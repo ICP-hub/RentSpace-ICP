@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {COLORS, SIZES} from '../../../../../constants/themes';
 import {images} from '../../../../../constants';
 import Icon2 from 'react-native-vector-icons/AntDesign';
+import Icon3 from 'react-native-vector-icons/MaterialIcons';
 import HostBand from './cards/HostBand';
 import HotelFacilityCard from './cards/HotelFacilityCard';
 import ReserveBtn from './cards/ReserveBtn';
@@ -32,6 +33,7 @@ const HotelDetailPage = ({item, setOpen, navigation}) => {
   const [host, setHost] = useState({});
 
   //   console.log('Item : ', item);
+  console.log('host : ', host.userImage);
 
   const getHotelRating = async () => {
     console.log('HID : ', item?.propertyId);
@@ -123,9 +125,8 @@ const HotelDetailPage = ({item, setOpen, navigation}) => {
             onPress={() => {
               setOpen(false);
             }}>
-            <Icon name="angle-left" size={30} color={COLORS.textLightGrey} />
+            <Icon name="angle-left" size={30} color={COLORS.white} />
           </TouchableOpacity>
-          {/* <Image source={(item?.details?.imagesUrls==""?images.hotel:{uri:item?.details?.imagesUrls})} style={styles.hotelImg}/> */}
           <Image source={{uri: item.imageList[0]}} style={styles.hotelImg} />
           {/* <Image source={images.hotel} style={styles.hotelImg}/> */}
           <View style={styles.hotelTitleReviewCont}>
@@ -135,7 +136,9 @@ const HotelDetailPage = ({item, setOpen, navigation}) => {
                 <Icon2 name="hearto" size={20} color={COLORS.textLightGrey} />
               </TouchableOpacity>
             </View>
-            <View style={styles.hotelReviewCont}>
+
+            {/* ------ */}
+            {/* <View style={styles.hotelReviewCont}>
               <Icon2
                 name="star"
                 size={12}
@@ -148,31 +151,110 @@ const HotelDetailPage = ({item, setOpen, navigation}) => {
                 {hotelReviews.length == 1 ? 'review' : 'reviews'} •{' '}
                 {item?.location}
               </Text>
-            </View>
+            </View> */}
+            {/* ------ */}
           </View>
-          <HostBand rooms={item.rooms} hostData={host} />
+          <HostBand
+            rooms={item.rooms}
+            hostData={host}
+            hotelRating={hotelRating}
+            hotelReviews={hotelReviews}
+          />
           <View style={[styles.allCont, {marginVertical: 25}]}>
             <HotelFacilityCard hostData={host} />
           </View>
           <View style={styles.hrLine}></View>
+          <View style={styles.descritionCont}>
+            <Text style={{color: COLORS.black, opacity: 0.7}}>
+              {item?.propertyDescription}
+            </Text>
+
+            <TouchableOpacity>
+              <Text
+                style={{
+                  color: COLORS.black,
+                  opacity: 0.7,
+                  textDecorationLine: 'underline',
+                  marginVertical: 12,
+                }}>
+                Show more
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.hrLine}></View>
+
+          <View style={styles.descritionCont}>
+            <Text
+              style={{
+                color: COLORS.black,
+                fontWeight: 'bold',
+                fontSize: 16,
+                marginVertical: 10,
+              }}>
+              What this place offers
+            </Text>
+            {item?.amenities.map((amenity, index) => {
+              return (
+                <Text
+                  key={index}
+                  style={{
+                    color: COLORS.black,
+                    opacity: 0.7,
+                    marginBottom: 5,
+                  }}>
+                  {' '}
+                  - {amenity}
+                </Text>
+              );
+            })}
+          </View>
+
+          {/* <View style={styles.hrLine}></View> */}
           <Reviews hotelReviews={hotelReviews} hotelRating={hotelRating} />
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() => {
-              let hostId = item?.propertyId?.split('#')[0];
-              console.log(host?.userID,"hp", hostId );
-              navigation.navigate('UserChat', {newChat: hostId});
-              setOpen(false);
-            }}>
-            <Text style={styles.btnText}>Chat with {host?.firstName}</Text>
-          </TouchableOpacity>
+          {/* ------------- */}
+          <View style={styles.hrLine}></View>
+
+          <View style={styles.secondBand}>
+            <View style={{display: 'flex', flexDirection: 'row', gap: 15}}>
+              <Image source={{uri: host?.userImage}} style={styles.img} />
+              <View>
+                <Text
+                  style={{
+                    color: COLORS.black,
+                    fontSize: SIZES.medium,
+                    fontWeight: '500',
+                    marginBottom: 10,
+                  }}>
+                  Hosted by {host?.firstName}
+                </Text>
+                <View style={{display: 'flex', flexDirection: 'row', gap: 5}}>
+                  <Icon3 name="verified" size={20} color={COLORS.black} />
+                  <Text style={{color: COLORS.black}}>Identity verified</Text>
+                </View>
+              </View>
+            </View>
+
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={() => {
+                let hostId = item?.propertyId?.split('#')[0];
+                console.log(host?.userID, 'hp', hostId);
+                navigation.navigate('UserChat', {newChat: hostId});
+                setOpen(false);
+              }}>
+              <Text style={styles.btnText}>Chat with {host?.firstName}</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* ------------- */}
+          {/* <View style={styles.hrLine}></View> */}
 
           <BottomSheetModal
             ref={btmBtn}
             index={0}
-            snapPoints={['12']}
-            backgroundStyle={{backgroundColor: COLORS.mainGrey}}
-            style={{elevation: 10, backgroundColor: COLORS.mainGrey}}>
+            snapPoints={['13']}
+            backgroundStyle={{backgroundColor: COLORS.white}}
+            style={{elevation: 10, backgroundColor: COLORS.mainnGrey}}>
             <ReserveBtn item={item} onClick={() => setBookingForm(true)} />
           </BottomSheetModal>
 
@@ -199,7 +281,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
     paddingBottom: 100,
-    backgroundColor: COLORS.mainGrey,
+    backgroundColor: COLORS.newBG,
   },
   backIcon: {
     display: 'flex',
@@ -207,7 +289,9 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 10,
     justifyContent: 'flex-start',
-    paddingLeft: 30,
+    paddingLeft: 20,
+    position: 'absolute',
+    zIndex: 1,
   },
   hotelImg: {
     width: '100%',
@@ -241,6 +325,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 3,
   },
+
+  descritionCont: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '90%',
+    alignItems: 'flex-start',
+    marginLeft: 20,
+  },
+  secondBand: {
+    backgroundColor: COLORS.white,
+    width: '85%',
+    // height: 150,
+    elevation: 10,
+    borderRadius: 12,
+    padding: 10,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 10,
+    marginBottom: 20,
+  },
+
+  img: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+  },
+
   hotelReviewCont: {
     display: 'flex',
     flexDirection: 'row',
@@ -263,20 +374,21 @@ const styles = StyleSheet.create({
   },
   hrLine: {
     height: 2,
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 0.25,
     borderBottomColor: COLORS.black,
     width: '100%',
     marginBottom: 20,
     opacity: 0.4,
   },
   btn: {
-    width: '80%',
+    width: '100%',
     borderRadius: 12,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     paddingVertical: 15,
     backgroundColor: COLORS.black,
+    marginVertical: 10,
   },
   btnText: {
     fontSize: SIZES.preMedium,

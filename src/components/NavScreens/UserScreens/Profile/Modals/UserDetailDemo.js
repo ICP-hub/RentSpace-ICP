@@ -2,7 +2,6 @@ import { ActivityIndicator, StyleSheet, Text, Image, TouchableOpacity, View, Mod
 import  { useEffect, useState } from 'react'
 import { COLORS, SIZES } from '../../../../../constants/themes'
 import { User } from '../../../../../declarations/User/index.js'
-import {hotel} from '../../../../../declarations/hotel/index.js'
 import { images } from '../../../../../constants'
 import Icon from 'react-native-vector-icons/AntDesign'
 import Icon2 from 'react-native-vector-icons/Entypo'
@@ -18,7 +17,6 @@ import BottomNav from '../../../../Navigation/BottomNav'
 import UpdateProfile from './UpdateProfile'
 import { useRoute } from '@react-navigation/native'
 import { createActor as createUserActor  } from '../../../../../declarations/User'
-import { createActor as createHotelActor } from '../../../../../declarations/hotel'
 import { createActor } from '../../../../../declarations/backend'
 import { setActor } from '../../../../../redux/actor/actions'
 import MainProfile from '../MainProfile/MainProfile'
@@ -196,17 +194,19 @@ const styles = StyleSheet.create({
         alignItems:'center',
         width:'100%',
         height:'100%',
-        backgroundColor:COLORS.mainGrey
+        backgroundColor:COLORS.white,
+       
     },
     header:{
-      backgroundColor:COLORS.white,
-      borderBottomRightRadius:20,
-      borderBottomLeftRadius:20,
+      backgroundColor:COLORS.newBG,
+      borderBottomRightRadius:50,
+      borderBottomLeftRadius:50,
       height:'38%',
       width:'100%',
       display:'flex',
       flexDirection:'column',
       alignItems:'center',
+      elevation:50,
     },
     title:{
         fontSize:SIZES.medium,
@@ -238,10 +238,14 @@ const styles = StyleSheet.create({
         opacity:0.8
     },
     dataCont:{
+      backgroundColor:COLORS.white,
       display:'flex',
       flexDirection:'column',
       alignItems:'center',
-      width:'80%'
+      width:'100%',
+      height:'62%',
+      paddingHorizontal:50,
+      
     },
     dataRow:{
       display:'flex',
@@ -278,7 +282,7 @@ const styles = StyleSheet.create({
       display:'flex',
       alignItems:'center',
       justifyContent:'center',
-      backgroundColor:COLORS.white,
+      backgroundColor:COLORS.black,
       height:60,
       width:'40%',
     },
@@ -295,7 +299,7 @@ const styles = StyleSheet.create({
     },
     btnText:{
         fontSize:SIZES.medium,
-        color:COLORS.black,
+        color:COLORS.white,
         fontWeight:'bold'
     }
 })

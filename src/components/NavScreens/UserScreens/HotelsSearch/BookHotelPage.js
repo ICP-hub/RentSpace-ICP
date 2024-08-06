@@ -108,7 +108,9 @@ const BookHotelPage = ({navigation, queryHotels, rateHawkHotel}) => {
         return
       }
       console.log(bookingRes?.ok)
-      setBookingList(bookingRes?.ok)
+      let bookingListInfo = bookingRes?.ok
+
+      setBookingList(bookingListInfo.reverse())
       setRefreshing(false)
       console.log("end of fetching bookings")
     }catch(err){

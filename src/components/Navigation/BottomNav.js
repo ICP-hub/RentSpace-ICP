@@ -12,14 +12,21 @@ import {COLORS, SIZES} from '../../constants/themes';
 import {images} from '../../constants';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/Fontisto';
+import Icon3 from 'react-native-vector-icons/FontAwesome';
 import {useSelector} from 'react-redux';
 import { ALERT_TYPE, Dialog } from 'react-native-alert-notification';
+
+
 
 const BottomNav = ({navigation}) => {
 
   const message = 'You need to login first, go to profile page!';
 
   const {principle} = useSelector(state => state.principleReducer);
+
+  const {user} = useSelector(state => state.userReducer);
+
+  console.log("user",user?.userImage);
 
   const [bottom, setBottom] = useState(0);
   useEffect(() => {
@@ -45,7 +52,8 @@ const BottomNav = ({navigation}) => {
               button:'OK',
             })
           }}>
-          <Icon name="filter" size={25} color={COLORS.black} />
+          <Icon3 name="sliders" size={26} color={COLORS.black} /> 
+         {/* ------------------------------------------------------------------------------------------ */}
         </TouchableOpacity>
         {/* <TouchableOpacity style={styles.iconNav} onPress={()=>{alert(message)}}>
                     <Icon name="search1" size={25} color={COLORS.black}/>
@@ -87,7 +95,7 @@ const BottomNav = ({navigation}) => {
           onPress={() => {
             navigation.navigate('Launch');
           }}>
-          <Icon name="filter" size={25} color={COLORS.black} />
+          <Icon3 name="sliders" size={26} color={COLORS.black} /> 
         </TouchableOpacity>
         {/* <TouchableOpacity style={styles.iconNav} onPress={()=>{navigation.navigate('mapSearch')}}>
                     <Icon name="search1" size={25} color={COLORS.black}/>
@@ -111,7 +119,9 @@ const BottomNav = ({navigation}) => {
           onPress={() => {
             navigation.navigate('profile');
           }}>
-          <Icon name="user" size={25} color={COLORS.black} />
+          {/* <Icon name="user" size={25} color={COLORS.black} /> */}
+          {/* user profile photo */}
+          <Image source={{uri: user?.userImage}} style={styles.profilePic} />
         </TouchableOpacity>
       </View>
     );
@@ -146,6 +156,13 @@ const styles = StyleSheet.create({
     shadowColor: COLORS.black,
     shadowOffset: {width: -2, height: 4},
     shadowRadius: 3,
+  },
+  profilePic: {
+    width: 28,
+    height: 28,
+    borderRadius: 50,
+    borderWidth: 1,
+    // borderColor: COLORS.black,
   },
 });
 

@@ -37,9 +37,11 @@ import sampleProfile2 from '../assets/images/sampleProfile2.png'
 import step1 from '../assets/images/hostViewNew/step1.png'
 import step2 from '../assets/images/hostViewNew/step2.png'
 import step3 from '../assets/images/hostViewNew/step3.png'
+import congro from '../assets/images/congro.png'
 // import saple
 
 export default {
+    congro,
     favourite,
     message,
     profile,

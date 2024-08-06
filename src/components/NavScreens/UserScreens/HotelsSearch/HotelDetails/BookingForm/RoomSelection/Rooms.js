@@ -113,6 +113,7 @@ const Rooms = ({item, setRoomData, setRoomModal,booking}) => {
   //   }, [selectedRooms]);
 
   const submitRooms = () => {
+    console.log('Selected Rooms: ', selectedRooms);
     setRoomData(selectedRooms);
     setRoomModal(false);
   };

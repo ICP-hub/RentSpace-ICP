@@ -5,5 +5,5 @@
     android:gravity="center"
     android:background="@drawable/bg"
     >
-    <ImageView  android:id="@+id/logo" android:layout_width="200dp" android:layout_height="300dp" android:src="@drawable/rent_space" android:scaleType="centerCrop" />
+    <ImageView  android:id="@+id/logo" android:layout_width="300dp" android:layout_height="270dp" android:src="@drawable/rent_space" android:scaleType="centerCrop" />
 </RelativeLayout>

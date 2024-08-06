@@ -430,9 +430,9 @@ const ReelCard = ({item, reelIndex}) => {
         <Text style={styles.infoTitle}>{item?.propertyName}</Text>
         <Text style={styles.infoText}>{distance} kilometers away</Text>
         <Text style={styles.infoText}>{changeDateFormat(item?.availableFrom) + ' - ' + changeDateFormat(item?.availableTill)}</Text>
-        <Text style={styles.infoText}>
+        {/* <Text style={styles.infoText}>
           <Text style={{fontWeight: 'bold'}}>${item?.price}</Text> night
-        </Text>
+        </Text> */}
       </View>
       <BottomSheetModal ref={btmSheetComments} index={0} snapPoints={['95%']}>
         <Comments

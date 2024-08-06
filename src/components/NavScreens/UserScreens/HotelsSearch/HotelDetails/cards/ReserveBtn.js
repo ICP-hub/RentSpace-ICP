@@ -84,12 +84,12 @@ const styles = StyleSheet.create({
   normalText: {
     fontSize: SIZES.preMedium - 1,
     color: COLORS.black,
-    opacity: 0.6,
+    // opacity: 0.6,
     marginBottom: 5,
   },
   smallText: {
     color: COLORS.black,
-    opacity: 0.5,
+    // opacity: 0.5,
     fontSize: SIZES.small,
   },
   btn: {

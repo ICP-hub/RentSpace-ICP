@@ -10,7 +10,7 @@ button {
 
 /* Apply a background color and some basic styling to the body */
 body {
-  background: #11002c;
+  background: #ffffff;
   font-family: Arial, sans-serif;
 }
 
@@ -19,8 +19,11 @@ body {
   opacity: 0.6;
   background: radial-gradient(
     107.52% 107.52% at 50% 50%,
-    #8d3494 0%,
-    #4b0fac 100%
+    /* #8d3494 0%,
+    #4b0fac 100% */
+    #333333 0%,
+    #cccccc 100%
+    
   );
   filter: blur(42.5px);
   width: 370px;
@@ -40,6 +43,8 @@ body {
     107.52% 107.52% at 50% 50%,
     #8d3494 0%,
     #4b0fac 100%
+    /* #cccccc 0%,
+    #333333 100% */
   );
   filter: blur(42.5px);
   position: absolute;
@@ -60,11 +65,14 @@ main {
 }
 
 button {
-  background: radial-gradient(
+  /* background: radial-gradient(
     107.52% 107.52% at 50% 50%,
-    #8d3494 0%,
-    #4b0fac 100%
-  );
+    /* #8d3494 0%,
+    #4b0fac 100% 
+    #cccccc 0%,
+    #333333 100%
+  ); */
+  background: black;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -84,3 +92,13 @@ form + form {
   margin-bottom: 20px;
   border-radius: 10px;
 }
+
+/* #logo-cont{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  background-color: white;
+  width: 70%;
+  border-radius: 10px;
+} */
