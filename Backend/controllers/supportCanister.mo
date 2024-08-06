@@ -20,6 +20,29 @@ shared ({caller = owner}) actor class Support() {
     var supportChatRecords = TrieMap.TrieMap<Principal, [SupportTypes.SupportMessage]>(Principal.equal, Principal.hash);
     var adminList : [Text] = ["sfwko-hd7us-gen5t-ssuci-vfjwf-afepb-a7p4y-guh5l-s5n2e-zuxvt-dae", "knve6-harwj-qzs3t-cu7oj-wpluq-ewgzd-tbdez-46lp5-nww7c-ne6rv-dae"];
 
+    stable var stableTicketRecords : [(Text, SupportTypes.Ticket)] = [];
+    stable var stableUnresolvedTicketRecords : [(Text, SupportTypes.Ticket)] = [];
+    stable var stableSupportChatRecords : [(Principal, [SupportTypes.SupportMessage])] = [];
+
+    system func preupgrade() {
+        stableTicketRecords := Iter.toArray(ticketRecords.entries());
+        stableUnresolvedTicketRecords := Iter.toArray(unresolvedTicketRecords.entries());
+        stableSupportChatRecords := Iter.toArray(supportChatRecords.entries());
+    };
+
+    system func postupgrade() {
+        let ticketRecordsVals = ticketRecords.entries();
+        let unresolvedTicketRecordsVals = unresolvedTicketRecords.entries();
+        let supportChatRecordsVals = supportChatRecords.entries();
+
+        ticketRecords := TrieMap.fromEntries<Text, SupportTypes.Ticket>(ticketRecordsVals, Text.equal, Text.hash);
+        unresolvedTicketRecords := TrieMap.fromEntries<Text, SupportTypes.Ticket>(unresolvedTicketRecordsVals, Text.equal, Text.hash);
+        supportChatRecords := TrieMap.fromEntries<Principal, [SupportTypes.SupportMessage]>(supportChatRecordsVals, Principal.equal, Principal.hash);
+
+        stableTicketRecords := [];
+        stableUnresolvedTicketRecords := [];
+    };
+
     //creates a new ticket
     public shared ({caller}) func createTicket(ticket : SupportTypes.TicketInput, address : SupportTypes.Address) : async Result.Result<Text, Text> {
         try {

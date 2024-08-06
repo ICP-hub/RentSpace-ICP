@@ -10,11 +10,31 @@ import Int "mo:base/Int";
 import DateTime "mo:datetime/DateTime";
 import ReviewTypes "../types/reviewTypes";
 import UtilityFunc "../utils/utilityFunc";
+import Iter "mo:base/Iter";
 
 shared({caller=owner}) actor class Review(){
 
     var hotelReviewRecords = TrieMap.TrieMap<Text,[Text]>(Text.equal, Text.hash);
     var reviewRecords= TrieMap.TrieMap<Text,ReviewTypes.Review>(Text.equal,Text.hash);
+
+    stable var stableHotelReviewRecords : [(Text, [Text])] = []; 
+    stable var stableReviewRecords : [(Text, ReviewTypes.Review)] = [];
+
+    system func preupgrade() {
+        stableHotelReviewRecords := Iter.toArray(hotelReviewRecords.entries());
+        stableReviewRecords := Iter.toArray(reviewRecords.entries());
+    };
+
+    system func postupgrade() {
+        let hotelReviewRecordsVals = hotelReviewRecords.entries();
+        let reviewRecordsVals = reviewRecords.entries();
+
+        hotelReviewRecords := TrieMap.fromEntries<Text, [Text]>(hotelReviewRecordsVals, Text.equal, Text.hash);
+        reviewRecords := TrieMap.fromEntries<Text, ReviewTypes.Review>(reviewRecordsVals, Text.equal, Text.hash);
+
+        stableHotelReviewRecords := [];
+        stableReviewRecords := [];
+    };
 
     // creates review on a hotel by a certain user
     public shared({caller}) func createReview(hotelId:Text,review:ReviewTypes.ReviewInput):async Result.Result<Text,Text>{

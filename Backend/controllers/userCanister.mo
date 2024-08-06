@@ -10,11 +10,69 @@ import Bool "mo:base/Bool";
 import DateTime "mo:datetime/DateTime";
 import Month "../utils/month";
 import UserTypes "../types/userTypes";
+import Iter "mo:base/Iter";
 
 shared ({ caller = owner }) actor class User() {
     var userRecord = TrieMap.TrieMap<Principal, UserTypes.UserInfo>(Principal.equal, Principal.hash);
     var anualRegisterFrequency = TrieMap.TrieMap<UserTypes.Year, UserTypes.AnnualData>(Text.equal, Text.hash);
     // var admin : [UserTypes.AdminId] = []; // make it stable array for main net
+
+    stable var stableUserRecords : [(Principal, UserTypes.UserInfo)] = [];
+
+    stable var stableAnnualRegisterFrequency : [(UserTypes.Year, UserTypes.AnnualData)] = [];
+
+    ///////////////////////////// Private Functions ////////////////////////////////////
+
+    // private func fromUserData(userData : UserTypes.UserInfo) : (Principal, UserTypes.UserInfo) {
+    //     (userData.userID, userData)
+    // };
+
+    // private func fromAnnualRegistry(year : UserTypes.Year, data : UserTypes.AnnualData) : (UserTypes.Year, UserTypes.AnnualData) {
+    //     (year, data)
+    // };
+
+    // private func toUser(userData : (Principal, UserTypes.UserInfo)) : UserTypes.UserInfo {
+    //     userData._2
+    // };
+
+    // private func toStableUserData() : [UserTypes.StableUserData] {
+    //     let users = userRecord.vals() |> Iter.map(_, fromUserData) |> Iter.toArray(_);
+    //     return users;
+    // };
+
+    // private func toStableAnnualRegistry() : [UserTypes.StableRegistry] {
+    //     let annualData = anualRegisterFrequency.vals() |> Iter.map(_, fromAnnualRegistry) |> Iter.toArray(_);
+    //     return annualData;
+    // };
+
+    // private func buildUserMap(users : [UserTypes.StableUserData]) : TrieMap.TrieMap<Principal, UserTypes.UserInfo> {
+    //     users.vals() 
+    //     |> Iter.map(_, )
+    // };
+
+    // private func buildAnnualRegistry(annualData : [UserTypes.StableRegistry]) : TrieMap.TrieMap<UserTypes.Year, UserTypes.AnnualData> {
+    //     let registry = TrieMap.TrieMap<UserTypes.Year, UserTypes.AnnualData>(Text.equal, Text.hash);
+    //     for (data in annualData) {
+    //         registry.put(data._1, data._2);
+    //     };
+    //     return registry;
+    // };
+
+    system func preupgrade() {
+        stableUserRecords := Iter.toArray(userRecord.entries());
+        stableAnnualRegisterFrequency := Iter.toArray(anualRegisterFrequency.entries());
+    };
+
+    system func postupgrade() {
+        let userRecordsVals = stableUserRecords.vals();
+        let annualRegistryRecords = stableAnnualRegisterFrequency.vals();
+        userRecord := TrieMap.fromEntries<Principal, UserTypes.UserInfo>(userRecordsVals, Principal.equal, Principal.hash);
+        anualRegisterFrequency := TrieMap.fromEntries<UserTypes.Year, UserTypes.AnnualData>(annualRegistryRecords, Text.equal, Text.hash);
+        stableUserRecords := [];
+        stableAnnualRegisterFrequency := [];
+    };
+
+    ///////////////////////////// Public Functions ////////////////////////////////////
 
     // Register a new user
     public shared ({ caller }) func registerUser(userData : UserTypes.User) : async Result.Result<Text, Text> {

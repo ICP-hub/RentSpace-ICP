@@ -19,6 +19,36 @@ shared({caller=owner}) actor class Booking(){
     var hotelBookingRecord = TrieMap.TrieMap<Text,[BookingTypes.BookingInfo]>(Text.equal,Text.hash);
     var userBookingRecord = TrieMap.TrieMap<Principal,[BookingTypes.BookingInfo]>(Principal.equal,Principal.hash);
     var bookingFreq = TrieMap.TrieMap<Text,BookingTypes.AnnualData>(Text.equal,Text.hash);
+
+    stable var stableBookingRecord : [(Text, BookingTypes.BookingInfo)] = [];
+    stable var stableHotelBookingRecord : [(Text, [BookingTypes.BookingInfo])] = [];
+    stable var stableUserBookingRecord : [(Principal, [BookingTypes.BookingInfo])] = [];
+    stable var stableBookingFreq : [(Text, BookingTypes.AnnualData)] = [];
+
+    system func preupgrade() {
+        stableBookingRecord := Iter.toArray(bookingRecord.entries());
+        stableHotelBookingRecord := Iter.toArray(hotelBookingRecord.entries());
+        stableUserBookingRecord := Iter.toArray(userBookingRecord.entries());
+        stableBookingFreq := Iter.toArray(bookingFreq.entries());
+    };
+
+    system func postupgrade() {
+        let bookingRecordVals = bookingRecord.entries();
+        let hotelBookingRecordVals = hotelBookingRecord.entries();
+        let userBookingRecordVals = userBookingRecord.entries();
+        let bookingFreqVals = bookingFreq.entries();
+
+        bookingRecord := TrieMap.fromEntries<Text, BookingTypes.BookingInfo>(bookingRecordVals, Text.equal, Text.hash);
+        hotelBookingRecord := TrieMap.fromEntries<Text, [BookingTypes.BookingInfo]>(hotelBookingRecordVals, Text.equal, Text.hash);
+        userBookingRecord := TrieMap.fromEntries<Principal, [BookingTypes.BookingInfo]>(userBookingRecordVals, Principal.equal, Principal.hash);
+        bookingFreq := TrieMap.fromEntries<Text, BookingTypes.AnnualData>(bookingFreqVals, Text.equal, Text.hash);
+
+        stableBookingRecord := [];
+        stableHotelBookingRecord := [];
+        stableUserBookingRecord := [];
+        stableBookingFreq := [];
+    };    
+
     var solanaPayments:Nat=0;
     var creditCardPayments:Nat=0;
     var paypalPayments:Nat=0;

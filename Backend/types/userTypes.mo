@@ -4,7 +4,6 @@ import Nat "mo:base/Nat";
 import Bool "mo:base/Bool";
 
 module {
-
     public type Year = Text;
     public type UserId = Text;
     public type AdminId = Text;
