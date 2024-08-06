@@ -18,13 +18,13 @@ const ChatList = ({currChat,setChat}) => {
   return (
     <div className='chatlist'>
         {
-            (userChats.length>0)?
+            (currChat.length>0)?
             <>
-                <h3 className='chat-list-headline'><p style={{opacity:0.5}}>You have </p>&nbsp;{userChats.length} New Queries Today</h3>
+                <h3 className='chat-list-headline'><p style={{opacity:0.5}}>You have </p>&nbsp;{currChat.length} New Queries Today</h3>
                 <h1 className='chat-list-day'>Today</h1>
                 {
-                    userChats.map((chat,index)=>(
-                        <ChatCard chat={chat} key={index} setChat={setChat} currChat={currChat}/>
+                    currChat.map((chat,index)=>(
+                        <ChatCard user = {chat.user} chat={chat.chats} idx={index} key={index} setChat={setChat} currChat={currChat}/>
                     ))
                 }
             </>    
