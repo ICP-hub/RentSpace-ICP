@@ -54,24 +54,26 @@ import {decryptPayload} from './utils/decryptPayload';
 import {encryptPayload} from './utils/encryptPayload';
 import PhantomPayment from './cryptoScreens/PhantomPayment';
 import axios from 'axios';
-import {ids} from '../../../../../../../DevelopmentConfig';
+import {ids, nodeBackend} from '../../../../../../../DevelopmentConfig';
 import {Principal} from '@dfinity/principal';
 import {toHex} from '@dfinity/agent';
 import {fromHexString} from '@dfinity/candid';
 import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
 import {clearScreenDown} from 'readline';
 import Rooms from './RoomSelection/Rooms';
-import { payPalUrl} from '../../../../../../../DevelopmentConfig';
+import {payPalUrl} from '../../../../../../../DevelopmentConfig';
 import PayPalApi from './Paypal/PayPalApi';
 import queryString from 'query-string';
 
-
+let paypalPayment = false;
 const onConnectRedirectLink = 'rentspace://onConnect';
 const connection = new Connection(clusterApiUrl('devnet'));
 const onSignAndSendTransactionRedirectLink =
   'rentspace://onSignAndSendTransaction';
 const SOLANA_DEVNET_USDC_PUBLIC_KEY =
   '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU';
+
+const baseURL = nodeBackend;
 
 const BookingFormComp = ({
   days,
@@ -98,6 +100,7 @@ const BookingFormComp = ({
   const [balanceScreen, setBalanceScreen] = useState(false);
   const [total, setTotal] = useState(0);
   const [cryptoPrice, setCryptoPrice] = useState();
+  const {authData} = useSelector(state => state.authDataReducer);
 
   // console.log('Item', item);
   const [roomModal, setRoomModal] = useState(false);
@@ -125,69 +128,99 @@ const BookingFormComp = ({
   const [approvedUrl, setApprovedUrl] = useState('');
   const [accessToken, setAccessToken] = useState('');
 
-  console.log("Paypal ID in form : ", item?.payPalId);
+  console.log('Paypal ID in form : ', item?.payPalId);
 
   const onPayPal = async () => {
     try {
-      const token = await PayPalApi.generateToken(item?.payPalId, item?.payPalSecret);
-      console.log("PayPal Token : ", token);
+      const token = await PayPalApi.generateToken(
+        item?.payPalId,
+        item?.payPalSecret,
+      );
+      console.log('PayPal Token : ', token);
       setAccessToken(token);
       const res = await PayPalApi.createOrder(token, total);
-      console.log("PayPal Order : ", res);
+      console.log('PayPal Order : ', res);
       // console.log("Approve : ", res?.links[1]?.href);
       // setApprovedUrl(res?.links[1]?.href);
 
-      if(!!res?.links){
+      if (!!res?.links) {
         const findUrl = res?.links.find(data => data.rel == 'approve');
-        console.log("Approve : ", findUrl);
+        console.log('Approve : ', findUrl);
         setApprovedUrl(findUrl?.href);
         setPaypalModal(true);
       }
-      
     } catch (error) {
-      console.log("Error in onPayPal: ", error);
+      console.log('Error in onPayPal: ', error);
     }
   };
 
-  const onUrlChange = (webViewState) => {
-    console.log("webViewState : ", webViewState);
-    if(webViewState.url.includes('https://example.com/cancel')){
+  const onUrlChange = webViewState => {
+    console.log('webViewState : ', webViewState);
+    if (webViewState.url.includes('https://example.com/cancel')) {
       setPaypalModal(false);
-      console.log("Payment Cancelled");
+      console.log('Payment Cancelled');
       return;
     }
-    if(webViewState.url.includes('https://example.com/return')){
-
+    if (webViewState.url.includes('https://example.com/return')) {
       const urlValue = queryString.parseUrl(webViewState.url);
 
-      console.log("URL Value : ", urlValue);
+      console.log('URL Value : ', urlValue);
 
       const {token} = urlValue.query;
 
-      console.log("Token : ", token);
+      console.log('Token : ', token);
 
-      if(!!token){
+      if (!!token) {
         paymentSuccess(token);
       }
     }
   };
 
-  const paymentSuccess = async (id) => {
+  const paymentSuccess = async id => {
     try {
       const res = await PayPalApi.capturePayment(id, accessToken);
 
-      console.log("Payment Capture : ", res);
-      Alert.alert("Payment Success");
+      console.log('Payment Capture : ', res);
+      Alert.alert('Payment Success');
       setPaypalModal(false);
-      console.log("totalBill for creditCard : ", totalBill);
+      console.log('totalBill for creditCard : ', totalBill);
       // afterPaymentFlow('creditCard Payment', 100);
-      afterPaymentFlow('Credit card payment', 100);
-      
+      if (!paypalPayment) {
+        paypalPayment = true;
+        afterPaymentFlow('Credit card payment', 100);
+      }
     } catch (error) {
-      console.log("error raised in payment capture : ", error);
+      console.log('error raised in payment capture : ', error);
     }
   };
   // ---------------------------------------------------------------
+
+  // update the room data on booking
+  const updateRoomData = async (
+    propertyId,
+    checkIn,
+    checkOut,
+    newRoomData,
+    roomData,
+  ) => {
+    // console.log('New Room Data on Booking Update : ', newRoomData);
+    const passData = {
+      propertyId: propertyId,
+      checkIn: checkIn,
+      checkOut: checkOut,
+      rooms: newRoomData,
+      roomData: roomData,
+    };
+    console.log('Room Pass Data : ', passData);
+    await axios
+      .post(`${baseURL}/api/v1/booking/create`, passData)
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   //booking flow general functions
   function notifyBookingConfirm() {
@@ -212,22 +245,33 @@ const BookingFormComp = ({
         paymentOpt = {sol: null};
       } else if (paymentMethod == 'ckBTC') {
         paymentOpt = {ckBTC: opt};
-      } else if (paymentMethod == 'creditCard'){
+      } else if (paymentMethod == 'creditCard') {
         paymentOpt = {creditCard: null};
-      } else if (paymentMethod == 'paypal'){
+      } else if (paymentMethod == 'paypal') {
         paymentOpt = {paypal: null};
-      }
-      else {
+      } else {
         paymentOpt = {icp: opt};
       }
-      console.log("POpp :> ", paymentOpt, "PMeth :> ", paymentMethod, "Obj :> ", obj, "AmNt :> ", amnt);
+      console.log(
+        'POpp :> ',
+        paymentOpt,
+        'PMeth :> ',
+        paymentMethod,
+        'Obj :> ',
+        obj,
+        'AmNt :> ',
+        amnt,
+        'Total :> ',
+        total,
+      );
 
-      console.log("Booking Actor : ", actors?.bookingActor?.createBooking);
+      console.log('Booking Actor : ', actors?.bookingActor?.createBooking);
 
       let bookingRes = await actors?.bookingActor?.createBooking(
         paymentOpt,
         obj,
         amnt,
+        total,
       );
       console.log('booking response : ', bookingRes);
       if (bookingRes?.err != undefined) {
@@ -240,6 +284,36 @@ const BookingFormComp = ({
         });
         return;
       }
+      // ------------------- update the room data on booking-------------------
+      // let roomData = [];
+      console.log('Obj on room update : ', roomData);
+      console.log('OBJ : ', obj);
+      console.log('checkout : ', obj?.checkOutDate);
+      console.log('Room Item : ', item.propertyId);
+
+      let newRoomData = item.rooms.map(room => {
+        let roomObj = roomData.find(data => data.roomID == room.roomID);
+        if (roomObj) {
+          room.totalAvailableRooms =
+            room.totalAvailableRooms - roomObj.totalRooms;
+        }
+        return room;
+      });
+
+      // console.log("New Room Data : ", newRoomData);
+
+      // send propertyId and rooms to update function
+
+      // propertyId, bookedRooms, checkIn, checkOut, rooms
+      await updateRoomData(
+        item.propertyId,
+        obj?.checkInDate,
+        obj?.checkOutDate,
+        newRoomData,
+        roomData,
+      );
+
+      // -----------------------------------------
       notify();
       setLoading(false);
       showBookingAnimation(true);
@@ -248,7 +322,7 @@ const BookingFormComp = ({
         setOpen(false);
       }, 2000);
     } catch (err) {
-      console.log("the error is : ", err);
+      console.log('the error is : ', err);
       setLoading(false);
       Dialog.show({
         type: ALERT_TYPE.DANGER,
@@ -258,9 +332,6 @@ const BookingFormComp = ({
       });
     }
   };
-
-
-  
 
   const afterPaymentFlow = async (paymentId, amnt) => {
     // setBooking({...booking, paymentStatus: true, paymentId: paymentId});
@@ -273,9 +344,9 @@ const BookingFormComp = ({
     //   // bookedTill:"end"
     // };
     // alert("in after payment")
-    console.log("booking : ", booking);
-    console.log("paymentId : ", paymentId);
-    console.log("amnt : ", amnt);
+    console.log('booking : ', booking);
+    console.log('paymentId : ', paymentId);
+    console.log('amnt : ', amnt);
 
     book(booking, notifyBookingConfirm, amnt, paymentId);
     setBalanceScreen(false);
@@ -540,7 +611,7 @@ const BookingFormComp = ({
       allParams.nonce,
       sharedSecretDapp,
     );
-    console.log(connectData, 'connect data')
+    console.log(connectData, 'connect data');
     setPhantomWalletPublicKey(new PublicKey(connectData?.public_key));
     setSession(connectData?.session);
     setSharedSecret(sharedSecretDapp);
@@ -648,18 +719,15 @@ const BookingFormComp = ({
       console.log('SOL selected!');
       setPaymentType('phantom');
     }
-    //-------------------------------------------------------------------------- PayPal for credit card 
-    else if (paymentMethod == 'creditCard') { 
+    //-------------------------------------------------------------------------- PayPal for credit card
+    else if (paymentMethod == 'creditCard') {
       // Alert.alert("PayPal", "PayPal payment is choosen !");
       setPaymentType('paypal');
       // setPaymentType('fiat');
-    }
-    else if (paymentMethod == 'paypal') {
-      console.log("PayPal selected!");
+    } else if (paymentMethod == 'paypal') {
+      console.log('PayPal selected!');
       setPaymentType('paypal');
-    }
-    
-    else {
+    } else {
       Alert.alert(
         'KYC needed',
         'For this option, if you are a first time transak user, you may need to complete your KYC!',
@@ -672,7 +740,7 @@ const BookingFormComp = ({
   //   console.log("Room Data : ", roomData);
   // }, [roomData]);
 
-  console.log("PayPal Approved URL : ", approvedUrl)
+  console.log('PayPal Approved URL : ', approvedUrl);
 
   return (
     <View style={styles.page}>
@@ -752,14 +820,13 @@ const BookingFormComp = ({
                 // connect()
                 // sendNewTransaction()
                 setPhantomModal(true);
-              } 
+              }
               // ----------------------------------------- PayPal for credit card
               else if (paymentType == 'paypal') {
-                  Alert.alert("PayPal", "PayPal payment selected!");
-                  console.log(payPalUrl);
-                  onPayPal();
-              } 
-              else {
+                Alert.alert('PayPal', 'PayPal payment selected!');
+                console.log(payPalUrl);
+                onPayPal();
+              } else {
                 getBalance();
                 setBalanceScreen(true);
               }
@@ -881,15 +948,13 @@ const BookingFormComp = ({
       <Modal
         visible={paypalModal}
         animationType="fade"
-        onRequestClose={() => setPaypalModal(false)}    
-      >
-        <View style={{flex:1}}>
-          <WebView 
+        onRequestClose={() => setPaypalModal(false)}>
+        <View style={{flex: 1}}>
+          <WebView
             source={{uri: approvedUrl}}
             onNavigationStateChange={onUrlChange}
           />
         </View>
-
       </Modal>
     </View>
   );

@@ -42,6 +42,7 @@ type BookingInfo =
    cancelStatus: bool;
    checkInDate: text;
    checkOutDate: text;
+   euroAmount: nat;
    hotelId: text;
    paymentId: text;
    paymentStatus: bool;
@@ -50,7 +51,7 @@ type BookingInfo =
  };
 type Booking = 
  service {
-   createBooking: (PaymentType, BookingInput, nat) -> (Result_3);
+   createBooking: (PaymentType, BookingInput, nat, nat) -> (Result_3);
    getAllHotelBookings: (text) -> (Result_2);
    getAllUserBookings: () -> (Result_2);
    getBookingDetails: (text) -> (Result_1);

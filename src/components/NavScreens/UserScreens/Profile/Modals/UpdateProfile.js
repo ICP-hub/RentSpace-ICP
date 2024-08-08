@@ -249,7 +249,7 @@ const UpdateProfile = ({setEditProfile}) => {
     /> */}
     <View style={styles.labelCont}>
         <Icon3 name='birthday-cake' size={15} color={COLORS.black} style={{marginRight:6}}/>
-        <Text style={styles.simpleText}>BirthDay</Text>
+        <Text style={styles.simpleText}>Date of Birth</Text>
       </View>
         <TouchableOpacity style={styles.inputs} onPress={()=>{
             setShowCalendar(true)
@@ -358,14 +358,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '80%',
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS.black,
         borderRadius: 10,
         height: 50,
         paddingHorizontal: 80,
         marginTop: 10,
       },
       submitText:{
-        color: COLORS.black,
+        color: COLORS.white,
         fontWeight: 'bold',
         fontSize: SIZES.medium,
       },

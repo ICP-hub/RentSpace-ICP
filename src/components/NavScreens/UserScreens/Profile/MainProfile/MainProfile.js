@@ -27,8 +27,6 @@ import {setUser} from '../../../../../redux/users/actions';
 import {setHotels} from '../../../../../redux/hotels/actions';
 import {setPrinciple} from '../../../../../redux/principle/actions';
 import {backend} from '../../../../../declarations/backend';
-import {User} from '../../../../../declarations/User';
-import {hotel} from '../../../../../declarations/hotel';
 import UserDetailDemo from '../Modals/UserDetailDemo';
 import Report from '../Report/Report';
 import Feedback from '../Feedback/Feedback';

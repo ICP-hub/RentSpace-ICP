@@ -31,6 +31,11 @@ const FirstForm = ({setBookingForm, item, setOpen}) => {
     bookingDuration: 1,
   });
 
+  const [checkInDate, setCheckInDate] = useState({
+    date: '',
+    marked: false,
+  });
+
   // console.log("item on 1st form : ", item.payPalId);
   const book = async (booking, notify) => {
     if (booking.paymentStatus) {
@@ -155,6 +160,10 @@ const FirstForm = ({setBookingForm, item, setOpen}) => {
       <Calendar
         onDayPress={day => {
           setSelected(day.dateString);
+          setCheckInDate({
+            date: day.dateString,
+            marked: true,
+          })
           setBooking({
             ...booking,
             // date:`${(day.day<10)?"0"+day.day:day.day}/${(day.month<10)?"0"+day.month:day.month}/${day.year}`,
@@ -167,14 +176,14 @@ const FirstForm = ({setBookingForm, item, setOpen}) => {
             checkInDate: `${day.day < 10 ? '0' + day.day : day.day}/${
               day.month < 10 ? '0' + day.month : day.month
             }/${day.year}`,
-          });
+          });          
         }}
         style={styles.calendar}
         markedDates={{
-          [selected]: {
-            selected: true,
-            disableTouchEvent: true,
-            selectedDotColor: COLORS.hostTitle,
+          [checkInDate.date]: {
+            selected: checkInDate.marked,
+            selectedColor: COLORS.black,
+            
           },
         }}
         minDate={`${new Date().getFullYear()}-${

@@ -11,6 +11,7 @@ module{
         paymentStatus : Bool;
         paymentId : Text;
         bookingId : Text;
+        euroAmount : Nat;
     };
     public type BookingInput={
         hotelId :Text;

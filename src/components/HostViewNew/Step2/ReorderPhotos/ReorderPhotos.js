@@ -35,6 +35,7 @@ const ReorderPhotos = ({setHostModal,pos}) => {
       <ScrollView contentContainerStyle={styles.subView}>
         <View style={styles.bigImgCont}>
             <Image source={{uri:files[1].uri}} style={styles.bigImg}/>
+            
         </View>
        
         <View style={styles.imgCont}>
@@ -61,11 +62,15 @@ const ReorderPhotos = ({setHostModal,pos}) => {
                 :<></>
             }
         </View>
+
         <View style={styles.iconCont}>
             <TouchableOpacity style={styles.plusIcon}>
                 <Icon name='plus' size={30} color={COLORS.black} style={styles.icon}/>
             </TouchableOpacity>
         </View>
+        
+        
+
       </ScrollView>
       <BottomBtn setHostModal={setHostModal} pos={pos} step={2} back={2} nextFunc={()=>{return true}}/>
     </View>
@@ -140,7 +145,8 @@ const styles = StyleSheet.create({
     bigImgCont:{
         width:'82%',
         marginLeft:'7.5%',
-        width:310
+        width:310,
+        backgroundColor:COLORS.white,
     },
     bigImg:{
         marginBottom:10,

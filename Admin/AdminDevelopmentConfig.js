@@ -1,10 +1,10 @@
 //Decides if canister ids used are of production or development
-const production=false
+const production = false;
 
-export const host=(production)?"https://icp-api.io":"http://127.0.0.1:4943"
+export const host = production ? 'https://icp-api.io' : 'http://127.0.0.1:4943';
 
-export const ids={
-    userCan: production
+export const ids = {
+  userCan: production
     ? 'ttotv-cyaaa-aaaao-a3o2a-cai'
     // : 'by6od-j4aaa-aaaaa-qaadq-cai', // rajnish
     // :"avqkn-guaaa-aaaaa-qaaea-cai", // atharva

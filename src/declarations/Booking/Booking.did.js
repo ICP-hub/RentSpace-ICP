@@ -26,6 +26,7 @@ export const idlFactory = ({ IDL }) => {
     'paymentId' : IDL.Text,
     'checkOutDate' : IDL.Text,
     'cancelStatus' : IDL.Bool,
+    'euroAmount' : IDL.Nat,
   });
   const Result_2 = IDL.Variant({
     'ok' : IDL.Vec(BookingInfo),
@@ -49,7 +50,7 @@ export const idlFactory = ({ IDL }) => {
   const Result = IDL.Variant({ 'ok' : AnnualData, 'err' : IDL.Text });
   const Booking = IDL.Service({
     'createBooking' : IDL.Func(
-        [PaymentType, BookingInput, IDL.Nat],
+        [PaymentType, BookingInput, IDL.Nat, IDL.Nat],
         [Result_3],
         [],
       ),

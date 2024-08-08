@@ -17,7 +17,10 @@ export interface AnnualData {
   'june' : bigint,
 }
 export interface Booking {
-  'createBooking' : ActorMethod<[PaymentType, BookingInput, bigint], Result_3>,
+  'createBooking' : ActorMethod<
+    [PaymentType, BookingInput, bigint, bigint],
+    Result_3
+  >,
   'getAllHotelBookings' : ActorMethod<[string], Result_2>,
   'getAllUserBookings' : ActorMethod<[], Result_2>,
   'getBookingDetails' : ActorMethod<[string], Result_1>,
@@ -35,6 +38,7 @@ export interface BookingInfo {
   'paymentId' : string,
   'checkOutDate' : string,
   'cancelStatus' : boolean,
+  'euroAmount' : bigint,
 }
 export interface BookingInput {
   'hotelId' : string,

@@ -66,8 +66,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     alignItems: 'center',
-    marginBottom: 20,
+    marginVertical: 20,
     paddingBottom: 20,
+
   },
   headerCont: {
     display: 'flex',
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '80%',
+    width: '85%',
     borderWidth: 1.2,
     borderColor: COLORS.black,
     borderRadius: 12,
