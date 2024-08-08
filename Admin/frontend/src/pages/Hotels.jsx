@@ -46,7 +46,7 @@ function createArray(arr) {
 const Hotels = () => {
   const nav=useNavigate()
   const [showDetail,setShowDetail]=useState(-1)
-  const [hotelYear,setHotelYear]=useState(2024)
+  const [hotelYear,setHotelYear]=useState(new Date().getFullYear())
   const {actors}=useAuth()
   const [hotelStats,setHotelStats]=useState([])
   const [hotelCount,setHotelCount]=useState(0)

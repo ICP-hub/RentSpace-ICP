@@ -49,6 +49,8 @@ const Chat = ({ user }) => {
       .catch((err) => {
         alert(err);
         setMessages((prev) => prev.filter((x) => x.message !== currentMessage));
+      }).finally(()=>{
+        setCurrentMessage("")
       });
   }, [actors, currentMessage, user.userID]);
 
