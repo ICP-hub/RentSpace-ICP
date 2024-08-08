@@ -46,6 +46,11 @@ body{
     margin-top: 2vh;
     min-height: 97vh;
 }
+
+.heebo {
+    font-family: "Heebo", sans-serif;
+}
+
 @media only screen and (max-width: 1000px) {
     .page{
         width: 100%;

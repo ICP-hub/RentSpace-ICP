@@ -1,9 +1,23 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import './reportDetail.css'
 import { IoClose } from "react-icons/io5";
 import { IoCheckmarkDone } from "react-icons/io5";
+import { useAuth } from '../../../utils/useAuthClient';
 
 const ReportDetail = ({report}) => {
+
+  const {actors} = useAuth()
+
+  const handleResolve = useCallback(async ()=>{
+    const resolveResponse = await actors?.supportActor?.resolveTicket(report.reportId)
+    if(resolveResponse.ok){
+      alert("Ticket resolved successfully")
+    }
+    else {
+      alert("Error resolving ticket")
+    }
+  },[report?.reportData?.resolved])
+
   return (
     <div className='report-detail-main-cont'>
       <div className="report-detail-title-cont">
@@ -11,9 +25,17 @@ const ReportDetail = ({report}) => {
         <div className="report-detail-icon-round">
           {
             report?.reportData?.resolved==false?
-            <IoClose className='resolve-icon-indicator' style={{color:'red'}}/>
+            (
+              <span className='resolve-icon-container' onClick={handleResolve}>
+                <IoCheckmarkDone className='resolve-icon-indicator' style={{color:'green'}}/>
+              </span>
+            )
             :
-            <IoCheckmarkDone className='resolve-icon-indicator' style={{color:'green'}}/>
+            (
+              <span className='resolve-icon-container'>
+                <IoClose className='resolve-icon-indicator' style={{color:'red'}}/>
+              </span>
+            )
           }
         </div>
       </div>

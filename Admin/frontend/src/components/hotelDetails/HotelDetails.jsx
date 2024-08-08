@@ -7,30 +7,32 @@ import { PiMedalMilitaryThin } from "react-icons/pi";
 import { LuKeyRound } from "react-icons/lu";
 import { HiOutlineClipboardList } from "react-icons/hi";
 
-const features=[
-    {
-        title:'Self check-in',
-        icon:<BsDoorOpen className='hotel-feature-icon'/>,
-        text:'You can check in with the building staff.'
-    },
-    {
-        title:'Lucy is a Superhost',
-        icon:<PiMedalMilitaryThin className='hotel-feature-icon'/>,
-        text:'Superhosts are experienced, highly rated Hosts.'
-    },
-    {
-        title:'Great check-in experience',
-        icon:<LuKeyRound className='hotel-feature-icon'/>,
-        text:'95% of recent guests gave the check-in process a 5-star rating.'
-    },
-    {
-        title:'Free cancellation for 48 hours',
-        icon:<HiOutlineClipboardList className='hotel-feature-icon'/>,
-        text:''
-    }
-]
 
 const HotelDetails = ({hotel}) => {
+
+    const features=[
+        {
+            title:'Self check-in',
+            icon:<BsDoorOpen className='hotel-feature-icon'/>,
+            text:'You can check in with the building staff.'
+        },
+        {
+            title:hotel?.userData?.firstName + ' is a Superhost',
+            icon:<PiMedalMilitaryThin className='hotel-feature-icon'/>,
+            text:'Superhosts are experienced, highly rated Hosts.'
+        },
+        {
+            title:'Great check-in experience',
+            icon:<LuKeyRound className='hotel-feature-icon'/>,
+            text:'95% of recent guests gave the check-in process a 5-star rating.'
+        },
+        {
+            title:'Free cancellation for 48 hours',
+            icon:<HiOutlineClipboardList className='hotel-feature-icon'/>,
+            text:''
+        }
+    ]
+
   return (
     <div className='hotel-detail-main'>
         <HotelHeader hotel={hotel}/>

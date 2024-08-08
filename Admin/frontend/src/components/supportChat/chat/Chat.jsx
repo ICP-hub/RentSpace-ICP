@@ -1,104 +1,101 @@
-import React, { useState } from 'react'
-import AdminMessage from './AdminMessage'
-import Message from './Message'
-import './chat.css'
+import React, { Suspense, useCallback, useEffect, useState, useTransition, lazy } from 'react';
 import { FaUser } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
+import { useAuth } from '../../../utils/useAuthClient';
+import './chat.css';
 
-const Chat = ({user}) => {
+const AdminMessage = lazy(() => import('./AdminMessage'));
+const Message = lazy(() => import('./Message'));
 
-  const messages=[
-    {
-      sender:"admin",
-      receiver:"Vikas",
-      text:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil?"
-    },
-    {
-      sender:"Vikas",
-      receiver:"admin",
-      text:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere animi atque vero!" 
-    },
-    {
-      sender:"admin",
-      receiver:"Vikas",
-      text:" 2 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil?"
-    },
-    {
-      sender:"Vikas",
-      receiver:"admin",
-      text:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere animi atque vero!" 
-    },
-    {
-      sender:"Raghav",
-      receiver:"admin",
-      text:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere animi atque vero!" 
-    },
-    {
-      sender:"admin",
-      receiver:"Raghav",
-      text:"3 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil?"
-    },
-    {
-      sender:"Raghav",
-      receiver:"admin",
-      text:"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Labore?"
-    },
-    {
-      sender:"admin",
-      receiver:"Raghav",
-      text:"4 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, nihil?"
-    }
-  ]
+const Chat = ({ user }) => {
+  const [messages, setMessages] = useState([]);
+  const [currentMessage, setCurrentMessage] = useState("");
+  const { actors } = useAuth();
+  const [isPending, startTransition] = useTransition();
 
-  const [currentMessage,setCurrentMessage]=useState("")
+  const getUserChats = useCallback(() => {
+    actors?.supportActor.getAllUserMessages(user.userID)
+      .then((getUserChatsResponse) => {
+        startTransition(() => {
+          if (getUserChatsResponse.ok) {
+            setMessages(getUserChatsResponse.ok);
+          } else {
+            setMessages([]);
+          }
+        });
+      })
+      .catch((err) => {
+        console.error("Failed to fetch user chats:", err);
+        startTransition(() => {
+          setMessages([]);
+        });
+      });
+  }, [actors, user.userID]);
+
+  useEffect(() => {
+    getUserChats();
+  }, [user, getUserChats]);
+
+  const handleSendMessage = useCallback(() => {
+    setMessages((prev) => [...prev, { byAdmin: true, message: currentMessage }]);
+
+    actors?.supportActor.sendMessage(currentMessage, [user.userID])
+      .then((sendMessageRequest) => {
+        console.log(sendMessageRequest);
+        if (!sendMessageRequest.ok) {
+          throw new Error("An error occurred while sending the message! Try Again!");
+        }
+      })
+      .catch((err) => {
+        alert(err);
+        setMessages((prev) => prev.filter((x) => x.message !== currentMessage));
+      }).finally(()=>{
+        setCurrentMessage("")
+      });
+  }, [actors, currentMessage, user.userID]);
+
+  console.log("Messages: ", messages);
 
   return (
     <div className='chat'>
       <div className="chat-header">
         <div className="chat-user-icon-cont">
-          <FaUser className='chat-user-icon'/>
+          <FaUser className='chat-user-icon' />
         </div>
         <div className="chat-user-status">
-          <h3 className="chat-header-name">Vikas</h3>
+          <h3 className="chat-header-name">{user?.firstName}</h3>
           <p className="chat-header-status">Active Now</p>
         </div>
         <div></div>
       </div>
-      <div className="chat-message-cont">
-        {
-            messages.map((message,index)=>{
-              console.log(message)
-              console.log(user)
-              if(message?.sender=="admin" && message?.receiver==user){
-                console.log("sender is admin")
-                return(
-                  <AdminMessage text={message?.text} key={index}/>
-                )
-              }else{
-                if(message?.sender==user){
-                  console.log("sender is "+message?.sender)
-                  return(
-                    <Message text={message?.text} key={index}/>
-                  )
-                } 
-              }
-            })
-        }
-      </div>
+      <Suspense fallback={<p>Loading...</p>}>
+        <div className="chat-message-cont">
+          {!isPending && messages.map((message, index) => {
+            if (message?.byAdmin) {
+              return (
+                <AdminMessage text={message?.message} key={index} />
+              );
+            }
+            return (
+              <Message text={message?.message} key={index} />
+            );
+          })}
+        </div>
+      </Suspense>
       <div className="chat-type-field-cont">
-        <input 
-          type='text' 
-          className='chat-type-field' 
-          placeholder='Type a message' 
+        <input
+          type='text'
+          className='chat-type-field'
+          placeholder='Type a message'
           value={currentMessage}
-          onChange={(e)=>setCurrentMessage(e.target.value)}
+          onChange={(e) => setCurrentMessage(e.target.value)}
         />
-        <div className='chat-type-field-btn'>
-          <FiSend className='chat-type-field-btn-icon'/>
+        <div className='chat-type-field-btn' onClick={handleSendMessage}>
+          <FiSend className='chat-type-field-btn-icon' />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Chat
+export default Chat;
