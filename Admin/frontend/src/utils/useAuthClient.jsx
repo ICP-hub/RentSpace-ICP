@@ -4,6 +4,7 @@ import { createActor as createUserActor } from '../declarations/User';
 import { createActor as createBookingActor } from '../declarations/Booking';
 import { createActor as createHotelActor } from '../declarations/Hotel';
 import { createActor as createSupportActor, supportChat } from '../declarations/Support';
+import {createActor as createReviewActor} from '../declarations/Review'
 import {ids} from '../../../AdminDevelopmentConfig'
 import Login from '../pages/Login'
 import { Principal } from '@dfinity/principal';
@@ -21,7 +22,7 @@ export const useAuthClient = () => {
         const isAuthenticated = await client.isAuthenticated();
         const identity = client.getIdentity();
         const principal = identity.getPrincipal();
-        console.log(principal)
+        console.log(principal.toText())
 
         setAuthClient(client);
         // setIsAuthenticated(isAuthenticated);
@@ -33,12 +34,14 @@ export const useAuthClient = () => {
             let hotelActor=createHotelActor(ids.hotelCan,{agentOptions:{identity:identity}})
             let bookingActor=createBookingActor(ids.bookingCan,{agentOptions:{identity:identity}})
             let supportActor=createSupportActor(ids.supportCan,{agentOptions:{identity:identity}})
+            let reviewActor = createReviewActor(ids.reviewCan, {agentOptions : {identity: identity}})
             console.log(supportActor)
             setActors({
                 userActor:userActor,
                 hotelActor:hotelActor,
                 bookingActor:bookingActor,
-                supportActor:supportActor
+                supportActor:supportActor,
+                reviewActor
             })
             let supportRes=await supportActor?.checkIsAdmin(identity.getPrincipal())
             if(supportRes==false){
@@ -60,6 +63,7 @@ export const useAuthClient = () => {
             const authClient = await AuthClient.create();
             clientInfo(authClient);
         })();
+        console.log(principal?.toText())
     }, []);
 
     const login = async () => {
