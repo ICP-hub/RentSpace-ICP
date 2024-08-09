@@ -27,6 +27,8 @@ import {setUser} from '../../../../../redux/users/actions';
 import {setHotels} from '../../../../../redux/hotels/actions';
 import {setPrinciple} from '../../../../../redux/principle/actions';
 import {backend} from '../../../../../declarations/backend';
+import { User } from '../../../../../declarations/User';
+import { Hotel } from '../../../../../declarations/Hotel';
 import UserDetailDemo from '../Modals/UserDetailDemo';
 import Report from '../Report/Report';
 import Feedback from '../Feedback/Feedback';
@@ -55,7 +57,7 @@ const MainProfile = ({navigation}) => {
     // dispatch(setActor({
     //     backendActor:backend,
     //     userActor:User,
-    //     hotelActor:hotel
+    //     hotelActor:Hotel
     // }))
     // dispatch(setUser({}))
     // dispatch(setHotels([]))
