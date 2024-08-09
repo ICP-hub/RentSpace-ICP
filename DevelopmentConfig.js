@@ -1,10 +1,11 @@
 //Decides if canister ids used are of production or development
-const production = true;
+const production = false;
 
 export const host = production ? 'https://icp-api.io' : 'http://127.0.0.1:4943';
 
 export const nodeBackend = production
-  ? 'https://rentspace.kaifoundry.com'
+  // ? 'https://rentspace.kaifoundry.com'
+  ? 'http://209.38.36.2:5000'
   : 'http://localhost:5000';
 
 
