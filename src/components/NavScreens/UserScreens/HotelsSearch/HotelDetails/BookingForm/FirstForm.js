@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, 
+  useState} from 'react';
 import {COLORS, SIZES} from '../../../../../../constants/themes';
 import Icon from 'react-native-vector-icons/Entypo';
 import {Calendar} from 'react-native-calendars';
