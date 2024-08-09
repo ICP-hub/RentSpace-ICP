@@ -363,7 +363,7 @@ const MainProfile = ({navigation}) => {
 
   return (
     <View style={styles.page}>
-      <View style={styles.backIconCont}>
+      {/* <View style={styles.backIconCont}>
         <TouchableOpacity
           style={styles.backIcon}
           onPress={() => {
@@ -371,13 +371,13 @@ const MainProfile = ({navigation}) => {
           }}>
           <Icon color={COLORS.black} name="chevron-left" size={25} />
         </TouchableOpacity>
-      </View>
+      </View> */}
       <ScrollView style={styles.scrollPart} contentContainerStyle={styles.page}>
         <View style={styles.header}>
           <Text style={styles.heading}>Profile</Text>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Icon2 name="bell" color={COLORS.textLightGrey} size={30} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <View style={styles.imgCont}>
           <View style={styles.imgView}>
@@ -485,7 +485,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '88%',
-    marginTop: 40,
+    marginTop: 20,
   },
   heading: {
     fontWeight: '600',
