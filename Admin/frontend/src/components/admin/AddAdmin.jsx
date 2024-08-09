@@ -14,26 +14,26 @@ const AddAdmin = () => {
         } 
 
         setLoading(true)
-        let p1=new Promise(async(resolve,reject)=>{
-            await actors?.userActor?.addOwner(principle).then((res)=>{
-                resolve(res)
-                console.log(res)
-            }).catch((err)=>{
-                reject(err)
-                console.log(err)
-            })
-        })
-        let p2=new Promise(async(resolve,reject)=>{
-            await actors?.bookingActor?.addOwner(principle).then((res)=>{
-                resolve(res)
-                console.log(res)
-            }).catch((err)=>{
-                reject(err)
-                console.log(err)
-            })
-        })
+        // let p1=new Promise(async(resolve,reject)=>{
+        //     await actors?.userActor?.addOwner(principle).then((res)=>{
+        //         resolve(res)
+        //         console.log(res)
+        //     }).catch((err)=>{
+        //         reject(err)
+        //         console.log(err)
+        //     })
+        // })
+        // let p2=new Promise(async(resolve,reject)=>{
+        //     await actors?.bookingActor?.addOwner(principle).then((res)=>{
+        //         resolve(res)
+        //         console.log(res)
+        //     }).catch((err)=>{
+        //         reject(err)
+        //         console.log(err)
+        //     })
+        // })
         let p3=new Promise(async(resolve,reject)=>{
-            await actors?.supportActor?.addOwner(principle).then((res)=>{
+            await actors?.supportActor?.addAdmin(principle).then((res)=>{
                 resolve(res)
                 console.log(res)
             }).catch((err)=>{
@@ -41,16 +41,16 @@ const AddAdmin = () => {
                 console.log(err)
             })
         })
-        let p4=new Promise(async(resolve,reject)=>{
-            await actors?.hotelActor?.addOwner(principle).then((res)=>{
-                resolve(res)
-                console.log(res)
-            }).catch((err)=>{
-                reject(err)
-                console.log(err)
-            })
-        })
-        await Promise.all([p1,p2,p3,p4])
+        // let p4=new Promise(async(resolve,reject)=>{
+        //     await actors?.hotelActor?.addOwner(principle).then((res)=>{
+        //         resolve(res)
+        //         console.log(res)
+        //     }).catch((err)=>{
+        //         reject(err)
+        //         console.log(err)
+        //     })
+        // })
+        await Promise.all([p3])
             .then((value)=>{
                 console.log(value)
                 alert("New admin is successfully added!")

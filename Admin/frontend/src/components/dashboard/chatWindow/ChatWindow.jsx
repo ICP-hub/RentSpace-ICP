@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import ChatCard from './ChatCard'
 import './chatWindow.css'
 import { FaQuestion } from "react-icons/fa6";
+import { useAuth } from '../../../utils/useAuthClient';
 
 const userChats=[
     {
@@ -15,6 +16,36 @@ const userChats=[
 ]
 
 const ChatWindow = ({nav}) => {
+    const [userChats, setUserChats] = useState([])
+    const {actors} = useAuth()
+
+    const getUserChats = useCallback(async()=>{
+        const getChatsResponse = await actors?.supportActor.getAllChats(50,1)
+        if (getChatsResponse.ok) {
+            const chatPromises = getChatsResponse.ok.map(async ([principal, chats]) => {
+              const userResponse = await actors?.userActor?.getUserByPrincipal(principal);
+              if (userResponse.ok) {
+                return { user: userResponse.ok, chats };
+              } else {
+                return { user: null, chats }; // Handle the case where user fetching fails
+              }
+            });
+        
+            const ChatList = await Promise.all(chatPromises);
+      
+            // console.log(ChatList)
+            
+            setUserChats(ChatList)
+          } else {
+            return setUserChats([])
+          }
+    },[actors])
+
+    useEffect(()=>{
+        getUserChats()
+    },[])
+
+
   return (
     <div className='chatWindow'>
         {

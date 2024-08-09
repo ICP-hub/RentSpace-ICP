@@ -96,6 +96,12 @@
     align-items: flex-end;
 }
 
+.report-list-card-time{
+    font-size: 20px;
+    font-weight: lighter;
+    
+}
+
 .report-list-card-sender-selected{
     display: flex;
     flex-direction: row;

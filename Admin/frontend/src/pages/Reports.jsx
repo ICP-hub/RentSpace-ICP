@@ -17,39 +17,61 @@ const Reports = () => {
   const getAllReports=async()=>{
     let newArr=[]
     let reportRes=await actors?.supportActor?.getAllUnresolvedTickets(10,1)
-    if(reportRes?.err!=undefined){
-      console.log("err fetching reports : ",reportRes?.err)
-      return
-    }
-    console.log(reportRes)
-    
-    await actors?.supportActor?.scanBooking(0,10).then((res)=>{
-      console.log("report : ",res[0][1])
-      res[0][1].map(async(r)=>{
-        let userId=r[0].split("#")[0]
-        await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(userId)).then((userRes)=>{
-          console.log(userRes[0])
-          let reportEl={
-            userId:userId,
-            reportId:r[0],
-            userData:userRes[0],
-            reportData:r[1]
-          }
-          if(!r[1]?.resolved){
-            newArr.push(reportEl)
-            setReportList([...newArr])            
-            console.log(reportEl)
-          }
+    // if(reportRes?.err!=undefined){
+    //   console.log("err fetching reports : ",reportRes?.err)
+    //   return
+    // }
+    // console.log(reportRes)
 
-        }).catch((err)=>{
-          console.log("err fetching user data : ",err)
-        })
+    if(reportRes.ok) {
+      let reports = reportRes.ok
+      const reportLists = reports.map(async (report) =>{
+        let userId = report[0].split("#")[0]
+        let userRes = await actors?.userActor?.getUserByPrincipal(Principal.fromText(userId))
+        let reportEl = {
+          userId: userId,
+          reportId: report[1].ticketId,
+          userData: userRes?.ok,
+          reportData: report[1]
+        }
+        if (!report[1]?.resolved) {
+          newArr.push(reportEl)
+          setReportList([...newArr])
+          console.log(reportEl)
+        }
       })
-    }).catch((err)=>{
-      console.log("err fetching reports : ",err)
-    })
-  }
+    }
+    
+    // await actors?.supportActor?.scanBooking(0,10).then((res)=>{
+      //   console.log("report : ",res[0][1])
+      //   res[0][1].map(async(r)=>{
+        //     let userId=r[0].split("#")[0]
+        //     await actors?.userActor?.getUserInfoByPrincipal(Principal.fromText(userId)).then((userRes)=>{
+          //       console.log(userRes[0])
+          //       let reportEl={
+            //         userId:userId,
+            //         reportId:r[0],
+            //         userData:userRes[0],
+    //         reportData:r[1]
+    //       }
+    //       if(!r[1]?.resolved){
+    //         newArr.push(reportEl)
+    //         setReportList([...newArr])            
+    //         console.log(reportEl)
+    //       }
 
+    //     }).catch((err)=>{
+    //       console.log("err fetching user data : ",err)
+    //     })
+    //   })
+    // }).catch((err)=>{
+    //   console.log("err fetching reports : ",err)
+    // }) 
+
+    
+  }
+  
+  console.log("Report List : ", reportList)
   
   const reports=[
     {
@@ -79,12 +101,12 @@ const Reports = () => {
         </div>
         <p className="no-reports-text">
                       Sorry!<br/>
-              You don’t have any report to show 
+              You don&apos;t have any report to show 
         </p>
       </div>
       :
       <div className="reports-main">
-        <ReportList reports={reportList} showReportDetail={showReportDetail} reportDetail={reportDetail}/>
+        <ReportList reports={reportList} showReportDetail={showReportDetail} reportDetail={reportList.reportData}/>
         {
             
             reportDetail?.userData?.firstName!=undefined?

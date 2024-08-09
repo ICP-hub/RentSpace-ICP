@@ -1,0 +1,40 @@
+type Review__1 = 
+ record {
+   createdAt: text;
+   des: text;
+   hotelId: text;
+   rating: float64;
+   reviewId: text;
+   title: text;
+   userId: text;
+ };
+type ReviewInput = 
+ record {
+   des: text;
+   hotelId: text;
+   rating: float64;
+   title: text;
+ };
+type Review = 
+ service {
+   createReview: (text, ReviewInput) -> (Result_2);
+   getAllReviewsOnHotel: (text) -> (Result_1);
+   getHotelRating: (text) -> (Result);
+   whoami: () -> (text) query;
+ };
+type Result_2 = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: vec Review__1;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: nat;
+ };
+service : () -> Review
